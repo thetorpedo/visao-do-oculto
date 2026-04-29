@@ -1,0 +1,10 @@
+[
+  {
+    "id": "acad-1",
+    "type": "origin",
+    "name": "Acadêmico",
+    "description": "Você é um estudioso focado em entender o mundo através de livros e pesquisas.",
+    "skills": ["Investigação", "Saber"],
+    "originPower": "Saber é Poder: Quando faz um teste de perícia usando Intelecto, pode gastar 2 PE para receber +5."
+  }
+]

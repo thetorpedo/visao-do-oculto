@@ -1,0 +1,18 @@
+[
+  {
+    "id": "pow-1",
+    "type": "power",
+    "classe": "Combatente",
+    "name": "Ataque Poderoso",
+    "description": "Você pode abdicar de precisão por dano bruto.",
+    "requirements": "Força 2"
+  },
+  {
+    "id": "ppow-1",
+    "type": "power",
+    "name": "Sangue de Ferro",
+    "description": "Sua vitalidade é aumentada sobrenaturalmente.",
+    "element": "Sangue",
+    "requirements": "Vigor 2"
+  }
+]

@@ -1,0 +1,13 @@
+[
+  {
+    "id": "ani-1",
+    "type": "track",
+    "classe": "Combatente",
+    "name": "Aniquilador",
+    "description": "Focado em causar o máximo de dano com uma arma específica.",
+    "abilities": {
+      "10": { "name": "A Favorita", "text": "Escolha uma arma para ser sua favorita. O custo de PE para usar habilidades com ela diminui em 1." },
+      "40": { "name": "Técnica Letal", "text": "O multiplicador de crítico da sua arma favorita aumenta em +1." }
+    }
+  }
+]
