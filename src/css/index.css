@@ -2,94 +2,106 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-/* 1. Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Spectral+SC:ital,wght@0,200;1,800&family=Road+Rage&family=Special+Elite&family=Protest+Revolution&family=Nothing+You+Could+Do&display=swap');
 
-/* 2. Fontes Locais (Ajustadas para a pasta public/fonts) */
 @font-face {
   font-family: 'westsacregular';
   src: url('/fonts/westsac-webfont.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
 }
+
 @font-face {
   font-family: 'special_eliteregular';
   src: url('/fonts/specialelite-regular-webfont.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
 }
+
 @font-face {
   font-family: 'sigilos_do_outro_ladoregular';
   src: url('/fonts/sigilosdooutrolado-regular-webfont.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
 }
+
 @font-face {
   font-family: 'optimanormal';
   src: url('/fonts/optima-webfont.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
 }
+
 @font-face {
   font-family: 'optimabold';
   src: url('/fonts/optima_b-webfont.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
 }
+
 @font-face {
   font-family: 'gabriele_bad_ahregular';
   src: url('/fonts/gabriele-bad-webfont.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
 }
+
 @font-face {
   font-family: 'daisywheelregular';
   src: url('/fonts/daisywhl-webfont.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
 }
+
 @font-face {
   font-family: 'blurlight';
   src: url('/fonts/blur_light_regular-webfont.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
 }
+
 @font-face {
   font-family: 'reappeatregular';
   src: url('/fonts/reappeat-webfont.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
 }
+
 @font-face {
   font-family: 'nightmare_5regular';
   src: url('/fonts/nightmare_5-webfont.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
 }
+
 @font-face {
   font-family: 'keyesregular';
   src: url('/fonts/keyes-webfont.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
 }
+
 @font-face {
   font-family: 'fluoxetineregular';
   src: url('/fonts/fluox___-webfont.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
 }
+
 @font-face {
   font-family: 'fsteinregular';
   src: url('/fonts/f-stein_-webfont.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
 }
+
 @font-face {
   font-family: 'cf_crack_and_boldregular';
   src: url('/fonts/cfcrackandbold-webfont.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
 }
+
 @font-face {
   font-family: '215000eregular';
   src: url('/fonts/215000e-webfont.woff2') format('woff2');
