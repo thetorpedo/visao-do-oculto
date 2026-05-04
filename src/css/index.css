@@ -6,6 +6,13 @@
 
 
 @font-face {
+  font-family: 'estrangeiro';
+  src: url('fonts/estrangeiro-regular.ttf-webfont.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
   font-family: 'westsacregular';
   src: url('/fonts/westsac-webfont.woff2') format('woff2');
   font-weight: normal;
@@ -120,6 +127,7 @@
   --font-optima: "optimanormal", sans-serif;
   --font-optima-bold: "optimabold", sans-serif;
   --font-sigilos: "sigilos_do_outro_ladoregular";
+  --font-estrangeiro: "estrangeiro";
   --font-blur: "blurlight";
   --font-nightmare: "nightmare_5regular", serif;
   --font-crack: "cf_crack_and_boldregular", sans-serif;

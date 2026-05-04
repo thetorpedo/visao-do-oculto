@@ -97,7 +97,7 @@ export default function FolderLayout() {
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[linear-gradient(rgba(109,109,109,0.2),rgba(109,109,109,0.2)),url(src/assets/paper.png)] bg-repeat bg-size-[30%] w-[97%] h-[95%] rotate-[-0.5deg] shadow-[0_0_40px_rgba(0,0,0,0.25)] p-1 z-11">
                 </div>
                 <div className="relative bg-[linear-gradient(rgba(229,229,229,0.5),rgba(229,229,229,0.5)),url(src/assets/paper.png)] bg-repeat bg-size-[30%] w-full h-full shadow-[0_0_15px_rgba(0,0,0,0.15)] z-12">
-                <div className="w-full h-full p-8">
+                <div className="w-full h-full p-8 pb-36">
                   <Outlet />
                 </div>
               </div>
