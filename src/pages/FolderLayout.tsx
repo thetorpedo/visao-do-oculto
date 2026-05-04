@@ -83,14 +83,14 @@ export default function FolderLayout() {
               TRILHAS
             </NavLink> 
             <NavLink to="/equipamento" className={({ isActive }: { isActive: boolean }) => `font-special bg-[url(src/assets/folder.jpg)] bg-blend-overlay bg-size-[170%] w-60  -mt-8 rounded-t-lg flex justify-center items-start text-black/70 text-2xl pt-4 transition-all -ml-5 hover:-mt-12 hover:h-16 cursor-pointer shadow-[0_0_15px_rgba(0,0,0,0.35)] z-5 ${isActive ? 'bg-[#837156] h-14 -mt-10 shadow-[0_0_15px_rgba(0,0,0,0.35)] z-20' : 'bg-[#7a6a51] h-12 shadow-[inset_0_-2px_5px_rgba(0,0,0,0.35),0_0px_20px_rgba(0,0,0,0.55)]'}`}>
-              EQUIPAMENTO
+              EQUIPAM.
             </NavLink> 
             <NavLink to="/rituais" className={({ isActive }: { isActive: boolean }) => `font-special bg-[url(src/assets/folder.jpg)] bg-blend-overlay bg-size-[170%] w-60  -mt-8 rounded-t-lg flex justify-center items-start text-black/70 text-2xl pt-4 transition-all -ml-5 hover:-mt-12 hover:h-16 cursor-pointer shadow-[0_0_15px_rgba(0,0,0,0.35)] z-4 ${isActive ? 'bg-[#837156] h-14 -mt-10 shadow-[0_0_15px_rgba(0,0,0,0.35)] z-20' : 'bg-[#7a6a51] h-12 shadow-[inset_0_-2px_5px_rgba(0,0,0,0.35),0_0px_20px_rgba(0,0,0,0.55)]'}`}>
               RITUAIS
             </NavLink> 
           </div>
           
-          <div className="bg-[#837156] bg-[url(src/assets/folder.jpg)] bg-blend-overlay bg-size-[30%] w-full h-8 rounded-tr-lg relative z-10"></div>
+          <div className="bg-[#837156] bg-[url(src/assets/folder.jpg)] bg-blend-overlay bg-size-[30%] w-full h-8 relative z-10"></div>
           <div className="relative bg-[#837156] bg-[url(src/assets/folder.jpg)] bg-blend-overlay bg-size-[30%] h-full p-6 ">
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[linear-gradient(rgba(79,79,79,0.2),rgba(79,79,79,0.2)),url(src/assets/paper.png)] bg-repeat bg-size-[30%] w-[97%] h-[95%] rotate-1 shadow-[0_0_40px_rgba(0,0,0,0.25)] p-1 z-11">
                 </div>
