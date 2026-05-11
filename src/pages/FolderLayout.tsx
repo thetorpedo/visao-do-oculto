@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
 
 function SigilRain() {
   const canvasRef = useRef(null);
@@ -59,16 +59,20 @@ function SigilRain() {
     };
   }, []);
 
-  return <canvas ref={canvasRef} className="absolute inset-0 z-0 opacity-60" />;
+  return <canvas ref={canvasRef} className="fixed inset-0 z-0 opacity-60" />;
 }
+
 
 export default function FolderLayout() {
 
+  const location = useLocation();
+  const isHome = location.pathname === "/";
+
   return (
-    <div className="relative overflow-hidden bg-[#000] bg-[radial-gradient(#5b4f21_1px,transparent_1px)] [background-size:16px_16px] min-h-screen flex-col justify-center items-center h-screen">
+    <div className="relative overflow-hidden bg-black bg-[radial-gradient(#5b4f21_1px,transparent_1px)] bg-size-[16px_16px] min-h-screen flex-col justify-center items-center">
       <SigilRain />
      
-        <div className="h-screen max-w-4/5 mx-auto opacity-99 shadow-2xl/90 mt-20">
+        <div className="max-w-4/5 -mb-1 mx-auto opacity-99 shadow-2xl/90 mt-20">
           <div className="flex flex-row -gap-2 relative z-0">
             <NavLink to="/" className={({ isActive }: { isActive: boolean }) => `font-special bg-[url(src/assets/folder.jpg)] bg-blend-overlay bg-size-[170%] w-60  -mt-8 rounded-t-lg flex justify-center items-start text-black/70 text-2xl pt-4 transition-all hover:-mt-12 hover:h-16 cursor-pointer shadow-[0_0_15px_rgba(0,0,0,0.35)] z-9 ${isActive ? 'bg-[#837156] h-14 -mt-10 shadow-[0_0_15px_rgba(0,0,0,0.35)]' : 'bg-[#7a6a51] h-12 shadow-[inset_0_-2px_5px_rgba(0,0,0,0.35),0_0px_20px_rgba(0,0,0,0.55)]'}`}>
               INÍCIO
@@ -92,12 +96,15 @@ export default function FolderLayout() {
           
           <div className="bg-[#837156] bg-[url(src/assets/folder.jpg)] bg-blend-overlay bg-size-[30%] w-full h-8 relative z-10"></div>
           <div className="relative bg-[#837156] bg-[url(src/assets/folder.jpg)] bg-blend-overlay bg-size-[30%] h-full p-6 ">
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[linear-gradient(rgba(79,79,79,0.2),rgba(79,79,79,0.2)),url(src/assets/paper.png)] bg-repeat bg-size-[30%] w-[97%] h-[95%] rotate-1 shadow-[0_0_40px_rgba(0,0,0,0.25)] p-1 z-11">
-                </div>
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[linear-gradient(rgba(109,109,109,0.2),rgba(109,109,109,0.2)),url(src/assets/paper.png)] bg-repeat bg-size-[30%] w-[97%] h-[95%] rotate-[-0.5deg] shadow-[0_0_40px_rgba(0,0,0,0.25)] p-1 z-11">
-                </div>
-                <div className="relative bg-[linear-gradient(rgba(229,229,229,0.5),rgba(229,229,229,0.5)),url(src/assets/paper.png)] bg-repeat bg-size-[30%] w-full h-full shadow-[0_0_15px_rgba(0,0,0,0.15)] z-12">
-                <div className="w-full h-full p-8 pb-36">
+          {isHome && (<>
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[linear-gradient(rgba(79,79,79,0.2),rgba(79,79,79,0.2)),url(src/assets/paper.png)] bg-repeat bg-size-[30%] w-[97%] h-[95%] rotate-1 shadow-[0_0_40px_rgba(0,0,0,0.25)] p-1 z-11">
+            </div>
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[linear-gradient(rgba(109,109,109,0.2),rgba(109,109,109,0.2)),url(src/assets/paper.png)] bg-repeat bg-size-[30%] w-[97%] h-[95%] rotate-[-0.5deg] shadow-[0_0_40px_rgba(0,0,0,0.25)] p-1 z-11">
+            </div>
+          </>)}
+                
+                <div className={`relative ${isHome ? ' bg-[linear-gradient(rgba(229,229,229,0.5),rgba(229,229,229,0.5)),url(src/assets/paper.png)] ' : 'bg-none shadow-none'} bg-repeat bg-size-[30%] w-full h-full shadow-[0_0_15px_rgba(0,0,0,0.15)] z-12`}>
+                <div className="w-full h-full">
                   <Outlet />
                 </div>
               </div>

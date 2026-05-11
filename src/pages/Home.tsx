@@ -4,7 +4,7 @@ import Logo from "@/components/logo";
 export default function Home() {
 
   return (
-    <div className="font-[400] flex flex-col items-center justify-between h-full w-full">
+    <div className="font-[400] flex flex-col items-center justify-between h-full w-full p-8 pb-10">
       <div>
         <h1 className="text-5xl md:text-7xl flex flex-wrap mb-4 justify-center pointer-events-none select-none border-b-4 border-dashed w-fit mx-auto">
             {'VISÃO DO OCULTO'.split("").map((char, index) => (

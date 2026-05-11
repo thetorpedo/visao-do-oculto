@@ -144,3 +144,16 @@
   --font-protest: "Protest Revolution", sans-serif;
   --font-handwriting: "Nothing You Could Do", cursive;
 }
+
+.folha-rpg {
+  position: relative;
+  background: white;
+  /* ou sua imagem de papel */
+  box-shadow:
+    2px 2px 0px #7a6a51,
+    /* Primeira camada */
+    -2px 4px 0px #6d5d44,
+    /* Segunda camada (levemente deslocada) */
+    5px 10px 15px rgba(0, 0, 0, 0.3);
+  /* Sombra real */
+}
