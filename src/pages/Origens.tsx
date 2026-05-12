@@ -1,3 +1,4 @@
+import DocumentReader from "@/components/DocumentReader";
 import origensData from "@/data/origens.json";
 import Fuse from "fuse.js"; // Importa o Fuse.js
 import { BookMarked, Search, X } from "lucide-react";
@@ -7,6 +8,7 @@ export default function Origens() {
   const [busca, setBusca] = useState("");
   const [filtroFonte, setFiltroFonte] = useState("");
   const [periciasSelecionadas, setPericiasSelecionadas] = useState<string[]>([]);
+  const [leitorAtivo, setLeitorAtivo] = useState<{ fonte: string; pagina: number } | null>(null);
 
   const PERICIAS_ORDEM = [
     "Acrobacia", "Adestramento", "Artes", "Atletismo", "Atualidades", 
@@ -77,6 +79,12 @@ export default function Origens() {
 
   return (
     <div className="space-y-6">
+      <DocumentReader 
+        fonteId={leitorAtivo?.fonte || ""} 
+        paginaImpressa={leitorAtivo?.pagina || 0} 
+        isOpen={!!leitorAtivo} // Passa um booleano para controlar visibilidade
+        onClose={() => setLeitorAtivo(null)} 
+      />
       <div className="relative">
       <div className="relative p-6 z-10 shadow-2xl bg-[url(src/assets/paper.png)] bg-repeat bg-size-[30%]">
         <div className="flex flex-col md:flex-row gap-4 mb-4">
@@ -140,7 +148,7 @@ export default function Origens() {
         
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {origensFiltradas.map((origem) => (
+        {Array.from(origensFiltradas).sort((a, b) => a.nome.localeCompare(b.nome)).map((origem) => (
           <div key={origem.id} className="relative group">
             <div className="relative flex flex-col justify-between z-10 w-full p-5 h-full shadow-lg bg-[linear-gradient(rgba(249,249,249,0.5),rgba(249,249,249,0.5)),url(src/assets/paper.png)] bg-repeat bg-size-[30%] border border-gray-300">
             <div>
@@ -164,11 +172,13 @@ export default function Origens() {
                <div className="text-xs text-gray-500 font-medium mt-3 -mb-1">
                   <BookMarked className="inline size-4 mr-1 mb-0.5" />
                   <span className="font-bold text-gray-600">Fonte: </span>
-                  <a className="underline cursor-pointer hover:brightness-120">
+                  <button 
+                  onClick={() => setLeitorAtivo({ fonte: origem.fonteLivro, pagina: parseInt(origem.fontePagina) })}
+                   className="underline cursor-pointer hover:brightness-120">
                     <span>{origem.fonteLivro}</span>
                     <span> - </span>
                     <span>página {origem.fontePagina}.</span> 
-                  </a>
+                  </button>
                 </div>
             </div>
             <div className="absolute top-1/2 left-1/2 z-0 h-full w-full -translate-x-1/2 -translate-y-1/2 -rotate-1 p-1 bg-[linear-gradient(rgba(139,139,139,0.4),rgba(139,139,139,0.2)),url(src/assets/paper.png)] shadow-[0_0_15px_rgba(0,0,0,0.15)] bg-repeat bg-size-[30%]" />
