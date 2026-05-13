@@ -1,12 +1,12 @@
 import DocumentReader from "@/components/DocumentReader";
 import origensData from "@/data/origens.json";
-import Fuse from "fuse.js"; // Importa o Fuse.js
+import Fuse from "fuse.js";
 import { BookMarked, Search, X } from "lucide-react";
 import { useMemo, useState } from "react";
 
 export default function Origens() {
   const [busca, setBusca] = useState("");
-  const [filtroFonte, setFiltroFonte] = useState("");
+  const [fontesSelecionadas, setFontesSelecionadas] = useState<string[]>([]);
   const [periciasSelecionadas, setPericiasSelecionadas] = useState<string[]>([]);
   const [leitorAtivo, setLeitorAtivo] = useState<{ fonte: string; pagina: number } | null>(null);
 
@@ -19,45 +19,47 @@ export default function Origens() {
     "Tática", "Tecnologia", "Vontade"
   ];
 
+  const fontesDisponiveis = useMemo(() => {
+    const fontes = new Set(origensData.map(o => o.fonteLivro));
+    return Array.from(fontes);
+  }, []);
+
   const fuse = useMemo(() => {
     return new Fuse(origensData, {
       keys: ["nome", "descricao", "tecnicaDescricao"], 
       threshold: 0.3, 
+      ignoreLocation: true,
     });
   }, []);
 
-  const botoesPericias = useMemo(() => {
-    return PERICIAS_ORDEM;
-  }, []);
-
   const origensFiltradas = useMemo(() => {
-    let resultado = origensData;
+    const resultadoBusca = busca.length > 2 
+      ? fuse.search(busca).map(r => r.item) 
+      : origensData;
   
-    if (busca.length > 2) {
-      resultado = fuse.search(busca).map(r => r.item);
-    }
-  
-    if (filtroFonte) {
-      resultado = resultado.filter(o => o.fonteLivro === filtroFonte);
-    }
-
-    if (periciasSelecionadas.length > 0) {
-      resultado = resultado.filter(o => {
-        const textoLimpoJson = o.pericias.replace(/\./g, "");
-        return periciasSelecionadas.every(p => textoLimpoJson.includes(p));
+    return resultadoBusca.filter(origem => {
+      const matchFonte = fontesSelecionadas.length === 0 || fontesSelecionadas.includes(origem.fonteLivro);
+      
+      const matchPericia = periciasSelecionadas.length === 0 || periciasSelecionadas.every(p => {
+        const textoLimpoJson = origem.pericias.replace(/\./g, "");
+        return textoLimpoJson.includes(p);
       });
-    }
-  
-    return resultado;
-  }, [busca, filtroFonte, periciasSelecionadas, fuse]);
 
-  const togglePericia = (pericia: string) => {
-    setPericiasSelecionadas(prev => 
-      prev.includes(pericia) ? prev.filter(p => p !== pericia) : [...prev, pericia]
-    );
+      return matchFonte && matchPericia;
+    });
+  }, [busca, fontesSelecionadas, periciasSelecionadas, fuse]);
+
+  const toggleFiltro = (setter: React.Dispatch<React.SetStateAction<string[]>>, item: string) => {
+    setter(prev => prev.includes(item) ? prev.filter(i => i !== item) : [...prev, item]);
   };
 
-  // ExpandableText atualizado com whitespace-pre-wrap para quebrar linha com \n
+  const temFiltroAtivo = fontesSelecionadas.length > 0 || periciasSelecionadas.length > 0;
+
+  const limparFiltros = () => {
+    setFontesSelecionadas([]);
+    setPericiasSelecionadas([]);
+  };
+
   function ExpandableText({ text, limit = 400 }: { text: string; limit?: number }) {
     const [isExpanded, setIsExpanded] = useState(false);
     if (!text) return null;
@@ -85,67 +87,70 @@ export default function Origens() {
         isOpen={!!leitorAtivo} 
         onClose={() => setLeitorAtivo(null)} 
       />
+      
       <div className="relative">
-      <div className="relative p-6 z-10 shadow-2xl bg-[url(src/assets/paper.png)] bg-repeat bg-size-[30%]">
-        <div className="flex flex-col md:flex-row gap-4 mb-4">
-          <div className="flex-1 flex items-center border-2 border-gray-800 bg-white/40 px-3 py-2">
-            <Search className="size-5 mr-2" />
-            <input
-              type="text"
-              placeholder={`Buscando entre ${filtroFonte ? origensData.filter(o => o.fonteLivro === filtroFonte).length : origensData.length} origens... `}
-              className="w-full bg-transparent outline-none font-medium"
-              value={busca}
-              onChange={(e) => setBusca(e.target.value)}
-            />
-          </div>
+        <div className="relative p-6 z-10 shadow-2xl bg-[url(src/assets/paper.png)] bg-repeat bg-size-[30%]">
           
-          <select
-            className="border-2 border-gray-800 bg-white/40 p-2 font-special"
-            value={filtroFonte}
-            onChange={(e) => setFiltroFonte(e.target.value)}
-          >
-            <option value="">Todos os Livros</option>
-            <option value="OPRPG">Livro Base</option>
-            <option value="SAH">Sobrevivendo ao Horror</option>
-            <option value="HQ Iniciação">HQ Iniciação</option>
-            <option value="HQ OSNF-1">HQ OSNF Pt.1</option>
-            <option value="HQ OSNF-2">HQ OSNF Pt.2</option>
-            <option value="AS1">Arquivos Secretos 01</option>
-            <option value="AS4">Arquivos Secretos 04</option>
-          </select>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-            <span className="font-special text-sm self-center mr-2">Filtrar Perícias:</span>
+          <div className="flex flex-col gap-5">
+            <div className="flex items-center border border-gray-600 bg-white/40 px-3 py-2">
+              <Search className="size-5 mr-2" />
+              <input
+                type="text"
+                placeholder={`Buscando entre ${origensFiltradas.length} origens...`}
+                className="w-full bg-transparent outline-none font-medium"
+                value={busca}
+                onChange={(e) => setBusca(e.target.value)}
+              />
+            </div>
             
-            {botoesPericias.map(p => (
-              <button
-                key={p}
-                onClick={() => togglePericia(p)}
-                className={`px-3 py-1 text-xs font-bold transition-colors border cursor-pointer ${
-                  periciasSelecionadas.includes(p)
-                    ? 'bg-gray-800 text-white border-gray-800'
-                    : 'bg-gray-200/50 text-gray-700 border-gray-400 hover:bg-gray-300'
-                }`}
-              >
-                {p}
-              </button>
-            ))}
+            <div className="flex flex-col gap-3">
+              <div className="flex flex-wrap gap-2">
+                <span className="font-special text-sm self-center mr-2 w-[72px]">Perícias:</span>
+                {PERICIAS_ORDEM.map(p => (
+                  <button
+                    key={p}
+                    onClick={() => toggleFiltro(setPericiasSelecionadas, p)}
+                    className={`px-3 py-1 text-xs font-bold transition-colors border cursor-pointer ${
+                      periciasSelecionadas.includes(p)
+                        ? 'bg-gray-800 text-white border-gray-800'
+                        : 'bg-gray-200/50 text-gray-700 border-gray-400 hover:bg-gray-300'
+                    }`}
+                  >
+                    {p}
+                  </button>
+                ))}
+              </div>
 
-            {periciasSelecionadas.length > 0 && (
-              <button 
-                onClick={() => setPericiasSelecionadas([])}
-                className="text-red-700 text-xs font-bold flex items-center ml-2 underline"
-              >
-                <X className="size-3 mr-1" /> Limpar
-              </button>
-            )}
+              <div className="flex flex-wrap gap-2">
+                <span className="font-special text-sm self-center mr-2 w-[72px]">Fontes:</span>
+                {fontesDisponiveis.map(f => (
+                  <button
+                    key={f}
+                    onClick={() => toggleFiltro(setFontesSelecionadas, f)}
+                    className={`px-3 py-1 text-xs font-bold transition-colors border cursor-pointer ${
+                      fontesSelecionadas.includes(f)
+                        ? 'bg-gray-800 text-white border-gray-800'
+                        : 'bg-gray-200/50 text-gray-700 border-gray-400 hover:bg-gray-300'
+                    }`}
+                  >
+                    {f}
+                  </button>
+                ))}
+
+                {temFiltroAtivo && (
+                  <button 
+                    onClick={limparFiltros}
+                    className="text-red-700 text-xs font-bold flex items-center ml-2 underline"
+                  >
+                    <X className="size-3 mr-1" /> Limpar Filtros
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
         </div>
         <div className="absolute top-1/2 left-1/2 z-0! h-full w-full -translate-x-1/2 -translate-y-1/2 rotate-[-0.5deg] p-1 bg-[linear-gradient(rgba(139,139,139,0.4),rgba(139,139,139,0.2)),url(src/assets/paper.png)] shadow-[0_0_15px_rgba(0,0,0,0.15)] bg-repeat bg-size-[30%]" />  
       </div>
-      
-        
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {Array.from(origensFiltradas).sort((a, b) => a.nome.localeCompare(b.nome)).map((origem) => (
@@ -153,30 +158,25 @@ export default function Origens() {
             <div className="relative flex flex-col justify-between z-10 w-full p-5 h-full shadow-lg bg-[linear-gradient(rgba(249,249,249,0.5),rgba(249,249,249,0.5)),url(src/assets/paper.png)] bg-repeat bg-size-[30%] border border-gray-300">
             
             <div className="flex-grow">
-               {/* Título inalterado */}
                <h3 className="text-2xl font-special underline mb-2">{origem.nome}</h3>
                
-               {/* Descrição */}
                <div className="text-sm italic mb-4 opacity-90"><ExpandableText text={origem.descricao} limit={400} /></div>
                
-               {/* Perícias Treinadas */}
-               <div className="flex mt-4 mb-4 border border-gray-900 shadow-sm">
+               <div className="flex mt-4 mb-4 border border-dashed border-gray-400 bg-gray-200">
                 <div className="flex items-center px-2 py-0.5 text-base text-white font-special bg-gray-900">
-                  <span className="-mb-1">Perícias treinadas:</span>
+                  <span className="-mb-1 uppercase">Perícias treinadas:</span>
                 </div>
                 <div className="flex items-center p-1 grow bg-gray-300/50">
                   <div className="text-sm ml-1 font-medium text-gray-800">{origem.pericias}</div>
                 </div>
                </div>
 
-               {/* Técnica de Origem */}
                <div className="mt-4 bg-gray-400/20 border border-gray-400/50 px-3 py-2">
                  <span className="font-special pt-1 text-sm tracking-wider mr-1 uppercase text-gray-900 block ">{origem.tecnicaNome}:</span>
                  <ExpandableText text={origem.tecnicaDescricao} limit={400} />
                </div>
             </div>
             
-               {/* Rodapé (Fonte) */}
                <div className="border-t border-dashed border-gray-400 mt-5 pt-3 flex items-center justify-between">
                   <div className="text-xs text-gray-700 font-medium flex items-center">
                     <BookMarked className="size-4 mr-1.5 opacity-80" />
@@ -194,6 +194,11 @@ export default function Origens() {
             <div className="absolute top-1/2 left-1/2 z-0 h-full w-full -translate-x-1/2 -translate-y-1/2 -rotate-1 p-1 bg-[linear-gradient(rgba(139,139,139,0.4),rgba(139,139,139,0.2)),url(src/assets/paper.png)] shadow-[0_0_15px_rgba(0,0,0,0.15)] bg-repeat bg-size-[30%]" />
           </div>
         ))}
+        {origensFiltradas.length === 0 && (
+           <div className="col-span-full text-center py-10 text-gray-600 font-special text-xl">
+             Nenhuma origem encontrada com esses termos.
+           </div>
+        )}
       </div>
     </div>
   );

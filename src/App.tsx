@@ -1,4 +1,5 @@
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import Equipamentos from './pages/Equipamentos';
 import FolderLayout from './pages/FolderLayout';
 import Home from './pages/Home';
 import Origens from './pages/Origens';
@@ -14,6 +15,7 @@ export default function App() {
         <Route path="/origens" element={<Origens />} />
         <Route path="/poderes" element={<Poderes />} />
         <Route path="/trilhas" element={<Trilhas />} />
+        <Route path="/equipamentos" element={<Equipamentos />} />
         </Route>
         
       </Routes>

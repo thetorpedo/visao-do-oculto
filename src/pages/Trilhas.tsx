@@ -1,15 +1,16 @@
 import DocumentReader from "@/components/DocumentReader";
 import trilhasData from "@/data/trilhas.json";
 import Fuse from "fuse.js";
-import { BookMarked, Search, X } from "lucide-react";
+import { BookMarked, ChevronDown, Search, X } from "lucide-react";
 import { useMemo, useState } from "react";
 
 const estiloBadgeTipo = (tipo: string) => {
   switch (tipo) {
-    case "Combatente": return "text-red-900 border-red-300 bg-gradient-to-t from-red-200/50 to-gray-100";
-    case "Especialista": return "text-blue-900 border-blue-300 bg-gradient-to-t from-blue-200/50 to-gray-100";
-    case "Ocultista": return "text-purple-900 border-purple-300 bg-gradient-to-t from-purple-200/50 to-gray-100";
-    default: return "text-gray-800 border-gray-400 bg-gradient-to-t from-gray-300/50 to-gray-100"; // Geral
+    case "Combatente": return "text-red-900 border-dashed border-red-300 bg-red-200/30";
+    case "Especialista": return "text-blue-900 border-dashed border-blue-300 bg-blue-200/30";
+    case "Ocultista": return "text-purple-900 border-dashed border-purple-300 bg-purple-200/30";
+    case "Sobrevivente": return "text-orange-900 border-dashed border-orange-300 bg-orange-200/30";
+    default: return "text-gray-800 border-dashed border-gray-400 bg-gray-300/30";
   }
 };
 
@@ -19,7 +20,7 @@ export default function Trilhas() {
   const [fontesSelecionadas, setFontesSelecionadas] = useState<string[]>([]);
   const [leitorAtivo, setLeitorAtivo] = useState<{ fonte: string; pagina: number } | null>(null);
 
-  const TIPOS_DISPONIVEIS = ["Combatente", "Especialista", "Ocultista", "Geral"];
+  const TIPOS_DISPONIVEIS = ["Geral", "Combatente", "Especialista", "Ocultista", "Sobrevivente"];
   
   const fontesDisponiveis = useMemo(() => {
     const fontes = new Set(trilhasData.map(t => t.fonteLivro));
@@ -30,6 +31,7 @@ export default function Trilhas() {
     return new Fuse(trilhasData, {
       keys: ["nome", "descricao", "especial", "nex10", "nex40", "nex65", "nex99"], 
       threshold: 0.3, 
+      ignoreLocation: true, 
     });
   }, []);
 
@@ -57,39 +59,19 @@ export default function Trilhas() {
     setFontesSelecionadas([]);
   };
 
-  // ExpandableText aprimorado: agora aceita boldTitle para destacar o nome da habilidade
-  function ExpandableText({ text, limit = 250, boldTitle = false }: { text: string; limit?: number; boldTitle?: boolean }) {
+  function ExpandableText({ text, limit = 250 }: { text: string; limit?: number }) {
     const [isExpanded, setIsExpanded] = useState(false);
     if (!text) return null;
-
-    // Lógica para deixar a primeira frase (até o ponto) em negrito
-    const formatarTexto = (conteudo: string) => {
-      if (!boldTitle) return conteudo;
-      
-      const indexPonto = conteudo.indexOf('.');
-      // Se não achar um ponto, ou for muito pro final, retorna normal
-      if (indexPonto === -1) return conteudo;
-
-      const titulo = conteudo.substring(0, indexPonto + 1);
-      const resto = conteudo.substring(indexPonto + 1);
-
-      return (
-        <>
-          <strong className="font-bold text-gray-900">{titulo}</strong>
-          {resto}
-        </>
-      );
-    };
 
     const textoExibido = isExpanded ? text : `${text.substring(0, limit)}...`;
 
     if (text.length <= limit) {
-      return <p className="text-sm whitespace-pre-wrap first-letter:uppercase text-justify text-gray-800 leading-relaxed">{formatarTexto(text)}</p>;
+      return <p className="text-sm whitespace-pre-wrap first-letter:uppercase text-justify text-gray-800 leading-relaxed">{text}</p>;
     }
   
     return (
       <span className="text-sm text-justify whitespace-pre-wrap text-gray-800 leading-relaxed">
-          {formatarTexto(textoExibido)}
+          {textoExibido}
           <button
             onClick={() => setIsExpanded(!isExpanded)}
             className="ml-2 text-xs cursor-pointer whitespace-pre-wrap font-bold text-gray-600 hover:text-black underline uppercase tracking-tighter"
@@ -97,6 +79,42 @@ export default function Trilhas() {
             {isExpanded ? "[ Ler menos ]" : "[ Ler mais ]"}
           </button>
       </span>
+    );
+  }
+
+  // Componente Dropdown para as habilidades
+  function NexDropdown({ label, text }: { label: string; text?: string }) {
+    const [isOpen, setIsOpen] = useState(false);
+    if (!text) return null;
+
+    // Isola o título (antes do primeiro ponto) da descrição
+    const indexPonto = text.indexOf('.');
+    const titulo = indexPonto !== -1 ? text.substring(0, indexPonto) : "Habilidade";
+    const descricao = indexPonto !== -1 ? text.substring(indexPonto + 1).trim() : text;
+
+    return (
+      <div className=" mb-2 last:mb-0 transition-all">
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="border border-dashed border-gray-400 bg-gray-200 cursor-pointer w-full flex items-center justify-between hover:bg-gray-200/50 transition-colors text-left"
+        >
+          <div className="flex items-center gap-2">
+            <span className="font-special text-sm tracking-wider uppercase text-white px-2 py-1 bg-gray-900 shrink-0">
+              {label}
+            </span>
+            <span className="font-semibold font-blur text-normal text-gray-900 leading-tight">
+              {titulo}
+            </span>
+          </div>
+          <ChevronDown className={`size-4 mr-2 text-gray-600 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} />
+        </button>
+        
+        {isOpen && (
+          <div className="p-3 pt-2 border border-t-0 border-dashed border-gray-400 bg-gray-200 text-sm whitespace-pre-wrap text-justify text-gray-800 leading-relaxed animate-in slide-in-from-top-1">
+            {descricao}
+          </div>
+        )}
+      </div>
     );
   }
 
@@ -113,7 +131,7 @@ export default function Trilhas() {
         <div className="relative p-6 z-10 shadow-2xl bg-[url(src/assets/paper.png)] bg-repeat bg-size-[30%]">
           
           <div className="flex flex-col gap-5">
-            <div className="flex items-center border-2 border-gray-800 bg-white/40 px-3 py-2">
+            <div className="flex items-center border border-gray-600 bg-white/40 px-3 py-2">
               <Search className="size-5 mr-2" />
               <input
                 type="text"
@@ -188,7 +206,7 @@ export default function Trilhas() {
                 </div>
                 
                 <div className="mb-4">
-                  <ExpandableText text={trilha.descricao} limit={250} />
+                  <ExpandableText text={trilha.descricao ? trilha.descricao : ''} limit={400} />
                 </div>
 
                 {/* Caixa de Regra Especial (Ex: Médico de Campo) */}
@@ -201,24 +219,17 @@ export default function Trilhas() {
                   </div>
                 )}
 
-                {/* Habilidades de NEX (Com boldTitle ativado) */}
-                <div className="flex flex-col gap-3 mt-4 border-t border-dashed border-gray-400/60 pt-3">
-                  <div>
-                    <span className="font-special text-sm tracking-wider mr-1 uppercase text-gray-900 block mb-0.5">NEX 10%:</span>
-                    <ExpandableText text={trilha.nex10} limit={200} boldTitle={true} />
-                  </div>
-                  <div>
-                    <span className="font-special text-sm tracking-wider mr-1 uppercase text-gray-900 block mb-0.5">NEX 40%:</span>
-                    <ExpandableText text={trilha.nex40} limit={200} boldTitle={true} />
-                  </div>
-                  <div>
-                    <span className="font-special text-sm tracking-wider mr-1 uppercase text-gray-900 block mb-0.5">NEX 65%:</span>
-                    <ExpandableText text={trilha.nex65} limit={200} boldTitle={true} />
-                  </div>
-                  <div>
-                    <span className="font-special text-sm tracking-wider mr-1 uppercase text-gray-900 block mb-0.5">NEX 99%:</span>
-                    <ExpandableText text={trilha.nex99} limit={200} boldTitle={true} />
-                  </div>
+                {/* Habilidades de NEX em formato Dropdown */}
+                <div className="mt-4 pt-1">
+                  <NexDropdown label={trilha.tipo === 'Sobrevivente' ? 'Estágio 2' : 'NEX 10%'} text={trilha.nex10} />
+                  <NexDropdown label={trilha.tipo === 'Sobrevivente' ? 'Estágio 4' : 'NEX 40%'} text={trilha.nex40} />
+                  
+                  {trilha.tipo !== 'Sobrevivente' && (
+                    <>
+                      <NexDropdown label="NEX 65%" text={trilha.nex65 ? trilha.nex65 : ''} />
+                      <NexDropdown label="NEX 99%" text={trilha.nex99 ? trilha.nex99 : ''} />
+                    </>
+                  )}
                 </div>
 
               </div>
