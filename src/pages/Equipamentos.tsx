@@ -37,6 +37,22 @@ const LinhaStatus = ({ label, valor }: { label: string; valor: string | number |
   );
 };
 
+// Função para remover o nome do item do início da descrição
+const formatarDescricao = (nome: string, descricao: string) => {
+  if (!descricao) return "";
+  
+  // Escapa caracteres especiais do nome para evitar erro no Regex
+  const nomeEscapado = nome.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  // Procura o nome exato no começo da string, seguido opcionalmente por ponto, traço, dois-pontos ou espaços
+  const regex = new RegExp(`^${nomeEscapado}[\\.\\-\\:\\s]*`, 'i');
+  
+  const textoLimpo = descricao.replace(regex, '').trim();
+  if (!textoLimpo) return "";
+  
+  // Retorna com a primeira letra maiúscula
+  return textoLimpo.charAt(0).toUpperCase() + textoLimpo.slice(1);
+};
+
 // Movido para fora para evitar recriação a cada render
 function ExpandableText({ text, limit = 250 }: { text: string; limit?: number }) {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -64,7 +80,13 @@ function ExpandableText({ text, limit = 250 }: { text: string; limit?: number })
 export default function Equipamentos() {
   const [abaAtiva, setAbaAtiva] = useState<"equipamentos" | "maldicoes">("equipamentos");
   
-  const [busca, setBusca] = useState("");
+  const [busca, setBusca] = useState(() => {
+  if (typeof window !== "undefined") {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("busca") || "";
+  }
+  return "";
+});
   // OTIMIZAÇÃO: Adia a filtragem pesada para não travar a digitação
   const buscaAdiada = useDeferredValue(busca);
 
@@ -216,6 +238,16 @@ export default function Equipamentos() {
     return [...equipamentosFiltrados].sort((a, b) => a.nome.localeCompare(b.nome));
   }, [equipamentosFiltrados, buscaAdiada]);
 
+  useMemo(() => {
+    const ids = equipamentosData.map(e => e.id).sort((a, b) => a - b);
+    const faltantes = [];
+    for (let i = 1; i <= ids[ids.length - 1]; i++) {
+      if (!ids.includes(i)) faltantes.push(i);
+    }
+    console.log("🎯 Total de itens:", equipamentosData.length);
+    console.log("🔍 IDs faltando:", faltantes);
+  }, []);
+
   return (
     <div className="space-y-6">
       <DocumentReader 
@@ -229,12 +261,12 @@ export default function Equipamentos() {
       <div className="relative">
         <div className="relative p-6 z-10 shadow-2xl bg-[url(src/assets/paper.png)] bg-repeat bg-size-[30%]">
           
-          <button 
+          {/* <button 
             onClick={() => setShowDebug(!showDebug)}
             className="absolute top-2 right-2 text-[10px] uppercase font-bold tracking-widest bg-gray-900 text-white px-2 py-1 shadow cursor-pointer hover:bg-gray-700"
           >
             {showDebug ? "Fechar Debug" : "Debug JSON"}
-          </button>
+          </button> */}
 
           <div className="flex flex-col gap-5 pt-2">
             
@@ -356,7 +388,7 @@ export default function Equipamentos() {
             { label: "Crítico", valor: equip.critico },
             { label: "Alcance", valor: equip.alcance },
             { label: "Tipo Dano", valor: equip.tipoDano },
-            { label: "Defesa", valor: equip.defesa },
+            // { label: "Defesa", valor: equip.defesa },
             { label: "Penalidade", valor: equip.penalidade }
           ].filter(s => s.valor !== null && s.valor !== undefined && s.valor !== "");
 
@@ -419,9 +451,9 @@ export default function Equipamentos() {
                     </div>
                   )}
                   
-                  {/* Descrição */}
+                  {/* Descrição Limpa */}
                   <div className="mb-2">
-                    <ExpandableText text={equip.descricao} limit={250} />
+                    <ExpandableText text={formatarDescricao(equip.nome, equip.descricao)} limit={equip.tipo === 'Arma' || equip.tipo2 === 'Arma' ? 250 : 500} />
                   </div>
 
                 </div>

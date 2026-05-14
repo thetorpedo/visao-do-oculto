@@ -5,8 +5,13 @@ import { BookMarked, Search, X } from "lucide-react";
 import { useMemo, useState } from "react";
 
 export default function Origens() {
-  const [busca, setBusca] = useState("");
-  const [fontesSelecionadas, setFontesSelecionadas] = useState<string[]>([]);
+const [busca, setBusca] = useState(() => {
+  if (typeof window !== "undefined") {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("busca") || "";
+  }
+  return "";
+});  const [fontesSelecionadas, setFontesSelecionadas] = useState<string[]>([]);
   const [periciasSelecionadas, setPericiasSelecionadas] = useState<string[]>([]);
   const [leitorAtivo, setLeitorAtivo] = useState<{ fonte: string; pagina: number } | null>(null);
 

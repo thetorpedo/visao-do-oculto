@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import Origens from './pages/Origens';
 import Poderes from './pages/Poderes';
 import Trilhas from './pages/Trilhas';
+import GlobalSearch from './components/GlobalSearch';
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
         </Route>
         
       </Routes>
+      <GlobalSearch />
     </Router>
   );
 }

@@ -27,8 +27,13 @@ const estiloBadgeTipo = (tipo: string) => {
 };
 
 export default function Poderes() {
-  const [busca, setBusca] = useState("");
-  const [tiposSelecionados, setTiposSelecionados] = useState<string[]>([]);
+const [busca, setBusca] = useState(() => {
+  if (typeof window !== "undefined") {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("busca") || "";
+  }
+  return "";
+});  const [tiposSelecionados, setTiposSelecionados] = useState<string[]>([]);
   const [elementosSelecionados, setElementosSelecionados] = useState<string[]>([]);
   const [fontesSelecionadas, setFontesSelecionadas] = useState<string[]>([]);
   const [preReqSelecionados, setPreReqSelecionados] = useState<string[]>([]);

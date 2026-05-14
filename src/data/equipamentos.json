@@ -4871,5 +4871,24 @@
         "elemento": "Energia",
         "fonteLivro": "OJDA",
         "fontePagina": "~"
-    }
+    },
+    {
+    "id": 276,
+    "nome": "Lançador de Granadas",
+    "tipo": "Arma",
+    "subtipo": "Pesada",
+    "armaTipo": "Fogo",
+    "empunhadura": "Duas mãos",
+    "categoria": "II",
+    "espaco": 2,
+    "descricao": "Essa arma é projetada para lançar granadas à longas distâncias, atingindo alvos com maior precisão e velocidade. É uma arma de fogo pesada de duas mãos com alcance longo (ela não tem valor de dano, tipo de dano ou crítico, variando seus efeitos conforme a munição). Ele comporta até 6 granadas de modelo 40mm. Recarregá-lo com 1 granada gasta uma ação de movimento. O lançador de granadas não dispara granadas de modelo arremessável. O lançador de granadas causa o efeito da granada no alvo atingido e em todos os seres num raio descrito pela granada usada. Todos os seres têm direito a fazer o teste de resistência oferecido pela granada, mas o alvo atingido diretamente só pode fazer o teste de resistência contra efeitos que não sejam dano. Você pode disparar a granada num ponto qualquer em alcance longo, em vez de num ser específico; nesse caso, não precisa rolar ataque e não tem chance de errar. É impossível tornar um lançador de granadas uma arma automática.",
+    "dano": null,
+    "critico": null,
+    "alcance": "Longo",
+    "tipoDano": null,
+    "defesa": "Alvo atingido diretamente só resiste a efeitos que não sejam dano",
+    "elemento": null,
+    "fonteLivro": "AS4",
+    "fontePagina": "71"
+  }
 ]
