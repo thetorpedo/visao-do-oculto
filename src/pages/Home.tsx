@@ -1,5 +1,4 @@
 import Logo from "@/components/logo";
-import GlobalSearch from "@/components/GlobalSearch";
 import { useEffect, useState } from "react";
 import { Search, Dices, ArrowRight } from "lucide-react";
 
@@ -18,7 +17,6 @@ const todosOsItens = [
 ];
 
 export default function Home() {
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [itemAleatorio, setItemAleatorio] = useState<any>(null);
 
   // Função para sortear um item aleatório

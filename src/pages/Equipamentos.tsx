@@ -100,7 +100,7 @@ export default function Equipamentos() {
   const [fontesSelecionadas, setFontesSelecionadas] = useState<string[]>([]);
   
   const [leitorAtivo, setLeitorAtivo] = useState<{ fonte: string; pagina: number } | null>(null);
-  const [showDebug, setShowDebug] = useState(false);
+  // const [showDebug, setShowDebug] = useState(false);
 
   // 1. Isola os dados baseados na aba ativa
   const dadosAbaAtual = useMemo(() => {
@@ -166,7 +166,7 @@ export default function Equipamentos() {
       const matchCatArma = catArmasSelecionadas.length === 0 || (equip.catArma && catArmasSelecionadas.includes(equip.catArma));
       const matchEmpunhadura = empunhadurasSelecionadas.length === 0 || (equip.empunhadura && empunhadurasSelecionadas.includes(equip.empunhadura));
       const matchElemento = elementosSelecionados.length === 0 || (equip.elemento && elementosSelecionados.includes(equip.elemento));
-      const matchCategoria = categoriasSelecionadas.length === 0 || categoriasSelecionadas.includes(equip.categoria);
+      const matchCategoria = categoriasSelecionadas.length === 0 || categoriasSelecionadas.includes(equip.categoria ? equip.categoria : '');
       const matchFonte = fontesSelecionadas.length === 0 || fontesSelecionadas.includes(equip.fonteLivro);
 
       return matchTipo && matchSubtipo && matchArmaTipo && matchCatArma && matchEmpunhadura && matchElemento && matchCategoria && matchFonte;
@@ -207,29 +207,29 @@ export default function Equipamentos() {
 
   const temFiltroAtivo = filtrosUI.some(f => f.estado.length > 0);
 
-  const debugData = useMemo(() => {
-    const valoresUnicos: Record<string, Set<any>> = {};
-    const chavesIgnoradas = ["id", "nome", "descricao", "defesa"];
+  // const debugData = useMemo(() => {
+  //   const valoresUnicos: Record<string, Set<any>> = {};
+  //   const chavesIgnoradas = ["id", "nome", "descricao", "defesa"];
 
-    equipamentosData.forEach(item => {
-      Object.entries(item).forEach(([chave, valor]) => {
-        if (chavesIgnoradas.includes(chave)) return;
-        if (valor === null || valor === undefined || valor === "") return;
+  //   equipamentosData.forEach(item => {
+  //     Object.entries(item).forEach(([chave, valor]) => {
+  //       if (chavesIgnoradas.includes(chave)) return;
+  //       if (valor === null || valor === undefined || valor === "") return;
 
-        if (!valoresUnicos[chave]) {
-          valoresUnicos[chave] = new Set();
-        }
-        valoresUnicos[chave].add(valor);
-      });
-    });
+  //       if (!valoresUnicos[chave]) {
+  //         valoresUnicos[chave] = new Set();
+  //       }
+  //       valoresUnicos[chave].add(valor);
+  //     });
+  //   });
 
-    const resultado: Record<string, any[]> = {};
-    Object.keys(valoresUnicos).sort().forEach(chave => {
-      resultado[chave] = Array.from(valoresUnicos[chave]).sort();
-    });
+  //   const resultado: Record<string, any[]> = {};
+  //   Object.keys(valoresUnicos).sort().forEach(chave => {
+  //     resultado[chave] = Array.from(valoresUnicos[chave]).sort();
+  //   });
 
-    return resultado;
-  }, []);
+  //   return resultado;
+  // }, []);
 
   const equipamentosOrdenados = useMemo(() => {
     if (buscaAdiada.length > 2) {
@@ -344,7 +344,7 @@ export default function Equipamentos() {
             </div>
 
             {/* PAINEL DE DEBUG */}
-            {showDebug && (
+            {/* {showDebug && (
               <div className="mt-2 p-4 bg-gray-900 text-green-400 font-mono text-xs overflow-auto max-h-64 border border-green-500 shadow-inner">
                 <div className="text-white font-bold mb-3 uppercase tracking-wider border-b border-gray-700 pb-1">
                   Valores Únicos por Campo
@@ -363,7 +363,7 @@ export default function Equipamentos() {
                   </div>
                 ))}
               </div>
-            )}
+            )} */}
             
           </div>
         </div>
