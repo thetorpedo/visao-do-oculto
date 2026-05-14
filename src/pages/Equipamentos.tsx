@@ -2,7 +2,7 @@ import DocumentReader from "@/components/DocumentReader";
 import equipamentosData from "@/data/equipamentos.json";
 import Fuse from "fuse.js";
 import { BookMarked, Search, X } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useDeferredValue, useMemo, useState } from "react";
 
 const corElemento = (elemento: string | null) => {
   switch (elemento) {
@@ -21,11 +21,12 @@ const estiloBadgeTipo = (tipo: string) => {
     case "Proteção": return "text-blue-900 border-dashed border-blue-300 bg-blue-200/30";
     case "Item Amaldiçoado": return "text-purple-900 border-dashed border-purple-300 bg-purple-200/30";
     case "Explosivo": return "text-orange-900 border-dashed border-orange-300 bg-orange-200/30";
+    case "Maldição": return "text-fuchsia-900 border-dashed border-fuchsia-400 bg-fuchsia-200/30";
+    case "Modificação": return "text-slate-900 border-dashed border-slate-400 bg-slate-200/30";
     default: return "text-gray-800 border-dashed border-gray-400 bg-gray-300/30"; 
   }
 };
 
-// Subcomponente com flex-wrap: Se a tela ficar apertada ou o texto for longo, o valor desce para a próxima linha
 const LinhaStatus = ({ label, valor }: { label: string; valor: string | number | null | undefined }) => {
   if (valor === null || valor === undefined || valor === "") return null;
   return (
@@ -36,82 +37,154 @@ const LinhaStatus = ({ label, valor }: { label: string; valor: string | number |
   );
 };
 
+// Movido para fora para evitar recriação a cada render
+function ExpandableText({ text, limit = 250 }: { text: string; limit?: number }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  if (!text) return null;
+
+  const textoExibido = isExpanded ? text : `${text.substring(0, limit)}...`;
+
+  if (text.length <= limit) {
+    return <p className="text-sm whitespace-pre-wrap first-letter:uppercase text-justify text-gray-800 leading-relaxed">{text}</p>;
+  }
+
+  return (
+    <span className="text-sm text-justify whitespace-pre-wrap text-gray-800 leading-relaxed">
+        {textoExibido}
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="ml-2 text-xs cursor-pointer whitespace-pre-wrap font-bold text-gray-600 hover:text-black underline uppercase tracking-tighter"
+        >
+          {isExpanded ? "[ Ler menos ]" : "[ Ler mais ]"}
+        </button>
+    </span>
+  );
+}
+
 export default function Equipamentos() {
+  const [abaAtiva, setAbaAtiva] = useState<"equipamentos" | "maldicoes">("equipamentos");
+  
   const [busca, setBusca] = useState("");
+  // OTIMIZAÇÃO: Adia a filtragem pesada para não travar a digitação
+  const buscaAdiada = useDeferredValue(busca);
+
   const [tiposSelecionados, setTiposSelecionados] = useState<string[]>([]);
+  const [subtiposSelecionados, setSubtiposSelecionados] = useState<string[]>([]);
+  const [armaTiposSelecionados, setArmaTiposSelecionados] = useState<string[]>([]);
+  const [catArmasSelecionadas, setCatArmasSelecionadas] = useState<string[]>([]);
+  const [empunhadurasSelecionadas, setEmpunhadurasSelecionadas] = useState<string[]>([]);
+  const [elementosSelecionados, setElementosSelecionados] = useState<string[]>([]);
   const [categoriasSelecionadas, setCategoriasSelecionadas] = useState<string[]>([]);
   const [fontesSelecionadas, setFontesSelecionadas] = useState<string[]>([]);
-  const [leitorAtivo, setLeitorAtivo] = useState<{ fonte: string; pagina: number } | null>(null);
   
-  // Estado para controlar a exibição do painel de Debug
+  const [leitorAtivo, setLeitorAtivo] = useState<{ fonte: string; pagina: number } | null>(null);
   const [showDebug, setShowDebug] = useState(false);
 
-  const TIPOS_DISPONIVEIS = ["Arma", "Proteção", "Equipamento Geral", "Acessório", "Item Amaldiçoado", "Explosivo"];
-  const CATEGORIAS_DISPONIVEIS = ["0", "I", "II", "III", "IV"];
-  
-  const fontesDisponiveis = useMemo(() => {
-    const fontes = new Set(equipamentosData.map(e => e.fonteLivro));
-    return Array.from(fontes).sort();
-  }, []);
+  // 1. Isola os dados baseados na aba ativa
+  const dadosAbaAtual = useMemo(() => {
+    return equipamentosData.filter(e => {
+      const isMaldicaoOuMod = e.tipo === "Maldição" || e.tipo === "Modificação" || e.tipo2 === "Maldição" || e.tipo2 === "Modificação";
+      return abaAtiva === "equipamentos" ? !isMaldicaoOuMod : isMaldicaoOuMod;
+    });
+  }, [abaAtiva]);
+
+  // OTIMIZAÇÃO: Loop Único. Extrai todos os filtros varrendo o array apenas UMA vez!
+  const opcoesDisponiveis = useMemo(() => {
+    const tipos = new Set<string>();
+    const subtipos = new Set<string>();
+    const armaTipos = new Set<string>();
+    const catArmas = new Set<string>();
+    const empunhaduras = new Set<string>();
+    const elementos = new Set<string>();
+    const categorias = new Set<string>();
+    const fontes = new Set<string>();
+
+    dadosAbaAtual.forEach(e => {
+      if (e.tipo) tipos.add(String(e.tipo));
+      if (e.tipo2) tipos.add(String(e.tipo2));
+      if (e.subtipo) subtipos.add(String(e.subtipo));
+      if (e.armaTipo) armaTipos.add(String(e.armaTipo));
+      if (e.catArma) catArmas.add(String(e.catArma));
+      if (e.empunhadura) empunhaduras.add(String(e.empunhadura));
+      if (e.elemento) elementos.add(String(e.elemento));
+      if (e.categoria) categorias.add(String(e.categoria));
+      if (e.fonteLivro) fontes.add(String(e.fonteLivro));
+    });
+
+    return {
+      tipos: Array.from(tipos).sort(),
+      subtipos: Array.from(subtipos).sort(),
+      armaTipos: Array.from(armaTipos).sort(),
+      catArmas: Array.from(catArmas).sort(),
+      empunhaduras: Array.from(empunhaduras).sort(),
+      elementos: Array.from(elementos).sort(),
+      categorias: Array.from(categorias).sort(),
+      fontes: Array.from(fontes).sort()
+    };
+  }, [dadosAbaAtual]);
 
   const fuse = useMemo(() => {
     return new Fuse(equipamentosData, {
-      keys: ["nome", "descricao", "tipo", "subtipo", "tipoDano", "armaTipo"], 
+      keys: ["nome", "descricao", "tipo", "tipo2", "subtipo", "tipoDano", "armaTipo", "catArma", "empunhadura", "elemento"], 
       threshold: 0.3, 
       ignoreLocation: true, 
     });
   }, []);
 
   const equipamentosFiltrados = useMemo(() => {
-    const resultadoBusca = busca.length > 2 
-      ? fuse.search(busca).map(r => r.item) 
-      : equipamentosData;
+    // Usa a buscaAdiada em vez da busca direta
+    const resultadoBusca = buscaAdiada.length > 2 
+      ? fuse.search(buscaAdiada).map(r => r.item) 
+      : dadosAbaAtual; 
   
     return resultadoBusca.filter(equip => {
-      const matchTipo = tiposSelecionados.length === 0 || tiposSelecionados.includes(equip.tipo);
+      const matchTipo = tiposSelecionados.length === 0 || tiposSelecionados.includes(equip.tipo) || (equip.tipo2 && tiposSelecionados.includes(equip.tipo2));
+      const matchSubtipo = subtiposSelecionados.length === 0 || (equip.subtipo && subtiposSelecionados.includes(equip.subtipo));
+      const matchArmaTipo = armaTiposSelecionados.length === 0 || (equip.armaTipo && armaTiposSelecionados.includes(equip.armaTipo));
+      const matchCatArma = catArmasSelecionadas.length === 0 || (equip.catArma && catArmasSelecionadas.includes(equip.catArma));
+      const matchEmpunhadura = empunhadurasSelecionadas.length === 0 || (equip.empunhadura && empunhadurasSelecionadas.includes(equip.empunhadura));
+      const matchElemento = elementosSelecionados.length === 0 || (equip.elemento && elementosSelecionados.includes(equip.elemento));
       const matchCategoria = categoriasSelecionadas.length === 0 || categoriasSelecionadas.includes(equip.categoria);
       const matchFonte = fontesSelecionadas.length === 0 || fontesSelecionadas.includes(equip.fonteLivro);
 
-      return matchTipo && matchCategoria && matchFonte;
+      return matchTipo && matchSubtipo && matchArmaTipo && matchCatArma && matchEmpunhadura && matchElemento && matchCategoria && matchFonte;
     });
-  }, [busca, tiposSelecionados, categoriasSelecionadas, fontesSelecionadas, fuse]);
+  }, [buscaAdiada, dadosAbaAtual, tiposSelecionados, subtiposSelecionados, armaTiposSelecionados, catArmasSelecionadas, empunhadurasSelecionadas, elementosSelecionados, categoriasSelecionadas, fontesSelecionadas, fuse]);
 
   const toggleFiltro = (setter: React.Dispatch<React.SetStateAction<string[]>>, item: string) => {
     setter(prev => prev.includes(item) ? prev.filter(i => i !== item) : [...prev, item]);
   };
 
-  const temFiltroAtivo = tiposSelecionados.length > 0 || categoriasSelecionadas.length > 0 || fontesSelecionadas.length > 0;
-
   const limparFiltros = () => {
     setTiposSelecionados([]);
+    setSubtiposSelecionados([]);
+    setArmaTiposSelecionados([]);
+    setCatArmasSelecionadas([]);
+    setEmpunhadurasSelecionadas([]);
+    setElementosSelecionados([]);
     setCategoriasSelecionadas([]);
     setFontesSelecionadas([]);
   };
 
-  function ExpandableText({ text, limit = 250 }: { text: string; limit?: number }) {
-    const [isExpanded, setIsExpanded] = useState(false);
-    if (!text) return null;
+  const mudarAba = (novaAba: "equipamentos" | "maldicoes") => {
+    setAbaAtiva(novaAba);
+    limparFiltros(); 
+  };
 
-    const textoExibido = isExpanded ? text : `${text.substring(0, limit)}...`;
+  // OTIMIZAÇÃO: Memoiza o array do UI de filtros para não recriar os botões desnecessariamente
+  const filtrosUI = useMemo(() => [
+    { label: "Tipos:", opcoes: opcoesDisponiveis.tipos, estado: tiposSelecionados, setter: setTiposSelecionados },
+    { label: "Subtipos:", opcoes: opcoesDisponiveis.subtipos, estado: subtiposSelecionados, setter: setSubtiposSelecionados },
+    { label: "Uso Arma:", opcoes: opcoesDisponiveis.armaTipos, estado: armaTiposSelecionados, setter: setArmaTiposSelecionados },
+    { label: "Cat Arma:", opcoes: opcoesDisponiveis.catArmas, estado: catArmasSelecionadas, setter: setCatArmasSelecionadas },
+    { label: "Empunh:", opcoes: opcoesDisponiveis.empunhaduras, estado: empunhadurasSelecionadas, setter: setEmpunhadurasSelecionadas },
+    { label: "Elementos:", opcoes: opcoesDisponiveis.elementos, estado: elementosSelecionados, setter: setElementosSelecionados },
+    ...(abaAtiva === "equipamentos" ? [{ label: "Categ:", opcoes: opcoesDisponiveis.categorias, estado: categoriasSelecionadas, setter: setCategoriasSelecionadas }] : []), 
+    { label: "Fontes:", opcoes: opcoesDisponiveis.fontes, estado: fontesSelecionadas, setter: setFontesSelecionadas },
+  ], [opcoesDisponiveis, tiposSelecionados, subtiposSelecionados, armaTiposSelecionados, catArmasSelecionadas, empunhadurasSelecionadas, elementosSelecionados, categoriasSelecionadas, fontesSelecionadas, abaAtiva]);
 
-    if (text.length <= limit) {
-      return <p className="text-sm whitespace-pre-wrap first-letter:uppercase text-justify text-gray-800 leading-relaxed">{text}</p>;
-    }
-  
-    return (
-      <span className="text-sm text-justify whitespace-pre-wrap text-gray-800 leading-relaxed">
-          {textoExibido}
-          <button
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="ml-2 text-xs cursor-pointer whitespace-pre-wrap font-bold text-gray-600 hover:text-black underline uppercase tracking-tighter"
-          >
-            {isExpanded ? "[ Ler menos ]" : "[ Ler mais ]"}
-          </button>
-      </span>
-    );
-  }
+  const temFiltroAtivo = filtrosUI.some(f => f.estado.length > 0);
 
-  // LÓGICA DE DEBUG: Extrai valores únicos de todos os campos
   const debugData = useMemo(() => {
     const valoresUnicos: Record<string, Set<any>> = {};
     const chavesIgnoradas = ["id", "nome", "descricao", "defesa"];
@@ -136,6 +209,13 @@ export default function Equipamentos() {
     return resultado;
   }, []);
 
+  const equipamentosOrdenados = useMemo(() => {
+    if (buscaAdiada.length > 2) {
+      return equipamentosFiltrados;
+    }
+    return [...equipamentosFiltrados].sort((a, b) => a.nome.localeCompare(b.nome));
+  }, [equipamentosFiltrados, buscaAdiada]);
+
   return (
     <div className="space-y-6">
       <DocumentReader 
@@ -149,7 +229,6 @@ export default function Equipamentos() {
       <div className="relative">
         <div className="relative p-6 z-10 shadow-2xl bg-[url(src/assets/paper.png)] bg-repeat bg-size-[30%]">
           
-          {/* Botão de Toggle do Debug */}
           <button 
             onClick={() => setShowDebug(!showDebug)}
             className="absolute top-2 right-2 text-[10px] uppercase font-bold tracking-widest bg-gray-900 text-white px-2 py-1 shadow cursor-pointer hover:bg-gray-700"
@@ -158,11 +237,36 @@ export default function Equipamentos() {
           </button>
 
           <div className="flex flex-col gap-5 pt-2">
-            <div className="flex items-center border border-gray-600 bg-white/40 px-3 py-2">
+            
+            {/* SUB-ABAS (Equipamentos / Maldições) */}
+            <div className="flex gap-1 border-b-2 border-gray-800 pb-0">
+              <button
+                onClick={() => mudarAba("equipamentos")}
+                className={`px-4 pt-1.5 pb-0.5 text-sm sm:text-base cursor-pointer font-special uppercase tracking-wider transition-colors border-2 border-b-0 border-gray-800 ${
+                  abaAtiva === "equipamentos" 
+                  ? "bg-gray-800 text-white" 
+                  : "bg-white/40 text-gray-800 hover:bg-white/80"
+                }`}
+              >
+                Equipamentos
+              </button>
+              <button
+                onClick={() => mudarAba("maldicoes")}
+                className={`px-4 pt-1.5 pb-0.5 text-sm sm:text-base cursor-pointer font-special uppercase tracking-wider transition-colors border-2 border-b-0 border-gray-800 ${
+                  abaAtiva === "maldicoes" 
+                  ? "bg-gray-800 text-white" 
+                  : "bg-white/40 text-gray-800 hover:bg-white/80"
+                }`}
+              >
+                Modificações & Maldições
+              </button>
+            </div>
+
+            <div className="flex items-center border border-gray-600 bg-white/40 px-3 py-2 -mt-2">
               <Search className="size-5 mr-2" />
               <input
                 type="text"
-                placeholder={`Buscando entre ${equipamentosFiltrados.length} equipamentos...`}
+                placeholder={`Buscando entre ${equipamentosFiltrados.length} itens...`}
                 className="w-full bg-transparent outline-none font-medium"
                 value={busca}
                 onChange={(e) => setBusca(e.target.value)}
@@ -170,68 +274,44 @@ export default function Equipamentos() {
             </div>
             
             <div className="flex flex-col gap-3">
-              <div className="flex flex-wrap gap-2">
-                <span className="font-special text-sm self-center mr-2 w-16">Tipos:</span>
-                {TIPOS_DISPONIVEIS.map(t => (
-                  <button
-                    key={t}
-                    onClick={() => toggleFiltro(setTiposSelecionados, t)}
-                    className={`px-3 py-1 text-xs font-bold transition-colors border cursor-pointer ${
-                      tiposSelecionados.includes(t)
-                        ? 'bg-gray-800 text-white border-gray-800'
-                        : 'bg-gray-200/50 text-gray-700 border-gray-400 hover:bg-gray-300'
-                    }`}
-                  >
-                    {t}
-                  </button>
-                ))}
-              </div>
+              {/* Renderização Dinâmica dos Filtros */}
+              {filtrosUI.map((filtro) => {
+                if (filtro.opcoes.length === 0) return null;
 
-              <div className="flex flex-wrap gap-2">
-                <span className="font-special text-sm self-center mr-2 w-16">Categ:</span>
-                {CATEGORIAS_DISPONIVEIS.map(c => (
-                  <button
-                    key={c}
-                    onClick={() => toggleFiltro(setCategoriasSelecionadas, c)}
-                    className={`px-3 py-1 text-xs font-bold transition-colors border cursor-pointer ${
-                      categoriasSelecionadas.includes(c)
-                        ? 'bg-gray-800 text-white border-gray-800'
-                        : 'bg-gray-200/50 text-gray-700 border-gray-400 hover:bg-gray-300'
-                    }`}
-                  >
-                    {c}
-                  </button>
-                ))}
-              </div>
+                return (
+                  <div key={filtro.label} className="flex flex-wrap gap-2">
+                    <span className="font-special text-sm self-center mr-2 w-[76px]">{filtro.label}</span>
+                    {filtro.opcoes.map(opcao => (
+                      <button
+                        key={opcao}
+                        onClick={() => toggleFiltro(filtro.setter, opcao)}
+                        className={`px-3 py-1 text-xs font-bold transition-colors border cursor-pointer ${
+                          filtro.estado.includes(opcao)
+                            ? 'bg-gray-800 text-white border-gray-800'
+                            : 'bg-gray-200/50 text-gray-700 border-gray-400 hover:bg-gray-300'
+                        }`}
+                      >
+                        {opcao}
+                      </button>
+                    ))}
+                  </div>
+                );
+              })}
 
-              <div className="flex flex-wrap gap-2">
-                <span className="font-special text-sm self-center mr-2 w-16">Fontes:</span>
-                {fontesDisponiveis.map(f => (
-                  <button
-                    key={f}
-                    onClick={() => toggleFiltro(setFontesSelecionadas, f)}
-                    className={`px-3 py-1 text-xs font-bold transition-colors border cursor-pointer ${
-                      fontesSelecionadas.includes(f)
-                        ? 'bg-gray-800 text-white border-gray-800'
-                        : 'bg-gray-200/50 text-gray-700 border-gray-400 hover:bg-gray-300'
-                    }`}
-                  >
-                    {f}
-                  </button>
-                ))}
-
-                {temFiltroAtivo && (
+              {temFiltroAtivo && (
+                <div className="flex mt-1">
+                  <span className="w-[76px] mr-2"></span> {/* Espaçador para alinhar */}
                   <button 
                     onClick={limparFiltros}
-                    className="text-red-700 text-xs font-bold flex items-center ml-2 underline"
+                    className="text-red-700 text-xs font-bold flex items-center underline"
                   >
-                    <X className="size-3 mr-1" /> Limpar Filtros
+                    <X className="size-3 mr-1" /> Limpar Todos os Filtros
                   </button>
-                )}
-              </div>
+                </div>
+              )}
             </div>
 
-            {/* PAINEL DE DEBUG (Condicional) */}
+            {/* PAINEL DE DEBUG */}
             {showDebug && (
               <div className="mt-2 p-4 bg-gray-900 text-green-400 font-mono text-xs overflow-auto max-h-64 border border-green-500 shadow-inner">
                 <div className="text-white font-bold mb-3 uppercase tracking-wider border-b border-gray-700 pb-1">
@@ -260,10 +340,12 @@ export default function Equipamentos() {
 
       {/* GRID DE EQUIPAMENTOS */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {Array.from(equipamentosFiltrados).sort((a, b) => a.nome.localeCompare(b.nome)).map((equip: any) => {
+        {equipamentosOrdenados.map((equip: any) => {
           
-          // Mapeamento dinâmico para contar quantas estatísticas o item tem.
-          // NOTA: Removido o campo 'defesa' conforme solicitado.
+          const isArma = equip.tipo === "Arma" || equip.tipo2 === "Arma";
+          const isAmaldicoado = equip.tipo === "Item Amaldiçoado" || equip.tipo2 === "Item Amaldiçoado";
+          const hideSubtipo = isAmaldicoado && !isArma;
+
           const statusAtivos = [
             { label: "Proficiência", valor: equip.proficiencia },
             { label: "Tipo", valor: equip.armaTipo },
@@ -274,6 +356,7 @@ export default function Equipamentos() {
             { label: "Crítico", valor: equip.critico },
             { label: "Alcance", valor: equip.alcance },
             { label: "Tipo Dano", valor: equip.tipoDano },
+            { label: "Defesa", valor: equip.defesa },
             { label: "Penalidade", valor: equip.penalidade }
           ].filter(s => s.valor !== null && s.valor !== undefined && s.valor !== "");
 
@@ -286,25 +369,36 @@ export default function Equipamentos() {
                   <div className="flex justify-between items-start mb-3 gap-4">
                     <h3 className="text-2xl font-special underline leading-tight mb-1">{equip.nome}</h3>
                     
-                    {/* Categoria e Espaço Super Destacados (Estilo Ficha) */}
-                    <div className="flex flex-col sm:flex-row gap-2 shrink-0">
-                      <div className="flex items-center justify-center align-middle border border-dashed border-gray-900 bg-white overflow-hidden">
-                        <span className="bg-gray-900 text-white font-special text-[10px] sm:text-xs px-2 h-full pt-1 align-middle uppercase">Cat</span>
-                        <span className="font-bold text-gray-900 px-2 h-full text-xs sm:text-sm">{equip.categoria}</span>
+                    {/* Categoria e Espaço Super Destacados */}
+                    {(equip.categoria || (equip.espaco !== undefined && equip.espaco !== null)) && (equip.tipo !== 'Modificação' && equip.tipo !== 'Maldição') && (
+                      <div className="flex flex-col sm:flex-row gap-2 shrink-0">
+                        {equip.categoria && (
+                          <div className="flex items-center justify-center align-middle border border-dashed border-gray-900 bg-white overflow-hidden">
+                            <span className="bg-gray-900 text-white font-special text-[10px] sm:text-xs px-2 h-full pt-1 align-middle uppercase">Cat</span>
+                            <span className="font-bold text-gray-900 px-2 h-full text-xs sm:text-sm">{equip.categoria}</span>
+                          </div>
+                        )}
+                        {equip.espaco !== undefined && equip.espaco !== null && (
+                          <div className="flex items-center border border-dashed border-gray-900 bg-white overflow-hidden">
+                            <span className="bg-gray-900 text-white font-special text-[10px] sm:text-xs px-2 h-full pt-1 text-center align-middle uppercase">Esp</span>
+                            <span className="font-bold text-gray-900 px-2 h-full text-xs sm:text-sm">{equip.espaco}</span>
+                          </div>
+                        )}
                       </div>
-                      <div className="flex items-center border border-dashed border-gray-900 bg-white overflow-hidden">
-                        <span className="bg-gray-900 text-white font-special text-[10px] sm:text-xs px-2 h-full pt-1 text-center align-middle uppercase">Esp</span>
-                        <span className="font-bold text-gray-900 px-2 h-full text-xs sm:text-sm">{equip.espaco}</span>
-                      </div>
-                    </div>
+                    )}
                   </div>
 
-                  {/* Badges unificados: Tipo, Subtipo e Elemento */}
+                  {/* Badges unificados: Tipo, Tipo2, Subtipo e Elemento */}
                   <div className="flex flex-wrap gap-2 mb-4">
                     <span className={`text-xs uppercase font-daisy px-2.5 py-1 border ${estiloBadgeTipo(equip.tipo)}`}>
                       {equip.tipo}
                     </span>
-                    {equip.subtipo && (
+                    {equip.tipo2 && (
+                      <span className={`text-xs uppercase font-daisy px-2.5 py-1 border ${estiloBadgeTipo(equip.tipo2)}`}>
+                        {equip.tipo2}
+                      </span>
+                    )}
+                    {equip.subtipo && !hideSubtipo && (
                       <span className="text-xs uppercase font-daisy px-2.5 py-1 border border-dashed border-gray-400 bg-gray-200/50 text-gray-700">
                         {equip.subtipo}
                       </span>
@@ -316,8 +410,8 @@ export default function Equipamentos() {
                     )}
                   </div>
                   
-                  {/* Tabela de Status Dinâmica (Ocupa 1 coluna inteira se tiver apenas 1 item) */}
-                  {statusAtivos.length > 0 && (
+                  {/* Tabela de Status Dinâmica (Só aparece se for Arma e tiver itens ativos) */}
+                  {(isArma || equip.tipo === "Proteção") && statusAtivos.length > 0 && (
                     <div className={`mb-4 bg-gray-100/90 border border-gray-400/50 p-3 grid gap-x-6 gap-y-1.5 ${statusAtivos.length === 1 ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-2'}`}>
                       {statusAtivos.map((status, index) => (
                         <LinhaStatus key={index} label={status.label} valor={status.valor} />
@@ -355,7 +449,7 @@ export default function Equipamentos() {
 
         {equipamentosFiltrados.length === 0 && (
            <div className="col-span-full text-center py-10 text-gray-600 font-special text-xl">
-             Nenhum equipamento encontrado com esses termos.
+             Nenhum item encontrado com esses termos.
            </div>
         )}
       </div>
