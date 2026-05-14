@@ -94,30 +94,30 @@ export default function FolderLayout() {
       <SigilRain />
 
       {/* ================= HEADER MOBILE ================= */}
-      <div className="lg:hidden fixed top-0 left-0 w-full bg-[#837156] bg-[url(src/assets/folder.jpg)] bg-blend-overlay bg-size-[30%] backdrop-blur-md  border-dashed border-[#837156] z-50 flex justify-between items-center p-4 shadow-xl">
+      <div className="lg:hidden fixed top-0 left-0 w-full bg-[#837156] bg-[url(/assets/folder.jpg)] bg-blend-overlay bg-size-[30%] backdrop-blur-md  border-dashed border-[#837156] z-50 flex justify-between items-center p-4 shadow-xl">
       <span className="relative">
-        <span className="relative z-99 font-special text-xl text-black tracking-widest p-2 bg-[linear-gradient(rgba(249,249,249,0.5),rgba(249,249,249,0.5)),url(src/assets/paper.png)] uppercase">Visão do Oculto
+        <span className="relative z-99 font-special text-xl text-black tracking-widest p-2 bg-[linear-gradient(rgba(249,249,249,0.5),rgba(249,249,249,0.5)),url(/assets/paper.png)] uppercase">Visão do Oculto
         </span>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[linear-gradient(rgba(79,79,79,0.2),rgba(79,79,79,0.2)),url(src/assets/paper.png)] bg-repeat bg-size-[30%] w-[97%] h-[95%] rotate-4 shadow-[0_0_40px_rgba(0,0,0,0.25)] p-1 z-11">
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[linear-gradient(rgba(79,79,79,0.2),rgba(79,79,79,0.2)),url(/assets/paper.png)] bg-repeat bg-size-[30%] w-[97%] h-[95%] rotate-4 shadow-[0_0_40px_rgba(0,0,0,0.25)] p-1 z-11">
               </div>
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[linear-gradient(rgba(109,109,109,0.2),rgba(109,109,109,0.2)),url(src/assets/paper.png)] bg-repeat bg-size-[30%] w-[97%] h-[95%] rotate-[-3.5deg] shadow-[0_0_40px_rgba(0,0,0,0.25)] p-1 z-11">
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[linear-gradient(rgba(109,109,109,0.2),rgba(109,109,109,0.2)),url(/assets/paper.png)] bg-repeat bg-size-[30%] w-[97%] h-[95%] rotate-[-3.5deg] shadow-[0_0_40px_rgba(0,0,0,0.25)] p-1 z-11">
               </div>
       </span>
 
       <span className="space-x-4">
         
         <button onClick={() => window.dispatchEvent(new Event("open-global-search"))} className="text-black p-1 relative">
-          <Search className="relative size-8 z-99 bg-[linear-gradient(rgba(249,249,249,0.5),rgba(249,249,249,0.5)),url(src/assets/paper.png)] " />
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[linear-gradient(rgba(79,79,79,0.2),rgba(79,79,79,0.2)),url(src/assets/paper.png)] bg-repeat bg-size-[30%] w-[97%] h-[95%] rotate-4 shadow-[0_0_40px_rgba(0,0,0,0.25)] p-1 z-11">
+          <Search className="relative size-8 z-99 bg-[linear-gradient(rgba(249,249,249,0.5),rgba(249,249,249,0.5)),url(/assets/paper.png)] " />
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[linear-gradient(rgba(79,79,79,0.2),rgba(79,79,79,0.2)),url(/assets/paper.png)] bg-repeat bg-size-[30%] w-[97%] h-[95%] rotate-4 shadow-[0_0_40px_rgba(0,0,0,0.25)] p-1 z-11">
               </div>
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[linear-gradient(rgba(109,109,109,0.2),rgba(109,109,109,0.2)),url(src/assets/paper.png)] bg-repeat bg-size-[30%] w-[97%] h-[95%] rotate-[-3.5deg] shadow-[0_0_40px_rgba(0,0,0,0.25)] p-1 z-11">
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[linear-gradient(rgba(109,109,109,0.2),rgba(109,109,109,0.2)),url(/assets/paper.png)] bg-repeat bg-size-[30%] w-[97%] h-[95%] rotate-[-3.5deg] shadow-[0_0_40px_rgba(0,0,0,0.25)] p-1 z-11">
               </div>
         </button>
         <button onClick={() => setIsMobileMenuOpen(true)} className="text-black p-1 relative">
-          <Menu className="relative size-8 z-99 bg-[linear-gradient(rgba(249,249,249,0.5),rgba(249,249,249,0.5)),url(src/assets/paper.png)] " />
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[linear-gradient(rgba(79,79,79,0.2),rgba(79,79,79,0.2)),url(src/assets/paper.png)] bg-repeat bg-size-[30%] w-[97%] h-[95%] rotate-4 shadow-[0_0_40px_rgba(0,0,0,0.25)] p-1 z-11">
+          <Menu className="relative size-8 z-99 bg-[linear-gradient(rgba(249,249,249,0.5),rgba(249,249,249,0.5)),url(/assets/paper.png)] " />
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[linear-gradient(rgba(79,79,79,0.2),rgba(79,79,79,0.2)),url(/assets/paper.png)] bg-repeat bg-size-[30%] w-[97%] h-[95%] rotate-4 shadow-[0_0_40px_rgba(0,0,0,0.25)] p-1 z-11">
               </div>
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[linear-gradient(rgba(109,109,109,0.2),rgba(109,109,109,0.2)),url(src/assets/paper.png)] bg-repeat bg-size-[30%] w-[97%] h-[95%] rotate-[-3.5deg] shadow-[0_0_40px_rgba(0,0,0,0.25)] p-1 z-11">
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[linear-gradient(rgba(109,109,109,0.2),rgba(109,109,109,0.2)),url(/assets/paper.png)] bg-repeat bg-size-[30%] w-[97%] h-[95%] rotate-[-3.5deg] shadow-[0_0_40px_rgba(0,0,0,0.25)] p-1 z-11">
               </div>
         </button>
         </span>
@@ -156,38 +156,38 @@ export default function FolderLayout() {
         
         {/* === ABAS DESKTOP (Escondidas no mobile) === */}
         <div className="hidden lg:flex flex-row -gap-2 relative z-0">
-          <NavLink to="/" className={({ isActive }: { isActive: boolean }) => `font-special bg-[url(src/assets/folder.jpg)] bg-blend-overlay bg-size-[170%] w-60  -mt-8 rounded-t-lg flex justify-center items-start text-black/70 text-2xl pt-4 transition-all hover:-mt-12 hover:h-16 cursor-pointer shadow-[0_0_15px_rgba(0,0,0,0.35)] z-9 ${isActive ? 'bg-[#837156] h-14 -mt-10 shadow-[0_0_15px_rgba(0,0,0,0.35)]' : 'bg-[#7a6a51] h-12 shadow-[inset_0_-2px_5px_rgba(0,0,0,0.35),0_0px_20px_rgba(0,0,0,0.55)]'}`}>
+          <NavLink to="/" className={({ isActive }: { isActive: boolean }) => `font-special bg-[url(/assets/folder.jpg)] bg-blend-overlay bg-size-[170%] w-60  -mt-8 rounded-t-lg flex justify-center items-start text-black/70 text-2xl pt-4 transition-all hover:-mt-12 hover:h-16 cursor-pointer shadow-[0_0_15px_rgba(0,0,0,0.35)] z-9 ${isActive ? 'bg-[#837156] h-14 -mt-10 shadow-[0_0_15px_rgba(0,0,0,0.35)]' : 'bg-[#7a6a51] h-12 shadow-[inset_0_-2px_5px_rgba(0,0,0,0.35),0_0px_20px_rgba(0,0,0,0.55)]'}`}>
             INÍCIO
           </NavLink>
-          <NavLink to="/origens" className={({ isActive }: { isActive: boolean }) => `font-special bg-[url(src/assets/folder.jpg)] bg-blend-overlay bg-size-[170%] w-60  -mt-8 rounded-t-lg flex justify-center items-start text-black/70 text-2xl pt-4 transition-all -ml-5 hover:-mt-12 hover:h-16 cursor-pointer shadow-[0_0_15px_rgba(0,0,0,0.35)] z-8 ${isActive ? 'bg-[#837156] h-14 -mt-10 shadow-[0_0_15px_rgba(0,0,0,0.35)] z-20' : 'bg-[#7a6a51] h-12 shadow-[inset_0_-2px_5px_rgba(0,0,0,0.35),0_0px_20px_rgba(0,0,0,0.55)]'}`}>
+          <NavLink to="/origens" className={({ isActive }: { isActive: boolean }) => `font-special bg-[url(/assets/folder.jpg)] bg-blend-overlay bg-size-[170%] w-60  -mt-8 rounded-t-lg flex justify-center items-start text-black/70 text-2xl pt-4 transition-all -ml-5 hover:-mt-12 hover:h-16 cursor-pointer shadow-[0_0_15px_rgba(0,0,0,0.35)] z-8 ${isActive ? 'bg-[#837156] h-14 -mt-10 shadow-[0_0_15px_rgba(0,0,0,0.35)] z-20' : 'bg-[#7a6a51] h-12 shadow-[inset_0_-2px_5px_rgba(0,0,0,0.35),0_0px_20px_rgba(0,0,0,0.55)]'}`}>
             ORIGENS
           </NavLink> 
-          <NavLink to="/poderes" className={({ isActive }: { isActive: boolean }) => `font-special bg-[url(src/assets/folder.jpg)] bg-blend-overlay bg-size-[170%] w-60  -mt-8 rounded-t-lg flex justify-center items-start text-black/70 text-2xl pt-4 transition-all -ml-5 hover:-mt-12 hover:h-16 cursor-pointer shadow-[0_0_15px_rgba(0,0,0,0.35)] z-7 ${isActive ? 'bg-[#837156] h-14 -mt-10 shadow-[0_0_15px_rgba(0,0,0,0.35)] z-20' : 'bg-[#7a6a51] h-12 shadow-[inset_0_-2px_5px_rgba(0,0,0,0.35),0_0px_20px_rgba(0,0,0,0.55)]'}`}>
+          <NavLink to="/poderes" className={({ isActive }: { isActive: boolean }) => `font-special bg-[url(/assets/folder.jpg)] bg-blend-overlay bg-size-[170%] w-60  -mt-8 rounded-t-lg flex justify-center items-start text-black/70 text-2xl pt-4 transition-all -ml-5 hover:-mt-12 hover:h-16 cursor-pointer shadow-[0_0_15px_rgba(0,0,0,0.35)] z-7 ${isActive ? 'bg-[#837156] h-14 -mt-10 shadow-[0_0_15px_rgba(0,0,0,0.35)] z-20' : 'bg-[#7a6a51] h-12 shadow-[inset_0_-2px_5px_rgba(0,0,0,0.35),0_0px_20px_rgba(0,0,0,0.55)]'}`}>
             PODERES
           </NavLink> 
-          <NavLink to="/trilhas" className={({ isActive }: { isActive: boolean }) => `font-special bg-[url(src/assets/folder.jpg)] bg-blend-overlay bg-size-[170%] w-60  -mt-8 rounded-t-lg flex justify-center items-start text-black/70 text-2xl pt-4 transition-all -ml-5 hover:-mt-12 hover:h-16 cursor-pointer shadow-[0_0_15px_rgba(0,0,0,0.35)] z-6 ${isActive ? 'bg-[#837156] h-14 -mt-10 shadow-[0_0_15px_rgba(0,0,0,0.35)] z-20' : 'bg-[#7a6a51] h-12 shadow-[inset_0_-2px_5px_rgba(0,0,0,0.35),0_0px_20px_rgba(0,0,0,0.55)]'}`}>
+          <NavLink to="/trilhas" className={({ isActive }: { isActive: boolean }) => `font-special bg-[url(/assets/folder.jpg)] bg-blend-overlay bg-size-[170%] w-60  -mt-8 rounded-t-lg flex justify-center items-start text-black/70 text-2xl pt-4 transition-all -ml-5 hover:-mt-12 hover:h-16 cursor-pointer shadow-[0_0_15px_rgba(0,0,0,0.35)] z-6 ${isActive ? 'bg-[#837156] h-14 -mt-10 shadow-[0_0_15px_rgba(0,0,0,0.35)] z-20' : 'bg-[#7a6a51] h-12 shadow-[inset_0_-2px_5px_rgba(0,0,0,0.35),0_0px_20px_rgba(0,0,0,0.55)]'}`}>
             TRILHAS
           </NavLink> 
-          <NavLink to="/equipamentos" className={({ isActive }: { isActive: boolean }) => `font-special bg-[url(src/assets/folder.jpg)] bg-blend-overlay bg-size-[170%] w-60  -mt-8 rounded-t-lg flex justify-center items-start text-black/70 text-2xl pt-4 transition-all -ml-5 hover:-mt-12 hover:h-16 cursor-pointer shadow-[0_0_15px_rgba(0,0,0,0.35)] z-5 ${isActive ? 'bg-[#837156] h-14 -mt-10 shadow-[0_0_15px_rgba(0,0,0,0.35)] z-20' : 'bg-[#7a6a51] h-12 shadow-[inset_0_-2px_5px_rgba(0,0,0,0.35),0_0px_20px_rgba(0,0,0,0.55)]'}`}>
+          <NavLink to="/equipamentos" className={({ isActive }: { isActive: boolean }) => `font-special bg-[url(/assets/folder.jpg)] bg-blend-overlay bg-size-[170%] w-60  -mt-8 rounded-t-lg flex justify-center items-start text-black/70 text-2xl pt-4 transition-all -ml-5 hover:-mt-12 hover:h-16 cursor-pointer shadow-[0_0_15px_rgba(0,0,0,0.35)] z-5 ${isActive ? 'bg-[#837156] h-14 -mt-10 shadow-[0_0_15px_rgba(0,0,0,0.35)] z-20' : 'bg-[#7a6a51] h-12 shadow-[inset_0_-2px_5px_rgba(0,0,0,0.35),0_0px_20px_rgba(0,0,0,0.55)]'}`}>
             EQUIPAM.
           </NavLink> 
         </div>
           
         {/* === CORPO DA PASTA === */}
         {/* No mobile, adicionei rounded-t-lg já que não temos as abas visíveis no topo */}
-        <div className="bg-[#837156] bg-[url(src/assets/folder.jpg)] bg-blend-overlay bg-size-[30%] w-full h-8 relative z-10 rounded-t-md lg:rounded-t-none"></div>
-        <div className="relative bg-[#837156] bg-[url(src/assets/folder.jpg)] bg-blend-overlay bg-size-[30%] h-full p-2 sm:p-6 lg:p-6 ">
+        <div className="bg-[#837156] bg-[url(/assets/folder.jpg)] bg-blend-overlay bg-size-[30%] w-full h-8 relative z-10 rounded-t-md lg:rounded-t-none"></div>
+        <div className="relative bg-[#837156] bg-[url(/assets/folder.jpg)] bg-blend-overlay bg-size-[30%] h-full p-2 sm:p-6 lg:p-6 ">
           
           {isHome && (
             <>
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[linear-gradient(rgba(79,79,79,0.2),rgba(79,79,79,0.2)),url(src/assets/paper.png)] bg-repeat bg-size-[30%] w-[97%] h-[95%] rotate-1 shadow-[0_0_40px_rgba(0,0,0,0.25)] p-1 z-11">
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[linear-gradient(rgba(79,79,79,0.2),rgba(79,79,79,0.2)),url(/assets/paper.png)] bg-repeat bg-size-[30%] w-[97%] h-[95%] rotate-1 shadow-[0_0_40px_rgba(0,0,0,0.25)] p-1 z-11">
               </div>
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[linear-gradient(rgba(109,109,109,0.2),rgba(109,109,109,0.2)),url(src/assets/paper.png)] bg-repeat bg-size-[30%] w-[97%] h-[95%] rotate-[-0.5deg] shadow-[0_0_40px_rgba(0,0,0,0.25)] p-1 z-11">
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[linear-gradient(rgba(109,109,109,0.2),rgba(109,109,109,0.2)),url(/assets/paper.png)] bg-repeat bg-size-[30%] w-[97%] h-[95%] rotate-[-0.5deg] shadow-[0_0_40px_rgba(0,0,0,0.25)] p-1 z-11">
               </div>
             </>
           )}
                 
-          <div className={`relative ${isHome ? ' bg-[linear-gradient(rgba(229,229,229,0.5),rgba(229,229,229,0.5)),url(src/assets/paper.png)] ' : 'bg-none shadow-none'} bg-repeat bg-size-[30%] w-full h-full shadow-[0_0_15px_rgba(0,0,0,0.15)] z-12`}>
+          <div className={`relative ${isHome ? ' bg-[linear-gradient(rgba(229,229,229,0.5),rgba(229,229,229,0.5)),url(/assets/paper.png)] ' : 'bg-none shadow-none'} bg-repeat bg-size-[30%] w-full h-full shadow-[0_0_15px_rgba(0,0,0,0.15)] z-12`}>
             <div className="w-full h-full">
               <Outlet />
             </div>
