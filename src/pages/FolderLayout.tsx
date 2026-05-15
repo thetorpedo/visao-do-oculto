@@ -60,7 +60,7 @@ function SigilRain() {
     };
   }, []);
 
-  return <canvas ref={canvasRef} className="fixed inset-0 z-0 opacity-60 pointer-events-none" />;
+  return <canvas ref={canvasRef} className="fixed inset-0 z-0 hidden lg:block opacity-60 pointer-events-none" />;
 }
 
 
@@ -90,7 +90,7 @@ export default function FolderLayout() {
   ];
 
   return (
-    <div className="relative overflow-hidden bg-black bg-[radial-gradient(#5b4f21_1px,transparent_1px)] bg-size-[16px_16px] min-h-screen flex-col justify-center items-center">
+    <div className="relative overflow-hidden bg-[#453b13] lg:bg-black bg-[radial-gradient(#5b4f21_1px,transparent_1px)] bg-size-[16px_16px] min-h-screen flex-col justify-center items-center">
       <SigilRain />
 
       {/* ================= HEADER MOBILE ================= */}

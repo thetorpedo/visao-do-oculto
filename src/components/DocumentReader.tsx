@@ -1,48 +1,22 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+// OTIMIZAÇÃO: Força o Vite a tratar o worker como um arquivo estático e gera a URL correta
+pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
 
 const FONTES_CONFIG: Record<string, { url: string; offset: number }> = {
-  "OPRPG": {
-    url: "/files/OPRPG.pdf", 
-    offset: 10,
-  },
-  "SAH": {
-    url: "/files/SAH.pdf",
-    offset: 1,
-  },
-  "HQ Iniciação": {
-    url: "/files/INICIACAO.png",
-    offset: 2,
-  },
-  "HQ OSNF-1": {
-    url: "/files/OSNF1.png",
-    offset: 2,
-  },
-  "HQ OSNF-2": {
-    url: "/files/OSNF2.png",
-    offset: 2,
-  },
-  "AS1": {
-    url: "/files/AS1.pdf",
-    offset: 0,
-  },
-  "AS2": {
-    url: "/files/AS2.pdf",
-    offset: 0,
-  },
-  "AS3": {
-    url: "/files/AS3.pdf",
-    offset: 0,
-  },
-  "AS4": {
-    url: "/files/AS4.pdf",
-    offset: 0,
-  },
+  "OPRPG": { url: "/files/OPRPG.pdf", offset: 10 },
+  "SAH": { url: "/files/SAH.pdf", offset: 1 },
+  "HQ Iniciação": { url: "/files/INICIACAO.png", offset: 2 },
+  "HQ OSNF-1": { url: "/files/OSNF1.png", offset: 2 },
+  "HQ OSNF-2": { url: "/files/OSNF2.png", offset: 2 },
+  "AS1": { url: "/files/AS1.pdf", offset: 0 },
+  "AS2": { url: "/files/AS2.pdf", offset: 0 },
+  "AS3": { url: "/files/AS3.pdf", offset: 0 },
+  "AS4": { url: "/files/AS4.pdf", offset: 0 },
 };
 
 interface DocumentReaderProps {
@@ -55,13 +29,60 @@ interface DocumentReaderProps {
 export default function DocumentReader({ fonteId, paginaImpressa, isOpen, onClose }: DocumentReaderProps) {
   const [viewMode, setViewMode] = useState<'single' | 'full'>('single');
   
+  // OTIMIZAÇÃO 2: Estado para segurar o arquivo puro (Blob) ou a URL
+  const [pdfSource, setPdfSource] = useState<string | Blob>("");
+  
   const config = FONTES_CONFIG[fonteId];
   const urlFinal = config ? config.url : "";
-  
-  // Agora ele reconhece a imagem pela URL também, impedindo que o react-pdf tente abrir um PNG
   const isImage = paginaImpressa === '~' || urlFinal.toLowerCase().endsWith('.png') || urlFinal.toLowerCase().endsWith('.jpg');
-  
   const paginaReal = !isImage ? Number(paginaImpressa) + (config?.offset || 0) : 0;
+  const [iframeUrl, setIframeUrl] = useState<string>("");
+
+  // OTIMIZAÇÃO 3: Força a leitura direta do Cache Storage do navegador
+  useEffect(() => {
+    let urlCriadaNaMemoria: string | null = null;
+
+    if (!urlFinal || isImage) {
+      setPdfSource(urlFinal);
+      setIframeUrl(urlFinal);
+      return;
+    }
+
+    const loadDirectlyFromCache = async () => {
+      try {
+        if ('caches' in window) {
+          const cache = await caches.open('visao-oculto-pdfs');
+          const cachedResponse = await cache.match(urlFinal);
+          
+          if (cachedResponse) {
+            console.log("🔥 CACHE HIT! Gerando link local...");
+            const blob = await cachedResponse.blob();
+            
+            // Transforma o Blob do cache em um link fictício que o Iframe entende
+            urlCriadaNaMemoria = URL.createObjectURL(blob);
+            
+            setPdfSource(blob);
+            setIframeUrl(urlCriadaNaMemoria);
+            return;
+          }
+        }
+      } catch (error) {
+        console.warn("Falha ao ler cache", error);
+      }
+      
+      setPdfSource(urlFinal);
+      setIframeUrl(urlFinal);
+    };
+
+    loadDirectlyFromCache();
+
+    // Limpeza crucial: Evita que a RAM do pc estoure ao fechar o leitor
+    return () => {
+      if (urlCriadaNaMemoria) {
+        URL.revokeObjectURL(urlCriadaNaMemoria);
+      }
+    };
+  }, [urlFinal, isImage]);
 
   const handleClose = () => {
     setViewMode('single');
@@ -93,7 +114,6 @@ export default function DocumentReader({ fonteId, paginaImpressa, isOpen, onClos
           </div>
 
           <div className='flex flex-row gap-4'>
-            {/* O botão de "Abrir Livro" só aparece se não for uma imagem */}
             {!isImage && (
               <button 
                 onClick={() => setViewMode(viewMode === 'single' ? 'full' : 'single')}
@@ -117,33 +137,30 @@ export default function DocumentReader({ fonteId, paginaImpressa, isOpen, onClos
 
         {/* CONTEÚDO */}
         <div className="flex-1 overflow-auto bg-[#0a0a0a] flex justify-center custom-scrollbar relative">
-          {isOpen && urlFinal && (
+          {isOpen && pdfSource && (
             <div className="p-8 animate-in fade-in zoom-in-95 duration-300 w-full flex justify-center">
               {isImage ? (
-                /* RENDERIZAÇÃO DE IMAGEM */
                 <img 
                   src={urlFinal} 
                   alt={fonteId} 
                   className="max-w-full max-h-[75vh] object-contain shadow-[0_0_30px_rgba(0,0,0,0.5)] border border-white/5"
                 />
               ) : viewMode === 'single' ? (
-                /* RENDERIZAÇÃO PDF PÁGINA ÚNICA */
                 <Document 
-                  file={urlFinal} 
-                  loading={<div className="text-red-500 font-special animate-pulse pt-20">DESCRIPTOGRAFANDO...</div>}
+                  file={pdfSource} 
+                  loading={<div className="text-red-500 font-special animate-pulse pt-20">DESCRIPTOGRAFANDO_DADOS...</div>}
                 >
                   <Page 
                     pageNumber={paginaReal} 
                     width={850}
-                    renderTextLayer={true}
-                    renderAnnotationLayer={true}
+                    renderTextLayer={false} 
+                    renderAnnotationLayer={false} 
                     className="shadow-[0_0_30px_rgba(0,0,0,0.5)]"
                   />
                 </Document>
               ) : (
-                /* RENDERIZAÇÃO IFRAME */
                 <iframe 
-                  src={`${urlFinal}#page=${paginaReal}`} 
+                  src={`${iframeUrl}#page=${paginaReal}`} 
                   className="w-full h-full min-h-[75vh] border-none invert-[0.05] contrast-[1.1]"
                   title="Leitor Completo"
                 />
