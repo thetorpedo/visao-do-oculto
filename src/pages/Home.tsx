@@ -85,7 +85,7 @@ export default function Home() {
         
         {/* Cabeçalho */}
         <div className="w-full mx-auto text-center mt-6">
-          <h1 className="text-2xl sm:text-5xl md:text-7xl flex flex-wrap mb-4 justify-center pointer-events-none select-none border-b-4 border-dashed border-gray-800 w-fit mx-auto pb-2">
+          <h1 className="text-3xl sm:text-5xl md:text-7xl flex flex-wrap mb-4 justify-center pointer-events-none select-none border-b-4 border-dashed border-gray-800 w-fit mx-auto pb-2">
             {'VISÃO DO OCULTO'.split("").map((char, index) => (
               <Logo key={index} char={char}/>
             ))}
