@@ -90,7 +90,7 @@ export default function GlobalSearch() {
         </div>
 
         {/* Resultados */}
-        <div className="overflow-y-auto p-2">
+        <div className="overflow-y-auto p-2 bg-white/50">
           {busca.length < 2 ? (
             <div className="p-6 text-center text-gray-500 font-special tracking-wide">
               Digite pelo menos 2 caracteres para buscar no grimório.

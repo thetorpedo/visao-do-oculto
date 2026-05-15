@@ -2,16 +2,21 @@ import DocumentReader from "@/components/DocumentReader";
 import origensData from "@/data/origens.json";
 import Fuse from "fuse.js";
 import { BookMarked, Search, X } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useDeferredValue, useMemo, useState } from "react";
 
 export default function Origens() {
-const [busca, setBusca] = useState(() => {
-  if (typeof window !== "undefined") {
-    const params = new URLSearchParams(window.location.search);
-    return params.get("busca") || "";
-  }
-  return "";
-});  const [fontesSelecionadas, setFontesSelecionadas] = useState<string[]>([]);
+  const [busca, setBusca] = useState(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      return params.get("busca") || "";
+    }
+    return "";
+  }); 
+  
+  // OTIMIZAÇÃO: Adia a filtragem para não travar a digitação
+  const buscaAdiada = useDeferredValue(busca);
+
+  const [fontesSelecionadas, setFontesSelecionadas] = useState<string[]>([]);
   const [periciasSelecionadas, setPericiasSelecionadas] = useState<string[]>([]);
   const [leitorAtivo, setLeitorAtivo] = useState<{ fonte: string; pagina: number } | null>(null);
 
@@ -38,8 +43,8 @@ const [busca, setBusca] = useState(() => {
   }, []);
 
   const origensFiltradas = useMemo(() => {
-    const resultadoBusca = busca.length > 2 
-      ? fuse.search(busca).map(r => r.item) 
+    const resultadoBusca = buscaAdiada.length > 2 
+      ? fuse.search(buscaAdiada).map(r => r.item) 
       : origensData;
   
     return resultadoBusca.filter(origem => {
@@ -52,7 +57,15 @@ const [busca, setBusca] = useState(() => {
 
       return matchFonte && matchPericia;
     });
-  }, [busca, fontesSelecionadas, periciasSelecionadas, fuse]);
+  }, [buscaAdiada, fontesSelecionadas, periciasSelecionadas, fuse]);
+
+  // CORREÇÃO DA ORDENAÇÃO: Respeita o Fuse.js quando há pesquisa
+  const origensOrdenadas = useMemo(() => {
+    if (buscaAdiada.length > 2) {
+      return origensFiltradas;
+    }
+    return [...origensFiltradas].sort((a, b) => a.nome.localeCompare(b.nome));
+  }, [origensFiltradas, buscaAdiada]);
 
   const toggleFiltro = (setter: React.Dispatch<React.SetStateAction<string[]>>, item: string) => {
     setter(prev => prev.includes(item) ? prev.filter(i => i !== item) : [...prev, item]);
@@ -158,7 +171,8 @@ const [busca, setBusca] = useState(() => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {Array.from(origensFiltradas).sort((a, b) => a.nome.localeCompare(b.nome)).map((origem) => (
+        {/* CORREÇÃO DO MAP: Substituímos o filter inline pelo origensOrdenadas */}
+        {origensOrdenadas.map((origem) => (
           <div key={origem.id} className="relative group">
             <div className="relative flex flex-col justify-between z-10 w-full p-5 h-full shadow-lg bg-[linear-gradient(rgba(249,249,249,0.5),rgba(249,249,249,0.5)),url(/assets/paper.png)] bg-repeat bg-size-[30%] border border-gray-300">
             
@@ -183,17 +197,17 @@ const [busca, setBusca] = useState(() => {
             </div>
             
                <div className="border-t border-dashed border-gray-400 mt-5 pt-3 flex items-center justify-between">
-                  <div className="text-xs text-gray-700 font-medium flex items-center">
-                    <BookMarked className="size-4 mr-1.5 opacity-80" />
-                    <button 
-                      onClick={() => setLeitorAtivo({ fonte: origem.fonteLivro, pagina: parseInt(origem.fontePagina) })}
-                      className="hover:text-black underline cursor-pointer transition-colors decoration-gray-400 underline-offset-2"
-                    >
-                      <span className="font-bold">{origem.fonteLivro}</span>
-                      <span>, pág. {origem.fontePagina}</span>
-                    </button>
-                  </div>
-                </div>
+                 <div className="text-xs text-gray-700 font-medium flex items-center">
+                   <BookMarked className="size-4 mr-1.5 opacity-80" />
+                   <button 
+                     onClick={() => setLeitorAtivo({ fonte: origem.fonteLivro, pagina: parseInt(origem.fontePagina) })}
+                     className="hover:text-black underline cursor-pointer transition-colors decoration-gray-400 underline-offset-2"
+                   >
+                     <span className="font-bold">{origem.fonteLivro}</span>
+                     <span>, pág. {origem.fontePagina}</span>
+                   </button>
+                 </div>
+               </div>
 
             </div>
             <div className="absolute top-1/2 left-1/2 z-0 h-full w-full -translate-x-1/2 -translate-y-1/2 -rotate-1 p-1 bg-[linear-gradient(rgba(139,139,139,0.4),rgba(139,139,139,0.2)),url(/assets/paper.png)] shadow-[0_0_15px_rgba(0,0,0,0.15)] bg-repeat bg-size-[30%]" />

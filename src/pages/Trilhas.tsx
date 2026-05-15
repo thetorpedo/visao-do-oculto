@@ -2,7 +2,7 @@ import DocumentReader from "@/components/DocumentReader";
 import trilhasData from "@/data/trilhas.json";
 import Fuse from "fuse.js";
 import { BookMarked, ChevronDown, Search, X } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useDeferredValue, useMemo, useState } from "react";
 
 const estiloBadgeTipo = (tipo: string) => {
   switch (tipo) {
@@ -15,13 +15,18 @@ const estiloBadgeTipo = (tipo: string) => {
 };
 
 export default function Trilhas() {
-const [busca, setBusca] = useState(() => {
-  if (typeof window !== "undefined") {
-    const params = new URLSearchParams(window.location.search);
-    return params.get("busca") || "";
-  }
-  return "";
-});  const [tiposSelecionados, setTiposSelecionados] = useState<string[]>([]);
+  const [busca, setBusca] = useState(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      return params.get("busca") || "";
+    }
+    return "";
+  }); 
+  
+  // OTIMIZAÇÃO: Adia a filtragem para não travar a digitação
+  const buscaAdiada = useDeferredValue(busca);
+  
+  const [tiposSelecionados, setTiposSelecionados] = useState<string[]>([]);
   const [fontesSelecionadas, setFontesSelecionadas] = useState<string[]>([]);
   const [leitorAtivo, setLeitorAtivo] = useState<{ fonte: string; pagina: number } | null>(null);
 
@@ -41,8 +46,8 @@ const [busca, setBusca] = useState(() => {
   }, []);
 
   const trilhasFiltradas = useMemo(() => {
-    const resultadoBusca = busca.length > 2 
-      ? fuse.search(busca).map(r => r.item) 
+    const resultadoBusca = buscaAdiada.length > 2 
+      ? fuse.search(buscaAdiada).map(r => r.item) 
       : trilhasData;
   
     return resultadoBusca.filter(trilha => {
@@ -51,7 +56,15 @@ const [busca, setBusca] = useState(() => {
 
       return matchTipo && matchFonte;
     });
-  }, [busca, tiposSelecionados, fontesSelecionadas, fuse]);
+  }, [buscaAdiada, tiposSelecionados, fontesSelecionadas, fuse]);
+
+  // CORREÇÃO DA ORDENAÇÃO: Respeita o Fuse.js quando há pesquisa
+  const trilhasOrdenadas = useMemo(() => {
+    if (buscaAdiada.length > 2) {
+      return trilhasFiltradas;
+    }
+    return [...trilhasFiltradas].sort((a, b) => a.nome.localeCompare(b.nome));
+  }, [trilhasFiltradas, buscaAdiada]);
 
   const toggleFiltro = (setter: React.Dispatch<React.SetStateAction<string[]>>, item: string) => {
     setter(prev => prev.includes(item) ? prev.filter(i => i !== item) : [...prev, item]);
@@ -197,7 +210,8 @@ const [busca, setBusca] = useState(() => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {Array.from(trilhasFiltradas).sort((a, b) => a.nome.localeCompare(b.nome)).map((trilha) => (
+        {/* CORREÇÃO DO MAP: Usando trilhasOrdenadas */}
+        {trilhasOrdenadas.map((trilha) => (
           <div key={trilha.id} className="relative group">
             <div className="relative flex flex-col justify-between z-10 w-full p-5 h-full shadow-lg bg-[linear-gradient(rgba(249,249,249,0.5),rgba(249,249,249,0.5)),url(/assets/paper.png)] bg-repeat bg-size-[30%] border border-gray-300">
               

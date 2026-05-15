@@ -146,12 +146,12 @@ export default function Equipamentos() {
   }, [dadosAbaAtual]);
 
   const fuse = useMemo(() => {
-    return new Fuse(equipamentosData, {
+    return new Fuse(dadosAbaAtual, {
       keys: ["nome", "descricao", "tipo", "tipo2", "subtipo", "tipoDano", "armaTipo", "catArma", "empunhadura", "elemento"], 
       threshold: 0.3, 
       ignoreLocation: true, 
     });
-  }, []);
+  }, [dadosAbaAtual]);
 
   const equipamentosFiltrados = useMemo(() => {
     // Usa a buscaAdiada em vez da busca direta

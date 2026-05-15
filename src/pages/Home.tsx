@@ -85,7 +85,7 @@ export default function Home() {
         
         {/* Cabeçalho */}
         <div className="w-full mx-auto text-center mt-6">
-          <h1 className="text-5xl md:text-7xl flex flex-wrap mb-4 justify-center pointer-events-none select-none border-b-4 border-dashed border-gray-800 w-fit mx-auto pb-2">
+          <h1 className="text-2xl sm:text-5xl md:text-7xl flex flex-wrap mb-4 justify-center pointer-events-none select-none border-b-4 border-dashed border-gray-800 w-fit mx-auto pb-2">
             {'VISÃO DO OCULTO'.split("").map((char, index) => (
               <Logo key={index} char={char}/>
             ))}
@@ -205,7 +205,7 @@ export default function Home() {
                   onClick={handleCachePDFs}
                   className="flex items-center gap-2 bg-white text-gray-900 hover:bg-gray-900 hover:text-white border-2 border-gray-900 px-6 py-3 font-special uppercase tracking-wider transition-colors cursor-pointer shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1"
                 >
-                  <Download className="size-5" /> Iniciar Download (~120MB)
+                  <Download className="size-5" /> Iniciar Download (~200MB)
                 </button>
               )}
             </div>

@@ -2,7 +2,7 @@ import DocumentReader from "@/components/DocumentReader";
 import poderesData from "@/data/poderes.json";
 import Fuse from "fuse.js";
 import { BookMarked, Search, X } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useDeferredValue, useMemo, useState } from "react";
 
 const corElemento = (elemento: string | null) => {
   switch (elemento) {
@@ -22,18 +22,24 @@ const estiloBadgeTipo = (tipo: string) => {
     case "Especialista": return "text-blue-900 border-dashed border-blue-300 bg-blue-200/30";
     case "Ocultista": return "text-purple-900 border-dashed border-purple-300 bg-purple-200/30";
     case "Sacrifício": return "text-rose-900 border-dashed border-rose-300 bg-rose-200/30";
+    case "Paranormal": return "text-black-900 border-dashed border-black-300 bg-black-200/30";
     default: return "text-gray-800 border-dashed border-gray-400 bg-gray-300/30";
   }
 };
 
 export default function Poderes() {
-const [busca, setBusca] = useState(() => {
-  if (typeof window !== "undefined") {
-    const params = new URLSearchParams(window.location.search);
-    return params.get("busca") || "";
-  }
-  return "";
-});  const [tiposSelecionados, setTiposSelecionados] = useState<string[]>([]);
+  const [busca, setBusca] = useState(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      return params.get("busca") || "";
+    }
+    return "";
+  }); 
+  
+  // OTIMIZAÇÃO: Adia a filtragem para não travar a digitação
+  const buscaAdiada = useDeferredValue(busca);
+  
+  const [tiposSelecionados, setTiposSelecionados] = useState<string[]>([]);
   const [elementosSelecionados, setElementosSelecionados] = useState<string[]>([]);
   const [fontesSelecionadas, setFontesSelecionadas] = useState<string[]>([]);
   const [preReqSelecionados, setPreReqSelecionados] = useState<string[]>([]);
@@ -57,8 +63,8 @@ const [busca, setBusca] = useState(() => {
   }, []);
 
   const poderesFiltrados = useMemo(() => {
-    const resultadoBusca = busca.length > 2 
-      ? fuse.search(busca).map(r => r.item) 
+    const resultadoBusca = buscaAdiada.length > 2 
+      ? fuse.search(buscaAdiada).map(r => r.item) 
       : poderesData;
   
     return resultadoBusca.filter(poder => {
@@ -71,7 +77,15 @@ const [busca, setBusca] = useState(() => {
 
       return matchTipo && matchFonte && matchElemento && matchPreReq;
     });
-  }, [busca, tiposSelecionados, elementosSelecionados, fontesSelecionadas, preReqSelecionados, fuse]);
+  }, [buscaAdiada, tiposSelecionados, elementosSelecionados, fontesSelecionadas, preReqSelecionados, fuse]);
+
+  // CORREÇÃO DA ORDENAÇÃO: Respeita o Fuse.js quando há pesquisa
+  const poderesOrdenados = useMemo(() => {
+    if (buscaAdiada.length > 2) {
+      return poderesFiltrados;
+    }
+    return [...poderesFiltrados].sort((a, b) => a.nome.localeCompare(b.nome));
+  }, [poderesFiltrados, buscaAdiada]);
 
   const toggleFiltro = (setter: React.Dispatch<React.SetStateAction<string[]>>, item: string) => {
     setter(prev => prev.includes(item) ? prev.filter(i => i !== item) : [...prev, item]);
@@ -195,16 +209,16 @@ const [busca, setBusca] = useState(() => {
                     {f}
                   </button>
                 ))}
-
-                {temFiltroAtivo && (
-                  <button 
-                    onClick={limparFiltros}
-                    className="text-red-700 text-xs font-bold flex items-center ml-2 underline"
-                  >
-                    <X className="size-3 mr-1" /> Limpar Filtros
-                  </button>
-                )}
               </div>
+              
+              {temFiltroAtivo && (
+                <button 
+                  onClick={limparFiltros}
+                  className="text-red-700 text-xs font-bold flex items-center underline mt-2"
+                >
+                  <X className="size-3 mr-1" /> Limpar Todos os Filtros
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -212,7 +226,8 @@ const [busca, setBusca] = useState(() => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {Array.from(poderesFiltrados).sort((a, b) => a.nome.localeCompare(b.nome)).map((poder) => (
+        {/* CORREÇÃO DO MAP: Usando poderesOrdenados */}
+        {poderesOrdenados.map((poder) => (
           <div key={poder.id} className="relative group">
             <div className="relative flex flex-col justify-between z-10 w-full p-5 h-full shadow-lg bg-[linear-gradient(rgba(249,249,249,0.5),rgba(249,249,249,0.5)),url(/assets/paper.png)] bg-repeat bg-size-[30%] border border-gray-300">
               
@@ -221,11 +236,21 @@ const [busca, setBusca] = useState(() => {
                 <div className="flex justify-between flex-col items-start mb-3">
                   <h3 className="text-xl font-special underline leading-tight">{poder.nome}</h3>
                   
+                  <span className="flex flex-row flex-wrap gap-2">
+                  <span className={`text-sm uppercase font-daisy px-2 mt-1 border ${
+                     estiloBadgeTipo(poder.tipo)
+                  } whitespace-nowrap`}>
+                    {poder.tipo}
+                  </span>
+                  {poder.elemento && (
                   <span className={`text-sm uppercase font-daisy px-2 mt-1 border ${
                     poder.elemento ? corElemento(poder.elemento) : estiloBadgeTipo(poder.tipo)
                   } whitespace-nowrap`}>
-                    {poder.elemento ? `${poder.elemento}` : poder.tipo}
+                    {poder.elemento}
+                  </span>  
+                  )}
                   </span>
+                  
                 </div>
                 
                 {/* Descrição Principal */}
