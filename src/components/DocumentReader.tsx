@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Document, Page, pdfjs } from 'react-pdf';
 
 import 'react-pdf/dist/Page/AnnotationLayer.css';
@@ -13,6 +14,7 @@ const FONTES_CONFIG: Record<string, { url: string; offset: number }> = {
   "HQ Iniciação": { url: "/files/INICIACAO.png", offset: 2 },
   "HQ OSNF-1": { url: "/files/OSNF1.png", offset: 2 },
   "HQ OSNF-2": { url: "/files/OSNF2.png", offset: 2 },
+  "HQ DESCONJ-1": { url: "/files/DESCONJ1.png", offset: 2 },
   "AS1": { url: "/files/AS1.pdf", offset: 0 },
   "AS2": { url: "/files/AS2.pdf", offset: 0 },
   "AS3": { url: "/files/AS3.pdf", offset: 0 },
@@ -28,17 +30,52 @@ interface DocumentReaderProps {
 
 export default function DocumentReader({ fonteId, paginaImpressa, isOpen, onClose }: DocumentReaderProps) {
   const [viewMode, setViewMode] = useState<'single' | 'full'>('single');
-  
-  // OTIMIZAÇÃO 2: Estado para segurar o arquivo puro (Blob) ou a URL
   const [pdfSource, setPdfSource] = useState<string | Blob>("");
+  const [iframeUrl, setIframeUrl] = useState<string>("");
+  const [mounted, setMounted] = useState(false);
+  
+  // Ref para calcular a largura disponível da tela
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [pdfWidth, setPdfWidth] = useState(850);
   
   const config = FONTES_CONFIG[fonteId];
   const urlFinal = config ? config.url : "";
   const isImage = paginaImpressa === '~' || urlFinal.toLowerCase().endsWith('.png') || urlFinal.toLowerCase().endsWith('.jpg');
   const paginaReal = !isImage ? Number(paginaImpressa) + (config?.offset || 0) : 0;
-  const [iframeUrl, setIframeUrl] = useState<string>("");
 
-  // OTIMIZAÇÃO 3: Força a leitura direta do Cache Storage do navegador
+  // Garante que o Portal só renderize no lado do cliente
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Trava o scroll do fundo quando o leitor está aberto
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => { document.body.style.overflow = 'unset'; };
+  }, [isOpen]);
+
+  // Lógica de Responsividade do PDF
+  useEffect(() => {
+    if (!isOpen) return;
+    
+    const updateWidth = () => {
+      if (containerRef.current) {
+        const containerWidth = containerRef.current.clientWidth;
+        // No mobile usa a largura total, no desktop trava em 850px
+        setPdfWidth(Math.min(containerWidth, 850)); 
+      }
+    };
+
+    updateWidth();
+    window.addEventListener('resize', updateWidth);
+    return () => window.removeEventListener('resize', updateWidth);
+  }, [isOpen, viewMode]);
+
+  // Lógica de Cache
   useEffect(() => {
     let urlCriadaNaMemoria: string | null = null;
 
@@ -57,10 +94,7 @@ export default function DocumentReader({ fonteId, paginaImpressa, isOpen, onClos
           if (cachedResponse) {
             console.log("🔥 CACHE HIT! Gerando link local...");
             const blob = await cachedResponse.blob();
-            
-            // Transforma o Blob do cache em um link fictício que o Iframe entende
             urlCriadaNaMemoria = URL.createObjectURL(blob);
-            
             setPdfSource(blob);
             setIframeUrl(urlCriadaNaMemoria);
             return;
@@ -76,7 +110,6 @@ export default function DocumentReader({ fonteId, paginaImpressa, isOpen, onClos
 
     loadDirectlyFromCache();
 
-    // Limpeza crucial: Evita que a RAM do pc estoure ao fechar o leitor
     return () => {
       if (urlCriadaNaMemoria) {
         URL.revokeObjectURL(urlCriadaNaMemoria);
@@ -89,79 +122,91 @@ export default function DocumentReader({ fonteId, paginaImpressa, isOpen, onClos
     onClose();
   };
 
-  return (
-    <div className={`fixed inset-0 z-[100] h-screen flex items-center justify-center bg-black/60 backdrop-blur-md p-4 transition-all duration-300 ${
-      isOpen ? "opacity-100 visible" : "opacity-0 invisible"
+  // Se não estiver montado (Server Side), não tenta renderizar o Portal
+  if (!mounted) return null;
+
+  // CREATE PORTAL: Joga o modal pro fim do HTML, burlando qualquer Z-index da aplicação!
+  return createPortal(
+    <div className={`fixed inset-0 z-[99999] flex items-center justify-center bg-black/80 backdrop-blur-md sm:p-4 transition-all duration-300 ${
+      isOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
     }`}>
-      <div className="relative w-full max-w-5xl h-[95vh] bg-[#1a1a1a] flex flex-col shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/10 overflow-hidden">
+      <div className="relative w-full max-w-5xl h-[100dvh] sm:h-[95vh] bg-[#1a1a1a] flex flex-col shadow-[0_0_50px_rgba(0,0,0,0.5)] sm:border border-white/10 sm:rounded-lg overflow-hidden">
         
-        {/* HEADER */}
-        <div className="flex justify-between items-center p-3 bg-gray-900 border-b border-red-900/30 shadow-md">
-          <div className="flex gap-6 items-center">
-            <div className="flex items-center gap-2 px-2">
-              <div className="relative flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
-                <span className="relative inline-flex rounded-full -mt-0.5 h-3 w-3 bg-red-600 shadow-[0_0_10px_#ff0000]"></span>
-              </div>
-              <span className="font-special text-sm text-red-500 tracking-[0.2em] uppercase mt-0.5">
-                {isImage 
-                  ? `ARQUIVO_VISUAL // ${fonteId}` 
-                  : viewMode === 'single' 
-                    ? `ACESSO_REMOTO // PÁG_${paginaImpressa}` 
-                    : "ACESSO_TOTAL_RESERVADO"}
-              </span>
+        {/* HEADER RESPONSIVO 1 LINHA */}
+        <div className="flex flex-row justify-between items-center p-2 sm:p-3 bg-gray-900 border-b border-red-900/30 shadow-md">
+          
+          {/* Lado Esquerdo (Status) */}
+          <div className="flex gap-2 items-center truncate">
+            <div className="relative flex h-2.5 w-2.5 sm:h-3 sm:w-3 shrink-0 ml-1">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 sm:h-3 sm:w-3 bg-red-600 shadow-[0_0_10px_#ff0000]"></span>
             </div>
+            <span className="font-special text-xs sm:text-sm text-red-500 tracking-wider sm:tracking-[0.2em] uppercase mt-0.5 truncate">
+              {isImage 
+                ? `VISUAL // ${fonteId}` 
+                : viewMode === 'single' 
+                  ? `PÁG_${paginaImpressa}` 
+                  : "LIVRO_COMPLETO"}
+            </span>
           </div>
 
-          <div className='flex flex-row gap-4'>
+          {/* Lado Direito (Botões) */}
+          <div className='flex flex-row gap-2 sm:gap-4 shrink-0'>
             {!isImage && (
               <button 
                 onClick={() => setViewMode(viewMode === 'single' ? 'full' : 'single')}
-                className="group flex items-center gap-2 text-sm font-daisy text-white bg-white/30 hover:bg-white/50 px-3 py-1.5 border border-white/50 transition-all cursor-pointer uppercase"
+                className="group flex items-center justify-center gap-1.5 text-xs sm:text-sm font-daisy text-white bg-white/30 hover:bg-white/50 px-2 sm:px-3 py-1.5 border border-white/50 transition-all cursor-pointer uppercase"
               >
-                {viewMode === 'single' ? ">> ABRIR_LIVRO_COMPLETO" : "<< VOLTAR_PARA_PÁGINA"}
+                {viewMode === 'single' ? (
+                  <><span className="shrink-0">{">>"}</span> <span className="hidden sm:inline">ABRIR_</span>LIVRO</>
+                ) : (
+                  <><span className="shrink-0">{"<<"}</span> VOLTAR</>
+                )}
               </button>
             )}
 
             <button 
               onClick={handleClose} 
-              className="group flex items-center gap-2 px-4 py-1.5 border-red-600/70 bg-red-600/20 hover:bg-red-600/40 border transition-all cursor-pointer"
+              className="group flex items-center justify-center gap-2 px-3 sm:px-4 py-1.5 border-red-600/70 bg-red-600/20 hover:bg-red-600/40 border transition-all cursor-pointer"
             >
-              <span className="text-red-600 group-hover:text-red-500 font-special -mb-1 text-sm tracking-widest uppercase">
-                [ ENCERRAR_SESSÃO ]
+              <span className="hidden sm:inline text-red-600 group-hover:text-red-500 font-special -mb-1 text-sm tracking-widest uppercase">
+                [ ENCERRAR ]
               </span>
-              <span className="text-red-600 font-bold">×</span>
+              <span className="text-red-600 font-bold text-lg sm:text-base leading-none">×</span>
             </button>
           </div>
         </div>
 
-        {/* CONTEÚDO */}
-        <div className="flex-1 overflow-auto bg-[#0a0a0a] flex justify-center custom-scrollbar relative">
+        {/* CONTEÚDO RESPONSIVO */}
+        <div 
+          ref={containerRef} 
+          className="flex-1 overflow-auto bg-[#0a0a0a] flex justify-center custom-scrollbar relative"
+        >
           {isOpen && pdfSource && (
-            <div className="p-8 animate-in fade-in zoom-in-95 duration-300 w-full flex justify-center">
+            <div className="p-0 sm:p-8 animate-in fade-in zoom-in-95 duration-300 w-full flex justify-center h-max">
               {isImage ? (
                 <img 
                   src={urlFinal} 
                   alt={fonteId} 
-                  className="max-w-full max-h-[75vh] object-contain shadow-[0_0_30px_rgba(0,0,0,0.5)] border border-white/5"
+                  className="max-w-full max-h-[85vh] sm:max-h-[75vh] object-contain shadow-[0_0_30px_rgba(0,0,0,0.5)] border border-white/5"
                 />
               ) : viewMode === 'single' ? (
                 <Document 
                   file={pdfSource} 
-                  loading={<div className="text-red-500 font-special animate-pulse pt-20">DESCRIPTOGRAFANDO_DADOS...</div>}
+                  loading={<div className="text-red-500 font-special animate-pulse pt-20 text-center">DESCRIPTOGRAFANDO_DADOS...</div>}
                 >
                   <Page 
                     pageNumber={paginaReal} 
-                    width={850}
+                    width={pdfWidth} // LARGURA DINÂMICA
                     renderTextLayer={false} 
                     renderAnnotationLayer={false} 
-                    className="shadow-[0_0_30px_rgba(0,0,0,0.5)]"
+                    className="shadow-[0_0_30px_rgba(0,0,0,0.5)] bg-white mx-auto"
                   />
                 </Document>
               ) : (
                 <iframe 
                   src={`${iframeUrl}#page=${paginaReal}`} 
-                  className="w-full h-full min-h-[75vh] border-none invert-[0.05] contrast-[1.1]"
+                  className="w-full h-full min-h-[90vh] sm:min-h-[75vh] border-none invert-[0.05] contrast-[1.1]"
                   title="Leitor Completo"
                 />
               )}
@@ -169,7 +214,10 @@ export default function DocumentReader({ fonteId, paginaImpressa, isOpen, onClos
           )}
         </div>
       </div>
+      
+      {/* Click fora para fechar (no mobile não tem muito espaço fora, mas mantém a funcionalidade) */}
       <div className="absolute inset-0 -z-10 cursor-default" onClick={handleClose}></div>
-    </div>
+    </div>,
+    document.body // TELETRANSPORTE PRO FINAL DO HTML
   );
 }
