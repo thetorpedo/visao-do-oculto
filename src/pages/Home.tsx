@@ -218,6 +218,11 @@ export default function Home() {
             </div>
             <div className="mt-3 flex flex-col gap-2">
               <p className="border-b border-dashed border-gray-400/60 pb-2 text-gray-800">
+                <span className="font-bold text-gray-900 bg-gray-200 px-1 border border-gray-300 mr-2">v1.1</span> 
+                <span className="text-gray-500 font-mono text-xs mr-2">(19/05/26)</span> 
+                Adicionado rituais.
+              </p>
+              <p className="border-b border-dashed border-gray-400/60 pb-2 text-gray-800">
                 <span className="font-bold text-gray-900 bg-gray-200 px-1 border border-gray-300 mr-2">v1.0</span> 
                 <span className="text-gray-500 font-mono text-xs mr-2">(14/05/26)</span> 
                 Primeira versão pública!
@@ -236,7 +241,7 @@ export default function Home() {
               Funcionalidades Planejadas
             </div>
             <ul className="mt-3 space-y-2 text-gray-800 list-disc list-inside marker:text-gray-500">
-              <li className="border-b border-dashed border-gray-400/60 pb-1">Rituais - paciência, tem muitos e são muito chatos de importar.</li>
+              <li className="border-b border-dashed border-gray-400/60 pb-1">Bestiário.</li>
               <li className="border-b border-dashed border-gray-400/60 pb-1">Dark mode?</li>
               <li className="border-b border-dashed border-gray-400/60 pb-1">Implementar sistema de favoritos.</li>
               <li className="border-b border-dashed border-gray-400/60 pb-1">Buscar pelas regras e livros.</li>

@@ -271,10 +271,10 @@ export default function Equipamentos() {
           <div className="flex flex-col gap-5 pt-2">
             
             {/* SUB-ABAS (Equipamentos / Maldições) */}
-            <div className="flex gap-1 border-b-2 border-gray-800 pb-0">
+            <div className="flex gap-2 pb-0">
               <button
                 onClick={() => mudarAba("equipamentos")}
-                className={`px-4 pt-1.5 pb-0.5 text-sm sm:text-base cursor-pointer font-special uppercase tracking-wider transition-colors border-2 border-b-0 border-gray-800 ${
+                className={`px-4 pt-1.5 pb-0.5 text-sm sm:text-base cursor-pointer font-special uppercase tracking-wider transition-colors border-2 border-gray-800 ${
                   abaAtiva === "equipamentos" 
                   ? "bg-gray-800 text-white" 
                   : "bg-white/40 text-gray-800 hover:bg-white/80"
@@ -284,7 +284,7 @@ export default function Equipamentos() {
               </button>
               <button
                 onClick={() => mudarAba("maldicoes")}
-                className={`px-4 pt-1.5 pb-0.5 text-sm sm:text-base cursor-pointer font-special uppercase tracking-wider transition-colors border-2 border-b-0 border-gray-800 ${
+                className={`px-4 pt-1.5 pb-0.5 text-sm sm:text-base cursor-pointer font-special uppercase tracking-wider transition-colors border-2 border-gray-800 ${
                   abaAtiva === "maldicoes" 
                   ? "bg-gray-800 text-white" 
                   : "bg-white/40 text-gray-800 hover:bg-white/80"
@@ -422,21 +422,21 @@ export default function Equipamentos() {
 
                   {/* Badges unificados: Tipo, Tipo2, Subtipo e Elemento */}
                   <div className="flex flex-wrap gap-2 mb-4">
-                    <span className={`text-xs uppercase font-daisy px-2.5 py-1 border ${estiloBadgeTipo(equip.tipo)}`}>
+                    <span className={`text-sm uppercase font-daisy px-2.5 py-1 border ${estiloBadgeTipo(equip.tipo)}`}>
                       {equip.tipo}
                     </span>
                     {equip.tipo2 && (
-                      <span className={`text-xs uppercase font-daisy px-2.5 py-1 border ${estiloBadgeTipo(equip.tipo2)}`}>
+                      <span className={`text-sm uppercase font-daisy px-2.5 py-1 border ${estiloBadgeTipo(equip.tipo2)}`}>
                         {equip.tipo2}
                       </span>
                     )}
                     {equip.subtipo && !hideSubtipo && (
-                      <span className="text-xs uppercase font-daisy px-2.5 py-1 border border-dashed border-gray-400 bg-gray-200/50 text-gray-700">
+                      <span className="text-sm uppercase font-daisy px-2.5 py-1 border border-dashed border-gray-400 bg-gray-200/50 text-gray-700">
                         {equip.subtipo}
                       </span>
                     )}
                     {equip.elemento && (
-                      <span className={`text-xs uppercase font-daisy px-2.5 py-1 border ${corElemento(equip.elemento)}`}>
+                      <span className={`text-sm uppercase font-daisy px-2.5 py-1 border ${corElemento(equip.elemento)}`}>
                         {equip.elemento}
                       </span>
                     )}

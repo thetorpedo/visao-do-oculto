@@ -87,6 +87,7 @@ export default function FolderLayout() {
     { to: "/poderes", label: "PODERES" },
     { to: "/trilhas", label: "TRILHAS" },
     { to: "/equipamentos", label: "EQUIPAMENTOS" },
+    { to: "/rituais", label: "RITUAIS" },
   ];
 
   return (
@@ -170,6 +171,9 @@ export default function FolderLayout() {
           </NavLink> 
           <NavLink to="/equipamentos" className={({ isActive }: { isActive: boolean }) => `font-special bg-[url(/assets/folder.jpg)] bg-blend-overlay bg-size-[170%] w-60  -mt-8 rounded-t-lg flex justify-center items-start text-black/70 text-2xl pt-4 transition-all -ml-5 hover:-mt-12 hover:h-16 cursor-pointer shadow-[0_0_15px_rgba(0,0,0,0.35)] z-5 ${isActive ? 'bg-[#837156] h-14 -mt-10 shadow-[0_0_15px_rgba(0,0,0,0.35)] z-20' : 'bg-[#7a6a51] h-12 shadow-[inset_0_-2px_5px_rgba(0,0,0,0.35),0_0px_20px_rgba(0,0,0,0.55)]'}`}>
             EQUIPAM.
+          </NavLink> 
+          <NavLink to="/rituais" className={({ isActive }: { isActive: boolean }) => `font-special bg-[url(/assets/folder.jpg)] bg-blend-overlay bg-size-[170%] w-60  -mt-8 rounded-t-lg flex justify-center items-start text-black/70 text-2xl pt-4 transition-all -ml-5 hover:-mt-12 hover:h-16 cursor-pointer shadow-[0_0_15px_rgba(0,0,0,0.35)] z-4 ${isActive ? 'bg-[#837156] h-14 -mt-10 shadow-[0_0_15px_rgba(0,0,0,0.35)] z-20' : 'bg-[#7a6a51] h-12 shadow-[inset_0_-2px_5px_rgba(0,0,0,0.35),0_0px_20px_rgba(0,0,0,0.55)]'}`}>
+            RITUAIS
           </NavLink> 
         </div>
           

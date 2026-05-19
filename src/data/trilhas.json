@@ -375,5 +375,19 @@
     "nex99": "Memória Muscular. Suas criações agem quase como uma extensão do seu corpo ou de quem as use. Você e qualquer aliado adjacente podem sacar qualquer explosivo autoral em seu inventário como uma ação livre, e você pode gastar 4 PE para usar um explosivo autoral como uma ação de movimento (mesmo em um lança-granadas). Além disso, seus explosivos autorais causam o dobro dos dados de dano.",
     "fonteLivro": "AS4",
     "fontePagina": "69"
+  },
+  
+  {
+    "id": "parapsicologo",
+    "nome": "Parapsicólogo",
+    "tipo": "Ocultista",
+    "descricao": "Você esteve em um meio de pessoas dedicadas a cuidar da mente humana… Mas, quando descobriu a maior ameaça para a nossa psique, descobriu também que seus colegas não passavam de tolos céticos. Quando você falou sobre o paranormal, eles apenas riram. Desprezado pela academia, você decidiu perseguir a verdade sozinho. Afinal, a diferença entre o remédio e o veneno é a dosagem. Se o paranormal pode ser usado para perturbar, também pode ser usado para sanar. Ele só precisa ser estudado, analisado e aplicado por alguém competente como você, mesmo que isso custe sua vida.",
+    "especial": "Para escolher esta trilha, você precisa ser treinado em Profissão (psicólogo).",
+    "nex10": "Terapia. Por meio de seus estudos parapsicológicos, você começa a compreender os efeitos do paranormal sobre a mente humana. Você pode usar Profissão (psicólogo) como Diplomacia. Além disso, uma vez por rodada, quando você ou um aliado em alcance curto falha em um teste de resistência contra um efeito que causa dano mental, você pode gastar 2 PE para fazer um teste de Profissão (psicólogo) e usar o resultado desse teste no lugar do teste de resistência falho. Se já possuir esta habilidade, em vez disso seu custo é reduzido em –1 PE e você recebe +2 em Profissão (psicólogo).",
+    "nex40": "Palavras-chave. Combinando psicologia e estudos do Outro Lado, você desenvolveu técnicas e sabe o que dizer para restaurar a sanidade de seus pacientes. Quando passa em um teste de perícia para acalmar (veja OPRPG, p. 44), você pode gastar uma quantidade de pontos de esforço até seu limite de PE. Para cada 1 PE gasto desta forma, a pessoa que está sendo tratada recupera 1 ponto de Sanidade (ou 1 PD, se estiver usando a regra “Jogando sem Sanidade” da p. 104).",
+    "nex65": "Reprogramação Mental. Ignorando os avisos de cautela de seus pares, você descobriu como hipnotizar e manipular a mente humana para reprogramar suas capacidades. Você pode gastar 5 PE e uma ação de interlúdio para manipular o cérebro de outra pessoa voluntária em alcance curto (essa pessoa também gasta sua ação de interlúdio). Até o próximo interlúdio, a pessoa recebe, à escolha dela, um poder geral, um poder da própria classe ou o primeiro poder de uma trilha que não a dela, acreditando que isso sempre fez parte de sua vida. A pessoa precisa cumprir os pré-requisitos do poder escolhido.",
+    "nex99": "A Sanidade Está Lá Fora. Graças aos seus estudos, a capacidade de curar a mente humana de (quase) todas as mazelas está ao seu alcance. Você pode gastar uma ação de movimento e 5 PE para remover todas as condições de medo ou mentais de uma pessoa adjacente (incluindo você mesmo).",
+    "fonteLivro": "SAH",
+    "fontePagina": "29"
   }
 ]

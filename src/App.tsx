@@ -6,6 +6,7 @@ import Origens from './pages/Origens';
 import Poderes from './pages/Poderes';
 import Trilhas from './pages/Trilhas';
 import GlobalSearch from './components/GlobalSearch';
+import Rituais from './pages/Rituais';
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
         <Route path="/poderes" element={<Poderes />} />
         <Route path="/trilhas" element={<Trilhas />} />
         <Route path="/equipamentos" element={<Equipamentos />} />
+        <Route path="/rituais" element={<Rituais />} />
         </Route>
         
       </Routes>
