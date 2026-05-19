@@ -2,6 +2,7 @@ import origensData from "@/data/origens.json";
 import poderesData from "@/data/poderes.json";
 import trilhasData from "@/data/trilhas.json";
 import equipamentosData from "@/data/equipamentos.json";
+import rituaisData from "@/data/rituais.json";
 import Fuse from "fuse.js";
 import { BookOpen, Box, Shield, Sparkles, Search, X } from "lucide-react";
 import { useEffect, useMemo, useState, useRef } from "react";
@@ -10,7 +11,8 @@ const dadosGlobais = [
   ...origensData.map(item => ({ ...item, globalType: "Origem", icone: BookOpen, link: `/origens?busca=${encodeURIComponent(item.nome)}` })),
   ...poderesData.map(item => ({ ...item, globalType: "Poder", icone: Sparkles, link: `/poderes?busca=${encodeURIComponent(item.nome)}` })),
   ...trilhasData.map(item => ({ ...item, globalType: "Trilha", icone: Shield, link: `/trilhas?busca=${encodeURIComponent(item.nome)}` })),
-  ...equipamentosData.map(item => ({ ...item, globalType: "Equipamento", icone: Box, link: `/equipamentos?busca=${encodeURIComponent(item.nome)}` }))
+  ...equipamentosData.map(item => ({ ...item, globalType: "Equipamento", icone: Box, link: `/equipamentos?busca=${encodeURIComponent(item.nome)}` })),
+  ...rituaisData.map(item => ({ ...item, globalType: "Ritual", icone: Sparkles, link: `/rituais?busca=${encodeURIComponent(item.nome)}` }))
 ];
 
 // Repare que tiramos as props daqui!
@@ -71,10 +73,10 @@ export default function GlobalSearch() {
       {/* Fundo clicável para fechar */}
       <div className="absolute inset-0" onClick={() => setIsOpen(false)} />
       
-      <div className="relative w-full max-w-2xl bg-[url(src/assets/paper.png)] bg-repeat bg-size-[30%] shadow-[0_0_40px_rgba(0,0,0,0.4)] border-2 border-gray-800 flex flex-col max-h-[80vh] overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+      <div className="relative w-full max-w-2xl bg-[url(/assets/paper.png)] bg-repeat bg-size-[30%] shadow-[0_0_40px_rgba(0,0,0,0.4)] border-2 border-gray-800 flex flex-col max-h-[80vh] overflow-hidden animate-in fade-in zoom-in-95 duration-200">
         
         {/* Barra de Input */}
-        <div className="flex items-center px-4 py-3 border-b-2 border-gray-800 bg-white/50">
+        <div className="flex items-center px-4 py-3 border-b-2 border-gray-800 bg-white/90">
           <Search className="size-5 text-gray-500 mr-3 shrink-0" />
           <input
             ref={inputRef}
