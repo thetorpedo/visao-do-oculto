@@ -7,13 +7,15 @@ import origensData from "@/data/origens.json";
 import poderesData from "@/data/poderes.json";
 import trilhasData from "@/data/trilhas.json";
 import equipamentosData from "@/data/equipamentos.json";
+import rituaisData from "@/data/rituais.json";
 
 // Junta tudo numa array só com uma tag de onde vieram
 const todosOsItens = [
   ...origensData.map(item => ({ ...item, globalType: "Origens", link: "/origens" })),
   ...poderesData.map(item => ({ ...item, globalType: "Poderes", link: "/poderes", badge: item.elemento || item.tipo })),
   ...trilhasData.map(item => ({ ...item, globalType: "Trilhas", link: "/trilhas", badge: item.tipo })),
-  ...equipamentosData.map(item => ({ ...item, globalType: "Equipamentos", link: "/equipamentos", badge: item.tipo }))
+  ...equipamentosData.map(item => ({ ...item, globalType: "Equipamentos", link: "/equipamentos", badge: item.tipo })),
+  ...rituaisData.map(item => ({ ...item, globalType: "Equipamentos", link: "/rituais", badge: item.elemento }))
 ];
 
 export default function Home() {
@@ -26,6 +28,7 @@ export default function Home() {
   // 1. Array com os caminhos exatos dos seus PDFs (AJUSTE OS NOMES AQUI!)
   const pdfsParaBaixar = [
     "/files/OPRPG.pdf",
+    "/files/OPRPGLUXO.pdf",
     "/files/SAH.pdf",
     "/files/AS1.pdf",
     "/files/AS2.pdf",
