@@ -902,17 +902,17 @@
     "alcance": "curto",
     "alvo": "1 ser",
     "duracao": "cena",
-    "descricao": "Espirais surgem no corpo do alvo, tornando seus movimentos lentos. O alvo sofre –O em testes de ataque.",
+    "descricao": "Espirais surgem no corpo do alvo, tornando seus movimentos lentos. O alvo sofre –1d20 em testes de ataque.",
     "aprimoramentos": [
       {
         "nome": "Discente",
         "custo": "+2 PE",
-        "descricao": "muda a penalidade para –OO. Requer 2º círculo."
+        "descricao": "muda a penalidade para –2d20. Requer 2º círculo."
       },
       {
         "nome": "Verdadeiro",
         "custo": "+8 PE",
-        "descricao": "muda a penalidade para –OO. e o alvo para “seres escolhidos”. Requer 3º círculo."
+        "descricao": "muda a penalidade para –2d20. e o alvo para “seres escolhidos”. Requer 3º círculo."
       }
     ],
     "fonteLivro": "OPRPG",
@@ -1025,12 +1025,12 @@
     "alcance": "pessoal",
     "alvo": "você",
     "duracao": "cena",
-    "descricao": "Você potencializa seus sentidos, recebendo +O em Investigação, Luta, Percepção e Pontaria.",
+    "descricao": "Você potencializa seus sentidos, recebendo +1d20 em Investigação, Luta, Percepção e Pontaria.",
     "aprimoramentos": [
       {
         "nome": "Discente",
         "custo": "+2 PE",
-        "descricao": "além do normal, seus inimigos sofrem –O em testes de ataque contra você. Requer 2º círculo."
+        "descricao": "além do normal, seus inimigos sofrem –1d20 em testes de ataque contra você. Requer 2º círculo."
       },
       {
         "nome": "Verdadeiro",
@@ -1191,7 +1191,7 @@
       {
         "nome": "Verdadeiro",
         "custo": "+5 PE",
-        "descricao": "a luz é cálida como a do sol. Dentro da área seus aliados recebem +O em testes de Vontade, e seus inimigos ficam ofuscados. Requer 3º círculo."
+        "descricao": "a luz é cálida como a do sol. Dentro da área seus aliados recebem +1d20 em testes de Vontade, e seus inimigos ficam ofuscados. Requer 3º círculo."
       }
     ],
     "fonteLivro": "OPRPG",
@@ -1951,7 +1951,7 @@
     "alcance": "pessoal",
     "alvo": "você",
     "duracao": "veja texto",
-    "descricao": "Você faz o sacrifício supremo e se entrega ao Sangue, sendo devorado em uma monstruosidade bestial por completo. Você fica mais forte, rápido e resistente, em troca de uma mente nublada pela raiva e uma aparência animalesca, sentindo os músculos rasgando, os ossos ficando protuberantes e a sua pele endurecendo em uma estrutura de couro rubro.\n\nVocê recebe faro, visão no escuro, cura acelerada 10, +10 em testes de ataque e rolagens de dano corpo a corpo e na Defesa, 30 PV temporários e seus ataques desarmados causam 1 dado de dano adicional e são considerados letais (sendo de corte, impacto ou perfuração à sua escolha no momento em que atacar). Após invocar o ritual, você não pode fazer mais fazer ações que demandem foco e concentração (como conjurar un ritual). Além disso, devido a sua aparência e estado violento, você sofre –3O em testes de perícias para interação social, como Diplomacia e Enganação.\n\nDiferente de outros rituais, este não possui fim. A cada rodada, você sente um pedaço da sua mente sendo devorado. Todas as suas memórias, pensamentos e existência sendo mastigados e consumidos pela intensidade do Sangue. As palavras fazem cada vez menos sentido, assim como falar e compreender os outros se torna cada vez mais impossível no meio da tormenta dos sentimentos. Suas emoções se convertem em um oceano de Sangue, tudo é tão intenso, todo toque é dor extrema, todo ataque é euforia, todo movimento é adrenalina… e finalmente, quando a cena em que conjurou o ritual acaba, o mínimo controle que você tinha de suas ações também se vai e você se torna, permanentemente, uma criatura de Sangue, sacrificando seu personagem para o Outro Lado e o perdendo para sempre.",
+    "descricao": "Você faz o sacrifício supremo e se entrega ao Sangue, sendo devorado em uma monstruosidade bestial por completo. Você fica mais forte, rápido e resistente, em troca de uma mente nublada pela raiva e uma aparência animalesca, sentindo os músculos rasgando, os ossos ficando protuberantes e a sua pele endurecendo em uma estrutura de couro rubro.\n\nVocê recebe faro, visão no escuro, cura acelerada 10, +10 em testes de ataque e rolagens de dano corpo a corpo e na Defesa, 30 PV temporários e seus ataques desarmados causam 1 dado de dano adicional e são considerados letais (sendo de corte, impacto ou perfuração à sua escolha no momento em que atacar). Após invocar o ritual, você não pode fazer mais fazer ações que demandem foco e concentração (como conjurar un ritual). Além disso, devido a sua aparência e estado violento, você sofre –3d20 em testes de perícias para interação social, como Diplomacia e Enganação.\n\nDiferente de outros rituais, este não possui fim. A cada rodada, você sente um pedaço da sua mente sendo devorado. Todas as suas memórias, pensamentos e existência sendo mastigados e consumidos pela intensidade do Sangue. As palavras fazem cada vez menos sentido, assim como falar e compreender os outros se torna cada vez mais impossível no meio da tormenta dos sentimentos. Suas emoções se convertem em um oceano de Sangue, tudo é tão intenso, todo toque é dor extrema, todo ataque é euforia, todo movimento é adrenalina… e finalmente, quando a cena em que conjurou o ritual acaba, o mínimo controle que você tinha de suas ações também se vai e você se torna, permanentemente, uma criatura de Sangue, sacrificando seu personagem para o Outro Lado e o perdendo para sempre.",
     "aprimoramentos": [
       {
         "nome": "Discente",
@@ -2021,7 +2021,7 @@
     "alcance": "pessoal",
     "alvo": "você",
     "duracao": "sustentada",
-    "descricao": "Por mais assustadora que seja a morte, você sabe que a melhor maneira de lidar com ela é aceitando o que ela tem a oferecer. Ao conjurar este ritual, você cobre o seu corpo com o fedor da Morte, parando suas funções biológicas e passando a cheirar como um cadáver apodrecendo. Seu coração para de bater, seus pulmões deixam de inflar, seu sangue cessa de fluir. Tudo fica, temporariamente, sendo sustentado pelo Lodo da Morte.\n\nNesse estado, qualquer animal se afasta de você instintivamente, como se você fosse uma fonte de doenças pútridas, e você sofre –3O in Diplomacia. Além disso, você recebe +5 em Furtividade, por se parecer com um corpo qualquer no cenário, e +10 em testes de Enganação para se fingir de morto. Em uma cena de furtividade (p. 92), enquanto você ficar parado, sua visibilidade é considerada 1 ponto menor.\n\nNa prática, você não está morto nem é um morto-vivo, não está imune a doenças ou outros efeitos biológicos, ainda precisa dormir etc. Ter seu corpo sustentado pelo Lodo é terrível; para cada rodada em que mantêm esse ritual, você sofre 1d4 pontos de dano de Morte que ignora resistências.",
+    "descricao": "Por mais assustadora que seja a morte, você sabe que a melhor maneira de lidar com ela é aceitando o que ela tem a oferecer. Ao conjurar este ritual, você cobre o seu corpo com o fedor da Morte, parando suas funções biológicas e passando a cheirar como um cadáver apodrecendo. Seu coração para de bater, seus pulmões deixam de inflar, seu sangue cessa de fluir. Tudo fica, temporariamente, sendo sustentado pelo Lodo da Morte.\n\nNesse estado, qualquer animal se afasta de você instintivamente, como se você fosse uma fonte de doenças pútridas, e você sofre –3d20 in Diplomacia. Além disso, você recebe +5 em Furtividade, por se parecer com um corpo qualquer no cenário, e +10 em testes de Enganação para se fingir de morto. Em uma cena de furtividade (p. 92), enquanto você ficar parado, sua visibilidade é considerada 1 ponto menor.\n\nNa prática, você não está morto nem é um morto-vivo, não está imune a doenças ou outros efeitos biológicos, ainda precisa dormir etc. Ter seu corpo sustentado pelo Lodo é terrível; para cada rodada em que mantêm esse ritual, você sofre 1d4 pontos de dano de Morte que ignora resistências.",
     "aprimoramentos": [
       {
         "nome": "Discente",
