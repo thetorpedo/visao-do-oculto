@@ -15,7 +15,7 @@ const todosOsItens = [
   ...poderesData.map(item => ({ ...item, globalType: "Poderes", link: "/poderes", badge: item.elemento || item.tipo })),
   ...trilhasData.map(item => ({ ...item, globalType: "Trilhas", link: "/trilhas", badge: item.tipo })),
   ...equipamentosData.map(item => ({ ...item, globalType: "Equipamentos", link: "/equipamentos", badge: item.tipo })),
-  ...rituaisData.map(item => ({ ...item, globalType: "Equipamentos", link: "/rituais", badge: item.elemento }))
+  ...rituaisData.map(item => ({ ...item, globalType: "Rituais", link: "/rituais", badge: item.elemento }))
 ];
 
 export default function Home() {
