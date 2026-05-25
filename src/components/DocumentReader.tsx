@@ -128,10 +128,10 @@ export default function DocumentReader({ fonteId, paginaImpressa, isOpen, onClos
 
   // CREATE PORTAL: Joga o modal pro fim do HTML, burlando qualquer Z-index da aplicação!
   return createPortal(
-    <div className={`fixed inset-0 z-[99999] flex items-center justify-center bg-black/80 backdrop-blur-md sm:p-4 transition-all duration-300 ${
+    <div className={`fixed inset-0 z-99999 flex items-center justify-center bg-black/80 backdrop-blur-md sm:p-4 transition-all duration-300 ${
       isOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
     }`}>
-      <div className="relative w-full max-w-5xl h-[100dvh] sm:h-[95vh] bg-[#1a1a1a] flex flex-col shadow-[0_0_50px_rgba(0,0,0,0.5)] sm:border border-white/10 sm:rounded-lg overflow-hidden">
+      <div className="relative w-full max-w-5xl h-dvh sm:h-[95vh] bg-[#1a1a1a] flex flex-col shadow-[0_0_50px_rgba(0,0,0,0.5)] sm:border border-white/10 sm:rounded-lg overflow-hidden">
         
         {/* HEADER RESPONSIVO 1 LINHA */}
         <div className="flex flex-row justify-between items-center p-2 sm:p-3 bg-gray-900 border-b border-red-900/30 shadow-md">
