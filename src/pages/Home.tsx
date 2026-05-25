@@ -1,6 +1,5 @@
 import Logo from "@/components/logo";
 import OfflineDownloader from "@/components/OfflineDownloader";
-import RandomItem from "@/components/RandomItem";
 import { Search } from "lucide-react";
 
 import equipamentosData from "@/data/equipamentos.json";
@@ -37,18 +36,18 @@ export default function Home() {
       <div className="font-normal flex flex-col items-center min-h-full w-full p-8 pb-10 space-y-6">
         
         {/* Cabeçalho */}
-        <div className="w-full mx-auto text-center mt-6">
+        <div className="w-full mx-auto text-center max-w-6xl mt-6">
           <h1 className="text-3xl sm:text-5xl md:text-7xl flex flex-wrap mb-4 justify-center pointer-events-none select-none border-b-4 border-dashed border-gray-800 w-fit mx-auto pb-2">
             {'VISÃO DO OCULTO'.split("").map((char, index) => (
               <Logo key={index} char={char}/>
             ))}
           </h1>
-          <p className="text-center font-special text-gray-800 mt-6 ">
+          {/* <p className="text-center font-special text-gray-800 mt-6 ">
             Visão do Oculto é um projeto pessoal meu, com o objetivo de unificar todo o material de Ordem Paranormal em um local só.<br/>
             Pra que habilidades do livro base, suplemento, revista ou marcador de página sejam encontrados sem abrir 3 drives, 20 pastas, e 14 pdfs.<br/><br/>
             São muitos registros importados semi-automaticamente, e embora eu tenha tentado tirar todos os erros, pode ter algum que passou batido - principalmente em formatação de texto para registros maiores (olhando pra você, sobrevivendo ao horror).<br/> Qualquer erro ou bug que achar, por favor, me avisa!<br/>
             Se você tá aqui e não sabe quem eu sou, provavelmente não deveria estar acessando isso.
-          </p>  
+          </p>   */}
         </div>
 
         {/* Barra de Pesquisa Global (Gatilho) */}
@@ -72,9 +71,9 @@ export default function Home() {
         </div>
 
         {/* Display Aleatório */}
-        <div className="w-full max-w-5xl mx-auto">
+        {/* <div className="w-full max-w-5xl mx-auto">
           <RandomItem itens={todosOsItens} />
-        </div>
+        </div> */}
 
         {/* Grid de Informações */}
         <div className="w-full max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-start">

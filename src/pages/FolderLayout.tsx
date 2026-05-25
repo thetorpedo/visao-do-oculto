@@ -76,7 +76,7 @@ export default function FolderLayout() {
       )}
 
       {/* ================= PASTA PRINCIPAL ================= */}
-      <div className="w-[95%] lg:w-4/5 -mb-1 mx-auto opacity-99 shadow-2xl/90 mt-24 lg:mt-20 relative z-10 pb-8">
+      <div className="w-[95%] lg:w-4/5 -mb-1 mx-auto opacity-99  mt-24 lg:mt-20 relative z-10 pb-8">
         
         {/* === ABAS DESKTOP === */}
         <div className="hidden lg:flex flex-row -gap-2 relative z-0">
@@ -97,7 +97,7 @@ export default function FolderLayout() {
           
         {/* === CORPO DA PASTA === */}
         <div className="bg-[#837156] bg-[url(/assets/folder.jpg)] bg-blend-overlay bg-size-[30%] w-full h-8 relative z-10 rounded-t-md lg:rounded-t-none"></div>
-        <div className="relative bg-[#837156] bg-[url(/assets/folder.jpg)] bg-blend-overlay bg-size-[30%] h-full p-2 sm:p-6 lg:p-6 ">
+        <div className="relative bg-[#837156] bg-[url(/assets/folder.jpg)] bg-blend-overlay bg-size-[30%] h-full p-2 sm:p-6 lg:p-6 shadow-2xl/90 rounded-b-lg">
           
           {isHome && (
             <>
