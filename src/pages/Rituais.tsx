@@ -1,21 +1,15 @@
+import BookReference from "@/components/BookReference";
 import DocumentReader from "@/components/DocumentReader";
+import ExpandableText from "@/components/ExpandableText";
+import FilterButton from "@/components/FilterButton";
+import { corElemento } from "@/utils/badgeUtils";
+
 import rituaisData from "@/data/rituais.json";
 import Fuse from "fuse.js";
-import { BookMarked, ChevronDown, Search, X } from "lucide-react";
+import { ChevronDown, Search, X } from "lucide-react";
 import { useDeferredValue, useMemo, useState } from "react";
 
-const corElemento = (elemento: string) => {
-  switch (elemento) {
-    case "Sangue": return "text-white bg-[#aa2321] border-[#aa2321]";
-    case "Morte": return "text-white bg-[#000000] border-[#000000]";
-    case "Energia": return "text-white bg-[#9a03fa] border-[#9a03fa]";
-    case "Conhecimento": return "text-white bg-[#ba921a] border-[#ba921a]";
-    case "Medo": return "text-black bg-[#ffffff] border-gray-400";
-    default: return "text-gray-800 border-gray-400 bg-gray-200";
-  }
-};
-
-// Utilitário para deixar a primeira letra maiúscula
+// Utilitário local para deixar a primeira letra maiúscula (usado no status e aprimoramentos)
 const capitalizeFirst = (str: string | number | null | undefined) => {
   if (!str) return "";
   const s = String(str);
@@ -27,35 +21,12 @@ const LinhaStatus = ({ label, valor }: { label: string; valor: string | number |
   return (
     <div className="flex flex-wrap justify-between items-baseline border-b border-dashed border-gray-300 pb-0.5 gap-x-2 gap-y-0.5">
       <span className="font-special text-xs text-gray-600 uppercase tracking-wide shrink-0">{label}:</span>
-      <span className="font-bold text-gray-900 text-sm text-right break-words">{capitalizeFirst(valor)}</span>
+      <span className="font-bold text-gray-900 text-sm text-right wrap-break-word">{capitalizeFirst(valor)}</span>
     </div>
   );
 };
 
-function ExpandableText({ text, limit = 250 }: { text: string; limit?: number }) {
-  const [isExpanded, setIsExpanded] = useState(false);
-  if (!text) return null;
-
-  const textoExibido = isExpanded ? text : `${text.substring(0, limit)}...`;
-
-  if (text.length <= limit) {
-    return <p className="text-sm whitespace-pre-wrap text-justify text-gray-800 leading-relaxed">{capitalizeFirst(text)}</p>;
-  }
-
-  return (
-    <span className="text-sm text-justify whitespace-pre-wrap text-gray-800 leading-relaxed">
-        {capitalizeFirst(textoExibido)}
-        <button
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="ml-2 text-xs cursor-pointer whitespace-pre-wrap font-bold text-gray-600 hover:text-black underline uppercase tracking-tighter"
-        >
-          {isExpanded ? "[ Ler menos ]" : "[ Ler mais ]"}
-        </button>
-    </span>
-  );
-}
-
-// Novo componente Dropdown para os Aprimoramentos
+// Componente Dropdown para os Aprimoramentos
 function AprimoramentoDropdown({ aprimoramento }: { aprimoramento: any }) {
   const [isOpen, setIsOpen] = useState(false);
   if (!aprimoramento) return null;
@@ -67,7 +38,6 @@ function AprimoramentoDropdown({ aprimoramento }: { aprimoramento: any }) {
         className="border border-dashed border-gray-400 bg-gray-200 cursor-pointer w-full flex items-center justify-between hover:bg-gray-200/50 transition-colors text-left"
       >
         <div className="flex items-center gap-2">
-          {/* Nome e custo integrados na mesma etiqueta preta */}
           <span className="font-special text-sm tracking-wider uppercase text-white px-2 py-1 bg-gray-900 shrink-0">
             {aprimoramento.nome} <span className="font-sans font-bold opacity-80 tracking-normal ml-0.5">({aprimoramento.custo})</span>
           </span>
@@ -104,8 +74,7 @@ export default function Rituais() {
   const CIRCULOS_DISPONIVEIS = [1, 2, 3, 4];
   
   const fontesDisponiveis = useMemo(() => {
-    const fontes = new Set(rituaisData.map(r => r.fonteLivro));
-    return Array.from(fontes).sort();
+    return Array.from(new Set(rituaisData.map(r => r.fonteLivro))).sort();
   }, []);
 
   const fuse = useMemo(() => {
@@ -133,9 +102,7 @@ export default function Rituais() {
   }, [buscaAdiada, elementosSelecionados, circulosSelecionados, fontesSelecionadas, fuse]);
 
   const rituaisOrdenados = useMemo(() => {
-    if (buscaAdiada.length > 2) {
-      return rituaisFiltrados;
-    }
+    if (buscaAdiada.length > 2) return rituaisFiltrados;
     return [...rituaisFiltrados].sort((a, b) => a.nome.localeCompare(b.nome));
   }, [rituaisFiltrados, buscaAdiada]);
 
@@ -179,51 +146,21 @@ export default function Rituais() {
               <div className="flex flex-wrap gap-2">
                 <span className="font-special text-sm self-center mr-2 w-16">Elemento:</span>
                 {ELEMENTOS_DISPONIVEIS.map(e => (
-                  <button
-                    key={e}
-                    onClick={() => toggleFiltroArray(setElementosSelecionados, e)}
-                    className={`px-3 py-1 text-xs font-bold transition-colors border cursor-pointer ${
-                      elementosSelecionados.includes(e)
-                        ? 'bg-gray-800 text-white border-gray-800'
-                        : 'bg-gray-200/50 text-gray-700 border-gray-400 hover:bg-gray-300'
-                    }`}
-                  >
-                    {e}
-                  </button>
+                  <FilterButton key={e} label={e} isSelected={elementosSelecionados.includes(e)} onClick={() => toggleFiltroArray(setElementosSelecionados, e)} />
                 ))}
               </div>
 
               <div className="flex flex-wrap gap-2">
                 <span className="font-special text-sm self-center mr-2 w-16">Círculo:</span>
                 {CIRCULOS_DISPONIVEIS.map(c => (
-                  <button
-                    key={c}
-                    onClick={() => toggleFiltroArray(setCirculosSelecionados, c)}
-                    className={`px-4 py-1 text-xs font-bold transition-colors border cursor-pointer ${
-                      circulosSelecionados.includes(c)
-                        ? 'bg-gray-800 text-white border-gray-800'
-                        : 'bg-gray-200/50 text-gray-700 border-gray-400 hover:bg-gray-300'
-                    }`}
-                  >
-                    {c}º
-                  </button>
+                  <FilterButton key={c} label={`${c}º`} isSelected={circulosSelecionados.includes(c)} onClick={() => toggleFiltroArray(setCirculosSelecionados, c)} />
                 ))}
               </div>
 
               <div className="flex flex-wrap gap-2">
                 <span className="font-special text-sm self-center mr-2 w-16">Fontes:</span>
                 {fontesDisponiveis.map(f => (
-                  <button
-                    key={f}
-                    onClick={() => toggleFiltroArray(setFontesSelecionadas, f)}
-                    className={`px-3 py-1 text-xs font-bold transition-colors border cursor-pointer ${
-                      fontesSelecionadas.includes(f)
-                        ? 'bg-gray-800 text-white border-gray-800'
-                        : 'bg-gray-200/50 text-gray-700 border-gray-400 hover:bg-gray-300'
-                    }`}
-                  >
-                    {f}
-                  </button>
+                  <FilterButton key={f} label={f} isSelected={fontesSelecionadas.includes(f)} onClick={() => toggleFiltroArray(setFontesSelecionadas, f)} />
                 ))}
               </div>
               
@@ -263,8 +200,7 @@ export default function Rituais() {
             <div key={ritual.id} className="relative group">
               <div className="relative flex flex-col justify-between z-10 w-full p-5 h-full shadow-lg bg-[linear-gradient(rgba(249,249,249,0.5),rgba(249,249,249,0.5)),url(/assets/paper.png)] bg-repeat bg-size-[30%] border border-gray-300">
                 
-                <div className="flex-grow">
-                  {/* Nome e Elementos/Círculos */}
+                <div className="grow">
                   <div className="flex justify-between flex-col items-start mb-4">
                     <h3 className="text-2xl font-special underline leading-tight">{ritual.nome}</h3>
                     
@@ -277,7 +213,6 @@ export default function Rituais() {
                     </div>
                   </div>
 
-                  {/* Tabela de Status do Ritual */}
                   {statusAtivos.length > 0 && (
                     <div className={`mb-4 bg-gray-100/90 border border-gray-400/50 p-3 grid gap-x-6 gap-y-1.5 ${statusAtivos.length === 1 ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-2'}`}>
                       {statusAtivos.map((status, index) => (
@@ -286,12 +221,10 @@ export default function Rituais() {
                     </div>
                   )}
                   
-                  {/* Descrição Principal com Limite Dinâmico */}
                   <div className="mb-4">
                     <ExpandableText text={ritual.descricao} limit={limiteDescricao} />
                   </div>
 
-                  {/* Aprimoramentos - Agora no estilo Dropdown */}
                   {temAprimoramentos && (
                     <div className="mt-4 pt-1">
                       {ritual.aprimoramentos.map((aprimoramento: any, index: number) => (
@@ -299,22 +232,13 @@ export default function Rituais() {
                       ))}
                     </div>
                   )}
-
                 </div>
                 
-                {/* Rodapé (Fonte) */}
-                <div className="border-t border-dashed border-gray-400 mt-5 pt-3 flex items-center justify-between">
-                  <div className="text-xs text-gray-700 font-medium flex items-center">
-                    <BookMarked className="size-4 mr-1.5 opacity-80" />
-                    <button 
-                      onClick={() => setLeitorAtivo({ fonte: ritual.fonteLivro, pagina: parseInt(ritual.fontePagina as any) })}
-                      className="hover:text-black underline cursor-pointer transition-colors"
-                    >
-                      <span className="font-bold decoration-gray-400 underline-offset-2">{ritual.fonteLivro}</span>
-                      <span>, pág. {ritual.fontePagina}</span>
-                    </button>
-                  </div>
-                </div>
+                <BookReference 
+                  fonte={ritual.fonteLivro} 
+                  pagina={ritual.fontePagina} 
+                  onOpenReader={() => setLeitorAtivo({ fonte: ritual.fonteLivro, pagina: parseInt(String(ritual.fontePagina)) })} 
+                />
 
               </div>
               

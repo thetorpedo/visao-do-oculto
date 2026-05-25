@@ -1,38 +1,20 @@
+import BookReference from "@/components/BookReference";
 import DocumentReader from "@/components/DocumentReader";
+import ExpandableText from "@/components/ExpandableText";
+import FilterButton from "@/components/FilterButton";
+import { corElemento, estiloBadgeTipo } from "@/utils/badgeUtils";
+
 import equipamentosData from "@/data/equipamentos.json";
 import Fuse from "fuse.js";
-import { BookMarked, Search, X } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { useDeferredValue, useMemo, useState } from "react";
-
-const corElemento = (elemento: string | null) => {
-  switch (elemento) {
-    case "Sangue": return "text-white bg-[#aa2321] border-[#aa2321]";
-    case "Morte": return "text-white bg-[#000000] border-[#000000]";
-    case "Energia": return "text-white bg-[#9a03fa] border-[#9a03fa]";
-    case "Conhecimento": return "text-white bg-[#ba921a] border-[#ba921a]";
-    case "Medo": return "text-black bg-[#ffffff] border-gray-400";
-    default: return "text-gray-800 border-dashed border-gray-400 bg-gray-200";
-  }
-};
-
-const estiloBadgeTipo = (tipo: string) => {
-  switch (tipo) {
-    case "Arma": return "text-red-900 border-dashed border-red-300 bg-red-200/30";
-    case "Proteção": return "text-blue-900 border-dashed border-blue-300 bg-blue-200/30";
-    case "Item Amaldiçoado": return "text-purple-900 border-dashed border-purple-300 bg-purple-200/30";
-    case "Explosivo": return "text-orange-900 border-dashed border-orange-300 bg-orange-200/30";
-    case "Maldição": return "text-fuchsia-900 border-dashed border-fuchsia-400 bg-fuchsia-200/30";
-    case "Modificação": return "text-slate-900 border-dashed border-slate-400 bg-slate-200/30";
-    default: return "text-gray-800 border-dashed border-gray-400 bg-gray-300/30"; 
-  }
-};
 
 const LinhaStatus = ({ label, valor }: { label: string; valor: string | number | null | undefined }) => {
   if (valor === null || valor === undefined || valor === "") return null;
   return (
     <div className="flex flex-wrap justify-between items-baseline border-b border-dashed border-gray-300 pb-0.5 gap-x-2 gap-y-0.5">
       <span className="font-special text-xs text-gray-600 uppercase tracking-wide shrink-0">{label}:</span>
-      <span className="font-bold text-gray-900 text-sm text-right break-words">{valor}</span>
+      <span className="font-bold text-gray-900 text-sm text-right wrap-break-word">{valor}</span>
     </div>
   );
 };
@@ -40,54 +22,26 @@ const LinhaStatus = ({ label, valor }: { label: string; valor: string | number |
 // Função para remover o nome do item do início da descrição
 const formatarDescricao = (nome: string, descricao: string) => {
   if (!descricao) return "";
-  
-  // Escapa caracteres especiais do nome para evitar erro no Regex
   const nomeEscapado = nome.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  // Procura o nome exato no começo da string, seguido opcionalmente por ponto, traço, dois-pontos ou espaços
   const regex = new RegExp(`^${nomeEscapado}[\\.\\-\\:\\s]*`, 'i');
   
   const textoLimpo = descricao.replace(regex, '').trim();
   if (!textoLimpo) return "";
   
-  // Retorna com a primeira letra maiúscula
   return textoLimpo.charAt(0).toUpperCase() + textoLimpo.slice(1);
 };
-
-// Movido para fora para evitar recriação a cada render
-function ExpandableText({ text, limit = 250 }: { text: string; limit?: number }) {
-  const [isExpanded, setIsExpanded] = useState(false);
-  if (!text) return null;
-
-  const textoExibido = isExpanded ? text : `${text.substring(0, limit)}...`;
-
-  if (text.length <= limit) {
-    return <p className="text-sm whitespace-pre-wrap first-letter:uppercase text-justify text-gray-800 leading-relaxed">{text}</p>;
-  }
-
-  return (
-    <span className="text-sm text-justify whitespace-pre-wrap text-gray-800 leading-relaxed">
-        {textoExibido}
-        <button
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="ml-2 text-xs cursor-pointer whitespace-pre-wrap font-bold text-gray-600 hover:text-black underline uppercase tracking-tighter"
-        >
-          {isExpanded ? "[ Ler menos ]" : "[ Ler mais ]"}
-        </button>
-    </span>
-  );
-}
 
 export default function Equipamentos() {
   const [abaAtiva, setAbaAtiva] = useState<"equipamentos" | "maldicoes">("equipamentos");
   
   const [busca, setBusca] = useState(() => {
-  if (typeof window !== "undefined") {
-    const params = new URLSearchParams(window.location.search);
-    return params.get("busca") || "";
-  }
-  return "";
-});
-  // OTIMIZAÇÃO: Adia a filtragem pesada para não travar a digitação
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      return params.get("busca") || "";
+    }
+    return "";
+  });
+
   const buscaAdiada = useDeferredValue(busca);
 
   const [tiposSelecionados, setTiposSelecionados] = useState<string[]>([]);
@@ -100,9 +54,7 @@ export default function Equipamentos() {
   const [fontesSelecionadas, setFontesSelecionadas] = useState<string[]>([]);
   
   const [leitorAtivo, setLeitorAtivo] = useState<{ fonte: string; pagina: number } | null>(null);
-  // const [showDebug, setShowDebug] = useState(false);
 
-  // 1. Isola os dados baseados na aba ativa
   const dadosAbaAtual = useMemo(() => {
     return equipamentosData.filter(e => {
       const isMaldicaoOuMod = e.tipo === "Maldição" || e.tipo === "Modificação" || e.tipo2 === "Maldição" || e.tipo2 === "Modificação";
@@ -110,7 +62,6 @@ export default function Equipamentos() {
     });
   }, [abaAtiva]);
 
-  // OTIMIZAÇÃO: Loop Único. Extrai todos os filtros varrendo o array apenas UMA vez!
   const opcoesDisponiveis = useMemo(() => {
     const tipos = new Set<string>();
     const subtipos = new Set<string>();
@@ -154,7 +105,6 @@ export default function Equipamentos() {
   }, [dadosAbaAtual]);
 
   const equipamentosFiltrados = useMemo(() => {
-    // Usa a buscaAdiada em vez da busca direta
     const resultadoBusca = buscaAdiada.length > 2 
       ? fuse.search(buscaAdiada).map(r => r.item) 
       : dadosAbaAtual; 
@@ -193,7 +143,6 @@ export default function Equipamentos() {
     limparFiltros(); 
   };
 
-  // OTIMIZAÇÃO: Memoiza o array do UI de filtros para não recriar os botões desnecessariamente
   const filtrosUI = useMemo(() => [
     { label: "Tipos:", opcoes: opcoesDisponiveis.tipos, estado: tiposSelecionados, setter: setTiposSelecionados },
     { label: "Subtipos:", opcoes: opcoesDisponiveis.subtipos, estado: subtiposSelecionados, setter: setSubtiposSelecionados },
@@ -207,46 +156,12 @@ export default function Equipamentos() {
 
   const temFiltroAtivo = filtrosUI.some(f => f.estado.length > 0);
 
-  // const debugData = useMemo(() => {
-  //   const valoresUnicos: Record<string, Set<any>> = {};
-  //   const chavesIgnoradas = ["id", "nome", "descricao", "defesa"];
-
-  //   equipamentosData.forEach(item => {
-  //     Object.entries(item).forEach(([chave, valor]) => {
-  //       if (chavesIgnoradas.includes(chave)) return;
-  //       if (valor === null || valor === undefined || valor === "") return;
-
-  //       if (!valoresUnicos[chave]) {
-  //         valoresUnicos[chave] = new Set();
-  //       }
-  //       valoresUnicos[chave].add(valor);
-  //     });
-  //   });
-
-  //   const resultado: Record<string, any[]> = {};
-  //   Object.keys(valoresUnicos).sort().forEach(chave => {
-  //     resultado[chave] = Array.from(valoresUnicos[chave]).sort();
-  //   });
-
-  //   return resultado;
-  // }, []);
-
   const equipamentosOrdenados = useMemo(() => {
     if (buscaAdiada.length > 2) {
       return equipamentosFiltrados;
     }
     return [...equipamentosFiltrados].sort((a, b) => a.nome.localeCompare(b.nome));
   }, [equipamentosFiltrados, buscaAdiada]);
-
-  useMemo(() => {
-    const ids = equipamentosData.map(e => e.id).sort((a, b) => a - b);
-    const faltantes = [];
-    for (let i = 1; i <= ids[ids.length - 1]; i++) {
-      if (!ids.includes(i)) faltantes.push(i);
-    }
-    console.log("🎯 Total de itens:", equipamentosData.length);
-    console.log("🔍 IDs faltando:", faltantes);
-  }, []);
 
   return (
     <div className="space-y-6">
@@ -261,13 +176,6 @@ export default function Equipamentos() {
       <div className="relative">
         <div className="relative p-6 z-10 shadow-2xl bg-[url(/assets/paper.png)] bg-repeat bg-size-[30%]">
           
-          {/* <button 
-            onClick={() => setShowDebug(!showDebug)}
-            className="absolute top-2 right-2 text-[10px] uppercase font-bold tracking-widest bg-gray-900 text-white px-2 py-1 shadow cursor-pointer hover:bg-gray-700"
-          >
-            {showDebug ? "Fechar Debug" : "Debug JSON"}
-          </button> */}
-
           <div className="flex flex-col gap-5 pt-2">
             
             {/* SUB-ABAS (Equipamentos / Maldições) */}
@@ -312,19 +220,14 @@ export default function Equipamentos() {
 
                 return (
                   <div key={filtro.label} className="flex flex-wrap gap-2">
-                    <span className="font-special text-sm self-center mr-2 w-[76px]">{filtro.label}</span>
+                    <span className="font-special text-sm self-center mr-2 w-19">{filtro.label}</span>
                     {filtro.opcoes.map(opcao => (
-                      <button
-                        key={opcao}
-                        onClick={() => toggleFiltro(filtro.setter, opcao)}
-                        className={`px-3 py-1 text-xs font-bold transition-colors border cursor-pointer ${
-                          filtro.estado.includes(opcao)
-                            ? 'bg-gray-800 text-white border-gray-800'
-                            : 'bg-gray-200/50 text-gray-700 border-gray-400 hover:bg-gray-300'
-                        }`}
-                      >
-                        {opcao}
-                      </button>
+                      <FilterButton 
+                        key={opcao} 
+                        label={opcao} 
+                        isSelected={filtro.estado.includes(opcao)} 
+                        onClick={() => toggleFiltro(filtro.setter, opcao)} 
+                      />
                     ))}
                   </div>
                 );
@@ -332,7 +235,7 @@ export default function Equipamentos() {
 
               {temFiltroAtivo && (
                 <div className="flex mt-1">
-                  <span className="w-[76px] mr-2"></span> {/* Espaçador para alinhar */}
+                  <span className="w-19 mr-2"></span> {/* Espaçador para alinhar */}
                   <button 
                     onClick={limparFiltros}
                     className="text-red-700 text-xs font-bold flex items-center underline"
@@ -342,28 +245,6 @@ export default function Equipamentos() {
                 </div>
               )}
             </div>
-
-            {/* PAINEL DE DEBUG */}
-            {/* {showDebug && (
-              <div className="mt-2 p-4 bg-gray-900 text-green-400 font-mono text-xs overflow-auto max-h-64 border border-green-500 shadow-inner">
-                <div className="text-white font-bold mb-3 uppercase tracking-wider border-b border-gray-700 pb-1">
-                  Valores Únicos por Campo
-                </div>
-                {Object.entries(debugData).map(([chave, valores]) => (
-                  <div key={chave} className="mb-3">
-                    <span className="text-yellow-300 font-bold">{chave}:</span> 
-                    <span className="ml-2 text-gray-300">
-                      {valores.map((v, i) => (
-                        <span key={i}>
-                          <span className="text-green-300">"{v}"</span>
-                          {i < valores.length - 1 ? ", " : ""}
-                        </span>
-                      ))}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            )} */}
             
           </div>
         </div>
@@ -388,7 +269,6 @@ export default function Equipamentos() {
             { label: "Crítico", valor: equip.critico },
             { label: "Alcance", valor: equip.alcance },
             { label: "Tipo Dano", valor: equip.tipoDano },
-            // { label: "Defesa", valor: equip.defesa },
             { label: "Penalidade", valor: equip.penalidade }
           ].filter(s => s.valor !== null && s.valor !== undefined && s.valor !== "");
 
@@ -396,7 +276,7 @@ export default function Equipamentos() {
             <div key={equip.id} className="relative group">
               <div className="relative flex flex-col justify-between z-10 w-full p-5 h-full shadow-lg bg-[linear-gradient(rgba(249,249,249,0.5),rgba(249,249,249,0.5)),url(/assets/paper.png)] bg-repeat bg-size-[30%] border border-gray-300">
                 
-                <div className="flex-grow">
+                <div className="grow">
                   {/* Cabeçalho */}
                   <div className="flex justify-between items-start mb-3 gap-4">
                     <h3 className="text-2xl font-special underline leading-tight mb-1">{equip.nome}</h3>
@@ -442,7 +322,7 @@ export default function Equipamentos() {
                     )}
                   </div>
                   
-                  {/* Tabela de Status Dinâmica (Só aparece se for Arma e tiver itens ativos) */}
+                  {/* Tabela de Status Dinâmica */}
                   {(isArma || equip.tipo === "Proteção") && statusAtivos.length > 0 && (
                     <div className={`mb-4 bg-gray-100/90 border border-gray-400/50 p-3 grid gap-x-6 gap-y-1.5 ${statusAtivos.length === 1 ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-2'}`}>
                       {statusAtivos.map((status, index) => (
@@ -458,19 +338,11 @@ export default function Equipamentos() {
 
                 </div>
                 
-                {/* Rodapé (Fonte) */}
-                <div className="border-t border-dashed border-gray-400 mt-5 pt-3 flex items-center justify-between">
-                  <div className="text-xs text-gray-700 font-medium flex items-center">
-                    <BookMarked className="size-4 mr-1.5 opacity-80" />
-                    <button 
-                      onClick={() => setLeitorAtivo({ fonte: equip.fonteLivro, pagina: parseInt(equip.fontePagina) })}
-                      className="hover:text-black underline cursor-pointer transition-colors decoration-gray-400 underline-offset-2"
-                    >
-                      <span className="font-bold">{equip.fonteLivro}</span>
-                      <span>, pág. {equip.fontePagina}</span>
-                    </button>
-                  </div>
-                </div>
+                <BookReference 
+                  fonte={equip.fonteLivro} 
+                  pagina={equip.fontePagina} 
+                  onOpenReader={() => setLeitorAtivo({ fonte: equip.fonteLivro, pagina: parseInt(equip.fontePagina) })} 
+                />
 
               </div>
               

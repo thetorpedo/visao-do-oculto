@@ -1,31 +1,13 @@
+import BookReference from "@/components/BookReference";
 import DocumentReader from "@/components/DocumentReader";
+import ExpandableText from "@/components/ExpandableText";
+import FilterButton from "@/components/FilterButton";
+import { corElemento, estiloBadgeTipo } from "@/utils/badgeUtils";
+
 import poderesData from "@/data/poderes.json";
 import Fuse from "fuse.js";
-import { BookMarked, Search, X } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { useDeferredValue, useMemo, useState } from "react";
-
-const corElemento = (elemento: string | null) => {
-  switch (elemento) {
-    case "Sangue": return "text-white bg-[#aa2321] border-[#aa2321]";
-    case "Morte": return "text-white bg-[#000000] border-[#000000]";
-    case "Energia": return "text-white bg-[#9a03fa] border-[#9a03fa]";
-    case "Conhecimento": return "text-white bg-[#ba921a] border-[#ba921a]";
-    case "Medo": return "text-black bg-[#ffffff] border-gray-400";
-    case "Intenção": return "text-white bg-orange-700/90 border-orange-700/90";
-    default: return "text-gray-800 border-gray-400 bg-gray-200";
-  }
-};
-
-const estiloBadgeTipo = (tipo: string) => {
-  switch (tipo) {
-    case "Combatente": return "text-red-900 border-dashed border-red-300 bg-red-200/30";
-    case "Especialista": return "text-blue-900 border-dashed border-blue-300 bg-blue-200/30";
-    case "Ocultista": return "text-purple-900 border-dashed border-purple-300 bg-purple-200/30";
-    case "Sacrifício": return "text-rose-900 border-dashed border-rose-300 bg-rose-200/30";
-    case "Paranormal": return "text-black-900 border-dashed border-black-300 bg-black-200/30";
-    default: return "text-gray-800 border-dashed border-gray-400 bg-gray-300/30";
-  }
-};
 
 export default function Poderes() {
   const [busca, setBusca] = useState(() => {
@@ -36,7 +18,6 @@ export default function Poderes() {
     return "";
   }); 
   
-  // OTIMIZAÇÃO: Adia a filtragem para não travar a digitação
   const buscaAdiada = useDeferredValue(busca);
   
   const [tiposSelecionados, setTiposSelecionados] = useState<string[]>([]);
@@ -50,8 +31,7 @@ export default function Poderes() {
   const PREREQ_DISPONIVEIS = ["Agi", "For", "Int", "Pre", "Vig", "Treinado", "Veterano", "Expert", "NEX"];
   
   const fontesDisponiveis = useMemo(() => {
-    const fontes = new Set(poderesData.map(p => p.fonteLivro));
-    return Array.from(fontes);
+    return Array.from(new Set(poderesData.map(p => p.fonteLivro)));
   }, []);
 
   const fuse = useMemo(() => {
@@ -79,11 +59,8 @@ export default function Poderes() {
     });
   }, [buscaAdiada, tiposSelecionados, elementosSelecionados, fontesSelecionadas, preReqSelecionados, fuse]);
 
-  // CORREÇÃO DA ORDENAÇÃO: Respeita o Fuse.js quando há pesquisa
   const poderesOrdenados = useMemo(() => {
-    if (buscaAdiada.length > 2) {
-      return poderesFiltrados;
-    }
+    if (buscaAdiada.length > 2) return poderesFiltrados;
     return [...poderesFiltrados].sort((a, b) => a.nome.localeCompare(b.nome));
   }, [poderesFiltrados, buscaAdiada]);
 
@@ -100,24 +77,6 @@ export default function Poderes() {
     setPreReqSelecionados([]);
   };
 
-  function ExpandableText({ text, limit = 250 }: { text: string; limit?: number }) {
-    const [isExpanded, setIsExpanded] = useState(false);
-    if (!text) return null;
-    if (text.length <= limit) return <p className="text-sm whitespace-pre-wrap first-letter:uppercase text-justify text-gray-800 leading-relaxed">{text}</p>;
-  
-    return (
-      <span className="text-sm text-justify whitespace-pre-wrap text-gray-800 leading-relaxed">
-          {isExpanded ? text : `${text.substring(0, limit)}...`}
-          <button
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="ml-2 text-xs cursor-pointer whitespace-pre-wrap font-bold text-gray-600 hover:text-black underline uppercase tracking-tighter"
-          >
-            {isExpanded ? "[ Ler menos ]" : "[ Ler mais ]"}
-          </button>
-      </span>
-    );
-  }
-
   return (
     <div className="space-y-6">
       <DocumentReader 
@@ -129,7 +88,6 @@ export default function Poderes() {
       
       <div className="relative">
         <div className="relative p-6 z-10 shadow-2xl bg-[url(/assets/paper.png)] bg-repeat bg-size-[30%]">
-          
           <div className="flex flex-col gap-5">
             <div className="flex items-center border border-gray-600 bg-white/40 px-3 py-2">
               <Search className="size-5 mr-2" />
@@ -146,68 +104,28 @@ export default function Poderes() {
               <div className="flex flex-wrap gap-2">
                 <span className="font-special text-sm self-center mr-2 w-16">Tipos:</span>
                 {TIPOS_DISPONIVEIS.map(t => (
-                  <button
-                    key={t}
-                    onClick={() => toggleFiltro(setTiposSelecionados, t)}
-                    className={`px-3 py-1 text-xs font-bold transition-colors border cursor-pointer ${
-                      tiposSelecionados.includes(t)
-                        ? 'bg-gray-800 text-white border-gray-800'
-                        : 'bg-gray-200/50 text-gray-700 border-gray-400 hover:bg-gray-300'
-                    }`}
-                  >
-                    {t}
-                  </button>
+                  <FilterButton key={t} label={t} isSelected={tiposSelecionados.includes(t)} onClick={() => toggleFiltro(setTiposSelecionados, t)} />
                 ))}
               </div>
 
               <div className="flex flex-wrap gap-2">
                 <span className="font-special text-sm self-center mr-2 w-16">Elementos:</span>
                 {ELEMENTOS_DISPONIVEIS.map(e => (
-                  <button
-                    key={e}
-                    onClick={() => toggleFiltro(setElementosSelecionados, e)}
-                    className={`px-3 py-1 text-xs font-bold transition-colors border cursor-pointer ${
-                      elementosSelecionados.includes(e)
-                        ? 'bg-gray-800 text-white border-gray-800'
-                        : 'bg-gray-200/50 text-gray-700 border-gray-400 hover:bg-gray-300'
-                    }`}
-                  >
-                    {e}
-                  </button>
+                  <FilterButton key={e} label={e} isSelected={elementosSelecionados.includes(e)} onClick={() => toggleFiltro(setElementosSelecionados, e)} />
                 ))}
               </div>
 
               <div className="flex flex-wrap gap-2">
                 <span className="font-special text-sm self-center mr-2 w-16">Pré-req:</span>
                 {PREREQ_DISPONIVEIS.map(pr => (
-                  <button
-                    key={pr}
-                    onClick={() => toggleFiltro(setPreReqSelecionados, pr)}
-                    className={`px-3 py-1 text-xs font-bold transition-colors border cursor-pointer ${
-                      preReqSelecionados.includes(pr)
-                        ? 'bg-gray-800 text-white border-gray-800'
-                        : 'bg-gray-200/50 text-gray-700 border-gray-400 hover:bg-gray-300'
-                    }`}
-                  >
-                    {pr}
-                  </button>
+                  <FilterButton key={pr} label={pr} isSelected={preReqSelecionados.includes(pr)} onClick={() => toggleFiltro(setPreReqSelecionados, pr)} />
                 ))}
               </div>
 
               <div className="flex flex-wrap gap-2">
                 <span className="font-special text-sm self-center mr-2 w-16">Fontes:</span>
                 {fontesDisponiveis.map(f => (
-                  <button
-                    key={f}
-                    onClick={() => toggleFiltro(setFontesSelecionadas, f)}
-                    className={`px-3 py-1 text-xs font-bold transition-colors border cursor-pointer ${
-                      fontesSelecionadas.includes(f)
-                        ? 'bg-gray-800 text-white border-gray-800'
-                        : 'bg-gray-200/50 text-gray-700 border-gray-400 hover:bg-gray-300'
-                    }`}
-                  >
-                    {f}
-                  </button>
+                  <FilterButton key={f} label={f} isSelected={fontesSelecionadas.includes(f)} onClick={() => toggleFiltro(setFontesSelecionadas, f)} />
                 ))}
               </div>
               
@@ -226,39 +144,30 @@ export default function Poderes() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* CORREÇÃO DO MAP: Usando poderesOrdenados */}
         {poderesOrdenados.map((poder) => (
           <div key={poder.id} className="relative group">
             <div className="relative flex flex-col justify-between z-10 w-full p-5 h-full shadow-lg bg-[linear-gradient(rgba(249,249,249,0.5),rgba(249,249,249,0.5)),url(/assets/paper.png)] bg-repeat bg-size-[30%] border border-gray-300">
               
-              <div className="flex-grow">
-                {/* Nome e Badge Dinâmico de Tipo/Elemento */}
+              <div className="grow">
                 <div className="flex justify-between flex-col items-start mb-3">
                   <h3 className="text-xl font-special underline leading-tight">{poder.nome}</h3>
                   
                   <span className="flex flex-row flex-wrap gap-2">
-                  <span className={`text-sm uppercase font-daisy px-2 mt-1 border ${
-                     estiloBadgeTipo(poder.tipo)
-                  } whitespace-nowrap`}>
-                    {poder.tipo}
+                    <span className={`text-sm uppercase font-daisy px-2 mt-1 border ${estiloBadgeTipo(poder.tipo)} whitespace-nowrap`}>
+                      {poder.tipo}
+                    </span>
+                    {poder.elemento && (
+                      <span className={`text-sm uppercase font-daisy px-2 mt-1 border ${corElemento(poder.elemento)} whitespace-nowrap`}>
+                        {poder.elemento}
+                      </span>  
+                    )}
                   </span>
-                  {poder.elemento && (
-                  <span className={`text-sm uppercase font-daisy px-2 mt-1 border ${
-                    poder.elemento ? corElemento(poder.elemento) : estiloBadgeTipo(poder.tipo)
-                  } whitespace-nowrap`}>
-                    {poder.elemento}
-                  </span>  
-                  )}
-                  </span>
-                  
                 </div>
                 
-                {/* Descrição Principal */}
                 <div className="mb-4">
                   <ExpandableText text={poder.descricao} limit={220} />
                 </div>
 
-                {/* Caixa de Pré-requisitos */}
                 {poder.preRequisitos && (
                   <div className="mt-3 bg-gray-400/20 border border-gray-400/50 px-3 py-1">
                     <p className="text-xs -mb-1 text-gray-800">
@@ -268,7 +177,6 @@ export default function Poderes() {
                   </div>
                 )}
 
-                {/* Caixa de Afinidade */}
                 {poder.afinidade && (
                   <div className={`mt-3 p-3 border-l-4 ${corElemento(poder.elemento).replace('bg-', 'border-').split(' ')[1]} bg-gray-300/30`}>
                     <span className="font-special text-sm tracking-wider block uppercase text-gray-900 mb-1">Afinidade:</span>
@@ -277,22 +185,13 @@ export default function Poderes() {
                 )}
               </div>
               
-              {/* Rodapé (Fonte) */}
-              <div className="border-t border-dashed border-gray-400 mt-5 pt-3 flex items-center justify-between">
-                <div className="text-xs text-gray-700 font-medium flex items-center">
-                  <BookMarked className="size-4 mr-1.5 opacity-80" />
-                  <button 
-                    onClick={() => setLeitorAtivo({ fonte: poder.fonteLivro, pagina: parseInt(poder.fontePagina) })}
-                    className="hover:text-black underline cursor-pointer transition-colors"
-                  >
-                    <span className="font-bold  decoration-gray-400 underline-offset-2">{poder.fonteLivro}</span>
-                    <span>, pág. {poder.fontePagina}</span>
-                  </button>
-                </div>
-              </div>
+              <BookReference 
+                fonte={poder.fonteLivro} 
+                pagina={poder.fontePagina} 
+                onOpenReader={() => setLeitorAtivo({ fonte: poder.fonteLivro, pagina: parseInt(poder.fontePagina as unknown as string) })} 
+              />
 
             </div>
-            
             <div className="absolute top-1/2 left-1/2 z-0 h-full w-full -translate-x-1/2 -translate-y-1/2 rotate-1 p-1 bg-[linear-gradient(rgba(139,139,139,0.4),rgba(139,139,139,0.2)),url(/assets/paper.png)] shadow-[0_0_15px_rgba(0,0,0,0.15)] bg-repeat bg-size-[30%]" />
           </div>
         ))}

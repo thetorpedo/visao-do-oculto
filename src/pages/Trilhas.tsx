@@ -1,18 +1,13 @@
+import BookReference from "@/components/BookReference";
 import DocumentReader from "@/components/DocumentReader";
+import ExpandableText from "@/components/ExpandableText";
+import FilterButton from "@/components/FilterButton";
+import { estiloBadgeTipo } from "@/utils/badgeUtils";
+
 import trilhasData from "@/data/trilhas.json";
 import Fuse from "fuse.js";
-import { BookMarked, ChevronDown, Search, X } from "lucide-react";
+import { ChevronDown, Search, X } from "lucide-react";
 import { useDeferredValue, useMemo, useState } from "react";
-
-const estiloBadgeTipo = (tipo: string) => {
-  switch (tipo) {
-    case "Combatente": return "text-red-900 border-dashed border-red-300 bg-red-200/30";
-    case "Especialista": return "text-blue-900 border-dashed border-blue-300 bg-blue-200/30";
-    case "Ocultista": return "text-purple-900 border-dashed border-purple-300 bg-purple-200/30";
-    case "Sobrevivente": return "text-orange-900 border-dashed border-orange-300 bg-orange-200/30";
-    default: return "text-gray-800 border-dashed border-gray-400 bg-gray-300/30";
-  }
-};
 
 export default function Trilhas() {
   const [busca, setBusca] = useState(() => {
@@ -23,7 +18,6 @@ export default function Trilhas() {
     return "";
   }); 
   
-  // OTIMIZAÇÃO: Adia a filtragem para não travar a digitação
   const buscaAdiada = useDeferredValue(busca);
   
   const [tiposSelecionados, setTiposSelecionados] = useState<string[]>([]);
@@ -33,8 +27,7 @@ export default function Trilhas() {
   const TIPOS_DISPONIVEIS = ["Geral", "Combatente", "Especialista", "Ocultista", "Sobrevivente"];
   
   const fontesDisponiveis = useMemo(() => {
-    const fontes = new Set(trilhasData.map(t => t.fonteLivro));
-    return Array.from(fontes).sort();
+    return Array.from(new Set(trilhasData.map(t => t.fonteLivro))).sort();
   }, []);
 
   const fuse = useMemo(() => {
@@ -58,11 +51,8 @@ export default function Trilhas() {
     });
   }, [buscaAdiada, tiposSelecionados, fontesSelecionadas, fuse]);
 
-  // CORREÇÃO DA ORDENAÇÃO: Respeita o Fuse.js quando há pesquisa
   const trilhasOrdenadas = useMemo(() => {
-    if (buscaAdiada.length > 2) {
-      return trilhasFiltradas;
-    }
+    if (buscaAdiada.length > 2) return trilhasFiltradas;
     return [...trilhasFiltradas].sort((a, b) => a.nome.localeCompare(b.nome));
   }, [trilhasFiltradas, buscaAdiada]);
 
@@ -77,41 +67,17 @@ export default function Trilhas() {
     setFontesSelecionadas([]);
   };
 
-  function ExpandableText({ text, limit = 250 }: { text: string; limit?: number }) {
-    const [isExpanded, setIsExpanded] = useState(false);
-    if (!text) return null;
-
-    const textoExibido = isExpanded ? text : `${text.substring(0, limit)}...`;
-
-    if (text.length <= limit) {
-      return <p className="text-sm whitespace-pre-wrap first-letter:uppercase text-justify text-gray-800 leading-relaxed">{text}</p>;
-    }
-  
-    return (
-      <span className="text-sm text-justify whitespace-pre-wrap text-gray-800 leading-relaxed">
-          {textoExibido}
-          <button
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="ml-2 text-xs cursor-pointer whitespace-pre-wrap font-bold text-gray-600 hover:text-black underline uppercase tracking-tighter"
-          >
-            {isExpanded ? "[ Ler menos ]" : "[ Ler mais ]"}
-          </button>
-      </span>
-    );
-  }
-
-  // Componente Dropdown para as habilidades
+  // Componente Dropdown exclusivo das Trilhas
   function NexDropdown({ label, text }: { label: string; text?: string }) {
     const [isOpen, setIsOpen] = useState(false);
     if (!text) return null;
 
-    // Isola o título (antes do primeiro ponto) da descrição
     const indexPonto = text.indexOf('.');
     const titulo = indexPonto !== -1 ? text.substring(0, indexPonto) : "Habilidade";
     const descricao = indexPonto !== -1 ? text.substring(indexPonto + 1).trim() : text;
 
     return (
-      <div className=" mb-2 last:mb-0 transition-all">
+      <div className="mb-2 last:mb-0 transition-all">
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="border border-dashed border-gray-400 bg-gray-200 cursor-pointer w-full flex items-center justify-between hover:bg-gray-200/50 transition-colors text-left"
@@ -164,34 +130,14 @@ export default function Trilhas() {
               <div className="flex flex-wrap gap-2">
                 <span className="font-special text-sm self-center mr-2 w-16">Classes:</span>
                 {TIPOS_DISPONIVEIS.map(t => (
-                  <button
-                    key={t}
-                    onClick={() => toggleFiltro(setTiposSelecionados, t)}
-                    className={`px-3 py-1 text-xs font-bold transition-colors border cursor-pointer ${
-                      tiposSelecionados.includes(t)
-                        ? 'bg-gray-800 text-white border-gray-800'
-                        : 'bg-gray-200/50 text-gray-700 border-gray-400 hover:bg-gray-300'
-                    }`}
-                  >
-                    {t}
-                  </button>
+                  <FilterButton key={t} label={t} isSelected={tiposSelecionados.includes(t)} onClick={() => toggleFiltro(setTiposSelecionados, t)} />
                 ))}
               </div>
 
               <div className="flex flex-wrap gap-2">
                 <span className="font-special text-sm self-center mr-2 w-16">Fontes:</span>
                 {fontesDisponiveis.map(f => (
-                  <button
-                    key={f}
-                    onClick={() => toggleFiltro(setFontesSelecionadas, f)}
-                    className={`px-3 py-1 text-xs font-bold transition-colors border cursor-pointer ${
-                      fontesSelecionadas.includes(f)
-                        ? 'bg-gray-800 text-white border-gray-800'
-                        : 'bg-gray-200/50 text-gray-700 border-gray-400 hover:bg-gray-300'
-                    }`}
-                  >
-                    {f}
-                  </button>
+                  <FilterButton key={f} label={f} isSelected={fontesSelecionadas.includes(f)} onClick={() => toggleFiltro(setFontesSelecionadas, f)} />
                 ))}
 
                 {temFiltroAtivo && (
@@ -210,12 +156,11 @@ export default function Trilhas() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* CORREÇÃO DO MAP: Usando trilhasOrdenadas */}
         {trilhasOrdenadas.map((trilha) => (
           <div key={trilha.id} className="relative group">
             <div className="relative flex flex-col justify-between z-10 w-full p-5 h-full shadow-lg bg-[linear-gradient(rgba(249,249,249,0.5),rgba(249,249,249,0.5)),url(/assets/paper.png)] bg-repeat bg-size-[30%] border border-gray-300">
               
-              <div className="flex-grow">
+              <div className="grow">
                 <div className="flex justify-between flex-col items-start mb-3">
                   <h3 className="text-xl font-special underline leading-tight">{trilha.nome}</h3>
                   
@@ -228,7 +173,6 @@ export default function Trilhas() {
                   <ExpandableText text={trilha.descricao ? trilha.descricao : ''} limit={400} />
                 </div>
 
-                {/* Caixa de Regra Especial (Ex: Médico de Campo) */}
                 {trilha.especial && (
                   <div className="mb-4 bg-gray-400/20 border border-gray-400/50 px-3 py-2">
                     <p className="text-xs text-gray-800">
@@ -238,7 +182,6 @@ export default function Trilhas() {
                   </div>
                 )}
 
-                {/* Habilidades de NEX em formato Dropdown */}
                 <div className="mt-4 pt-1">
                   <NexDropdown label={trilha.tipo === 'Sobrevivente' ? 'Estágio 2' : 'NEX 10%'} text={trilha.nex10} />
                   <NexDropdown label={trilha.tipo === 'Sobrevivente' ? 'Estágio 4' : 'NEX 40%'} text={trilha.nex40} />
@@ -250,22 +193,13 @@ export default function Trilhas() {
                     </>
                   )}
                 </div>
-
               </div>
               
-              {/* Rodapé (Fonte) */}
-              <div className="border-t border-dashed border-gray-400 mt-5 pt-3 flex items-center justify-between">
-                <div className="text-xs text-gray-700 font-medium flex items-center">
-                  <BookMarked className="size-4 mr-1.5 opacity-80" />
-                  <button 
-                    onClick={() => setLeitorAtivo({ fonte: trilha.fonteLivro, pagina: parseInt(trilha.fontePagina) })}
-                    className="hover:text-black underline cursor-pointer transition-colors decoration-gray-400 underline-offset-2"
-                  >
-                    <span className="font-bold">{trilha.fonteLivro}</span>
-                    <span>, pág. {trilha.fontePagina}</span>
-                  </button>
-                </div>
-              </div>
+              <BookReference 
+                fonte={trilha.fonteLivro} 
+                pagina={trilha.fontePagina} 
+                onOpenReader={() => setLeitorAtivo({ fonte: trilha.fonteLivro, pagina: parseInt(String(trilha.fontePagina)) })} 
+              />
 
             </div>
             
