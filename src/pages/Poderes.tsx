@@ -27,7 +27,7 @@ export default function Poderes() {
   const [leitorAtivo, setLeitorAtivo] = useState<{ fonte: string; pagina: number } | null>(null);
 
   const TIPOS_DISPONIVEIS = ["Geral", "Combatente", "Especialista", "Ocultista", "Paranormal", "Sacrifício"];
-  const ELEMENTOS_DISPONIVEIS = ["Conhecimento", "Energia", "Morte", "Sangue", "Intenção"];
+  const ELEMENTOS_DISPONIVEIS = ["Conhecimento", "Energia", "Morte", "Sangue", "Intenção", "Transmissão"];
   const PREREQ_DISPONIVEIS = ["Agi", "For", "Int", "Pre", "Vig", "Treinado", "Veterano", "Expert", "NEX"];
   
   const fontesDisponiveis = useMemo(() => {

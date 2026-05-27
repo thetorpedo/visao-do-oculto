@@ -2,6 +2,7 @@ import Logo from "@/components/logo";
 import OfflineDownloader from "@/components/OfflineDownloader";
 import { Search } from "lucide-react";
 
+import InfoPanel from "@/components/InfoPanel";
 import equipamentosData from "@/data/equipamentos.json";
 import origensData from "@/data/origens.json";
 import poderesData from "@/data/poderes.json";
@@ -28,6 +29,7 @@ const pdfsParaBaixar = [
   "/files/OSNF2.png",
   "/files/INICIACAO.png",
   "/files/OJDA.png",
+  "/files/AS5.pdf",
 ];
 
 export default function Home() {
@@ -81,41 +83,24 @@ export default function Home() {
           <OfflineDownloader pdfsParaBaixar={pdfsParaBaixar} />
 
           {/* Atualizações */}
-          <div className="relative p-6 border border-gray-400 bg-gray-300/30 ">
-            <div className="absolute top-0 left-4 -translate-y-1/2 px-2 py-0.5 bg-gray-900 text-white font-special text-sm uppercase tracking-widest flex items-center ">
-              Lista de Atualizações
-            </div>
-            <div className="mt-3 flex flex-col gap-2">
-              <p className="border-b border-dashed border-gray-400/60 pb-2 text-gray-800">
-                <span className="font-bold text-gray-900 bg-gray-200 px-1 border border-gray-300 mr-2">v1.1</span> 
-                <span className="text-gray-500 font-mono text-xs mr-2">(19/05/26)</span> 
-                Adicionado rituais.
-              </p>
-              <p className="border-b border-dashed border-gray-400/60 pb-2 text-gray-800">
-                <span className="font-bold text-gray-900 bg-gray-200 px-1 border border-gray-300 mr-2">v1.0</span> 
-                <span className="text-gray-500 font-mono text-xs mr-2">(14/05/26)</span> 
-                Primeira versão pública!
-              </p>
-              <p className="border-b border-dashed border-gray-400/60 pb-2 text-gray-800">
-                <span className="font-bold text-gray-900 bg-gray-200 px-1 border border-gray-300 mr-2">v0.1</span> 
-                <span className="text-gray-500 font-mono text-xs mr-2">(04/05/26)</span> 
-                Comecei a desenvolver.
-              </p>
-            </div>
+          <InfoPanel title="Lista de Atualizações">
+          <div className="flex flex-col gap-2">
+            <UpdateItem version="v1.2" date="(27/05/26)" text="Adicionado conteúdo do AS5." />
+            <UpdateItem version="v1.1" date="(19/05/26)" text="Adicionado rituais." />
+            <UpdateItem version="v1.0" date="(14/05/26)" text="Primeira versão pública!" />
+            <UpdateItem version="v0.1" date="(04/05/26)" text="Comecei a desenvolver." />
           </div>
+        </InfoPanel>
 
           {/* Planejamento */}
-          <div className="relative p-6 border border-gray-400 bg-gray-300/30">
-            <div className="absolute top-0 left-4 -translate-y-1/2 px-2 py-0.5 bg-gray-900 text-white font-special text-sm uppercase tracking-widest flex items-center">
-              Funcionalidades Planejadas
-            </div>
-            <ul className="mt-3 space-y-2 text-gray-800 list-disc list-inside marker:text-gray-500">
-              <li className="border-b border-dashed border-gray-400/60 pb-1">Bestiário.</li>
-              <li className="border-b border-dashed border-gray-400/60 pb-1">Dark mode?</li>
-              <li className="border-b border-dashed border-gray-400/60 pb-1">Implementar sistema de favoritos.</li>
-              <li className="border-b border-dashed border-gray-400/60 pb-1">Buscar pelas regras e livros.</li>
-            </ul>
-          </div>
+          <InfoPanel title="Funcionalidades Planejadas">
+          <ul className="space-y-2 text-gray-800 list-disc list-inside marker:text-gray-500">
+            <li className="border-b border-dashed border-gray-400/60 pb-1">Bestiário.</li>
+            <li className="border-b border-dashed border-gray-400/60 pb-1">Dark mode?</li>
+            <li className="border-b border-dashed border-gray-400/60 pb-1">Implementar sistema de montar ficha.</li>
+            <li className="border-b border-dashed border-gray-400/60 pb-1">Buscar pelas regras e livros.</li>
+          </ul>
+        </InfoPanel>
           
         </div>
         
@@ -130,5 +115,15 @@ export default function Home() {
 
       </div>
     </>
+  );
+}
+
+function UpdateItem({ version, date, text }: { version: string, date: string, text: string }) {
+  return (
+    <p className="border-b border-dashed border-gray-400/60 pb-2 text-gray-800">
+      <span className="font-bold text-gray-900 bg-gray-200 px-1 border border-gray-300 mr-2">{version}</span> 
+      <span className="text-gray-500 font-mono text-xs mr-2">{date}</span> 
+      {text}
+    </p>
   );
 }

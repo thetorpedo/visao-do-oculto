@@ -35,8 +35,8 @@ export default function OfflineDownloader({ pdfsParaBaixar }: { pdfsParaBaixar: 
   };
 
   return (
-    <div className="relative p-6 border border-gray-800 bg-amber-100/30 md:col-span-2 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
-      <div className="absolute top-0 left-4 -translate-y-1/2 px-2 py-0.5 bg-gray-900 text-white font-special text-sm uppercase tracking-widest flex items-center shadow-[2px_2px_0px_rgba(0,0,0,0.3)]">
+    <div className="relative p-6 border border-gray-800 bg-amber-100/30 md:col-span-2 flex flex-col md:flex-row items-center justify-between gap-6 ">
+      <div className="absolute top-0 left-4 -translate-y-1/2 px-2 py-0.5 bg-gray-900 text-white font-special text-sm uppercase tracking-widest flex items-center ">
         Leitura Rápida / Offline
       </div>
       
@@ -59,7 +59,7 @@ export default function OfflineDownloader({ pdfsParaBaixar }: { pdfsParaBaixar: 
         ) : (
           <button 
             onClick={handleCachePDFs}
-            className="flex items-center gap-2 bg-white text-gray-900 hover:bg-gray-900 hover:text-white border-2 border-gray-900 px-6 py-3 font-special uppercase tracking-wider transition-colors cursor-pointer shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1"
+            className="flex items-center gap-2 bg-white text-gray-900 hover:bg-gray-900 hover:text-white border-2 border-gray-900 px-6 py-3 font-special uppercase tracking-wider transition-all cursor-pointer shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1"
           >
             <Download className="size-5" /> BAIXAR (~200MB)
           </button>

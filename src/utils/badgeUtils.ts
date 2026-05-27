@@ -6,6 +6,7 @@ export const corElemento = (elemento: string | null) => {
         case "Conhecimento": return "text-white bg-[#ba921a] border-[#ba921a]";
         case "Medo": return "text-black bg-[#ffffff] border-gray-400";
         case "Intenção": return "text-white bg-orange-700/90 border-orange-700/90";
+        case "Transmissão": return "text-white bg-green-700/90 border-green-700/90";
         default: return "text-gray-800 border-gray-400 bg-gray-200";
     }
 };

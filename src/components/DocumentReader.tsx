@@ -10,7 +10,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
 
 const FONTES_CONFIG: Record<string, { url: string; offset: number }> = {
   "OPRPG": { url: "/files/OPRPG.pdf", offset: 10 },
-  "OPRPG LUXO": { url: "/files/OPRPGLUXO.jpg", offset: 10 },
+  "OPRPG LUXO": { url: "/files/OPRPGLUXO.jpg", offset: 0 },
   "SAH": { url: "/files/SAH.pdf", offset: 1 },
   "HQ Iniciação": { url: "/files/INICIACAO.png", offset: 2 },
   "HQ OSNF-1": { url: "/files/OSNF1.png", offset: 2 },
@@ -20,6 +20,7 @@ const FONTES_CONFIG: Record<string, { url: string; offset: number }> = {
   "AS2": { url: "/files/AS2.pdf", offset: 0 },
   "AS3": { url: "/files/AS3.pdf", offset: 0 },
   "AS4": { url: "/files/AS4.pdf", offset: 0 },
+  "AS5": { url: "/files/AS5.pdf", offset: 0 },
 };
 
 interface DocumentReaderProps {

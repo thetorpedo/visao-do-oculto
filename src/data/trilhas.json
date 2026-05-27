@@ -376,7 +376,6 @@
     "fonteLivro": "AS4",
     "fontePagina": "69"
   },
-  
   {
     "id": "parapsicologo",
     "nome": "Parapsicólogo",
@@ -389,5 +388,18 @@
     "nex99": "A Sanidade Está Lá Fora. Graças aos seus estudos, a capacidade de curar a mente humana de (quase) todas as mazelas está ao seu alcance. Você pode gastar uma ação de movimento e 5 PE para remover todas as condições de medo ou mentais de uma pessoa adjacente (incluindo você mesmo).",
     "fonteLivro": "SAH",
     "fontePagina": "29"
+  },
+  {
+    "id": "criptologista_do_oculto",
+    "nome": "Criptologista do Oculto",
+    "tipo": "Ocultista",
+    "descricao": "Você estuda tentando compreender as linguagens utilizadas para se comunicar com o Outro Lado. Mesmo desconfiando que não haja uma solução concreta, você analisa os padrões, desenvolve técnicas e ensina aos seus aliados maneiras de aprimorar suas súplicas ao paranormal.",
+    "especial": null,
+    "nex10": "Método Intuitivo. Você recebe o poder Criar Selo (OPRPG, p. 33). Se recebê-lo novamente, dobra a quantidade máxima de selos criados ao mesmo tempo. Você pode criar 2 selos com uma ação de interlúdio, em vez de apenas 1. O número de selos que você pode criar em uma ação de interlúdio aumenta em +1 para cada outra habilidade desta trilha que adquirir.",
+    "nex40": "Caligrafia Eficiente. Selos feitos por você são mais fáceis de usar. O teste para usar o Selo de um ritual que o usuário não conhece muda para Ocultismo (DT 10 + custo em PE do ritual). Além disso, você recebe +5 em testes para identificar rituais.",
+    "nex65": "Decifrar à Distância. Quando usa um Selo Paranormal, você não precisa estar empunhando-o nem precisa lê-lo em voz alta. Basta poder lê-lo, mesmo que apenas mentalmente, mas o Selo precisa estar, no máximo, em alcance curto de você. Além disso, você recebe +5 em testes para compreender “linguagens” do Outro Lado como Sigilos ou Sinais.",
+    "nex99": "Selo Supremo. Selos feitos por você dispensam testes de Ocultismo para serem usados. Além disso, os rituais dos seus Selos sofrem as seguintes alterações:\n\no Se o ritual pede testes de resistência, a DT aumenta em +5;\n\no Se o ritual causa dano, a rolagem de dano aumenta em +3 dados extras do mesmo tipo;\n\no Se o ritual for usado em forma avançada (discente ou verdadeira), o usuário do Selo não precisa pagar o custo adicional em pontos de esforço da forma avançada.",
+    "fonteLivro": "AS5",
+    "fontePagina": "58"
   }
 ]
