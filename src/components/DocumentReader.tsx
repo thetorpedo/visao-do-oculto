@@ -21,6 +21,7 @@ const FONTES_CONFIG: Record<string, { url: string; offset: number }> = {
   "AS3": { url: "/files/AS3.pdf", offset: 0 },
   "AS4": { url: "/files/AS4.pdf", offset: 0 },
   "AS5": { url: "/files/AS5.pdf", offset: 0 },
+  "AS6": { url: "/files/AS6.pdf", offset: 0 },
 };
 
 interface DocumentReaderProps {

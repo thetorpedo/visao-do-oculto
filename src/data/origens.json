@@ -615,7 +615,7 @@
     "descricao": "Você sempre soube que não estávamos sozinhos no universo. Muitos já te consideraram um lunático, mas algo dizia que suas teorias sempre estavam no caminho certo. As intermináveis pesquisas sobre o espaço, sinais no céu e seres de outros planetas eventualmente te fizeram perceber que o oculto não mede distâncias. Onde há medo, há algo incompreensível para espreitar.",
     "pericias": "Ciências e Ocultismo.",
     "tecnicaNome": "Minha Teoria Absurda",
-    "tecnicaDescricao": "Uma vez por missão em que há algo a ser investigado, você pode gastar 10 minutos para apresentar ao seu grupo sua tese sobre as prováveis respostas para a investigação. Obviamente, isso deve ser feito antes de terem todas as respostas. Se, quando a missão acabar, sua tese se provar correta, você recebe +3 PE máximos e atuais.",
+    "tecnicaDescricao": "Uma vez por cena de interlúdio, você pode gastar uma ação para apresentar ao seu grupo sua tese sobre as prováveis respostas para a investigação com a qual estão lidando. Obviamente, isso deve ser feito antes de terem todas as respostas. A critério do mestre, se suas teorias forem boas (não necessariamente corretas), você recebe 1d4+1 PE temporários que duram até serem gastos. Se, quando a missão acabar, uma de suas teorias se provar correta, você recebe +1 PE máximo e atual.",
     "fonteLivro": "AS5",
     "fontePagina": "54"
   },
@@ -628,5 +628,35 @@
     "tecnicaDescricao": "Uma vez por missão, durante uma cena de interlúdio, você pode receber os benefícios da ação dormir sem precisar realizá-la. Além disso, recebe +2 em testes contra qualquer efeito que tente te deixar inconsciente.",
     "fonteLivro": "AS5",
     "fontePagina": "54"
+  },
+  {
+    "id": "cientista_ex_panacea",
+    "nome": "Cientista Ex-Panacea",
+    "descricao": "Ingênuo, você passou anos trabalhando para a Panacea Industries até descobrir que prestava serviços para uma grande organização responsável por aprisionar e utilizar criaturas paranormais que pesquisam para enfrentarem umas às outras. Quando soube do uso de cobaias humanas nesses experimentos, decidiu parar de apoiar as pesquisas e se voltou contra a multinacional.",
+    "pericias": "Atualidades e Ciências.",
+    "tecnicaNome": "Existe uma Explicação",
+    "tecnicaDescricao": "Acostumado a ver o paranormal como um assunto científico, você prefere lidar com o sobrenatural através de teorias, cálculos e testes experimentais. Quando faz um teste de Ocultismo, você pode gastar 2 PE para usar Ciências no lugar dessa perícia.",
+    "fonteLivro": "AS6",
+    "fontePagina": "66"
+  },
+  {
+    "id": "cobaia_sobrevivente",
+    "nome": "Cobaia Sobrevivente",
+    "descricao": "Você foi pego pelas Indústrias Panacea (ou outra organização semelhante) ainda pequeno, mas, após anos como cobaia, conseguiu sobreviver aos experimentos com o mínimo de sequelas mentais e/ou físicas. Após escapar das garras da multinacional, passou a dedicar a sua vida a encontrar meios de salvar outras pessoas do destino trágico que você evitou.",
+    "pericias": "Fortitude e Vontade.",
+    "tecnicaNome": "Forças para Enfrentar",
+    "tecnicaDescricao": "Ser uma cobaia por anos marcou você com experiências horríveis, mas que, às vezes, podem ser usadas como força para continuar sobrevivendo. Descreva para o mestre a parte mais traumática da sua história como cobaia. Quando estiver em uma cena em que há algo relacionado a esse trauma, à critério do mestre, você fica abalado. Entretanto, quando isso acontecer, você pode gastar 2 PE para, até o fim da cena, receber imunidade a efeitos de medo (se aplica também ao abalado desta habilidade).",
+    "fonteLivro": "AS6",
+    "fontePagina": "66"
+  },
+  {
+    "id": "seguranca_ex_panacea",
+    "nome": "Segurança Ex-Panacea",
+    "descricao": "Acreditando que trabalhava em uma multinacional dedicada à saúde e bem-estar da população, você quase enlouqueceu quando descobriu que fazia a segurança para cientistas dispostos a usar cobaias humanas em seus experimentos com o paranormal. Assim que soube a verdade, abandonou as Indústrias Panacea para acabar com a existência dela.",
+    "pericias": "Luta e Pontaria.",
+    "tecnicaNome": "Técnicas de Contenção",
+    "tecnicaDescricao": "Você domina técnicas de luta para conter pessoas que podem causar problemas. Quando faz uma manobra de combate, você pode gastar 2 PE para receber +5 no teste de manobra.",
+    "fonteLivro": "AS6",
+    "fontePagina": "66"
   }
 ]
