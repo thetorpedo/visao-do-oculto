@@ -2657,6 +2657,7 @@
     "alcance": "curto",
     "alvo": "1 pessoa",
     "duracao": "sustentada",
+    "resistencia": "Vontade parcial",
     "descricao": "Em conexão com o Conhecimento, você invade a mente da pessoa com fragmentos de dúvidas e inseguranças que já existiam em seu subconsciente. Todas elas são expandidas ao extremo sob uma influência menor do Sangue, fazendo com que cada decisão pareça ser a errada. Enquanto o ritual estiver ativo, o alvo deve fazer um teste de Vontade no início de cada um de seus turnos. Se falhar, ele deverá rolar novamente o maior dado de qualquer teste feito até o fim de seu turno. Se o alvo passar no teste de resistência duas vezes seguidas, o efeito termina.",
     "aprimoramentos": [
       {
