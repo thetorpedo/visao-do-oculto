@@ -1,0 +1,32 @@
+[
+  {
+    "id": "hesitacao_forcada",
+    "codigo": 107,
+    "nome": "Hesitação Forçada",
+    "elemento": [
+      "Conhecimento"
+    ],
+    "circulo": 1,
+    "execucao": "padrão",
+    "alcance": "curto",
+    "alvo": "1 pessoa",
+    "area": null,
+    "duracao": "sustentada",
+    "resistencia": "Vontade parcial",
+    "descricao": "Em conexão com o Conhecimento, você invade a mente da pessoa com fragmentos de dúvidas e inseguranças que já existiam em seu subconsciente. Todas elas são expandidas ao extremo sob uma influência menor do Sangue, fazendo com que cada decisão pareça ser a errada. Enquanto o ritual estiver ativo, o alvo deve fazer um teste de Vontade no início de cada um de seus turnos. Se falhar, ele deverá rolar novamente o maior dado de qualquer teste feito até o fim de seu turno. Se o alvo passar no teste de resistência duas vezes seguidas, o efeito termina.",
+    "aprimoramentos": [
+      {
+        "nome": "Discente",
+        "custo": "+2 PE",
+        "descricao": "muda o alvo para “1 ser”. Além do normal, um alvo que não tenha resistido ao ritual não pode realizar ações hostis contra o conjurador. Quando usado em criaturas, o ritual não desperta inseguranças (elas não possuem nada disso). Mas seus movimentos são reescritos através do Conhecimento, resultando em efeitos similares. Requer 2º círculo."
+      },
+      {
+        "nome": "Verdadeiro",
+        "custo": "+5 PE",
+        "descricao": "muda a resistência para “Vontade anula”. O efeito muda: em vez de alimentar dúvidas, o ritual fortalece as convicções, qualidades e certezas do alvo até extremos absurdos. Ele se torna extremamente confiante em suas próprias capacidades, convencido de que pode superar qualquer obstáculo ou proteger aqueles ao seu redor. Enquanto o ritual estiver ativo, o alvo rola novamente o menor dado de qualquer teste realizado, mantendo o novo resultado. Além disso, sempre que um aliado adjacente do alvo sofrer um ataque, aquele sobre o efeito do ritual deve gastar uma reação para se colocar no caminho do golpe, tornando-se o novo alvo do ataque (e acreditando ser invencível). Um alvo involuntário afetado ainda pode resistir ao ritual com um teste de Vontade no início de seus turnos. Requer 3º círculo e afinidade."
+      }
+    ],
+    "fonteLivro": "AS6",
+    "fontePagina": "72"
+  }
+]

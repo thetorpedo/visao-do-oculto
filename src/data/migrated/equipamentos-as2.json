@@ -1,0 +1,218 @@
+[
+  {
+    "id": "machado_do_mutilador",
+    "codigo": 256,
+    "nome": "Machado do Mutilador",
+    "tipo": [
+      "Item Amaldiçoado",
+      "Arma"
+    ],
+    "subtipo": "Tática",
+    "categoria": "IV",
+    "espaco": 1,
+    "descricao": "Uma arma com cabo de madeira e lâmina vermelha que já deu fim a diversas vítimas e anseia por mais sangue. É uma arma tática corpo a corpo e de uma mão. Ela causa 1d8 pontos de dano de corte mais 1d8 pontos de dano de Sangue, multiplicado em caso de acerto crítico, e tem crítico 20/x3. Além disso, quando atinge uma vítima, você pode gastar 1 PE para deixá-la sangrando; esse efeito é cumulativo, ou seja, ela pode ficar sangrando várias vezes simultaneamente (perdendo 1d6 PV para cada sangramento).",
+    "elemento": "Sangue",
+    "dano": "1d8 + 1d8",
+    "critico": "20/x3",
+    "alcance": "-",
+    "tipoDano": "Cortante / Sangue",
+    "arma": {
+      "armaTipo": "Corpo a Corpo",
+      "empunhadura": "Uma mão",
+      "catArma": null,
+      "municao": null
+    },
+    "fonteLivro": "AS2",
+    "fontePagina": "41"
+  },
+  {
+    "id": "elmo_do_colosso",
+    "codigo": 257,
+    "nome": "Elmo do Colosso",
+    "tipo": [
+      "Item Amaldiçoado"
+    ],
+    "subtipo": null,
+    "categoria": "III",
+    "espaco": 3,
+    "descricao": "Um elmo de escafandro trabalhado em metal e imbuído com uma forte pressão eletrostática criada a partir da Energia. O Elmo é uma vestimenta que fornece resistência a dano 10. Se usado em conjunto com um resto do equipamento de escafandro qualquer que o personagem encontrar, conta como um traje de mergulho (SaH, p. 44).",
+    "elemento": "Energia",
+    "dano": null,
+    "critico": null,
+    "alcance": null,
+    "tipoDano": null,
+    "arma": null,
+    "fonteLivro": "AS2",
+    "fontePagina": "47"
+  },
+  {
+    "id": "manoplas_do_colosso",
+    "codigo": 258,
+    "nome": "Manoplas do Colosso",
+    "tipo": [
+      "Item Amaldiçoado",
+      "Arma"
+    ],
+    "subtipo": "Tática",
+    "categoria": "IV",
+    "espaco": 3,
+    "descricao": "Um par de manoplas trabalhadas em metal e imbuídas com uma violenta onda de Energia. Cada Manopla é uma arma tática corpo a corpo e de uma mão, mas elas só funcionam se usadas em par. Cada uma causa 1d8 pontos de dano de impacto mais 1d10 pontos de dano de Energia e tem crítico 20/x3. Além disso, as regras e efeitos de ataque desarmado se aplicam às Manoplas, assim como efeitos que mencionem objetos ou armas.",
+    "elemento": "Energia",
+    "dano": "1d8 + 1d10 (cada)",
+    "critico": "20/x3",
+    "alcance": "-",
+    "tipoDano": "Impacto / Energia",
+    "arma": {
+      "armaTipo": "Corpo a Corpo",
+      "empunhadura": "Uma mão",
+      "catArma": null,
+      "municao": null
+    },
+    "fonteLivro": "AS2",
+    "fontePagina": "47"
+  },
+  {
+    "id": "punhal_x",
+    "codigo": 259,
+    "nome": "Punhal X",
+    "tipo": [
+      "Item Amaldiçoado",
+      "Arma"
+    ],
+    "subtipo": "Simples",
+    "categoria": "IV",
+    "espaco": 1,
+    "descricao": "Uma grande faca de cabo sombrio e guarda dourada. É uma arma simples corpo a corpo, de uma mão e ágil, que pode ser arremessada em alcance curto. Ela causa 1d4 pontos de dano de perfuração mais 1d6 pontos de dano de Conhecimento e tem crítico 19/x3. Além disso, quando ataca com esta arma, você pode gastar 2 PE para deixar o alvo desprevenido contra o ataque e, se acertar, o alvo fica cego por 1 rodada. Um mesmo alvo só pode ficar cego por esta arma uma vez por cena.",
+    "elemento": "Conhecimento",
+    "dano": "1d4 + 1d6",
+    "critico": "19/x3",
+    "alcance": "Curto",
+    "tipoDano": "Perfuração / Conhecimento",
+    "arma": {
+      "armaTipo": "Corpo a Corpo",
+      "empunhadura": "Uma mão",
+      "catArma": "Ágil",
+      "municao": null
+    },
+    "fonteLivro": "AS2",
+    "fontePagina": "53"
+  },
+  {
+    "id": "sniper_fantasma",
+    "codigo": 260,
+    "nome": "Sniper Fantasma",
+    "tipo": [
+      "Item Amaldiçoado",
+      "Arma"
+    ],
+    "subtipo": "Tática",
+    "categoria": "IV",
+    "espaco": 2,
+    "descricao": "Um fuzil de precisão sombrio enrolado em bandagens que o tornaram amaldiçoado. É uma arma de fogo tática, de duas mãos e alcance longo. Ela causa 2d10 pontos de dano balístico mais 3d4 pontos de dano de Morte e tem crítico 19/x3. Se for veterano em Pontaria e mirar com esta arma (OPRPG, p. 87), você recebe +5 na margem de ameaça de seu ataque. Além disso, um ser reduzido a 0 PV por dano desta arma morre se iniciar 2 turnos morrendo (em vez de 3).",
+    "elemento": "Morte",
+    "dano": "2d10 + 3d4",
+    "critico": "19/x3",
+    "alcance": "Longo",
+    "tipoDano": "Balístico / Morte",
+    "arma": {
+      "armaTipo": "Fogo",
+      "empunhadura": "Duas mãos",
+      "catArma": null,
+      "municao": null
+    },
+    "fonteLivro": "AS2",
+    "fontePagina": "59"
+  },
+  {
+    "id": "a_antena",
+    "codigo": 261,
+    "nome": "A Antena",
+    "tipo": [
+      "Item Amaldiçoado",
+      "Arma"
+    ],
+    "subtipo": "Simples",
+    "categoria": "IV",
+    "espaco": 2,
+    "descricao": "Uma antena parabólica encaixada em uma das extremidades de um bastão de ferro. Apesar da aparência estranha, este item maldito transmite medo primal. É uma arma simples corpo a corpo, de duas mãos, que conta como uma arma improvisada (–1d20 em testes de ataque). Ela causa 1d6 pontos de dano de impacto e tem crítico 20/x2. Seu verdadeiro potencial só se revela nas mãos de um conjurador de rituais. A DT de seus rituais aumenta em +3. Além disso, você pode conjurar um ritual n’A Antena. O ritual não faz efeito na hora; em vez disso, fica contido nela. Você pode gastar uma ação padrão para libertar o ritual e gerar o efeito dele (sem precisar gastar ações de conjuração ou PE). A Antena só pode conter um ritual por vez.",
+    "elemento": "Medo",
+    "dano": "1d6",
+    "critico": "20/x2",
+    "alcance": "-",
+    "tipoDano": "Impacto",
+    "arma": {
+      "armaTipo": "Corpo a Corpo",
+      "empunhadura": "Duas mãos",
+      "catArma": null,
+      "municao": null
+    },
+    "fonteLivro": "AS2",
+    "fontePagina": "67"
+  },
+  {
+    "id": "encaixe",
+    "codigo": 262,
+    "nome": "Encaixe",
+    "tipo": [
+      "Modificação"
+    ],
+    "subtipo": "Armas corpo a corpo",
+    "categoria": null,
+    "espaco": 0,
+    "descricao": "Encaixe MODIFICAÇÃO PARA ARMA O cabo da arma é modificado para permitir ser acoplado a outra arma, com a mesma modificação. A arma se torna acoplável. Esta modificação só pode ser aplicada em armas corpo a corpo de uma mão, leves, simples e táticas. Acoplável HABILIDADE DE ARMA Uma arma acoplável é a fusão de duas armas de uma mão que, quando unidas através do gasto de uma ação de movimento, se tornam uma arma de duas mãos. Toda arma acoplável, quando unida, é considerada uma arma tática, mesmo que suas formas separadas não sejam. Um personagem pode gastar uma ação de movimento para desacoplar as armas. Quando as formas separadas são acopláveis, o item passa a ser considerado uma única arma, fazendo com que o personagem deva, sempre que fizer uma rolagem de ataque, definir com qual das armas o ataque será realizado, assim definindo as estatísticas e demais modificações e maldições contabilizadas no ataque. Por exemplo: um machado lancinante e um machado energético, cada um acoplável. No primeiro ataque escolha se a ponta vai ser a que possui lancinante ou a que possui energético, o próximo ataque será com a outra ponta. Além disso, a arma acoplada sofre as seguintes modificações: o Muda para duas mãos. o O dano da arma é igual ao dano da arma separada aumentado em +1 dado do mesmo tipo. o A margem de crítico ou o multiplicador de crítico aumenta em +1 (escolha no momento que a arma recebe a habilidade). o Os espaços dobram. o Pode ser usada com Combater com Duas Armas (e habilidades similares) para fazer ataques adicionais, como se fosse uma arma de uma mão e uma arma leve. Por exemplo, um personagem pode ter duas espadas (arma tática corpo a corpo de uma mão; categoria II; dano 1d8/1d10; crítico 19; tipo corte; 1 espaço), com cada uma delas tendo a modificação encaixe. Quando ele gastar uma ação de movimento para acoplar as duas espadas, obtém uma espada de lâmina dupla (arma tática corpo a corpo de duas mãos; categoria II; dano 2d10; crítico 19/x3; tipo corte; 2 espaços).",
+    "elemento": null,
+    "dano": "+1 dado do mesmo tipo (quando acoplada)",
+    "critico": "+1 na margem ou multiplicador (quando acoplada)",
+    "alcance": null,
+    "tipoDano": null,
+    "arma": null,
+    "fonteLivro": "AS2",
+    "fontePagina": "71"
+  },
+  {
+    "id": "catalisador_sofisticado_e_horrorizado",
+    "codigo": 263,
+    "nome": "Catalisador Sofisticado e Horrorizado",
+    "tipo": [
+      "Equipamento Geral"
+    ],
+    "subtipo": "Item Paranormal",
+    "categoria": "III",
+    "espaco": 1,
+    "descricao": "Este tipo de catalisador ritualístico (SaH, p. 44) foi intensamente horrorizado pelo Outro Lado e pode ser usado como uma vestimenta semelhante a uma bijuteria ou acessório, não sendo necessário empunhá-lo. Além disso, ele não é consumido quando usado. Uma vez por cena, você recebe 3d6. Você pode gastar 1d6, como ação livre, para: Aumentar o dano de um ritual em +1d6; Aumentar a recuperação de PV de um ritual em +1d6; Aumentar a DT de um ritual em +1d6. Você só pode gastar 1d6 no mesmo ritual, e apenas no momento em que conjurá-lo. No fim da cena, d6 não gastos são perdidos.",
+    "elemento": null,
+    "dano": null,
+    "critico": null,
+    "alcance": null,
+    "tipoDano": null,
+    "arma": null,
+    "fonteLivro": "AS2",
+    "fontePagina": "75"
+  },
+  {
+    "id": "faca_predadora",
+    "codigo": 264,
+    "nome": "Faca Predadora",
+    "tipo": [
+      "Item Amaldiçoado",
+      "Arma"
+    ],
+    "subtipo": "Simples",
+    "categoria": "IV",
+    "espaco": 1,
+    "descricao": "Uma faca de cabo escuro ornamentada com várias ondas em sua lâmina. É uma arma simples corpo a corpo, de uma mão e ágil, que pode ser arremessada em alcance curto. Ela causa 1d4 pontos de dano de perfuração mais 2d10 pontos de dano de Sangue e tem crítico 19/x3. Quando ataca com esta arma, você pode gastar 2 PE. Se fizer isso e acertar o ataque, você recupera 2d10 PV. Qualquer ponto de vida recuperado que exceda seus PV máximos se torna pontos de vida temporários.",
+    "elemento": "Sangue",
+    "dano": "1d4 + 2d10",
+    "critico": "19/x3",
+    "alcance": "Curto",
+    "tipoDano": "Perfuração / Sangue",
+    "arma": {
+      "armaTipo": "Corpo a Corpo",
+      "empunhadura": "Uma mão",
+      "catArma": "Ágil",
+      "municao": null
+    },
+    "fonteLivro": "AS2",
+    "fontePagina": "93"
+  }
+]

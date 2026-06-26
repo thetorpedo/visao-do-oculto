@@ -552,7 +552,7 @@
     "fontePagina": "114"
   },
   {
-    "id": "resistir_a",
+    "id": "resistir_a_elemento",
     "codigo": 47,
     "nome": "Resistir a <Elemento>",
     "tipo": "Paranormal",
@@ -1272,7 +1272,7 @@
     "fontePagina": "47"
   },
   {
-    "id": "acostumado_a_maldicao_de",
+    "id": "acostumado_a_maldicao_de_elemento",
     "codigo": 107,
     "nome": "Acostumado a Maldição de <Elemento>",
     "tipo": "Ocultista",

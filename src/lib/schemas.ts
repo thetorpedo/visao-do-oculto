@@ -61,7 +61,6 @@ export const EquipamentoSchema = z
         critico: z.string().nullable(),
         alcance: z.string().nullable(),
         tipoDano: z.string().nullable(),
-        defesa: z.string().nullable(),
         arma: ArmaSchema.nullable(),
     })
     .merge(FonteSchema);

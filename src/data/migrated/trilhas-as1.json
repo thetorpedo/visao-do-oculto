@@ -1,0 +1,16 @@
+[
+  {
+    "id": "maledictologo",
+    "codigo": 27,
+    "nome": "Maledictólogo",
+    "tipo": "Ocultista",
+    "descricao": null,
+    "especial": null,
+    "nex10": "Identificação Macabra. Compreender o paranormal fica cada vez mais prático com o tempo. Quando faz um teste para identificar item amaldiçoado ou identificar ritual, você pode gastar 1 PE para receber +1d10 neste teste. Além disso, sofre apenas –1d20 para identificar itens amaldiçoados como uma ação completa.",
+    "nex40": "Compreensão de Maldições. Você pode gastar uma ação de interlúdio e 3 PE para fazer leituras e rituais de identificação em um item amaldiçoado. Após isso, faça um teste de Ocultismo (DT 10 +5 por categoria do item). Se falhar, você perde 2d4+2 SAN e não pode tentar novamente com o mesmo item. Se passar e o item amaldiçoado contiver um ritual, você perde 1d4+1 SAN, aprende o ritual e o item é consumido. Esse ritual não conta no seu limite de rituais. Se passar e o item amaldiçoado não contiver um ritual, você perde 1d4+1 SAN e pode transferir as maldições para outro item ou para um símbolo marcado em seu corpo ou no corpo de um aliado adjacente, como uma tatuagem, e o item amaldiçoado original é consumido. A pessoa tatuada pode usufruir das maldições como se estivesse usando o item, mas a mesma pessoa não pode ter mais do que uma tatuagem desse tipo. Você pode destruir esse símbolo em seu corpo gastando uma ação de interlúdio.",
+    "nex65": "Reproduzir Maldição. Sua determinação em usar o Outro Lado contra ele mesmo é maior do que seu medo de enlouquecer. Você pode gastar uma ação de interlúdio e 3 PE para memorizar uma maldição de item com a qual já tenha lidado (por exemplo, um item que já estudou ou usou, ou mesmo um do qual já foi alvo). Uma vez que tenha memorizado uma maldição, pode gastar uma ação de interlúdio e 3 PE para aplicá-la a um novo item. Para isso, faça um teste de Ocultismo (DT 10 +5 por categoria do item). Se falhar, você perde 2d8+2 SAN. Se passar, você perde 1d8+1 SAN e o novo item recebe a maldição que você havia memorizado até o fim da missão. Maldições aumentam categorias de itens, e nenhum item pode ter categoria maior do que IV.",
+    "nex99": "Maldição Suprema. A loucura não o impede de fazer o impensável. Ao usar a habilidade Reproduzir Maldição, você considera o item três categorias efetivas a menos. Por exemplo, um item de categoria IV é considerado de categoria I, permitindo que você aplique maldições até ele voltar à categoria IV.",
+    "fonteLivro": "AS1",
+    "fontePagina": "45"
+  }
+]

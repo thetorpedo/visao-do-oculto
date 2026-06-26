@@ -3,13 +3,12 @@ import DocumentReader from "@/components/DocumentReader";
 import ExpandableText from "@/components/ExpandableText";
 import FilterButton from "@/components/FilterButton";
 import { corElemento } from "@/utils/badgeUtils";
+import { useData } from "@/context/DataContext";
 
-import rituaisData from "@/data/rituais.json";
 import Fuse from "fuse.js";
 import { ChevronDown, Search, X } from "lucide-react";
 import { useDeferredValue, useMemo, useState } from "react";
 
-// Utilitário local para deixar a primeira letra maiúscula (usado no status e aprimoramentos)
 const capitalizeFirst = (str: string | number | null | undefined) => {
   if (!str) return "";
   const s = String(str);
@@ -26,8 +25,7 @@ const LinhaStatus = ({ label, valor }: { label: string; valor: string | number |
   );
 };
 
-// Componente Dropdown para os Aprimoramentos
-function AprimoramentoDropdown({ aprimoramento }: { aprimoramento: any }) {
+function AprimoramentoDropdown({ aprimoramento }: { aprimoramento: { nome: string; custo: string; descricao: string } }) {
   const [isOpen, setIsOpen] = useState(false);
   if (!aprimoramento) return null;
 
@@ -55,6 +53,8 @@ function AprimoramentoDropdown({ aprimoramento }: { aprimoramento: any }) {
 }
 
 export default function Rituais() {
+  const { rituais: rituaisData } = useData();
+
   const [busca, setBusca] = useState(() => {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
@@ -75,7 +75,7 @@ export default function Rituais() {
   
   const fontesDisponiveis = useMemo(() => {
     return Array.from(new Set(rituaisData.map(r => r.fonteLivro))).sort();
-  }, []);
+  }, [rituaisData]);
 
   const fuse = useMemo(() => {
     return new Fuse(rituaisData, {
@@ -83,7 +83,7 @@ export default function Rituais() {
       threshold: 0.3, 
       ignoreLocation: true,
     });
-  }, []);
+  }, [rituaisData]);
 
   const rituaisFiltrados = useMemo(() => {
     const resultadoBusca = buscaAdiada.length > 2 
@@ -93,13 +93,11 @@ export default function Rituais() {
     return resultadoBusca.filter(ritual => {
       const matchElemento = elementosSelecionados.length === 0 || 
         ritual.elemento.some(e => elementosSelecionados.includes(e));
-        
       const matchCirculo = circulosSelecionados.length === 0 || circulosSelecionados.includes(ritual.circulo);
       const matchFonte = fontesSelecionadas.length === 0 || fontesSelecionadas.includes(ritual.fonteLivro);
-
       return matchElemento && matchCirculo && matchFonte;
     });
-  }, [buscaAdiada, elementosSelecionados, circulosSelecionados, fontesSelecionadas, fuse]);
+  }, [buscaAdiada, rituaisData, elementosSelecionados, circulosSelecionados, fontesSelecionadas, fuse]);
 
   const rituaisOrdenados = useMemo(() => {
     if (buscaAdiada.length > 2) return rituaisFiltrados;
@@ -129,7 +127,6 @@ export default function Rituais() {
       
       <div className="relative">
         <div className="relative p-6 z-10 shadow-2xl bg-[url(/assets/paper.png)] bg-repeat bg-size-[30%]">
-          
           <div className="flex flex-col gap-5">
             <div className="flex items-center border border-gray-600 bg-white/40 px-3 py-2">
               <Search className="size-5 mr-2" />
@@ -180,7 +177,6 @@ export default function Rituais() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {rituaisOrdenados.map((ritual) => {
-          
           const statusAtivos = [
             { label: "Execução", valor: ritual.execucao },
             { label: "Alcance", valor: ritual.alcance },
@@ -192,7 +188,6 @@ export default function Rituais() {
 
           let limiteDescricao = 200;
           const temAprimoramentos = ritual.aprimoramentos && ritual.aprimoramentos.length > 0;
-          
           if (!temAprimoramentos) limiteDescricao += 100;
           if (statusAtivos.length === 0) limiteDescricao += 100;
 
@@ -203,7 +198,6 @@ export default function Rituais() {
                 <div className="grow">
                   <div className="flex justify-between flex-col items-start mb-4">
                     <h3 className="text-2xl font-special underline leading-tight">{ritual.nome}</h3>
-                    
                     <div className="flex flex-wrap gap-1 mt-2">
                       {ritual.elemento.map((e: string) => (
                         <span key={e} className={`text-sm uppercase font-daisy px-2 py-0.5 border ${corElemento(e)} whitespace-nowrap`}>
@@ -227,7 +221,7 @@ export default function Rituais() {
 
                   {temAprimoramentos && (
                     <div className="mt-4 pt-1">
-                      {ritual.aprimoramentos.map((aprimoramento: any, index: number) => (
+                      {ritual.aprimoramentos!.map((aprimoramento, index) => (
                         <AprimoramentoDropdown key={index} aprimoramento={aprimoramento} />
                       ))}
                     </div>
@@ -239,7 +233,6 @@ export default function Rituais() {
                   pagina={ritual.fontePagina} 
                   onOpenReader={() => setLeitorAtivo({ fonte: ritual.fonteLivro, pagina: parseInt(String(ritual.fontePagina)) })} 
                 />
-
               </div>
               
               <div className="absolute top-1/2 left-1/2 z-0 h-full w-full -translate-x-1/2 -translate-y-1/2 rotate-1 p-1 bg-[linear-gradient(rgba(139,139,139,0.4),rgba(139,139,139,0.2)),url(/assets/paper.png)] shadow-[0_0_15px_rgba(0,0,0,0.15)] bg-repeat bg-size-[30%]" />

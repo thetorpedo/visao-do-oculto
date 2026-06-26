@@ -1,0 +1,24 @@
+[
+  {
+    "id": "influencer_paranormal",
+    "codigo": 60,
+    "nome": "Influencer Paranormal",
+    "descricao": "De início, você nunca acreditou nas lendas urbanas e vídeos de fantasmas, então resolveu se aproveitar daqueles que acreditam. Foi produzindo conteúdos falsos e duvidosos para a internet que você descobriu a dura verdade por trás da Membrana.",
+    "pericias": "Enganação e Tecnologia.",
+    "tecnicaNome": "Registrar o Paranormal",
+    "tecnicaDescricao": "Uma vez por cena, você pode gastar uma ação padrão e 2 PE para criar um registro de uma criatura paranormal ou ritual que tenha sido conjurado na mesma cena. A ação padrão deve ser gasta para tirar uma foto, fazer um vídeo ou algum tipo de registro desse tipo. Uma vez por cena, você pode gastar uma ação de interlúdio e um dos registros de criatura para receber +5 em testes de identificar criatura e presença perturbadora envolvendo a criatura fotografada até o início da próxima cena de interlúdio. Alternativamente, uma vez por cena, você pode gastar uma ação de interlúdio e um dos registros de ritual para memorizar o ritual presente no registro, podendo conjurá-lo como se o conhecesse até o início de sua próxima cena de interlúdio, desde que tenha o NEX necessário (1o círculo a partir do NEX 5%, 2o círculo a partir do NEX 45% e 3o círculo a partir do NEX 75%); você também recebe +5 em testes para identificar o ritual. Esse ritual não conta no seu limite de rituais conhecidos.",
+    "fonteLivro": "AS4",
+    "fontePagina": "64"
+  },
+  {
+    "id": "cacador_de_recompensas",
+    "codigo": 61,
+    "nome": "Caçador de Recompensas",
+    "descricao": "Sua sede pelo dinheiro fácil sempre te guiou na exploração dos locais mais obscuros. Você sabe muito bem que as situações mais insalubres guardam as melhores recompensas.",
+    "pericias": "Crime e Investigação.",
+    "tecnicaNome": "Quem Não Arrisca, Não Petisca",
+    "tecnicaDescricao": "Você recebe +2 em testes para resistir à condições mentais e de medo. Além disso, caso falhe em algum desses testes, você recebe +1d20 no próximo teste que realizar até o fim da cena (não cumulativo com ele mesmo).",
+    "fonteLivro": "AS4",
+    "fontePagina": "64"
+  }
+]

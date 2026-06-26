@@ -1,0 +1,46 @@
+[
+  {
+    "id": "ginasta",
+    "codigo": 51,
+    "nome": "Ginasta",
+    "descricao": "Desde muito jovem, você passou a maior parte de sua vida em ginásios (ou talvez em antigos templos monásticos) praticando as mais difíceis acrobacias. Sua preparação foi árdua e dolorosa, mas aprimorou seu corpo, sua técnica e sua disciplina. Recrutado pela Ordo Realitas, essas se tornaram suas principais ferramentas para enfrentar o Outro Lado. E com elas, você planeja fazer as criaturas paranormais sofrerem muito mais do que você sofreu em seus treinos.",
+    "pericias": "Acrobacia e Reflexos.",
+    "tecnicaNome": "Mobilidade Acrobática",
+    "tecnicaDescricao": "Você recebe +2 na Defesa e seu deslocamento aumenta em +3m.",
+    "fonteLivro": "HQ OSNF-1",
+    "fontePagina": "~"
+  },
+  {
+    "id": "duble",
+    "codigo": 52,
+    "nome": "Dublê",
+    "descricao": "Você sempre combinou um gosto por alta velocidade, manobras ousadas e esportes radicais com uma total falta de noção do perigo. Sua busca incessante por adrenalina o fez seguir carreira de dublê, uma profissão que lhe permitiu enfrentar o risco das mais diversas formas. Agora a serviço da Ordem, você enfim enfrentará o Medo verdadeiro e poderá colocar sua coragem — e suas peripécias — à prova como nunca.",
+    "pericias": "Pilotagem e Reflexos.",
+    "tecnicaNome": "Destemido",
+    "tecnicaDescricao": "Quando faz um teste de perícia para o qual uma falha terá como consequência direta dano ou uma condição negativa, você recebe +5 nesse teste.",
+    "fonteLivro": "HQ OSNF-1",
+    "fontePagina": "~"
+  },
+  {
+    "id": "revoltado",
+    "codigo": 53,
+    "nome": "Revoltado",
+    "descricao": "Alguma coisa aconteceu em sua juventude que fez com que você se rebelasse contra o mundo ao seu redor. Talvez seus parentes tenham sido ausentes, por escolha ou por algum evento trágico, talvez outra perda tenha marcado seu coração. Qualquer que seja a razão, você possui iguais doses de rebeldia e independência e, acima de tudo, aprendeu a se virar sozinho. Recrutado pela Ordem, você luta por vingança — ou para que outros não passem pelo que você passou.",
+    "pericias": "Furtividade e Vontade.",
+    "tecnicaNome": "Antes Só",
+    "tecnicaDescricao": "Você recebe +1 na Defesa, em testes de perícias e em seu limite de PE por turno se estiver sem nenhum aliado em alcance curto.",
+    "fonteLivro": "HQ OSNF-1",
+    "fontePagina": "~"
+  },
+  {
+    "id": "gauderio_abutre",
+    "codigo": 54,
+    "nome": "Gaudério Abutre",
+    "descricao": "Você faz parte dos valorosos Gaudérios Abutres. Mesmo longe do motoclube, ainda segue o lema \"A gente morre por quem a gente ama\".",
+    "pericias": "Luta e Pilotagem.",
+    "tecnicaNome": "Fraternidade Gaudéria",
+    "tecnicaDescricao": "Uma vez por rodada, quando um aliado adjacente é alvo de um ataque ou efeito, você pode gastar 1 PE para trocar de lugar com este aliado e se tornar o alvo deste ataque ou efeito. Se fizer isso, em seu próximo turno você recebe +2 em testes de ataque contra o agressor.",
+    "fonteLivro": "HQ OSNF-1",
+    "fontePagina": "~"
+  }
+]

@@ -1,0 +1,53 @@
+[
+  {
+    "id": "passagem_de_conhecimento",
+    "codigo": 99,
+    "nome": "Passagem de Conhecimento",
+    "elemento": [
+      "Sangue",
+      "Conhecimento"
+    ],
+    "circulo": 2,
+    "execucao": "completa",
+    "alcance": "toque",
+    "alvo": "1 pessoa",
+    "area": null,
+    "duracao": "cena",
+    "resistencia": "Vontade evita",
+    "descricao": "Você transfere sua consciência para o corpo do alvo. Quando conjura este ritual, você deve escolher entre habitar o corpo do alvo e tentar sobrepor a mente dele ou fazer uma transferência completa, em que as consciências são trocadas e o alvo passa a habitar o seu corpo.\n\nNo primeiro caso, se o alvo falhar no teste de resistência, você passa a controlar o corpo dele (o seu próprio corpo cai inconsciente). Você continua usando sua ficha, mas substitui seus atributos físicos (Força, Agilidade e Vigor) pelos do alvo. De acordo com o mestre, você pode usar outras características inatas do corpo do alvo. No início de cada turno do alvo, ele pode repetir o teste de resistência para tentar recuperar o controle de seu corpo. Além disso, a critério do mestre (conforme a história e a sua relação com a pessoa), o alvo pode tentar recuperar o controle mais de uma vez por rodada. Se ele passar, você retorna para seu próprio corpo, que desperta na hora. Se o corpo do alvo morrer enquanto você o está ocupando, você também morre. Se o seu corpo morrer, você fica permanentemente preso no corpo do alvo e, se o alvo conseguir recuperar o controle do corpo, você morre.\n\nNo segundo caso, se o alvo falhar no teste de resistência, você passa a controlar o corpo dele e ele o seu. Ambos continuam usando suas fichas, mas substituem seus atributos físicos (Força, Agilidade e Vigor) pelos do outro. De acordo com o mestre, ambos podem usar outras características inatas do outro corpo. Nesse caso, o alvo não pode tentar se libertar novamente. A única maneira de reaver seu corpo é com o fim da duração do ritual ou conjurando este ritual contra aquele que tomou seu corpo de você. Se um dos corpos morrer, quem está ocupando ele também morre e é impossível retornar para um corpo morto.",
+    "aprimoramentos": [
+      {
+        "nome": "Discente",
+        "custo": "+3 PE",
+        "descricao": "O alcance muda para curto e a duração para 1 dia. No primeiro caso, o alvo só pode tentar recuperar o controle do corpo uma vez por dia ou uma vez por cena (o que for maior), em vez de uma vez por rodada."
+      },
+      {
+        "nome": "Verdadeiro",
+        "custo": "+7 PE",
+        "descricao": "O alcance muda para médio e a duração para permanente. No primeiro caso, o alvo só pode tentar recuperar o controle do corpo uma vez por ano, em vez de uma vez por rodada. Requer 4º círculo e afinidade."
+      }
+    ],
+    "fonteLivro": "AS1",
+    "fontePagina": "48"
+  },
+  {
+    "id": "passagem_de_conhecimento_expandido",
+    "codigo": 100,
+    "nome": "Passagem de Conhecimento Expandido",
+    "elemento": [
+      "Sangue",
+      "Conhecimento"
+    ],
+    "circulo": 4,
+    "execucao": "1 dia",
+    "alcance": "curto",
+    "alvo": "até 10 pessoas",
+    "area": null,
+    "duracao": "permanente",
+    "resistencia": null,
+    "descricao": "Criado por Agatha Volkomenn, este ritual é uma versão avançada de Passagem de Conhecimento, capaz de afetar várias pessoas ao mesmo tempo. Ele só pode ser aprendido por personagens capazes de conjurar Passagem de Conhecimento.\n\nEste ritual afeta de duas a dez pessoas, sempre em número par. Os alvos devem ser separados em dois grupos, sendo um deles o grupo principal. Cada alvo do grupo principal se sente submerso em um oceano infinito e, banhado pelo fluxo do Outro Lado, deve escolher um alvo do outro grupo. Entretanto, essa escolha nunca é simples, premeditada ou aleatória. As consciências deverão navegar através de suas intenções até alcançar o corpo adequado (veja o quadro Os Passos da Passagem, na p. 51). Quando a escolha enfim é feita, as consciências trocam de corpos.\n\nAo contrário da versão normal deste ritual, os personagens assumem os atributos e habilidades do corpo novo. Como parte da conjuração deste ritual, os corpos de um dos grupos podem ficar presos em caixões, num estado transitório, enquanto os corpos do outro grupo ficam livres no mundo. Os caixões não podem ser abertos antes de 1d6+1 dias, e só podem ser abertos por quem participou do ritual. Se um caixão for aberto enquanto o corpo estiver nesse estado transitório, o corpo se transforma em um anulado (veja a p. 52).\n\nO cérebro humano não consegue suportar a transferência completa, por isso bloqueia as memórias da consciência original, que retornam lentamente. Além disso, quando um personagem fica emocionalmente instável, pode perder o controle para as intenções do corpo invadido por alguns momentos. Em termos de regras, sempre que o personagem ficar enlouquecendo, insano ou perturbado, deve rolar 1d4; em um resultado 1, perde o controle para as intenções do corpo invadido por 1d4 rodadas.\n\nA única maneira de se voltar ao corpo original é refazer este ritual presencialmente. Se sua consciência morrer enquanto está no corpo trocado, estará permanentemente morta, assim como se estivesse em seu próprio corpo.",
+    "aprimoramentos": null,
+    "fonteLivro": "AS1",
+    "fontePagina": "50"
+  }
+]

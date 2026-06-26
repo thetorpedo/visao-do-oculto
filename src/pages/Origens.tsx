@@ -2,13 +2,15 @@ import BookReference from "@/components/BookReference";
 import DocumentReader from "@/components/DocumentReader";
 import ExpandableText from "@/components/ExpandableText";
 import FilterButton from "@/components/FilterButton";
+import { useData } from "@/context/DataContext";
 
-import origensData from "@/data/origens.json";
 import Fuse from "fuse.js";
 import { Search, X } from "lucide-react";
 import { useDeferredValue, useMemo, useState } from "react";
 
 export default function Origens() {
+  const { origens: origensData } = useData();
+
   const [busca, setBusca] = useState(() => {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
@@ -34,7 +36,7 @@ export default function Origens() {
 
   const fontesDisponiveis = useMemo(() => {
     return Array.from(new Set(origensData.map(o => o.fonteLivro)));
-  }, []);
+  }, [origensData]);
 
   const fuse = useMemo(() => {
     return new Fuse(origensData, {
@@ -42,7 +44,7 @@ export default function Origens() {
       threshold: 0.3, 
       ignoreLocation: true,
     });
-  }, []);
+  }, [origensData]);
 
   const origensFiltradas = useMemo(() => {
     const resultadoBusca = buscaAdiada.length > 2 
@@ -54,10 +56,9 @@ export default function Origens() {
       const matchPericia = periciasSelecionadas.length === 0 || periciasSelecionadas.every(p => {
         return origem.pericias.replace(/\./g, "").includes(p);
       });
-
       return matchFonte && matchPericia;
     });
-  }, [buscaAdiada, fontesSelecionadas, periciasSelecionadas, fuse]);
+  }, [buscaAdiada, origensData, fontesSelecionadas, periciasSelecionadas, fuse]);
 
   const origensOrdenadas = useMemo(() => {
     if (buscaAdiada.length > 2) return origensFiltradas;
@@ -82,7 +83,6 @@ export default function Origens() {
       <div className="relative">
         <div className="relative p-6 z-10 shadow-2xl bg-[url(/assets/paper.png)] bg-repeat bg-size-[30%]">
           <div className="flex flex-col gap-5">
-            {/* SEARCH BAR */}
             <div className="flex items-center border border-gray-600 bg-white/40 px-3 py-2">
               <Search className="size-5 mr-2" />
               <input
@@ -94,7 +94,6 @@ export default function Origens() {
               />
             </div>
             
-            {/* FILTROS */}
             <div className="flex flex-col gap-3">
               <div className="flex flex-wrap gap-2">
                 <span className="font-special text-sm self-center mr-2 w-18">Perícias:</span>
@@ -131,7 +130,6 @@ export default function Origens() {
             </div>
           </div>
         </div>
-        {/* SHADOW DO FILTRO */}
         <div className="absolute top-1/2 left-1/2 z-0! h-full w-full -translate-x-1/2 -translate-y-1/2 rotate-[-0.5deg] p-1 bg-[linear-gradient(rgba(139,139,139,0.4),rgba(139,139,139,0.2)),url(/assets/paper.png)] shadow-[0_0_15px_rgba(0,0,0,0.15)] bg-repeat bg-size-[30%]" />  
       </div>
 
@@ -157,12 +155,11 @@ export default function Origens() {
                </div>
 
                <div className="mt-4 bg-gray-400/20 border border-gray-400/50 px-3 py-2">
-                 <span className="font-special pt-1 text-sm tracking-wider mr-1 uppercase text-gray-900 block ">{origem.tecnicaNome}:</span>
+                 <span className="font-special pt-1 text-sm tracking-wider mr-1 uppercase text-gray-900 block">{origem.tecnicaNome}:</span>
                  <ExpandableText text={origem.tecnicaDescricao} limit={400} />
                </div>
             </div>
             
-            {/* RODAPÉ DO LIVRO (COMPONENTE) */}
             <BookReference 
               fonte={origem.fonteLivro} 
               pagina={origem.fontePagina} 
@@ -170,7 +167,6 @@ export default function Origens() {
             />
 
             </div>
-            {/* SHADOW DO CARD */}
             <div className="absolute top-1/2 left-1/2 z-0 h-full w-full -translate-x-1/2 -translate-y-1/2 -rotate-1 p-1 bg-[linear-gradient(rgba(139,139,139,0.4),rgba(139,139,139,0.2)),url(/assets/paper.png)] shadow-[0_0_15px_rgba(0,0,0,0.15)] bg-repeat bg-size-[30%]" />
           </div>
         ))}

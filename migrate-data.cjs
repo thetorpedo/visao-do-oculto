@@ -2,10 +2,10 @@
 
 /**
  * Migrador de dados — Visão do Oculto
- * Lê os JSONs em /src/data, normaliza para o schema atual e salva em /src/data/migrated
+ * Lê os JSONs em /src/data, normaliza e salva em /src/data/migrated
+ * Gera um arquivo por fonte (ex: poderes-as5.json) + um arquivo combinado por categoria
  *
  * Uso: node migrate-data.cjs [--dry-run]
- *   --dry-run  Só valida e mostra erros, sem gravar arquivos
  */
 
 const fs = require("fs");
@@ -36,35 +36,62 @@ function toStr(value) {
   return String(value);
 }
 
-function toSnakeCase(str) {
-  return str
-    .normalize("NFD")                        // separa acentos dos caracteres
-    .replace(/[\u0300-\u036f]/g, "")         // remove acentos
-    .toLowerCase()
-    .replace(/[^a-z0-9\s_-]/g, "")          // remove caracteres especiais
-    .trim()
-    .replace(/[\s-]+/g, "_");               // espaços e hífens viram _
-}
-
-function resolveId(item) {
-  // Se já é string no formato snake_case, mantém
-  if (typeof item.id === "string" && /^[a-z0-9_]+$/.test(item.id)) return item.id;
-  // Se é numérico ou string com caractere estranho, gera do nome
-  if (item.nome) return toSnakeCase(item.nome);
-  // Fallback
-  return `item_${item.id}`;
-}
-
-// Retorna o código numérico original, ou null se já era snake_case
-function resolveCodigo(item, autoIndex) {
-  if (typeof item.id === "number") return item.id;
-  // Se era snake_case, não tinha código numérico — atribui sequencial
-  return autoIndex;
-}
-
 function toStrRequired(value, fallback = "") {
   if (value === null || value === undefined) return fallback;
   return String(value);
+}
+
+function toSnakeCase(str) {
+  return str
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9\s_-]/g, "")
+    .trim()
+    .replace(/[\s-]+/g, "_");
+}
+
+// Resolve ID com estratégia de deduplicação:
+// 1. snake_case(nome)
+// 2. snake_case(nome)_fonteLivro  (se colisão com fonte diferente)
+// 3. snake_case(nome)_fonteLivro_N (se duplicata real)
+function buildIdMap(items) {
+  const seen = new Map(); // id_base → [{ nome, fonteLivro, index }]
+
+  return items.map((item, i) => {
+    const base = toSnakeCase(item.nome || `item_${i}`);
+    const fonte = toSnakeCase(item.fonteLivro || "");
+
+    if (!seen.has(base)) {
+      seen.set(base, [{ nome: item.nome, fonteLivro: item.fonteLivro, index: i }]);
+      return base;
+    }
+
+    // Já existe — tenta com fonte
+    const comFonte = `${base}_${fonte}`;
+    const existentes = seen.get(base);
+    const mesmaFonte = existentes.find(e => toSnakeCase(e.fonteLivro || "") === fonte);
+
+    if (!mesmaFonte) {
+      // Fonte diferente — usa base_fonte
+      existentes.push({ nome: item.nome, fonteLivro: item.fonteLivro, index: i });
+      seen.set(base, existentes);
+      return comFonte;
+    }
+
+    // Mesma fonte — duplicata real, adiciona sufixo numérico
+    const count = existentes.filter(e => toSnakeCase(e.fonteLivro || "") === fonte).length + 1;
+    existentes.push({ nome: item.nome, fonteLivro: item.fonteLivro, index: i });
+    seen.set(base, existentes);
+
+    console.warn(`  ⚠️  Duplicata real: "${item.nome}" (${item.fonteLivro}) → ${comFonte}_${count}`);
+    return `${comFonte}_${count}`;
+  });
+}
+
+function resolveCodigo(item, autoIndex) {
+  if (typeof item.id === "number") return item.id;
+  return autoIndex;
 }
 
 function report(file, index, item, issues) {
@@ -75,22 +102,38 @@ function report(file, index, item, issues) {
   }
 }
 
+// Agrupa itens por fonteLivro e salva um arquivo por fonte
+function salvarPorFonte(categoria, items) {
+  if (DRY_RUN) return;
+  const porFonte = {};
+  for (const item of items) {
+    const chave = toSnakeCase(item.fonteLivro || "sem_fonte");
+    if (!porFonte[chave]) porFonte[chave] = [];
+    porFonte[chave].push(item);
+  }
+  for (const [fonte, itens] of Object.entries(porFonte)) {
+    writeJson(`${categoria}-${fonte}.json`, itens);
+  }
+  const fontes = Object.keys(porFonte);
+  console.log(`   📂 Arquivos por fonte: ${fontes.map(f => `${categoria}-${f}.json`).join(", ")}`);
+}
+
 // ─────────────────────────────────────────
-// Migradores por tipo
+// Migradores
 // ─────────────────────────────────────────
 
 function migratePoderes() {
   const items = readJson("poderes.json");
-  const errors = [];
+  const ids = buildIdMap(items);
+
   const result = items.map((item, i) => {
     const issues = [];
-
     if (item.afinidade !== null && item.elemento === null) {
-      issues.push(`afinidade definida sem elemento — afinidade será removida`);
+      issues.push(`afinidade definida sem elemento — será removida`);
     }
 
     const normalized = {
-      id: resolveId(item),
+      id: ids[i],
       codigo: resolveCodigo(item, i + 1),
       nome: toStrRequired(item.nome),
       tipo: item.tipo ?? null,
@@ -107,16 +150,18 @@ function migratePoderes() {
   });
 
   writeJson("poderes.json", result);
-  console.log(`✅ poderes.json — ${result.length} itens migrados`);
+  salvarPorFonte("poderes", result);
+  console.log(`✅ poderes.json — ${result.length} itens`);
   return result;
 }
 
 function migrateEquipamentos() {
   const items = readJson("equipamentos.json");
+  const ids = buildIdMap(items);
+
   const result = items.map((item, i) => {
     const issues = [];
 
-    // tipo: string → array
     let tipo;
     if (Array.isArray(item.tipo)) {
       tipo = item.tipo;
@@ -126,32 +171,28 @@ function migrateEquipamentos() {
       tipo = [item.tipo];
     }
 
-    // id: snake_case do nome; codigo: numérico original ou sequencial
     if (typeof item.id === "number") {
-      issues.push(`id numérico (${item.id}) convertido para snake_case do nome`);
+      issues.push(`id numérico convertido para snake_case`);
     }
 
-    const id = resolveId(item);
-    const codigo = resolveCodigo(item, i + 1);
-
-    // campos de arma: agrupados em subobjeto ou null
     const isArma = item.armaTipo !== undefined || tipo.includes("Arma");
     const arma = isArma
       ? {
-          armaTipo: toStrRequired(item.armaTipo),
-          empunhadura: item.empunhadura ?? null,
-          catArma: item.catArma ?? null,
-          municao: item.municao ?? null,
-        }
+        armaTipo: toStrRequired(item.armaTipo),
+        empunhadura: item.empunhadura ?? null,
+        catArma: item.catArma ?? null,
+        municao: item.municao ?? null,
+      }
       : null;
 
     if (!isArma && (item.empunhadura || item.catArma || item.municao)) {
       issues.push(`campos de arma presentes mas tipo não é "Arma" — verifique`);
     }
 
+    // defesa removido intencionalmente
     const normalized = {
-      id,
-      codigo,
+      id: ids[i],
+      codigo: resolveCodigo(item, i + 1),
       nome: toStrRequired(item.nome),
       tipo,
       subtipo: item.subtipo ?? null,
@@ -163,7 +204,6 @@ function migrateEquipamentos() {
       critico: item.critico ?? null,
       alcance: item.alcance ?? null,
       tipoDano: item.tipoDano ?? null,
-      defesa: item.defesa ?? null,
       arma,
       fonteLivro: toStrRequired(item.fonteLivro),
       fontePagina: toStrRequired(item.fontePagina),
@@ -174,15 +214,17 @@ function migrateEquipamentos() {
   });
 
   writeJson("equipamentos.json", result);
-  console.log(`✅ equipamentos.json — ${result.length} itens migrados`);
+  salvarPorFonte("equipamentos", result);
+  console.log(`✅ equipamentos.json — ${result.length} itens`);
   return result;
 }
 
 function migrateOrigens() {
   const items = readJson("origens.json");
-  // Origens já estão uniformes — só garantir tipos
+  const ids = buildIdMap(items);
+
   const result = items.map((item, i) => ({
-    id: resolveId(item),
+    id: ids[i],
     codigo: resolveCodigo(item, i + 1),
     nome: toStrRequired(item.nome),
     descricao: toStrRequired(item.descricao),
@@ -194,27 +236,22 @@ function migrateOrigens() {
   }));
 
   writeJson("origens.json", result);
-  console.log(`✅ origens.json — ${result.length} itens migrados`);
+  salvarPorFonte("origens", result);
+  console.log(`✅ origens.json — ${result.length} itens`);
   return result;
 }
 
 function migrateRituais() {
   const items = readJson("rituais.json");
+  const ids = buildIdMap(items);
+
   const result = items.map((item, i) => {
     const issues = [];
-
-    // id: snake_case do nome; codigo: numérico original ou sequencial
-    if (typeof item.id === "number") {
-      issues.push(`id numérico (${item.id}) convertido para snake_case do nome`);
-    }
-
-    // fontePagina: sempre string
-    if (typeof item.fontePagina === "number") {
-      issues.push(`fontePagina numérica (${item.fontePagina}) convertida para string`);
-    }
+    if (typeof item.id === "number") issues.push(`id numérico convertido`);
+    if (typeof item.fontePagina === "number") issues.push(`fontePagina numérica convertida`);
 
     const normalized = {
-      id: resolveId(item),
+      id: ids[i],
       codigo: resolveCodigo(item, i + 1),
       nome: toStrRequired(item.nome),
       elemento: Array.isArray(item.elemento) ? item.elemento : [item.elemento].filter(Boolean),
@@ -236,24 +273,22 @@ function migrateRituais() {
   });
 
   writeJson("rituais.json", result);
-  console.log(`✅ rituais.json — ${result.length} itens migrados`);
+  salvarPorFonte("rituais", result);
+  console.log(`✅ rituais.json — ${result.length} itens`);
   return result;
 }
 
 function migrateTrilhas() {
   const items = readJson("trilhas.json");
+  const ids = buildIdMap(items);
+
   const result = items.map((item, i) => {
     const issues = [];
-
-    if (!item.nex10 || !item.nex40) {
-      issues.push(`nex10 ou nex40 ausente — campos obrigatórios`);
-    }
-    if (item.descricao === null) {
-      issues.push(`descricao nula — verifique se é esperado`);
-    }
+    if (!item.nex10 || !item.nex40) issues.push(`nex10 ou nex40 ausente`);
+    if (item.descricao === null) issues.push(`descricao nula`);
 
     const normalized = {
-      id: resolveId(item),
+      id: ids[i],
       codigo: resolveCodigo(item, i + 1),
       nome: toStrRequired(item.nome),
       tipo: toStrRequired(item.tipo),
@@ -272,7 +307,8 @@ function migrateTrilhas() {
   });
 
   writeJson("trilhas.json", result);
-  console.log(`✅ trilhas.json — ${result.length} itens migrados`);
+  salvarPorFonte("trilhas", result);
+  console.log(`✅ trilhas.json — ${result.length} itens`);
   return result;
 }
 
@@ -280,7 +316,7 @@ function migrateTrilhas() {
 // Main
 // ─────────────────────────────────────────
 
-console.log(`\n🔄 Iniciando migração${DRY_RUN ? " (dry-run — sem gravação)" : ""}...\n`);
+console.log(`\n🔄 Iniciando migração${DRY_RUN ? " (dry-run)" : ""}...\n`);
 
 migratePoderes();
 migrateEquipamentos();
@@ -289,8 +325,7 @@ migrateRituais();
 migrateTrilhas();
 
 if (!DRY_RUN) {
-  console.log(`\n📁 Arquivos migrados salvos em: ${OUT_DIR}`);
-  console.log(`   Verifique os dados antes de substituir os originais.\n`);
+  console.log(`\n📁 Arquivos em: ${OUT_DIR}\n`);
 } else {
-  console.log(`\nDry-run concluído. Nenhum arquivo foi gravado.\n`);
+  console.log(`\nDry-run concluído. Nenhum arquivo gravado.\n`);
 }

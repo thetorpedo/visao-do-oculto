@@ -1,0 +1,22 @@
+[
+  {
+    "id": "faixas_da_videncia",
+    "codigo": 281,
+    "nome": "Faixas da Vidência",
+    "tipo": [
+      "Item Amaldiçoado"
+    ],
+    "subtipo": null,
+    "categoria": "II",
+    "espaco": 1,
+    "descricao": "Uma faixa de tecido, geralmente preto, com pequenos símbolos de Morte gravados em suas bordas. O usuário é considerado cego para alvos além do alcance médio. No entanto, a faixa distorce a percepção temporal do usuário dentro do alcance, fazendo com que enxergue os eventos fora da linha do tempo. Contra efeitos em alcance médio, o usuário nunca fica desprevenido, recebe +10 em testes de resistência e recebe +10 na Defesa quando esquiva. Além disso, uma vez por cena de investigação, pode gastar 2 PE para ter um vislumbre do passado que auxilia a ação de procurar pistas, fornecendo +5 para o teste.",
+    "elemento": "Morte",
+    "dano": null,
+    "critico": null,
+    "alcance": "Médio (limite de visão)",
+    "tipoDano": null,
+    "arma": null,
+    "fonteLivro": "OPRPG LUXO",
+    "fontePagina": "~"
+  }
+]

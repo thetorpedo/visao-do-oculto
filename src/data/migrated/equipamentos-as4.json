@@ -1,0 +1,167 @@
+[
+  {
+    "id": "granada_ctrlc_ctrlv",
+    "codigo": 273,
+    "nome": "Granada Ctrl+C Ctrl+V",
+    "tipo": [
+      "Item Amaldiçoado"
+    ],
+    "subtipo": "Explosivo",
+    "categoria": "II",
+    "espaco": 1,
+    "descricao": "Uma granada de fragmentação transparente envolta por fios de cobre que parece tremeluzir e ameaçar uma explosão a cada segundo. Este item é uma granada. Para usá-lo, você precisa empunhá-lo e então gastar uma ação padrão para arremessá-lo em um ponto à sua escolha em alcance médio. Ele afeta um raio de 6m a partir do ponto de impacto, espalhando fragmentos de Energia. Seres na área sofrem 8d6 pontos de dano de Energia (Reflexos DT Agi reduz à metade). Quando esta granada explodir, role 1d4. Se o resultado for par, a explosão gera uma segunda granada idêntica que explode em outro espaço a sua escolha dentro da área de efeito da granada original. O processo se repete até a quarta explosão ou até que o d4 dê ímpar (o que acontecer primeiro).",
+    "elemento": "Energia",
+    "dano": "8d6",
+    "critico": null,
+    "alcance": "Médio / Raio de 6m",
+    "tipoDano": "Energia",
+    "arma": null,
+    "fonteLivro": "AS4",
+    "fontePagina": "70"
+  },
+  {
+    "id": "granada_de_gas_lacrimogeneo",
+    "codigo": 274,
+    "nome": "Granada de Gás Lacrimogêneo",
+    "tipo": [
+      "Equipamento Geral"
+    ],
+    "subtipo": "Explosivo",
+    "categoria": "I",
+    "espaco": 1,
+    "descricao": "Uma granada que libera uma nuvem química que provoca ardência, irritação e sufocamento. Seres em um raio de 6m a partir do ponto de impacto sofrem 4d6 pontos de dano químico, ficam enjoados e asfixiados (OPRPG, p. 293). Após deixarem a área de efeito, continuam asfixiados por 1d4 rodadas e ainda ficam enjoados até o fim da cena (Fortitude DT Agi reduz o dano à metade e evita a condição enjoado).",
+    "elemento": null,
+    "dano": "4d6",
+    "critico": null,
+    "alcance": "Raio de 6m",
+    "tipoDano": "Químico",
+    "arma": null,
+    "fonteLivro": "AS4",
+    "fontePagina": "70"
+  },
+  {
+    "id": "granada_de_tinta",
+    "codigo": 275,
+    "nome": "Granada de Tinta",
+    "tipo": [
+      "Equipamento Geral"
+    ],
+    "subtipo": "Explosivo",
+    "categoria": "0",
+    "espaco": 1,
+    "descricao": "Uma granada caseira que espalha tintas coloridas e fosforescentes pelo ambiente, marcando os alvos e os tornando mais visíveis. Seres em um raio de 6m a partir do ponto de impacto ficam vulneráveis e sofrem –2d20 em Furtividade até o fim da cena (Reflexos DT Agi evita condição).",
+    "elemento": null,
+    "dano": "–2d20 em Furtividade",
+    "critico": null,
+    "alcance": "Raio de 6m",
+    "tipoDano": null,
+    "arma": null,
+    "fonteLivro": "AS4",
+    "fontePagina": "70"
+  },
+  {
+    "id": "adesiva",
+    "codigo": 277,
+    "nome": "Adesiva",
+    "tipo": [
+      "Modificação"
+    ],
+    "subtipo": "Granada",
+    "categoria": null,
+    "espaco": 0,
+    "descricao": "Adesiva. A granada gruda no alvo. Se o alvo for um ser, você precisa fazer um teste de ataque à distância contra a Defesa dele. Se errar, a granada gruda no espaço onde o ser está. Se acertar, ela gruda no ser (ele falha automaticamente em qualquer teste de resistência contra a granada). Caso o seu efeito não seja instantâneo, a granada se move junto com o alvo até que ele gaste uma ação padrão para removê-la do seu corpo.",
+    "elemento": null,
+    "dano": null,
+    "critico": null,
+    "alcance": null,
+    "tipoDano": null,
+    "arma": null,
+    "fonteLivro": "AS4",
+    "fontePagina": "71"
+  },
+  {
+    "id": "dupla",
+    "codigo": 278,
+    "nome": "Dupla",
+    "tipo": [
+      "Modificação"
+    ],
+    "subtipo": "Granada",
+    "categoria": null,
+    "espaco": 0,
+    "descricao": "Dupla. A granada tem um efeito adicional. Ao aplicar essa modificação, você escolhe um efeito de outra granada de categoria igual ou menor que a desta granada (exceto itens amaldiçoados) que se ativará junto com o efeito principal. O efeito adicional deve ser diferente do efeito principal.",
+    "elemento": null,
+    "dano": "Varia conforme efeito adicional",
+    "critico": null,
+    "alcance": null,
+    "tipoDano": null,
+    "arma": null,
+    "fonteLivro": "AS4",
+    "fontePagina": "71"
+  },
+  {
+    "id": "programada",
+    "codigo": 279,
+    "nome": "Programada",
+    "tipo": [
+      "Modificação"
+    ],
+    "subtipo": "Granada",
+    "categoria": null,
+    "espaco": 0,
+    "descricao": "Programada. A granada tem um temporizador programado por você. Após arremessá-la, ou posicioná-la onde desejar, você define em quantos turnos ela deverá se ativar.",
+    "elemento": null,
+    "dano": null,
+    "critico": null,
+    "alcance": null,
+    "tipoDano": null,
+    "arma": null,
+    "fonteLivro": "AS4",
+    "fontePagina": "71"
+  },
+  {
+    "id": "granada_40mm",
+    "codigo": 280,
+    "nome": "Granada 40mm",
+    "tipo": [
+      "Munição"
+    ],
+    "subtipo": null,
+    "categoria": "Varia",
+    "espaco": 1,
+    "descricao": "Granada 40mm. Disparada por lançador de granadas. Ao contrário de outras munições, cada granada 40mm dura um único disparo, não uma cena. Para fazer vários ataques, você precisará carregar várias granadas. As granadas 40mm são modelos específicos de granada que funcionam com as regras descritas em OPRPG (pp. 63-64), com a exceção de que elas não funcionam se arremessadas, apenas se atiradas por um lançador de granadas.",
+    "elemento": null,
+    "dano": "Varia conforme a granada",
+    "critico": null,
+    "alcance": "Longo (via lançador)",
+    "tipoDano": "Varia",
+    "arma": null,
+    "fonteLivro": "AS4",
+    "fontePagina": "71"
+  },
+  {
+    "id": "lancador_de_granadas",
+    "codigo": 276,
+    "nome": "Lançador de Granadas",
+    "tipo": [
+      "Arma"
+    ],
+    "subtipo": "Pesada",
+    "categoria": "II",
+    "espaco": 2,
+    "descricao": "Essa arma é projetada para lançar granadas à longas distâncias, atingindo alvos com maior precisão e velocidade. É uma arma de fogo pesada de duas mãos com alcance longo (ela não tem valor de dano, tipo de dano ou crítico, variando seus efeitos conforme a munição). Ele comporta até 6 granadas de modelo 40mm. Recarregá-lo com 1 granada gasta uma ação de movimento. O lançador de granadas não dispara granadas de modelo arremessável. O lançador de granadas causa o efeito da granada no alvo atingido e em todos os seres num raio descrito pela granada usada. Todos os seres têm direito a fazer o teste de resistência oferecido pela granada, mas o alvo atingido diretamente só pode fazer o teste de resistência contra efeitos que não sejam dano. Você pode disparar a granada num ponto qualquer em alcance longo, em vez de num ser específico; nesse caso, não precisa rolar ataque e não tem chance de errar. É impossível tornar um lançador de granadas uma arma automática.",
+    "elemento": null,
+    "dano": null,
+    "critico": null,
+    "alcance": "Longo",
+    "tipoDano": null,
+    "arma": {
+      "armaTipo": "Fogo",
+      "empunhadura": "Duas mãos",
+      "catArma": null,
+      "municao": null
+    },
+    "fonteLivro": "AS4",
+    "fontePagina": "71"
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "id": "body_builder",
+    "codigo": 55,
+    "nome": "Body Builder",
+    "descricao": "Valendo-se de esforço e determinação incomparáveis, você buscou o desenvolvimento máximo dos seus músculos por meio de exercícios físicos intensos e regulares, além de uma rotina de alimentação que demandou o máximo de autocontrole.",
+    "pericias": "Atletismo e Fortitude.",
+    "tecnicaNome": "Saindo da Jaula",
+    "tecnicaDescricao": "O êxtase de ir além dos limites do seu corpo é inebriante. Quando faz um teste usando Força ou Vigor (exceto Luta) você pode gastar 2 PE para receber +5 nesse teste.",
+    "fonteLivro": "HQ OSNF-2",
+    "fontePagina": "~"
+  },
+  {
+    "id": "personal_trainer",
+    "codigo": 56,
+    "nome": "Personal Trainer",
+    "descricao": "Dedicado a aprender e ensinar sobre saúde corporal, você se tornou um modelo a ser seguido. Você ocupava seus dias elaborando treinos, ministrando aulas e acompanhando o desenvolvimento dos alunos, além de estar em constante processo de atualização para transformar indivíduos em pessoas saudáveis e até mesmo em atletas.",
+    "pericias": "Atletismo e Ciências.",
+    "tecnicaNome": "Todo Mundo Pagando 10",
+    "tecnicaDescricao": "Você pode gastar uma ação de movimento e 2 PE para motivar sua equipe. Enquanto você estiver consciente, você e seus aliados em alcance curto recebem +2 em testes de perícia que usam Força ou Agilidade (exceto Luta e Pontaria) até o fim da cena.",
+    "fonteLivro": "HQ OSNF-2",
+    "fontePagina": "~"
+  },
+  {
+    "id": "blaster",
+    "codigo": 57,
+    "nome": "Blaster",
+    "descricao": "Também chamado de técnico em detonação, você foi responsável por conduzir e inspecionar explosivos, seja em área militar, construção civil, mineração ou em extração de petróleo marinho. Você sabe usar o ambiente, ângulos e estruturas para garantir que seus explosivos, sejam improvisados ou profissionais, causem o maior estrago possível.",
+    "pericias": "Ciências e Profissão (químico).",
+    "tecnicaNome": "Explosão Solidária",
+    "tecnicaDescricao": "Seus explosivos que provocam dano causam +2d6 pontos de dano. Além disso, você pode gastar 2 PE e uma ação de interlúdio para melhorar um explosivo, aumentando a CD para resistir a ele em +5. Só é possível melhorar o mesmo explosivo uma vez.",
+    "fonteLivro": "HQ OSNF-2",
+    "fontePagina": "~"
+  }
+]

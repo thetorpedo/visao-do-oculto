@@ -15,7 +15,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "63"
@@ -36,7 +35,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "63"
@@ -57,7 +55,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "63"
@@ -78,7 +75,6 @@
     "critico": null,
     "alcance": "Médio",
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "64"
@@ -99,7 +95,6 @@
     "critico": null,
     "alcance": "Médio",
     "tipoDano": "Perfuração",
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "64"
@@ -120,7 +115,6 @@
     "critico": null,
     "alcance": "Médio",
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "64"
@@ -141,7 +135,6 @@
     "critico": null,
     "alcance": "Médio",
     "tipoDano": "Fogo",
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "64"
@@ -162,7 +155,6 @@
     "critico": null,
     "alcance": "Longo (Detonação)",
     "tipoDano": "Perfuração",
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "64"
@@ -183,7 +175,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "64"
@@ -204,7 +195,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "65"
@@ -225,7 +215,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "65"
@@ -246,7 +235,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "65"
@@ -267,7 +255,6 @@
     "critico": null,
     "alcance": "Médio",
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "65"
@@ -288,7 +275,6 @@
     "critico": null,
     "alcance": "Adjacente",
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "65"
@@ -309,7 +295,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "65"
@@ -330,7 +315,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "65"
@@ -351,7 +335,6 @@
     "critico": null,
     "alcance": "9m (Curto)",
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "65"
@@ -372,7 +355,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "66"
@@ -393,7 +375,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "66"
@@ -414,7 +395,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "66"
@@ -435,7 +415,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "66"
@@ -456,7 +435,6 @@
     "critico": null,
     "alcance": "Curto",
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "66"
@@ -477,7 +455,6 @@
     "critico": null,
     "alcance": "Curto",
     "tipoDano": "Fogo",
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "66"
@@ -498,7 +475,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "66"
@@ -519,7 +495,6 @@
     "critico": null,
     "alcance": "Adjacente",
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "66"
@@ -540,7 +515,6 @@
     "critico": null,
     "alcance": "Adjacente",
     "tipoDano": "Eletricidade",
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "66"
@@ -561,7 +535,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "RD 10 Químico",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "66"
@@ -582,7 +555,6 @@
     "critico": null,
     "alcance": "Curto (Laçar)",
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "66"
@@ -603,7 +575,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "66"
@@ -624,7 +595,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "66"
@@ -645,7 +615,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "67"
@@ -666,7 +635,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "67"
@@ -687,7 +655,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "67"
@@ -708,7 +675,6 @@
     "critico": null,
     "alcance": "Longo",
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "67"
@@ -729,7 +695,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "+5",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "62"
@@ -750,7 +715,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "+10 (RD 2 Físico/Balístico)",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "62"
@@ -771,7 +735,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "+2",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "62"
@@ -792,7 +755,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "+5 em testes de resistência contra efeitos de área",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "62"
@@ -813,7 +775,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "RD 5",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "62"
@@ -834,7 +795,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "62"
@@ -855,7 +815,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "+2",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "62"
@@ -876,7 +835,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "64"
@@ -897,7 +855,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "64"
@@ -918,7 +875,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "64"
@@ -939,7 +895,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "64"
@@ -960,7 +915,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "59"
@@ -981,7 +935,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "59"
@@ -1002,7 +955,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "59"
@@ -1023,7 +975,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "59"
@@ -1044,7 +995,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "59"
@@ -1065,7 +1015,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "59"
@@ -1086,7 +1035,6 @@
     "critico": "x3",
     "alcance": "-",
     "tipoDano": "Cortante",
-    "defesa": null,
     "arma": {
       "armaTipo": "Corpo a Corpo",
       "empunhadura": "Duas mãos",
@@ -1112,7 +1060,6 @@
     "critico": "x4",
     "alcance": "-",
     "tipoDano": "Cortante",
-    "defesa": null,
     "arma": {
       "armaTipo": "Corpo a Corpo",
       "empunhadura": "Duas mãos",
@@ -1138,7 +1085,6 @@
     "critico": "19",
     "alcance": "-",
     "tipoDano": "Cortante",
-    "defesa": null,
     "arma": {
       "armaTipo": "Corpo a Corpo",
       "empunhadura": "Duas mãos",
@@ -1164,7 +1110,6 @@
     "critico": "x2",
     "alcance": "-",
     "tipoDano": "Impacto",
-    "defesa": null,
     "arma": {
       "armaTipo": "Corpo a Corpo",
       "empunhadura": "Duas mãos",
@@ -1190,7 +1135,6 @@
     "critico": "19",
     "alcance": "-",
     "tipoDano": "Cortante",
-    "defesa": null,
     "arma": {
       "armaTipo": "Corpo a Corpo",
       "empunhadura": "Duas mãos",
@@ -1216,7 +1160,6 @@
     "critico": "x2",
     "alcance": "-",
     "tipoDano": "Cortante",
-    "defesa": null,
     "arma": {
       "armaTipo": "Corpo a Corpo",
       "empunhadura": "Duas mãos",
@@ -1242,7 +1185,6 @@
     "critico": "x3",
     "alcance": "Médio",
     "tipoDano": "Perfuração",
-    "defesa": null,
     "arma": {
       "armaTipo": "Disparo",
       "empunhadura": "Duas mãos",
@@ -1268,7 +1210,6 @@
     "critico": "19",
     "alcance": "Médio",
     "tipoDano": "Perfuração",
-    "defesa": null,
     "arma": {
       "armaTipo": "Disparo",
       "empunhadura": "Duas mãos",
@@ -1294,7 +1235,6 @@
     "critico": "19/x3",
     "alcance": "Curto",
     "tipoDano": "Balístico",
-    "defesa": null,
     "arma": {
       "armaTipo": "Fogo",
       "empunhadura": "Uma mão",
@@ -1320,7 +1260,6 @@
     "critico": "x3",
     "alcance": "Curto",
     "tipoDano": "Balístico",
-    "defesa": null,
     "arma": {
       "armaTipo": "Fogo",
       "empunhadura": "Duas mãos",
@@ -1346,7 +1285,6 @@
     "critico": "19/x3",
     "alcance": "Médio",
     "tipoDano": "Balístico",
-    "defesa": null,
     "arma": {
       "armaTipo": "Fogo",
       "empunhadura": "Duas mãos",
@@ -1372,7 +1310,6 @@
     "critico": "19/x3",
     "alcance": "Longo",
     "tipoDano": "Balístico",
-    "defesa": null,
     "arma": {
       "armaTipo": "Fogo",
       "empunhadura": "Duas mãos",
@@ -1398,7 +1335,6 @@
     "critico": "x2",
     "alcance": "Médio",
     "tipoDano": "Impacto",
-    "defesa": null,
     "arma": {
       "armaTipo": "Fogo",
       "empunhadura": "Duas mãos",
@@ -1424,7 +1360,6 @@
     "critico": "x2",
     "alcance": "Curto",
     "tipoDano": "Fogo",
-    "defesa": null,
     "arma": {
       "armaTipo": "Fogo",
       "empunhadura": "Duas mãos",
@@ -1450,7 +1385,6 @@
     "critico": "19/x3",
     "alcance": "Médio",
     "tipoDano": "Balístico",
-    "defesa": null,
     "arma": {
       "armaTipo": "Fogo",
       "empunhadura": "Duas mãos",
@@ -1476,7 +1410,6 @@
     "critico": "x3",
     "alcance": "Curto",
     "tipoDano": "Cortante",
-    "defesa": null,
     "arma": {
       "armaTipo": "Corpo a Corpo",
       "empunhadura": "Leve",
@@ -1502,7 +1435,6 @@
     "critico": "x2",
     "alcance": "-",
     "tipoDano": "Impacto",
-    "defesa": null,
     "arma": {
       "armaTipo": "Corpo a Corpo",
       "empunhadura": "Leve",
@@ -1528,7 +1460,6 @@
     "critico": "x2",
     "alcance": "-",
     "tipoDano": "Impacto",
-    "defesa": null,
     "arma": {
       "armaTipo": "Corpo a Corpo",
       "empunhadura": "Uma mão",
@@ -1554,7 +1485,6 @@
     "critico": "19",
     "alcance": "-",
     "tipoDano": "Cortante",
-    "defesa": null,
     "arma": {
       "armaTipo": "Corpo a Corpo",
       "empunhadura": "Uma mão",
@@ -1580,7 +1510,6 @@
     "critico": "18",
     "alcance": "Curto",
     "tipoDano": "Cortante",
-    "defesa": null,
     "arma": {
       "armaTipo": "Corpo a Corpo",
       "empunhadura": "Uma mão",
@@ -1606,7 +1535,6 @@
     "critico": "x3",
     "alcance": "-",
     "tipoDano": "Cortante",
-    "defesa": null,
     "arma": {
       "armaTipo": "Corpo a Corpo",
       "empunhadura": "Uma mão",
@@ -1632,7 +1560,6 @@
     "critico": "x2",
     "alcance": "-",
     "tipoDano": "Impacto",
-    "defesa": null,
     "arma": {
       "armaTipo": "Corpo a Corpo",
       "empunhadura": "Uma mão",
@@ -1658,7 +1585,6 @@
     "critico": "x2",
     "alcance": "-",
     "tipoDano": "Impacto",
-    "defesa": null,
     "arma": {
       "armaTipo": "Corpo a Corpo",
       "empunhadura": "Leve",
@@ -1684,7 +1610,6 @@
     "critico": "19",
     "alcance": "Curto",
     "tipoDano": "Cortante",
-    "defesa": null,
     "arma": {
       "armaTipo": "Corpo a Corpo",
       "empunhadura": "Leve",
@@ -1710,7 +1635,6 @@
     "critico": "x2",
     "alcance": "-",
     "tipoDano": "Impacto",
-    "defesa": null,
     "arma": {
       "armaTipo": "Corpo a Corpo",
       "empunhadura": "Leve",
@@ -1736,7 +1660,6 @@
     "critico": "x3",
     "alcance": "-",
     "tipoDano": "Perfuração",
-    "defesa": null,
     "arma": {
       "armaTipo": "Corpo a Corpo",
       "empunhadura": "Leve",
@@ -1762,7 +1685,6 @@
     "critico": "x2",
     "alcance": "-",
     "tipoDano": "Impacto",
-    "defesa": null,
     "arma": {
       "armaTipo": "Corpo a Corpo",
       "empunhadura": "Uma mão",
@@ -1788,7 +1710,6 @@
     "critico": "19",
     "alcance": "-",
     "tipoDano": "Cortante",
-    "defesa": null,
     "arma": {
       "armaTipo": "Corpo a Corpo",
       "empunhadura": "Uma mão",
@@ -1814,7 +1735,6 @@
     "critico": "x2",
     "alcance": "Curto",
     "tipoDano": "Perfuração",
-    "defesa": null,
     "arma": {
       "armaTipo": "Corpo a Corpo",
       "empunhadura": "Uma mão",
@@ -1840,7 +1760,6 @@
     "critico": "x2",
     "alcance": "-",
     "tipoDano": "Impacto",
-    "defesa": null,
     "arma": {
       "armaTipo": "Corpo a Corpo",
       "empunhadura": "Duas mãos",
@@ -1866,7 +1785,6 @@
     "critico": "x3",
     "alcance": "Médio",
     "tipoDano": "Perfuração",
-    "defesa": null,
     "arma": {
       "armaTipo": "Disparo",
       "empunhadura": "Duas mãos",
@@ -1892,7 +1810,6 @@
     "critico": "19",
     "alcance": "Médio",
     "tipoDano": "Perfuração",
-    "defesa": null,
     "arma": {
       "armaTipo": "Disparo",
       "empunhadura": "Duas mãos",
@@ -1918,7 +1835,6 @@
     "critico": "18",
     "alcance": "Curto",
     "tipoDano": "Balístico",
-    "defesa": null,
     "arma": {
       "armaTipo": "Fogo",
       "empunhadura": "Leve",
@@ -1944,7 +1860,6 @@
     "critico": "19/x3",
     "alcance": "Curto",
     "tipoDano": "Balístico",
-    "defesa": null,
     "arma": {
       "armaTipo": "Fogo",
       "empunhadura": "Leve",
@@ -1970,7 +1885,6 @@
     "critico": "19/x3",
     "alcance": "Médio",
     "tipoDano": "Balístico",
-    "defesa": null,
     "arma": {
       "armaTipo": "Fogo",
       "empunhadura": "Duas mãos",
@@ -1996,7 +1910,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "+2 em testes de ataque",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "60"
@@ -2017,13 +1930,12 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "60"
   },
   {
-    "id": "discreta",
+    "id": "discreta_oprpg_2",
     "codigo": 95,
     "nome": "Discreta",
     "tipo": [
@@ -2038,7 +1950,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "+5 em testes de ocultar",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "60"
@@ -2059,7 +1970,6 @@
     "critico": "+2 Margem de Ameaça",
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "60"
@@ -2080,7 +1990,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "60"
@@ -2101,7 +2010,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "+2 em testes de ataque",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "60"
@@ -2122,7 +2030,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "60"
@@ -2143,13 +2050,12 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Anula penalidade de rajada",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "60"
   },
   {
-    "id": "discreta",
+    "id": "discreta_oprpg_3",
     "codigo": 101,
     "nome": "Discreta",
     "tipo": [
@@ -2164,7 +2070,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "+5 em testes de ocultar",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "60"
@@ -2185,7 +2090,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Torna a arma automática",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "60"
@@ -2206,7 +2110,6 @@
     "critico": "+2 Margem de Ameaça",
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "60"
@@ -2227,7 +2130,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Ataque Furtivo em qualquer alcance",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "60"
@@ -2248,13 +2150,12 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Reduz em –2d20 a penalidade em Furtividade após atacar",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "60"
   },
   {
-    "id": "tatica",
+    "id": "tatica_oprpg_2",
     "codigo": 106,
     "nome": "Tática",
     "tipo": [
@@ -2269,7 +2170,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Sacar como ação livre",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "60"
@@ -2290,7 +2190,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Ignora camuflagem",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "60"
@@ -2311,7 +2210,6 @@
     "critico": "+1 Multiplicador",
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "60"
@@ -2332,7 +2230,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "60"
@@ -2353,7 +2250,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "148"
@@ -2374,7 +2270,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "148"
@@ -2395,7 +2290,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "148"
@@ -2416,7 +2310,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "148"
@@ -2437,7 +2330,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": "Sangue",
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "148"
@@ -2458,7 +2350,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "148"
@@ -2479,7 +2370,6 @@
     "critico": null,
     "alcance": "Curto",
     "tipoDano": null,
-    "defesa": "+10 em testes de agarrar",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "148"
@@ -2500,7 +2390,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Resistência 5 (Cortante, Impacto, Morte e Perfuração)",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "149"
@@ -2521,7 +2410,6 @@
     "critico": null,
     "alcance": "Curto",
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "149"
@@ -2542,7 +2430,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "149"
@@ -2563,7 +2450,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": "Morte",
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "149"
@@ -2584,7 +2470,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Revela pior resistência e vulnerabilidades",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "149"
@@ -2605,7 +2490,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Usa o melhor bônus de Vontade entre os usuários",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "149"
@@ -2626,7 +2510,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Propriedades do ritual Terceiro Olho",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "149"
@@ -2647,7 +2530,6 @@
     "critico": null,
     "alcance": "Médio (Teletransporte)",
     "tipoDano": null,
-    "defesa": "Resistência a Conhecimento 10",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "149"
@@ -2668,7 +2550,6 @@
     "critico": "Dobrado",
     "alcance": null,
     "tipoDano": "Conhecimento",
-    "defesa": "–2 em Defesa",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "150"
@@ -2689,7 +2570,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "150"
@@ -2710,7 +2590,6 @@
     "critico": "x3",
     "alcance": "Curto",
     "tipoDano": "Energia",
-    "defesa": "+2 em testes de ataque",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "150"
@@ -2731,7 +2610,6 @@
     "critico": null,
     "alcance": "Curto",
     "tipoDano": "Energia",
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "150"
@@ -2752,7 +2630,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Reanima com 4d10 PV ao cair a 0 PV",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "150"
@@ -2773,7 +2650,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Rola novamente resultado 1",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "150"
@@ -2794,7 +2670,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Chance de evitar dano",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "150"
@@ -2815,7 +2690,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": "Mental",
-    "defesa": "+10 em testes para hackear",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "150"
@@ -2836,7 +2710,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": "Mental",
-    "defesa": "Teste de Vontade (DT do usuário +5)",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "151"
@@ -2857,7 +2730,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Torna-se incorpóreo com teste de Pilotagem (DT 25)",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "151"
@@ -2878,7 +2750,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Resistência a dano paranormal 15",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "151"
@@ -2899,7 +2770,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "–10 em testes de Diplomacia",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "151"
@@ -2920,7 +2790,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "151"
@@ -2941,7 +2810,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": "Varia",
-    "defesa": "Gasta 2 PE para +4d8 de dano",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "145"
@@ -2962,7 +2830,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Armazena e descarrega 1 ritual",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "145"
@@ -2983,7 +2850,6 @@
     "critico": null,
     "alcance": "Curto",
     "tipoDano": null,
-    "defesa": "Arma flutua e ataca autonomamente",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "146"
@@ -3004,7 +2870,6 @@
     "critico": null,
     "alcance": "Curto (ou +1 categoria)",
     "tipoDano": "Varia",
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "146"
@@ -3025,7 +2890,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": "Energia",
-    "defesa": "+5 em testes de ataque / ignora RD",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "146"
@@ -3046,7 +2910,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Habilidade Ataque Extra (ou –1 PE no custo)",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "146"
@@ -3067,7 +2930,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Gasta 2 PE para deixar o alvo imóvel por 1 rodada",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "146"
@@ -3088,7 +2950,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": "Morte",
-    "defesa": "Gasta 2 PE para aplicar 2d4 de dano por 2 rodadas",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "146"
@@ -3109,7 +2970,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "+2 Defesa (passivo) / +5 Defesa (bloqueio, 2 PE)",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "146"
@@ -3130,7 +2990,6 @@
     "critico": "Multiplicado no crítico",
     "alcance": null,
     "tipoDano": "Sangue",
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "146"
@@ -3151,7 +3010,6 @@
     "critico": "Margem de ameaça duplica",
     "alcance": "+1 categoria (se à distância)",
     "tipoDano": null,
-    "defesa": "Anula camuflagem e cobertura leves",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "146"
@@ -3172,7 +3030,6 @@
     "critico": "Alvo fraco / +2d10 PV temporários",
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "146"
@@ -3193,7 +3050,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "+5 em resistência a rituais / Refletir ritual",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "146"
@@ -3214,7 +3070,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Resistência a Conhecimento 10 / Rerrolar resistência (2 PE)",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "146"
@@ -3235,7 +3090,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "+5 em Furtividade / Aparência de roupa comum",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "147"
@@ -3256,7 +3110,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "+2 em Defesa / RD 2 (Leve/Escudo) ou 5 (Pesada)",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "147"
@@ -3277,7 +3130,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "+10 Atletismo / +3m Deslocamento / Mobilidade sobrenatural (2 PE)",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "147"
@@ -3298,7 +3150,6 @@
     "critico": null,
     "alcance": "Adjacente",
     "tipoDano": "Energia",
-    "defesa": "Resistência a Energia 10",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "147"
@@ -3319,7 +3170,6 @@
     "critico": "Ignora dano crítico (25% ou 50% de chance)",
     "alcance": null,
     "tipoDano": null,
-    "defesa": "+2 em Defesa / Chance de ignorar ataque furtivo",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "147"
@@ -3340,7 +3190,6 @@
     "critico": null,
     "alcance": "Corpo a corpo (ao ser atacado)",
     "tipoDano": "Morte",
-    "defesa": "Resistência a Morte 10",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "147"
@@ -3361,7 +3210,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Resistência a Sangue 10 / Recupera 1d12 PV (1 PE)",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "147"
@@ -3382,7 +3230,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "+1 em ataques por cada 10 de dano sofrido",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "147"
@@ -3403,7 +3250,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "+1 em Presença",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "147"
@@ -3424,7 +3270,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Conjura ritual de 1º círculo ou –1 PE de custo",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "147"
@@ -3445,7 +3290,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Resistência mental 10",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "147"
@@ -3466,7 +3310,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Reflete 1 ritual por rodada",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "147"
@@ -3487,7 +3330,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "+1 em Intelecto",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "147"
@@ -3508,7 +3350,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "+5 de Defesa",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "147"
@@ -3529,7 +3370,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "+1 em Agilidade",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "147"
@@ -3550,7 +3390,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "+1 na DT de habilidades, poderes e rituais",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "147"
@@ -3571,7 +3410,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "+5 PE",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "147"
@@ -3592,7 +3430,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "+1 em Vigor",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "147"
@@ -3613,7 +3450,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "+1 em Força",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "147"
@@ -3634,7 +3470,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "+15 PV",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "147"
@@ -3655,7 +3490,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Resistência 10 contra um elemento",
     "arma": null,
     "fonteLivro": "OPRPG",
     "fontePagina": "147"
@@ -3676,7 +3510,6 @@
     "critico": "x4",
     "alcance": "Curto",
     "tipoDano": "Perfuração",
-    "defesa": null,
     "arma": {
       "armaTipo": "Disparo",
       "empunhadura": "Uma mão",
@@ -3702,7 +3535,6 @@
     "critico": "x2",
     "alcance": "Curto",
     "tipoDano": "Impacto",
-    "defesa": null,
     "arma": {
       "armaTipo": "Disparo",
       "empunhadura": "Duas mãos",
@@ -3728,7 +3560,6 @@
     "critico": "19/x3",
     "alcance": "Curto",
     "tipoDano": "Perfuração",
-    "defesa": "Ocupa 0 espaços se treinado em Crime",
     "arma": {
       "armaTipo": "Fogo",
       "empunhadura": "Leve",
@@ -3754,7 +3585,6 @@
     "critico": "19",
     "alcance": "-",
     "tipoDano": "Perfuração",
-    "defesa": null,
     "arma": {
       "armaTipo": "Corpo a Corpo",
       "empunhadura": "Leve",
@@ -3780,7 +3610,6 @@
     "critico": "19",
     "alcance": "Curto",
     "tipoDano": "Cortante",
-    "defesa": "+2 contra-ataque / +20 RD bloqueio (sacríficio)",
     "arma": {
       "armaTipo": "Corpo a Corpo",
       "empunhadura": "Leve",
@@ -3806,7 +3635,6 @@
     "critico": "x4",
     "alcance": "-",
     "tipoDano": "Perfuração",
-    "defesa": null,
     "arma": {
       "armaTipo": "Corpo a Corpo",
       "empunhadura": "Leve",
@@ -3832,7 +3660,6 @@
     "critico": "x2",
     "alcance": "Curto",
     "tipoDano": "Impacto",
-    "defesa": "+1 na esquiva",
     "arma": {
       "armaTipo": "Corpo a Corpo",
       "empunhadura": "Uma mão",
@@ -3858,7 +3685,6 @@
     "critico": "x4",
     "alcance": "-",
     "tipoDano": "Perfuração",
-    "defesa": null,
     "arma": {
       "armaTipo": "Corpo a Corpo",
       "empunhadura": "Uma mão",
@@ -3884,7 +3710,6 @@
     "critico": "x2",
     "alcance": "Curto",
     "tipoDano": "Perfuração",
-    "defesa": null,
     "arma": {
       "armaTipo": "Arremesso",
       "empunhadura": null,
@@ -3910,7 +3735,6 @@
     "critico": "18",
     "alcance": "Curto",
     "tipoDano": "Balístico",
-    "defesa": null,
     "arma": {
       "armaTipo": "Fogo",
       "empunhadura": "Uma mão",
@@ -3936,7 +3760,6 @@
     "critico": "x3",
     "alcance": "Curto",
     "tipoDano": "Balístico",
-    "defesa": null,
     "arma": {
       "armaTipo": "Fogo",
       "empunhadura": "Duas mãos",
@@ -3962,7 +3785,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "+2 em Religião e Vontade",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "39"
@@ -3983,7 +3805,6 @@
     "critico": null,
     "alcance": "4,5m (lanterna)",
     "tipoDano": null,
-    "defesa": "+2 em testes para adquirir informações",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "39"
@@ -4004,7 +3825,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "+2 em criar ou reparar objetos",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "39"
@@ -4025,7 +3845,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "+2 em Furtividade (distração)",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "39"
@@ -4046,7 +3865,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "+2 em Diplomacia, Enganação e Intimidação",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "39"
@@ -4067,7 +3885,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Usa perícia como treinado",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "39"
@@ -4088,7 +3905,6 @@
     "critico": null,
     "alcance": "4,5m (monitor)",
     "tipoDano": null,
-    "defesa": "+2 em info / +1 Sanidade no interlúdio",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "39"
@@ -4109,7 +3925,6 @@
     "critico": null,
     "alcance": "Dobra alcance da luz",
     "tipoDano": "Energia (Taser)",
-    "defesa": "+5 na DT do Taser",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "39"
@@ -4130,7 +3945,6 @@
     "critico": null,
     "alcance": "Médio (Raio de 6m)",
     "tipoDano": "Impacto e Fogo",
-    "defesa": "Reflexos DT Agi (reduz metade e evita chamas)",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "41"
@@ -4151,7 +3965,6 @@
     "critico": null,
     "alcance": "Longo (Detonador) / Raio de 3m",
     "tipoDano": "Impacto",
-    "defesa": "Reflexos DT Int (reduz metade)",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "41"
@@ -4172,7 +3985,6 @@
     "critico": null,
     "alcance": "Raio de 6m",
     "tipoDano": "Fogo",
-    "defesa": "Reflexos DT 25 (reduz metade e evita chamas)",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "41"
@@ -4193,7 +4005,6 @@
     "critico": null,
     "alcance": "Raio de 6m",
     "tipoDano": null,
-    "defesa": "Fortitude DT Agi (reduz efeito)",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "41"
@@ -4214,7 +4025,6 @@
     "critico": null,
     "alcance": "Raio de 18m",
     "tipoDano": "Impacto",
-    "defesa": "Fortitude DT Agi (reduz metade e evita paralisia)",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "41"
@@ -4235,7 +4045,6 @@
     "critico": null,
     "alcance": "30m (Cone)",
     "tipoDano": null,
-    "defesa": "Sinalização discreta ou sonora",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "42"
@@ -4256,7 +4065,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Recupera 1d4 PE",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "42"
@@ -4277,7 +4085,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Aplica substância como ação de movimento / 3 doses",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "42"
@@ -4298,7 +4105,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "+2 RD em Bloqueios",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "42"
@@ -4319,7 +4125,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Atua como Aliado (requer Adestramento)",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "42"
@@ -4340,7 +4145,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Saque/Guarda arma leve como ação livre",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "42"
@@ -4361,7 +4165,6 @@
     "critico": null,
     "alcance": "90m (Receptor) / 9m (Transmissores)",
     "tipoDano": null,
-    "defesa": "Teste de Crime (DT 20) para instalação",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "42"
@@ -4382,7 +4185,6 @@
     "critico": null,
     "alcance": "1,5m (Quadrado)",
     "tipoDano": "Perfuração",
-    "defesa": "Reflexos DT Agi evita / Condição: Lento por um dia",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "42"
@@ -4403,7 +4205,6 @@
     "critico": null,
     "alcance": "Linha de 9m",
     "tipoDano": "Perfuração",
-    "defesa": "Reflexos DT Agi evita / Reduz deslocamento de veículos",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "42"
@@ -4424,7 +4225,6 @@
     "critico": null,
     "alcance": "Raio de 3m (Luz)",
     "tipoDano": "Fogo",
-    "defesa": null,
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "43"
@@ -4445,7 +4245,6 @@
     "critico": null,
     "alcance": "Adjacente",
     "tipoDano": null,
-    "defesa": "+5 em Fortitude contra doenças",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "43"
@@ -4466,7 +4265,6 @@
     "critico": null,
     "alcance": "Adjacente",
     "tipoDano": null,
-    "defesa": "+5 em Fortitude contra venenos",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "43"
@@ -4487,7 +4285,6 @@
     "critico": null,
     "alcance": "Adjacente",
     "tipoDano": null,
-    "defesa": "Remove enjoado / +5 para evitar",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "43"
@@ -4508,7 +4305,6 @@
     "critico": null,
     "alcance": "Adjacente",
     "tipoDano": null,
-    "defesa": "+5 contra alergias",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "43"
@@ -4529,7 +4325,6 @@
     "critico": null,
     "alcance": "Adjacente",
     "tipoDano": null,
-    "defesa": "1d8+2 PV temporários",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "43"
@@ -4550,7 +4345,6 @@
     "critico": null,
     "alcance": "Adjacente",
     "tipoDano": null,
-    "defesa": "Novo teste contra condição mental",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "43"
@@ -4571,7 +4365,6 @@
     "critico": null,
     "alcance": "Adjacente",
     "tipoDano": null,
-    "defesa": "+5 contra asfixia ou fadiga",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "43"
@@ -4592,7 +4385,6 @@
     "critico": null,
     "alcance": "Adjacente",
     "tipoDano": null,
-    "defesa": "+5 estabilizar sangramento / +5 remover morrendo",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "43"
@@ -4613,7 +4405,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Visão no escuro / –O contra ofuscamento",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "43"
@@ -4634,7 +4425,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Imunidade a ofuscamento",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "43"
@@ -4655,7 +4445,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": "Impacto",
-    "defesa": "+5 em testes de Força para cavar",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "43"
@@ -4676,7 +4465,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Anula dano de queda / Reflexos DT 20 se não veterano",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "43"
@@ -4697,7 +4485,6 @@
     "critico": null,
     "alcance": "1 hora de oxigênio",
     "tipoDano": null,
-    "defesa": "+5 resistência ambiental / RD Química 5",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "44"
@@ -4718,7 +4505,6 @@
     "critico": null,
     "alcance": "8 horas de oxigênio",
     "tipoDano": null,
-    "defesa": "+10 resistência ambiental / RD Química 20",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "44"
@@ -4739,7 +4525,6 @@
     "critico": null,
     "alcance": "Aumenta alcance ou dobra área",
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "44"
@@ -4760,7 +4545,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "44"
@@ -4781,7 +4565,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "44"
@@ -4802,7 +4585,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "44"
@@ -4823,7 +4605,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "RD 20 / Imunidade a Sangue (veículo) / +5 Pilotagem",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "44"
@@ -4844,7 +4625,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "+2 em Fortitude / +5 em Medicina para auxiliar usuário",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "44"
@@ -4865,7 +4645,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "+5 em Furtividade",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "45"
@@ -4886,7 +4665,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Imunidade a efeitos de Energia e Rituais",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "45"
@@ -4907,7 +4685,6 @@
     "critico": null,
     "alcance": "Médio",
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "45"
@@ -4928,7 +4705,6 @@
     "critico": null,
     "alcance": "Curto (fotografia)",
     "tipoDano": null,
-    "defesa": "Revela seres invisíveis e incorpóreos / Remove camuflagem",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "45"
@@ -4949,7 +4725,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "57"
@@ -4970,7 +4745,6 @@
     "critico": null,
     "alcance": "Adjacente",
     "tipoDano": "Mental",
-    "defesa": "Fortitude DT 20+",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "57"
@@ -4991,7 +4765,6 @@
     "critico": null,
     "alcance": "Médio / Raio de 30m",
     "tipoDano": null,
-    "defesa": "Vontade DT 35 (Criaturas de Sangue)",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "57"
@@ -5012,7 +4785,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Fortitude DT 15+",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "57"
@@ -5033,7 +4805,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Recebe benefícios de interlúdio (5 PE)",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "58"
@@ -5054,7 +4825,6 @@
     "critico": null,
     "alcance": "Adjacente",
     "tipoDano": null,
-    "defesa": "Vulnerabilidade balística e de Energia / Se reduzido a 0 PV, fica com 1 PV",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "59"
@@ -5075,7 +4845,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "+1d20 em testes de perícia (1 PE)",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "59"
@@ -5096,7 +4865,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": "Morte",
-    "defesa": "Arma se degrada no fim da cena",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "59"
@@ -5117,7 +4885,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": "Morte",
-    "defesa": "Arma se degrada no fim da cena",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "59"
@@ -5138,7 +4905,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": "Frio",
-    "defesa": "DT +10",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "59"
@@ -5159,7 +4925,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": "Mental",
-    "defesa": "Invisibilidade",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "60"
@@ -5180,7 +4945,6 @@
     "critico": null,
     "alcance": "Médio",
     "tipoDano": null,
-    "defesa": "Recupera 1d4 PE / –1 em Vontade (cumulativo)",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "60"
@@ -5201,7 +4965,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Treinado em perícia (1 teste) / Perda de Sanidade",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "60"
@@ -5222,7 +4985,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": "Energia",
-    "defesa": "Recupera 1 PE (máx 2x Vigor/dia) ao sofrer 5+ dano Energia",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "60"
@@ -5243,7 +5005,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Turno adicional (3 PE) / Teste Ocultismo DT 15+",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "60"
@@ -5264,7 +5025,6 @@
     "critico": null,
     "alcance": "Médio",
     "tipoDano": "Energia",
-    "defesa": "+1d20 em Percepção / Evita dano de Energia (sacrifício)",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "61"
@@ -5286,7 +5046,6 @@
     "critico": "19/x3",
     "alcance": "Longo",
     "tipoDano": "Energia",
-    "defesa": "Mira telescópica e mira laser / Não precisa de munição",
     "arma": {
       "armaTipo": "Fogo",
       "empunhadura": "Duas mãos",
@@ -5312,7 +5071,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Catalisadores: ampliador, perturbador, potencializador e prolongador / Conjuração: 1 rodada",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "61"
@@ -5333,7 +5091,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Recarrega arma de fogo como ação livre 1x/rodada; recarrega besta/balestra até 5x como ação livre com uma mão",
     "arma": null,
     "fonteLivro": "SAH",
     "fontePagina": "38"
@@ -5354,7 +5111,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Componentes e catalisadores presos contam como empunhados",
     "arma": null,
     "fonteLivro": "AS1",
     "fontePagina": "54"
@@ -5375,7 +5131,6 @@
     "critico": null,
     "alcance": "Longo",
     "tipoDano": null,
-    "defesa": "Sinaliza presença de criaturas do elemento escolhido",
     "arma": null,
     "fonteLivro": "AS1",
     "fontePagina": "54"
@@ -5396,7 +5151,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Vontade DT 15+",
     "arma": null,
     "fonteLivro": "AS1",
     "fontePagina": "54"
@@ -5418,7 +5172,6 @@
     "critico": "20/x3",
     "alcance": "Curto",
     "tipoDano": "Perfuração / Sangue",
-    "defesa": "Atletismo (DT For) para remover lento",
     "arma": {
       "armaTipo": "Corpo a Corpo",
       "empunhadura": "Uma mão",
@@ -5444,7 +5197,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": "Sangue",
-    "defesa": null,
     "arma": null,
     "fonteLivro": "AS1",
     "fontePagina": "55"
@@ -5466,7 +5218,6 @@
     "critico": "20/x4",
     "alcance": "-",
     "tipoDano": "Impacto / Sangue",
-    "defesa": "Fortitude (DT For) / Usuário perde 1d6 PV",
     "arma": {
       "armaTipo": "Corpo a Corpo",
       "empunhadura": "Duas mãos",
@@ -5493,7 +5244,6 @@
     "critico": "20/x3",
     "alcance": "-",
     "tipoDano": "Cortante / Sangue",
-    "defesa": "Sangramento cumulativo (1 PE / 1d6 PV)",
     "arma": {
       "armaTipo": "Corpo a Corpo",
       "empunhadura": "Uma mão",
@@ -5519,7 +5269,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "RD 10 / Traje de mergulho (se em conjunto)",
     "arma": null,
     "fonteLivro": "AS2",
     "fontePagina": "47"
@@ -5541,7 +5290,6 @@
     "critico": "20/x3",
     "alcance": "-",
     "tipoDano": "Impacto / Energia",
-    "defesa": "Efeitos de ataque desarmado se aplicam",
     "arma": {
       "armaTipo": "Corpo a Corpo",
       "empunhadura": "Uma mão",
@@ -5568,7 +5316,6 @@
     "critico": "19/x3",
     "alcance": "Curto",
     "tipoDano": "Perfuração / Conhecimento",
-    "defesa": "Alvo desprevenido (2 PE) / Cego por 1 rodada",
     "arma": {
       "armaTipo": "Corpo a Corpo",
       "empunhadura": "Uma mão",
@@ -5595,7 +5342,6 @@
     "critico": "19/x3",
     "alcance": "Longo",
     "tipoDano": "Balístico / Morte",
-    "defesa": "Veteran em Pontaria: +5 margem de ameaça / Morte acelerada (2 turnos)",
     "arma": {
       "armaTipo": "Fogo",
       "empunhadura": "Duas mãos",
@@ -5622,7 +5368,6 @@
     "critico": "20/x2",
     "alcance": "-",
     "tipoDano": "Impacto",
-    "defesa": "DT de rituais +3 / Armazena 1 ritual",
     "arma": {
       "armaTipo": "Corpo a Corpo",
       "empunhadura": "Duas mãos",
@@ -5648,7 +5393,6 @@
     "critico": "+1 na margem ou multiplicador (quando acoplada)",
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Torna-se arma tática / Espaços dobram / Combater com Duas Armas (quando acoplada)",
     "arma": null,
     "fonteLivro": "AS2",
     "fontePagina": "71"
@@ -5669,7 +5413,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Não consumido / Vestimenta / Ação Livre: +1d6 dano, cura ou DT",
     "arma": null,
     "fonteLivro": "AS2",
     "fontePagina": "75"
@@ -5691,7 +5434,6 @@
     "critico": "19/x3",
     "alcance": "Curto",
     "tipoDano": "Perfuração / Sangue",
-    "defesa": "Recupera 2d10 PV (2 PE)",
     "arma": {
       "armaTipo": "Corpo a Corpo",
       "empunhadura": "Uma mão",
@@ -5717,7 +5459,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": "Mental",
-    "defesa": "Remove 1 condição mental e/ou de medo",
     "arma": null,
     "fonteLivro": "AS3",
     "fontePagina": "112"
@@ -5738,7 +5479,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Recupera 1d8+1 PV, PE e SAN (1x/dia, critério do mestre)",
     "arma": null,
     "fonteLivro": "AS3",
     "fontePagina": "112"
@@ -5759,7 +5499,6 @@
     "critico": "19/x2",
     "alcance": "Curto",
     "tipoDano": "Cortante",
-    "defesa": "Manobra de agarrar (2 PE) / Combater com Duas Armas / Item único",
     "arma": {
       "armaTipo": "Corpo a Corpo",
       "empunhadura": "Duas mãos",
@@ -5785,7 +5524,6 @@
     "critico": null,
     "alcance": "Curto",
     "tipoDano": null,
-    "defesa": "Reflexos DT Pre evita / Rompimento: Defesa 10, RD 10, 20 PV",
     "arma": null,
     "fonteLivro": "AS3",
     "fontePagina": "113"
@@ -5806,7 +5544,6 @@
     "critico": null,
     "alcance": "Raio de 18m",
     "tipoDano": "Morte",
-    "defesa": "Fortitude DT Vig reduz à metade",
     "arma": null,
     "fonteLivro": "AS3",
     "fontePagina": "113"
@@ -5827,7 +5564,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": "Sangue",
-    "defesa": "Bônus de dano se estiver machucado",
     "arma": null,
     "fonteLivro": "AS3",
     "fontePagina": "114"
@@ -5849,7 +5585,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Tornar-se alvo de ataque de aliado (2 PE / 1 PE) / Contra-ataque",
     "arma": {
       "armaTipo": "Corpo a Corpo",
       "empunhadura": "Uma mão",
@@ -5876,7 +5611,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Defesa +10 (+1 por semana até +20); RD 5 (Balístico, Impacto e Perfuração); RD 10 (Sangue); Vulnerabilidade a Morte",
     "arma": null,
     "fonteLivro": "AS3",
     "fontePagina": "115"
@@ -5897,7 +5631,6 @@
     "critico": null,
     "alcance": "Médio / Raio de 6m",
     "tipoDano": "Energia",
-    "defesa": "Reflexos DT Agi reduz à metade",
     "arma": null,
     "fonteLivro": "AS4",
     "fontePagina": "70"
@@ -5918,7 +5651,6 @@
     "critico": null,
     "alcance": "Raio de 6m",
     "tipoDano": "Químico",
-    "defesa": "Fortitude DT Agi reduz dano e evita enjoado",
     "arma": null,
     "fonteLivro": "AS4",
     "fontePagina": "70"
@@ -5939,7 +5671,6 @@
     "critico": null,
     "alcance": "Raio de 6m",
     "tipoDano": null,
-    "defesa": "Reflexos DT Agi evita condição",
     "arma": null,
     "fonteLivro": "AS4",
     "fontePagina": "70"
@@ -5960,7 +5691,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Alvo acertado falha automaticamente na resistência",
     "arma": null,
     "fonteLivro": "AS4",
     "fontePagina": "71"
@@ -5981,7 +5711,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "AS4",
     "fontePagina": "71"
@@ -6002,7 +5731,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Ativação em turnos programados",
     "arma": null,
     "fonteLivro": "AS4",
     "fontePagina": "71"
@@ -6023,7 +5751,6 @@
     "critico": null,
     "alcance": "Longo (via lançador)",
     "tipoDano": "Varia",
-    "defesa": null,
     "arma": null,
     "fonteLivro": "AS4",
     "fontePagina": "71"
@@ -6044,7 +5771,6 @@
     "critico": null,
     "alcance": "Médio (limite de visão)",
     "tipoDano": null,
-    "defesa": "Nunca fica desprevenido (até médio) / +10 testes resistência (até médio) / +10 Defesa esquiva (até médio) / Cego além de médio",
     "arma": null,
     "fonteLivro": "OPRPG LUXO",
     "fontePagina": "~"
@@ -6065,7 +5791,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Substitui teste de hackear por 1d4 (par consegue); risco de quebrar ao reiniciar",
     "arma": null,
     "fonteLivro": "OJDA",
     "fontePagina": "~"
@@ -6086,7 +5811,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Fornece ação de interlúdio adicional para aliados que ouvirem a música",
     "arma": null,
     "fonteLivro": "OJDA",
     "fontePagina": "~"
@@ -6107,7 +5831,6 @@
     "critico": null,
     "alcance": "Médio / Raio de 6m",
     "tipoDano": "Perfuração e Fogo",
-    "defesa": "Reflexos DT Agi reduz à metade",
     "arma": null,
     "fonteLivro": "OJDA",
     "fontePagina": "~"
@@ -6129,7 +5852,6 @@
     "critico": "20/x3",
     "alcance": "-",
     "tipoDano": "Cortante / Energia",
-    "defesa": "Alvo atordoado por 1 rodada (1d8 par); Item único",
     "arma": {
       "armaTipo": "Corpo a Corpo",
       "empunhadura": "Uma mão",
@@ -6155,7 +5877,6 @@
     "critico": null,
     "alcance": "Longo",
     "tipoDano": null,
-    "defesa": "Alvo atingido diretamente só resiste a efeitos que não sejam dano",
     "arma": {
       "armaTipo": "Fogo",
       "empunhadura": "Duas mãos",
@@ -6181,7 +5902,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Aprende rituais de Morte / Redução de -1 PE para rituais de Morte conhecidos",
     "arma": null,
     "fonteLivro": "HQ DESCONJ-1",
     "fontePagina": "~"
@@ -6202,7 +5922,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "RD Conhecimento 10 / +2 em testes de resistência (Conhecimento) / Camuflagem total (4 PE)",
     "arma": null,
     "fonteLivro": "HQ DESCONJ-1",
     "fontePagina": "~"
@@ -6223,7 +5942,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": "Sangue",
-    "defesa": "RD Sangue 15 / +2 na DT de rituais de Sangue / Mínimo 3 em dados de dano (3 PE)",
     "arma": null,
     "fonteLivro": "HQ DESCONJ-1",
     "fontePagina": "~"
@@ -6244,13 +5962,12 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "AS5",
     "fontePagina": "60"
   },
   {
-    "id": "faixas_da_videncia",
+    "id": "faixas_da_videncia_as5",
     "codigo": 290,
     "nome": "Faixas da Vidência",
     "tipo": [
@@ -6265,7 +5982,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "+5 na Defesa e resistências (alcance médio) / –5 na Defesa e resistências (além de 9m)",
     "arma": null,
     "fonteLivro": "AS5",
     "fontePagina": "60"
@@ -6286,7 +6002,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "Resistência mental 10",
     "arma": null,
     "fonteLivro": "AS5",
     "fontePagina": "60"
@@ -6307,7 +6022,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "AS5",
     "fontePagina": "61"
@@ -6329,7 +6043,6 @@
     "critico": "x2",
     "alcance": "-",
     "tipoDano": "Impacto",
-    "defesa": "+5 na Defesa",
     "arma": {
       "armaTipo": "Corpo a Corpo",
       "empunhadura": "Duas mãos",
@@ -6355,7 +6068,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": "+12 em Atletismo / +3m de deslocamento / Mobilidade sobrenatural (2 PE)",
     "arma": null,
     "fonteLivro": "AS5",
     "fontePagina": "61"
@@ -6376,7 +6088,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "AS6",
     "fontePagina": "73"
@@ -6397,7 +6108,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "AS6",
     "fontePagina": "73"
@@ -6418,7 +6128,6 @@
     "critico": "20/x2",
     "alcance": "Curto",
     "tipoDano": "Frio",
-    "defesa": null,
     "arma": {
       "armaTipo": "Fogo",
       "empunhadura": "Duas mãos",
@@ -6444,7 +6153,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "AS6",
     "fontePagina": "74"
@@ -6465,7 +6173,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "AS6",
     "fontePagina": "74"
@@ -6486,7 +6193,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "AS6",
     "fontePagina": "73"
@@ -6507,7 +6213,6 @@
     "critico": null,
     "alcance": null,
     "tipoDano": null,
-    "defesa": null,
     "arma": null,
     "fonteLivro": "AS6",
     "fontePagina": "73"

@@ -1,0 +1,21 @@
+[
+  {
+    "id": "barganha_insana",
+    "codigo": 106,
+    "nome": "Barganha Insana",
+    "elemento": [
+      "Morte"
+    ],
+    "circulo": 3,
+    "execucao": "completa",
+    "alcance": "pessoal",
+    "alvo": "você",
+    "area": null,
+    "duracao": "instantânea",
+    "resistencia": null,
+    "descricao": "Você contata a entidade da Morte e entrega a ela parte de sua própria percepção temporal da Realidade, em troca da restauração plena de sua saúde. Você recupera todos os pontos de vida e pontos de energia, e elimina quaisquer condições negativas que o estejam afetando. Porém, no final da cena, perde 1d4 pontos de Sanidade permanentemente. Além disso, cada vez que conjura este ritual, sua pele adquire uma tonalidade mais acizentada e seu sangue fica mais escuro. Alguns ocultistas temem que múltiplos usos tenham como efeito colateral transformá-lo em um luzídio, embora ninguém saiba exatamente quantas conjurações seriam necessárias para completar a transformação.",
+    "aprimoramentos": null,
+    "fonteLivro": "OPRPG LUXO",
+    "fontePagina": "~"
+  }
+]

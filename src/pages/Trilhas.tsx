@@ -3,13 +3,15 @@ import DocumentReader from "@/components/DocumentReader";
 import ExpandableText from "@/components/ExpandableText";
 import FilterButton from "@/components/FilterButton";
 import { estiloBadgeTipo } from "@/utils/badgeUtils";
+import { useData } from "@/context/DataContext";
 
-import trilhasData from "@/data/trilhas.json";
 import Fuse from "fuse.js";
 import { ChevronDown, Search, X } from "lucide-react";
 import { useDeferredValue, useMemo, useState } from "react";
 
 export default function Trilhas() {
+  const { trilhas: trilhasData } = useData();
+
   const [busca, setBusca] = useState(() => {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
@@ -28,7 +30,7 @@ export default function Trilhas() {
   
   const fontesDisponiveis = useMemo(() => {
     return Array.from(new Set(trilhasData.map(t => t.fonteLivro))).sort();
-  }, []);
+  }, [trilhasData]);
 
   const fuse = useMemo(() => {
     return new Fuse(trilhasData, {
@@ -36,7 +38,7 @@ export default function Trilhas() {
       threshold: 0.3, 
       ignoreLocation: true, 
     });
-  }, []);
+  }, [trilhasData]);
 
   const trilhasFiltradas = useMemo(() => {
     const resultadoBusca = buscaAdiada.length > 2 
@@ -46,10 +48,9 @@ export default function Trilhas() {
     return resultadoBusca.filter(trilha => {
       const matchTipo = tiposSelecionados.length === 0 || tiposSelecionados.includes(trilha.tipo);
       const matchFonte = fontesSelecionadas.length === 0 || fontesSelecionadas.includes(trilha.fonteLivro);
-
       return matchTipo && matchFonte;
     });
-  }, [buscaAdiada, tiposSelecionados, fontesSelecionadas, fuse]);
+  }, [buscaAdiada, trilhasData, tiposSelecionados, fontesSelecionadas, fuse]);
 
   const trilhasOrdenadas = useMemo(() => {
     if (buscaAdiada.length > 2) return trilhasFiltradas;
@@ -67,8 +68,7 @@ export default function Trilhas() {
     setFontesSelecionadas([]);
   };
 
-  // Componente Dropdown exclusivo das Trilhas
-  function NexDropdown({ label, text }: { label: string; text?: string }) {
+  function NexDropdown({ label, text }: { label: string; text?: string | null }) {
     const [isOpen, setIsOpen] = useState(false);
     if (!text) return null;
 
@@ -113,7 +113,6 @@ export default function Trilhas() {
       
       <div className="relative">
         <div className="relative p-6 z-10 shadow-2xl bg-[url(/assets/paper.png)] bg-repeat bg-size-[30%]">
-          
           <div className="flex flex-col gap-5">
             <div className="flex items-center border border-gray-600 bg-white/40 px-3 py-2">
               <Search className="size-5 mr-2" />
@@ -163,14 +162,13 @@ export default function Trilhas() {
               <div className="grow">
                 <div className="flex justify-between flex-col items-start mb-3">
                   <h3 className="text-xl font-special underline leading-tight">{trilha.nome}</h3>
-                  
                   <span className={`text-sm uppercase font-daisy px-2 mt-1 border ${estiloBadgeTipo(trilha.tipo)} whitespace-nowrap`}>
                     {trilha.tipo}
                   </span>
                 </div>
                 
                 <div className="mb-4">
-                  <ExpandableText text={trilha.descricao ? trilha.descricao : ''} limit={400} />
+                  <ExpandableText text={trilha.descricao ?? ''} limit={400} />
                 </div>
 
                 {trilha.especial && (
@@ -185,11 +183,10 @@ export default function Trilhas() {
                 <div className="mt-4 pt-1">
                   <NexDropdown label={trilha.tipo === 'Sobrevivente' ? 'Estágio 2' : 'NEX 10%'} text={trilha.nex10} />
                   <NexDropdown label={trilha.tipo === 'Sobrevivente' ? 'Estágio 4' : 'NEX 40%'} text={trilha.nex40} />
-                  
                   {trilha.tipo !== 'Sobrevivente' && (
                     <>
-                      <NexDropdown label="NEX 65%" text={trilha.nex65 ? trilha.nex65 : ''} />
-                      <NexDropdown label="NEX 99%" text={trilha.nex99 ? trilha.nex99 : ''} />
+                      <NexDropdown label="NEX 65%" text={trilha.nex65} />
+                      <NexDropdown label="NEX 99%" text={trilha.nex99} />
                     </>
                   )}
                 </div>
@@ -200,7 +197,6 @@ export default function Trilhas() {
                 pagina={trilha.fontePagina} 
                 onOpenReader={() => setLeitorAtivo({ fonte: trilha.fonteLivro, pagina: parseInt(String(trilha.fontePagina)) })} 
               />
-
             </div>
             
             <div className="absolute top-1/2 left-1/2 z-0 h-full w-full -translate-x-1/2 -translate-y-1/2 rotate-1 p-1 bg-[linear-gradient(rgba(139,139,139,0.4),rgba(139,139,139,0.2)),url(/assets/paper.png)] shadow-[0_0_15px_rgba(0,0,0,0.15)] bg-repeat bg-size-[30%]" />

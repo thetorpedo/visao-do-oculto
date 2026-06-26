@@ -1,0 +1,62 @@
+[
+  {
+    "id": "oculos_que_viram_morte_demais",
+    "codigo": 286,
+    "nome": "Óculos Que Viram Morte Demais",
+    "tipo": [
+      "Item Amaldiçoado"
+    ],
+    "subtipo": "Vestimenta",
+    "categoria": "IV",
+    "espaco": 1,
+    "descricao": "Um par de óculos de armação quadrada e preta corrompido pela entidade de Morte por ter testemunhado horrores do Paranormal em excesso. Se estiver vestindo esse item, você pode conjurar os seguintes rituais como se os tivesse aprendido: Cicatrização, Decadência, Eco Espiral, Paradoxo e Tentáculos de Lodo. Se já aprendeu o ritual, em vez disso, o custo em pontos de esforço para conjurá-lo diminui em -1 PE. Essa redução se acumula com reduções fornecidas por outras fontes. Esse é um item único (apenas um agente pode escolhê-lo).",
+    "elemento": "Morte",
+    "dano": null,
+    "critico": null,
+    "alcance": null,
+    "tipoDano": null,
+    "arma": null,
+    "fonteLivro": "HQ DESCONJ-1",
+    "fontePagina": "~"
+  },
+  {
+    "id": "pingente_da_lua_dourada",
+    "codigo": 287,
+    "nome": "Pingente da Lua Dourada",
+    "tipo": [
+      "Item Amaldiçoado"
+    ],
+    "subtipo": "Vestimenta",
+    "categoria": "IV",
+    "espaco": 0.5,
+    "descricao": "Um pequeno pingente dourado com uma lua crescente que, após ter severo contato com o Paranormal, se tornou amaldiçoado com Conhecimento. Se estiver vestindo esse item, você recebe resistência a dano de Conhecimento 10 e +2 em testes de resistência contra efeitos de Conhecimento. Além disso, você pode gastar 4 PE para se cobrir com uma tênue luz dourada, recebendo camuflagem total (OPRPG, p. 89) e +10 em testes de Furtividade por uma rodada. Esse é um item único (apenas um agente pode escolhê-lo).",
+    "elemento": "Conhecimento",
+    "dano": null,
+    "critico": null,
+    "alcance": null,
+    "tipoDano": null,
+    "arma": null,
+    "fonteLivro": "HQ DESCONJ-1",
+    "fontePagina": "~"
+  },
+  {
+    "id": "colar_banhado_em_sangue",
+    "codigo": 288,
+    "nome": "Colar Banhado em Sangue",
+    "tipo": [
+      "Item Amaldiçoado"
+    ],
+    "subtipo": "Vestimenta",
+    "categoria": "IV",
+    "espaco": 0.5,
+    "descricao": "Um colar simples de cordão preto e pingente metálico que já presenciou rituais de Sangue suficientes para ser distorcido pela entidade. Se estiver vestindo esse item, você recebe resistência a dano de Sangue 15. Além disso, seus rituais de Sangue recebem +2 na DT para resistir e causam um dado adicional de dano do mesmo tipo. Em adição, quando conjura um ritual de Sangue, você pode gastar 3 PE para considerar qualquer dado de dano com resultado 2 ou 1 como 3. Esse é um item único (apenas um agente pode escolhê-lo).",
+    "elemento": "Sangue",
+    "dano": "+1 dado de dano em rituais de Sangue",
+    "critico": null,
+    "alcance": null,
+    "tipoDano": "Sangue",
+    "arma": null,
+    "fonteLivro": "HQ DESCONJ-1",
+    "fontePagina": "~"
+  }
+]

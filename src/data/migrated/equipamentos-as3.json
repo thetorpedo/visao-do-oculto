@@ -1,0 +1,174 @@
+[
+  {
+    "id": "bloody_mary_batizada",
+    "codigo": 265,
+    "nome": "Bloody Mary Batizada",
+    "tipo": [
+      "Equipamento Geral"
+    ],
+    "subtipo": "Item Operacional",
+    "categoria": "II",
+    "espaco": 1,
+    "descricao": "Uma versão especial da bebida Bloody Mary, preparada com “carinho” para expurgar todas as mazelas de um corpo. Se beber, você se livra de uma condição mental e/ou de medo que o esteja afetando. Porém, sofre 2d4 pontos de dano mental.",
+    "elemento": null,
+    "dano": "2d4",
+    "critico": null,
+    "alcance": null,
+    "tipoDano": "Mental",
+    "arma": null,
+    "fonteLivro": "AS3",
+    "fontePagina": "112"
+  },
+  {
+    "id": "pacoca",
+    "codigo": 266,
+    "nome": "Paçoca",
+    "tipo": [
+      "Equipamento Geral"
+    ],
+    "subtipo": "Item Operacional",
+    "categoria": "0",
+    "espaco": 0.5,
+    "descricao": "Uma iguaria típica brasileira, muito popular nas festas juninas. Este delicioso doce é feito à base de amendoim torrado e moído, açúcar e farinha de mandioca. Dizem que é impossível comer uma só. A paçoca conta como um prato rápido (OPRPG, p. 93), mas em ocasiões especiais, a critério do mestre, a paçoca pode surpreender: uma vez por dia, ao comer ela, o personagem recupera 1d8+1 PV, PE e SAN.",
+    "elemento": null,
+    "dano": null,
+    "critico": null,
+    "alcance": null,
+    "tipoDano": null,
+    "arma": null,
+    "fonteLivro": "AS3",
+    "fontePagina": "112"
+  },
+  {
+    "id": "garra_do_harpia",
+    "codigo": 267,
+    "nome": "Garra do Harpia",
+    "tipo": [
+      "Arma"
+    ],
+    "subtipo": "Tática",
+    "categoria": "II",
+    "espaco": 2,
+    "descricao": "Um rastelo transformado em uma arma estratégica, decorado com penas escuras e badulaques coloridos. A garra do harpia é uma arma tática ágil corpo a corpo e de duas mãos. Ela causa 2d8 pontos de dano de corte, pode ser arremessada em alcance curto e tem crítico 19/x2. O formato estranho permite que, ao causar dano em um alvo, você possa gastar 2 PE para fazer uma manobra de agarrar contra ele como ação livre (a manobra não precisa ser feita desarmada, não sendo necessário soltar esta arma). Além disso, pode ser usada com Combater com Duas Armas (e poderes similares) para fazer ataques adicionais, como se fosse uma arma de uma mão e uma arma leve. Este é um item único (apenas um agente pode escolhê-lo).",
+    "elemento": null,
+    "dano": "2d8",
+    "critico": "19/x2",
+    "alcance": "Curto",
+    "tipoDano": "Cortante",
+    "arma": {
+      "armaTipo": "Corpo a Corpo",
+      "empunhadura": "Duas mãos",
+      "catArma": "Ágil",
+      "municao": null
+    },
+    "fonteLivro": "AS3",
+    "fontePagina": "112"
+  },
+  {
+    "id": "cranio_dominador",
+    "codigo": 268,
+    "nome": "Crânio Dominador",
+    "tipo": [
+      "Equipamento Geral"
+    ],
+    "subtipo": "Item Paranormal",
+    "categoria": "III",
+    "espaco": 1,
+    "descricao": "O crânio nefasto de quem outrora conheceu a submissão, agora tomado pela podridão e pelas correntes que o aprisionavam em vida, transbordando o desejo de retribuir cada gota de sofrimento. Se estiver empunhando este item, você pode gastar uma ação padrão e 2 PE para invocar correntes que envolvem até dois alvos em alcance curto. Eles ficam paralisados (Reflexos DT Pre evita). A única forma de se libertar é com o rompimento da corrente (Defesa 10, RD 10, 20 PV). O crânio não pode ser usado novamente por 24 horas e quando voltar a ser útil, as correntes já existentes desaparecem.",
+    "elemento": null,
+    "dano": null,
+    "critico": null,
+    "alcance": "Curto",
+    "tipoDano": null,
+    "arma": null,
+    "fonteLivro": "AS3",
+    "fontePagina": "113"
+  },
+  {
+    "id": "gaiola_do_corvo",
+    "codigo": 269,
+    "nome": "Gaiola do Corvo",
+    "tipo": [
+      "Equipamento Geral"
+    ],
+    "subtipo": "Item Paranormal",
+    "categoria": "III",
+    "espaco": 2,
+    "descricao": "Uma gaiola de pássaros feita de ossos e originada da morte daquele que perdeu sua liberdade. Dentro dela, uma nuvem de cinzas inquieta sussurra os lamentos daqueles que se foram. Se estiver empunhando este item, você pode gastar uma ação padrão para colocá-lo no chão e abrir sua portinhola. Ao fazer isso, todo o solo em um raio de 18m da gaiola é tomado por Lodo e se torna terreno difícil. No começo de toda rodada, aqueles que se encontrarem no Lodo sofrem 3d10 pontos de dano de Morte (Fortitude DT Vig reduz à metade). Se alguém ficar morrendo enquanto está no Lodo, seu corpo é consumido, transformado em cinzas e levado para dentro da gaiola, onde permanecerá para sempre. Após isso, a gaiola se fecha e seus efeitos acabam. É possível fechar a gaiola a qualquer momento como ação padrão.",
+    "elemento": null,
+    "dano": "3d10",
+    "critico": null,
+    "alcance": "Raio de 18m",
+    "tipoDano": "Morte",
+    "arma": null,
+    "fonteLivro": "AS3",
+    "fontePagina": "113"
+  },
+  {
+    "id": "camiseta_psikolera",
+    "codigo": 270,
+    "nome": "Camiseta Psikolera",
+    "tipo": [
+      "Item Amaldiçoado"
+    ],
+    "subtipo": null,
+    "categoria": "II",
+    "espaco": 1,
+    "descricao": "Manchada de sangue dos vários mosh pits na qual já esteve presente, uma simples merch de uma banda se torna um símbolo de resistência e adrenalina. Quanto mais ela se suja, mais você se deleita. Se estiver machucado enquanto usa esta vestimenta, todas as suas rolagens de dano causam +2d8 pontos de dano de Sangue.",
+    "elemento": "Sangue",
+    "dano": "+2d8",
+    "critico": null,
+    "alcance": null,
+    "tipoDano": "Sangue",
+    "arma": null,
+    "fonteLivro": "AS3",
+    "fontePagina": "114"
+  },
+  {
+    "id": "dupla_obsessiva",
+    "codigo": 271,
+    "nome": "Dupla Obsessiva",
+    "tipo": [
+      "Item Amaldiçoado",
+      "Arma"
+    ],
+    "subtipo": "Tática",
+    "categoria": "III",
+    "espaco": 2,
+    "descricao": "Maça e florete. Essa dupla de armas enferrujadas parecem não conseguir ficar longe uma da outra, obcecadas por si mesmas e seu único propósito: proteger aqueles que amam com fervor. A maça é uma arma tática corpo a corpo e de uma mão. Ela causa 2d4 pontos de dano de perfuração mais 1d6 pontos de dano de Sangue, multiplicado em caso de acerto crítico, e tem crítico 20/x3. O florete é uma arma tática ágil corpo a corpo e de uma mão. Ela causa 1d6 pontos de dano de perfuração mais 2d4 pontos de dano de Sangue, multiplicado em caso de acerto crítico, e tem crítico 18/x2. Se estiver empunhando as duas armas, pode gastar uma ação padrão para realizar dois ataques, um com cada arma. Além disso, se um aliado em alcance curto de você for alvo de um ataque, você pode gastar 2 PE como reação para se tornar o alvo do ataque. Se fizer isso e a fonte do ataque estiver em alcance corpo a corpo, você pode gastar 2 PE para atacar a fonte com a maça. Se tiver Combater com Duas Armas e/ou Ambidestria, os custos mudam para 1 PE.",
+    "elemento": "Sangue",
+    "dano": null,
+    "critico": null,
+    "alcance": null,
+    "tipoDano": null,
+    "arma": {
+      "armaTipo": "Corpo a Corpo",
+      "empunhadura": "Uma mão",
+      "catArma": "Ágil",
+      "municao": null
+    },
+    "fonteLivro": "AS3",
+    "fontePagina": "114"
+  },
+  {
+    "id": "armadura_de_guevara_armadura_dos_couracas",
+    "codigo": 272,
+    "nome": "Armadura de Guevara (Armadura dos Couraças)",
+    "tipo": [
+      "Item Amaldiçoado",
+      "Proteção"
+    ],
+    "subtipo": "Pesada",
+    "categoria": "III",
+    "espaco": 0,
+    "descricao": "Peças com partes orgânicas que abrem e fecham conforme a vontade do usuário. A armadura se movimenta com vontade própria, não pesando sobre o usuário, não aplicando penalidades e não dificultando conjurações. Ela se adapta ao alvo, dispensando a necessidade de proficiência. Uma pessoa que toque a armadura deve passar em um teste de Vontade (DT 6d6) ou será forçada a equipá-la; uma vez equipada, deve passar em um teste de Fortitude (DT 6d6) ou o Sangue poderá controlar a pessoa. Tentar retirá-la exige que o usuário sofra dano de Morte até ficar com 0 PV para ser removido. Todos os testes devem ser repetidos após uma semana ou no início de uma nova missão.",
+    "elemento": "Sangue",
+    "dano": null,
+    "critico": null,
+    "alcance": null,
+    "tipoDano": null,
+    "arma": null,
+    "fonteLivro": "AS3",
+    "fontePagina": "115"
+  }
+]

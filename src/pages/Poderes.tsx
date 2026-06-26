@@ -3,13 +3,15 @@ import DocumentReader from "@/components/DocumentReader";
 import ExpandableText from "@/components/ExpandableText";
 import FilterButton from "@/components/FilterButton";
 import { corElemento, estiloBadgeTipo } from "@/utils/badgeUtils";
+import { useData } from "@/context/DataContext";
 
-import poderesData from "@/data/poderes.json";
 import Fuse from "fuse.js";
 import { Search, X } from "lucide-react";
 import { useDeferredValue, useMemo, useState } from "react";
 
 export default function Poderes() {
+  const { poderes: poderesData } = useData();
+
   const [busca, setBusca] = useState(() => {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
@@ -32,7 +34,7 @@ export default function Poderes() {
   
   const fontesDisponiveis = useMemo(() => {
     return Array.from(new Set(poderesData.map(p => p.fonteLivro)));
-  }, []);
+  }, [poderesData]);
 
   const fuse = useMemo(() => {
     return new Fuse(poderesData, {
@@ -40,7 +42,7 @@ export default function Poderes() {
       threshold: 0.3, 
       ignoreLocation: true,
     });
-  }, []);
+  }, [poderesData]);
 
   const poderesFiltrados = useMemo(() => {
     const resultadoBusca = buscaAdiada.length > 2 
@@ -57,7 +59,7 @@ export default function Poderes() {
 
       return matchTipo && matchFonte && matchElemento && matchPreReq;
     });
-  }, [buscaAdiada, tiposSelecionados, elementosSelecionados, fontesSelecionadas, preReqSelecionados, fuse]);
+  }, [buscaAdiada, poderesData, tiposSelecionados, elementosSelecionados, fontesSelecionadas, preReqSelecionados, fuse]);
 
   const poderesOrdenados = useMemo(() => {
     if (buscaAdiada.length > 2) return poderesFiltrados;
