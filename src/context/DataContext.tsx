@@ -11,6 +11,8 @@ import {
     PoderSchema,
     RitualSchema,
     TrilhaSchema,
+    RegraSchema,
+    type Regra,
     type Equipamento,
     type Origem,
     type Poder,
@@ -23,13 +25,15 @@ import { z } from "zod";
 // Tipos
 // ─────────────────────────────────────────
 
-export type Categoria = "poderes" | "rituais" | "equipamentos" | "origens" | "trilhas";
+export type Categoria = "poderes" | "rituais" | "equipamentos" | "origens" | "trilhas" | "regras";
 
 export interface FonteConfig {
     id: string;
     offset: number;
+    tipo: "dados" | "visual";
     arquivo?: Blob;
     nomeArquivo?: string;
+    label?: string;
 }
 
 export interface ArquivoImportado {
@@ -44,13 +48,14 @@ interface DataState {
     equipamentos: Equipamento[];
     origens: Origem[];
     trilhas: Trilha[];
+    regras: Regra[];
     fontes: Record<string, FonteConfig>;
     arquivosImportados: ArquivoImportado[];
 }
 
 interface DataContextValue extends DataState {
     status: "loading" | "empty" | "ready";
-    importarJson: (categoria: Categoria, arquivo: File) => Promise<{ ok: boolean; itens: number; erros: number }>;
+    importarJson: (categoria: Categoria | null, arquivos: File | File[]) => Promise<{ ok: boolean; itens: number; erros: number }>;
     removerArquivo: (nomeArquivo: string, categoria: Categoria) => Promise<void>;
     limparCategoria: (categoria: Categoria) => Promise<void>;
     salvarFonte: (config: FonteConfig, arquivo?: File) => Promise<void>;
@@ -58,6 +63,8 @@ interface DataContextValue extends DataState {
     getBlobUrlFonte: (id: string) => Promise<string | null>;
     limparTudo: () => Promise<void>;
     exportarPacote: () => Promise<void>;
+    exportarCategoria: (categoria: Categoria) => void;
+    exportarArquivo: (nomeArquivo: string, categoria: Categoria) => Promise<void>;
 }
 
 // ─────────────────────────────────────────
@@ -141,9 +148,10 @@ const SCHEMAS: Record<Categoria, z.ZodTypeAny> = {
     equipamentos: EquipamentoSchema,
     origens: OrigemSchema,
     trilhas: TrilhaSchema,
+    regras: RegraSchema,
 };
 
-const CATEGORIAS: Categoria[] = ["poderes", "rituais", "equipamentos", "origens", "trilhas"];
+const CATEGORIAS: Categoria[] = ["poderes", "rituais", "equipamentos", "origens", "trilhas", "regras"];
 
 // ─────────────────────────────────────────
 // Carregamento estático (deploy privado)
@@ -190,7 +198,7 @@ async function carregarEstatico(): Promise<{
     if (!index) return null;
 
     const dados: Record<Categoria, unknown[]> = {
-        poderes: [], rituais: [], equipamentos: [], origens: [], trilhas: [],
+        poderes: [], rituais: [], equipamentos: [], origens: [], trilhas: [], regras: []
     };
     const arquivos: ArquivoImportado[] = [];
 
@@ -229,6 +237,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         equipamentos: [],
         origens: [],
         trilhas: [],
+        regras: [],
         fontes: {},
         arquivosImportados: [],
     });
@@ -242,6 +251,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
             equipamentos: [],
             origens: [],
             trilhas: [],
+            regras: [],
             fontes: {},
             arquivosImportados: [],
         };
@@ -274,12 +284,25 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         }
 
         // 4. Configs padrão de fontes conhecidas (só preenche se ainda não existir)
-        const FONTES_DEFAULT: Record<string, number> = {
-            OPRPG: 10, SAH: 1, AS1: 0, AS2: 0, AS3: 0, AS4: 0, AS5: 0, AS6: 0,
+        const FONTES_DEFAULT: Record<string, Omit<FonteConfig, "id">> = {
+            OPRPG: { tipo: "dados", offset: 10, nomeArquivo: "OPRPG.pdf" },
+            SAH: { tipo: "dados", offset: 1, nomeArquivo: "SAH.pdf" },
+            AS1: { tipo: "dados", offset: 0, nomeArquivo: "AS1.pdf" },
+            AS2: { tipo: "dados", offset: 0, nomeArquivo: "AS2.pdf" },
+            AS3: { tipo: "dados", offset: 0, nomeArquivo: "AS3.pdf" },
+            AS4: { tipo: "dados", offset: 0, nomeArquivo: "AS4.pdf" },
+            AS5: { tipo: "dados", offset: 0, nomeArquivo: "AS5.pdf" },
+            AS6: { tipo: "dados", offset: 0, nomeArquivo: "AS6.pdf" },
+            OPRPGLUXO: { tipo: "visual", offset: 0, nomeArquivo: "OPRPGLUXO.jpg", label: "OPRPG Luxo" },
+            INICIACAO: { tipo: "visual", offset: 0, nomeArquivo: "INICIACAO.png", label: "HQ Iniciação" },
+            OSNF1: { tipo: "visual", offset: 0, nomeArquivo: "OSNF1.png", label: "HQ OSNF-1" },
+            OSNF2: { tipo: "visual", offset: 0, nomeArquivo: "OSNF2.png", label: "HQ OSNF-2" },
+            DESCONJ1: { tipo: "visual", offset: 0, nomeArquivo: "DESCONJ1.png", label: "HQ DESCONJ-1" },
+            OJDA: { tipo: "visual", offset: 0, nomeArquivo: "OJDA.png", label: "HQ OJDA" },
         };
-        for (const [id, offset] of Object.entries(FONTES_DEFAULT)) {
+        for (const [id, config] of Object.entries(FONTES_DEFAULT)) {
             if (!novoState.fontes[id]) {
-                novoState.fontes[id] = { id, offset };
+                novoState.fontes[id] = { id, ...config };
             }
         }
 
@@ -292,52 +315,84 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         carregarTudo();
     }, [carregarTudo]);
 
-    // ── Importar JSON ──
-    const importarJson = useCallback(async (
+    const _importarArray = async (
         categoria: Categoria,
-        arquivo: File
-    ): Promise<{ ok: boolean; itens: number; erros: number }> => {
-        const texto = await arquivo.text();
-        const json = JSON.parse(texto);
-        const array = Array.isArray(json) ? json : Object.values(json).find(Array.isArray);
-        if (!array) return { ok: false, itens: 0, erros: 0 };
-
+        array: unknown[],
+        nomeArquivo: string
+    ): Promise<{ itens: number; erros: number }> => {
         const schema = SCHEMAS[categoria];
         const validos: unknown[] = [];
         let erros = 0;
 
-        for (const item of array as unknown[]) {
+        for (const item of array) {
             const result = schema.safeParse(item);
-            if (result.success) {
-                validos.push(result.data);
-            } else {
-                erros++;
-                console.warn(`Item inválido em ${categoria}:`, result.error.flatten());
-            }
+            if (result.success) validos.push(result.data);
+            else { erros++; console.warn(`Item inválido em ${categoria}:`, result.error.flatten()); }
         }
 
-        const key = `${categoria}:${arquivo.name}`;
+        const key = `${categoria}:${nomeArquivo}`;
         await dbSet("dados", key, validos);
 
         setState((prev) => {
             const jaExiste = prev.arquivosImportados.find(
-                (a) => a.nome === arquivo.name && a.categoria === categoria
+                (a) => a.nome === nomeArquivo && a.categoria === categoria
             );
             return {
                 ...prev,
                 [categoria]: [...(prev[categoria] as unknown[]), ...validos],
                 arquivosImportados: jaExiste
                     ? prev.arquivosImportados.map((a) =>
-                        a.nome === arquivo.name && a.categoria === categoria
-                            ? { ...a, itens: validos.length }
-                            : a
-                    )
-                    : [...prev.arquivosImportados, { nome: arquivo.name, categoria, itens: validos.length }],
+                        a.nome === nomeArquivo && a.categoria === categoria
+                            ? { ...a, itens: validos.length } : a)
+                    : [...prev.arquivosImportados, { nome: nomeArquivo, categoria, itens: validos.length }],
             };
         });
 
-        if (status === "empty" && validos.length > 0) setStatus("ready");
-        return { ok: true, itens: validos.length, erros };
+        return { itens: validos.length, erros };
+    };
+
+    // ── Importar JSON ──
+    const importarJson = useCallback(async (
+        categoria: Categoria | null, // null = detectar do arquivo
+        arquivos: File | File[]
+    ): Promise<{ ok: boolean; itens: number; erros: number }> => {
+        const lista = Array.isArray(arquivos) ? arquivos : [arquivos];
+        let totalItens = 0;
+        let totalErros = 0;
+
+        for (const arquivo of lista) {
+            const texto = await arquivo.text();
+            let json: unknown;
+            try { json = JSON.parse(texto); } catch { totalErros++; continue; }
+
+            // Detecta se é multi-categoria (objeto com chaves de categoria)
+            const isMulti = !Array.isArray(json) && typeof json === "object" && json !== null &&
+                CATEGORIAS.some(c => c in (json as Record<string, unknown>));
+
+            if (isMulti) {
+                const obj = json as Record<string, unknown>;
+                for (const cat of CATEGORIAS) {
+                    const array = Array.isArray(obj[cat]) ? obj[cat] as unknown[] : null;
+                    if (!array || array.length === 0) continue;
+                    const { itens, erros } = await _importarArray(cat, array, arquivo.name);
+                    totalItens += itens;
+                    totalErros += erros;
+                }
+            } else {
+                const cat = categoria!;
+                const array = Array.isArray(json) ? json :
+                    (typeof json === "object" && json !== null
+                        ? (Object.values(json as Record<string, unknown>).find(Array.isArray) as unknown[] | undefined)
+                        : undefined);
+                if (!array) { totalErros++; continue; }
+                const { itens, erros } = await _importarArray(cat, array, arquivo.name);
+                totalItens += itens;
+                totalErros += erros;
+            }
+        }
+
+        if (status === "empty" && totalItens > 0) setStatus("ready");
+        return { ok: totalItens > 0, itens: totalItens, erros: totalErros };
     }, [status]);
 
     // ── Remover arquivo específico ──
@@ -386,9 +441,11 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     const getBlobUrlFonte = useCallback(async (id: string): Promise<string | null> => {
         const blob = await dbGet<Blob>("pdfs", id);
         if (blob) return URL.createObjectURL(blob);
-        // O DocumentReader tenta /files/ diretamente como fallback
+        // Fallback para arquivo estático se tiver nomeArquivo configurado
+        const nomeArquivo = state.fontes[id]?.nomeArquivo;
+        if (nomeArquivo) return `/files/${nomeArquivo}`;
         return null;
-    }, []);
+    }, [state.fontes]);
 
     // ── Limpar tudo ──
     const limparTudo = useCallback(async () => {
@@ -413,6 +470,30 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         URL.revokeObjectURL(url);
     }, [state]);
 
+    const exportarCategoria = useCallback((categoria: Categoria) => {
+        const dados = state[categoria];
+        const blob = new Blob([JSON.stringify(dados, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${categoria}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+    }, [state]);
+
+    const exportarArquivo = useCallback(async (nomeArquivo: string, categoria: Categoria) => {
+        const key = `${categoria}:${nomeArquivo}`;
+        const itens = await dbGet<unknown[]>("dados", key);
+        if (!itens) return;
+        const blob = new Blob([JSON.stringify(itens, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = nomeArquivo;
+        a.click();
+        URL.revokeObjectURL(url);
+    }, []);
+
     return (
         <DataContext.Provider
             value={{
@@ -426,6 +507,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
                 getBlobUrlFonte,
                 limparTudo,
                 exportarPacote,
+                exportarCategoria,
+                exportarArquivo
             }}
         >
             {children}

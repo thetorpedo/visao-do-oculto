@@ -1,6 +1,7 @@
 import Logo from "@/components/logo";
 import { useData, type Categoria } from "@/context/DataContext";
-import { FileJson, Upload } from "lucide-react";
+import { baixarTemplate } from "@/lib/templates";
+import { Download, FileJson, Upload } from "lucide-react";
 import { useRef, useState } from "react";
 
 const CATEGORIAS: { id: Categoria; label: string; descricao: string }[] = [
@@ -99,6 +100,10 @@ export default function TelaImportacao() {
                       >
                         <Upload className="size-3.5" />
                         {estaCarregando ? "Carregando..." : resultado ? "Trocar" : "Selecionar"}
+                      </button>
+                      <button onClick={() => baixarTemplate(cat.id)}
+                        className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-special uppercase border-2 border-gray-400 text-gray-600 hover:bg-gray-100">
+                        <Download className="size-3.5" /> Template
                       </button>
                     </div>
                   </div>

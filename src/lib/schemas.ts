@@ -137,3 +137,15 @@ export const TrilhaSchema = z
     .merge(FonteSchema);
 
 export type Trilha = z.infer<typeof TrilhaSchema>;
+
+export const RegraSchema = z
+    .object({
+        id: z.string(),
+        codigo: z.number().int().positive(),
+        nome: z.string(),
+        categoria: z.array(z.string()).min(1),
+        descricao: z.string(),
+    })
+    .merge(FonteSchema);
+
+export type Regra = z.infer<typeof RegraSchema>;

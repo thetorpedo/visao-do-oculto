@@ -10,6 +10,7 @@ import Rituais from './pages/Rituais';
 import Configuracoes from './pages/Configuracoes';
 import TelaImportacao from './pages/TelaImportacao';
 import { useData } from './context/DataContext';
+import Regras from './pages/Regras';
 
 function AppRoutes() {
   const { status } = useData();
@@ -38,6 +39,7 @@ function AppRoutes() {
           <Route path="/trilhas" element={<Trilhas />} />
           <Route path="/equipamentos" element={<Equipamentos />} />
           <Route path="/rituais" element={<Rituais />} />
+          <Route path="/regras" element={<Regras />} />
           <Route path="/configuracoes" element={<Configuracoes />} />
         </Route>
       </Routes>
