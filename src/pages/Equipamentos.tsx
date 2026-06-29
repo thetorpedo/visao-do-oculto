@@ -1,13 +1,12 @@
 import BookReference from "@/components/BookReference";
 import DocumentReader from "@/components/DocumentReader";
 import ExpandableText from "@/components/ExpandableText";
-import FilterButton from "@/components/FilterButton";
+import FiltrosPainel from "@/components/FiltrosPainel";
 import { corElemento, estiloBadgeTipo } from "@/utils/badgeUtils";
 import { useData } from "@/context/DataContext";
+import { useFiltros, type ConfigFiltro } from "@/hooks/useFiltros";
 
-import Fuse from "fuse.js";
-import { Search, X } from "lucide-react";
-import { useDeferredValue, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 const LinhaStatus = ({ label, valor }: { label: string; valor: string | number | null | undefined }) => {
   if (valor === null || valor === undefined || valor === "") return null;
@@ -30,28 +29,10 @@ const formatarDescricao = (nome: string, descricao: string) => {
 
 export default function Equipamentos() {
   const { equipamentos: equipamentosData } = useData();
-
   const [abaAtiva, setAbaAtiva] = useState<"equipamentos" | "maldicoes">("equipamentos");
-  const [busca, setBusca] = useState(() => {
-    if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-      return params.get("busca") || "";
-    }
-    return "";
-  });
-
-  const buscaAdiada = useDeferredValue(busca);
-
-  const [tiposSelecionados, setTiposSelecionados] = useState<string[]>([]);
-  const [subtiposSelecionados, setSubtiposSelecionados] = useState<string[]>([]);
-  const [armaTiposSelecionados, setArmaTiposSelecionados] = useState<string[]>([]);
-  const [catArmasSelecionadas, setCatArmasSelecionadas] = useState<string[]>([]);
-  const [empunhadurasSelecionadas, setEmpunhadurasSelecionadas] = useState<string[]>([]);
-  const [elementosSelecionados, setElementosSelecionados] = useState<string[]>([]);
-  const [categoriasSelecionadas, setCategoriasSelecionadas] = useState<string[]>([]);
-  const [fontesSelecionadas, setFontesSelecionadas] = useState<string[]>([]);
   const [leitorAtivo, setLeitorAtivo] = useState<{ fonte: string; pagina: number } | null>(null);
 
+  // Divide os dados brutos com base nas regras de negócio da aba antes de alimentar o hook
   const dadosAbaAtual = useMemo(() => {
     return equipamentosData.filter(e => {
       const tipos = Array.isArray(e.tipo) ? e.tipo : [e.tipo];
@@ -60,105 +41,59 @@ export default function Equipamentos() {
     });
   }, [abaAtiva, equipamentosData]);
 
-  const opcoesDisponiveis = useMemo(() => {
-    const tipos = new Set<string>();
-    const subtipos = new Set<string>();
-    const armaTipos = new Set<string>();
-    const catArmas = new Set<string>();
-    const empunhaduras = new Set<string>();
-    const elementos = new Set<string>();
-    const categorias = new Set<string>();
-    const fontes = new Set<string>();
+  // Configuração estática dos filtros baseada nos campos definidos no schema
+  const configsFiltro: ConfigFiltro[] = useMemo(() => {
+    return [
+      { id: "tipo", label: "Tipos", opcoes: "auto", match: "array" },
+      { id: "subtipo", label: "Subtipos", opcoes: "auto" },
+      { id: "arma.armaTipo", label: "Uso Arma", opcoes: "auto" },
+      { id: "arma.catArma", label: "Cat Arma", opcoes: "auto" },
+      { id: "arma.empunhadura", label: "Empunh", opcoes: "auto" },
+      { id: "elemento", label: "Elementos", opcoes: "auto" },
+      ...(abaAtiva === "equipamentos" ? [{ id: "categoria", label: "Categ", opcoes: "auto" as const }] : []),
+      { id: "fonteLivro", label: "Fontes", opcoes: "auto" },
+    ];
+  }, [abaAtiva]);
 
-    dadosAbaAtual.forEach(e => {
-      const tiposArr = Array.isArray(e.tipo) ? e.tipo : [e.tipo];
-      tiposArr.forEach(t => t && tipos.add(t));
-      if (e.subtipo) subtipos.add(e.subtipo);
-      if (e.arma?.armaTipo) armaTipos.add(e.arma.armaTipo);
-      if (e.arma?.catArma) catArmas.add(e.arma.catArma);
-      if (e.arma?.empunhadura) empunhaduras.add(e.arma.empunhadura);
-      if (e.elemento) elementos.add(e.elemento);
-      if (e.categoria) categorias.add(e.categoria);
-      if (e.fonteLivro) fontes.add(e.fonteLivro);
-    });
+  const {
+    busca,
+    setBusca,
+    filtrosAtivos,
+    operadoresAtivos,
+    toggleOperador,
+    toggleFiltro,
+    limparFiltros,
+    opcoesResolvidas,
+    dadosFiltrados,
+    temFiltroAtivo,
+    limparTudo
+  } = useFiltros(dadosAbaAtual, configsFiltro);
 
-    return {
-      tipos: Array.from(tipos).sort(),
-      subtipos: Array.from(subtipos).sort(),
-      armaTipos: Array.from(armaTipos).sort(),
-      catArmas: Array.from(catArmas).sort(),
-      empunhaduras: Array.from(empunhaduras).sort(),
-      elementos: Array.from(elementos).sort(),
-      categorias: Array.from(categorias).sort(),
-      fontes: Array.from(fontes).sort(),
-    };
-  }, [dadosAbaAtual]);
-
-  const fuse = useMemo(() => {
-    return new Fuse(dadosAbaAtual, {
-      keys: ["nome", "descricao", "tipo", "subtipo", "tipoDano", "arma.armaTipo", "arma.catArma", "arma.empunhadura", "elemento"],
-      threshold: 0.3,
-      ignoreLocation: true,
-    });
-  }, [dadosAbaAtual]);
-
-  const equipamentosFiltrados = useMemo(() => {
-    const resultadoBusca = buscaAdiada.length > 2
-      ? fuse.search(buscaAdiada).map(r => r.item)
-      : dadosAbaAtual;
-
-    return resultadoBusca.filter(equip => {
-      const tipos = Array.isArray(equip.tipo) ? equip.tipo : [equip.tipo];
-      const matchTipo = tiposSelecionados.length === 0 || tiposSelecionados.some(t => tipos.includes(t));
-      const matchSubtipo = subtiposSelecionados.length === 0 || (equip.subtipo && subtiposSelecionados.includes(equip.subtipo));
-      const matchArmaTipo = armaTiposSelecionados.length === 0 || (equip.arma?.armaTipo && armaTiposSelecionados.includes(equip.arma.armaTipo));
-      const matchCatArma = catArmasSelecionadas.length === 0 || (equip.arma?.catArma && catArmasSelecionadas.includes(equip.arma.catArma));
-      const matchEmpunhadura = empunhadurasSelecionadas.length === 0 || (equip.arma?.empunhadura && empunhadurasSelecionadas.includes(equip.arma.empunhadura));
-      const matchElemento = elementosSelecionados.length === 0 || (equip.elemento && elementosSelecionados.includes(equip.elemento));
-      const matchCategoria = categoriasSelecionadas.length === 0 || categoriasSelecionadas.includes(equip.categoria ?? '');
-      const matchFonte = fontesSelecionadas.length === 0 || fontesSelecionadas.includes(equip.fonteLivro);
-
-      return matchTipo && matchSubtipo && matchArmaTipo && matchCatArma && matchEmpunhadura && matchElemento && matchCategoria && matchFonte;
-    });
-  }, [buscaAdiada, dadosAbaAtual, tiposSelecionados, subtiposSelecionados, armaTiposSelecionados, catArmasSelecionadas, empunhadurasSelecionadas, elementosSelecionados, categoriasSelecionadas, fontesSelecionadas, fuse]);
-
-  const toggleFiltro = (setter: React.Dispatch<React.SetStateAction<string[]>>, item: string) => {
-    setter(prev => prev.includes(item) ? prev.filter(i => i !== item) : [...prev, item]);
-  };
-
-  const limparFiltros = () => {
-    setTiposSelecionados([]);
-    setSubtiposSelecionados([]);
-    setArmaTiposSelecionados([]);
-    setCatArmasSelecionadas([]);
-    setEmpunhadurasSelecionadas([]);
-    setElementosSelecionados([]);
-    setCategoriasSelecionadas([]);
-    setFontesSelecionadas([]);
-  };
-
+  // Altera a aba limpando os parâmetros da URL para evitar filtros órfãos cruzados
   const mudarAba = (novaAba: "equipamentos" | "maldicoes") => {
     setAbaAtiva(novaAba);
-    limparFiltros();
+    limparTudo();
   };
 
-  const filtrosUI = useMemo(() => [
-    { label: "Tipos:", opcoes: opcoesDisponiveis.tipos, estado: tiposSelecionados, setter: setTiposSelecionados },
-    { label: "Subtipos:", opcoes: opcoesDisponiveis.subtipos, estado: subtiposSelecionados, setter: setSubtiposSelecionados },
-    { label: "Uso Arma:", opcoes: opcoesDisponiveis.armaTipos, estado: armaTiposSelecionados, setter: setArmaTiposSelecionados },
-    { label: "Cat Arma:", opcoes: opcoesDisponiveis.catArmas, estado: catArmasSelecionadas, setter: setCatArmasSelecionadas },
-    { label: "Empunh:", opcoes: opcoesDisponiveis.empunhaduras, estado: empunhadurasSelecionadas, setter: setEmpunhadurasSelecionadas },
-    { label: "Elementos:", opcoes: opcoesDisponiveis.elementos, estado: elementosSelecionados, setter: setElementosSelecionados },
-    ...(abaAtiva === "equipamentos" ? [{ label: "Categ:", opcoes: opcoesDisponiveis.categorias, estado: categoriasSelecionadas, setter: setCategoriasSelecionadas }] : []),
-    { label: "Fontes:", opcoes: opcoesDisponiveis.fontes, estado: fontesSelecionadas, setter: setFontesSelecionadas },
-  ], [opcoesDisponiveis, tiposSelecionados, subtiposSelecionados, armaTiposSelecionados, catArmasSelecionadas, empunhadurasSelecionadas, elementosSelecionados, categoriasSelecionadas, fontesSelecionadas, abaAtiva]);
-
-  const temFiltroAtivo = filtrosUI.some(f => f.estado.length > 0);
+  // Busca textual profunda customizada sobre os dados estruturados já refinados
+  const equipamentosFiltradosEBusca = useMemo(() => {
+    if (!busca) return dadosFiltrados;
+    const termo = busca.toLowerCase();
+    return dadosFiltrados.filter(
+      (e) =>
+        e.nome.toLowerCase().includes(termo) ||
+        e.descricao.toLowerCase().includes(termo) ||
+        (e.subtipo && e.subtipo.toLowerCase().includes(termo)) ||
+        (e.tipoDano && e.tipoDano.toLowerCase().includes(termo)) ||
+        (e.elemento && e.elemento.toLowerCase().includes(termo)) ||
+        (e.arma?.armaTipo && e.arma.armaTipo.toLowerCase().includes(termo))
+    );
+  }, [dadosFiltrados, busca]);
 
   const equipamentosOrdenados = useMemo(() => {
-    if (buscaAdiada.length > 2) return equipamentosFiltrados;
-    return [...equipamentosFiltrados].sort((a, b) => a.nome.localeCompare(b.nome));
-  }, [equipamentosFiltrados, buscaAdiada]);
+    if (busca.length > 2) return equipamentosFiltradosEBusca;
+    return [...equipamentosFiltradosEBusca].sort((a, b) => a.nome.localeCompare(b.nome));
+  }, [equipamentosFiltradosEBusca, busca]);
 
   return (
     <div className="space-y-6">
@@ -169,9 +104,11 @@ export default function Equipamentos() {
         onClose={() => setLeitorAtivo(null)}
       />
 
-      <div className="relative">
-        <div className="relative p-6 z-10 shadow-2xl bg-[url(/assets/paper.png)] bg-repeat bg-size-[30%]">
-          <div className="flex flex-col gap-5 pt-2">
+      <div className="relative -mt-8">
+        <div className="relative z-10">
+          <div className="flex flex-col gap-5">
+
+            {/* Abas de Navegação */}
             <div className="flex gap-2 pb-0">
               <button
                 onClick={() => mudarAba("equipamentos")}
@@ -187,52 +124,26 @@ export default function Equipamentos() {
               </button>
             </div>
 
-            <div className="flex items-center border border-gray-600 bg-white/40 px-3 py-2 -mt-2">
-              <Search className="size-5 mr-2" />
-              <input
-                type="text"
-                placeholder={`Buscando entre ${equipamentosFiltrados.length} itens...`}
-                className="w-full bg-transparent outline-none font-medium"
-                value={busca}
-                onChange={(e) => setBusca(e.target.value)}
-              />
-            </div>
+            {/* Painel Unificado de Filtros */}
+            <FiltrosPainel
+              busca={busca}
+              setBusca={setBusca}
+              placeholder={`Buscando entre ${equipamentosOrdenados.length} itens...`}
+              opcoesResolvidas={opcoesResolvidas}
+              filtrosAtivos={filtrosAtivos}
+              operadoresAtivos={operadoresAtivos}
+              toggleOperador={toggleOperador}
+              toggleFiltro={toggleFiltro}
+              temFiltroAtivo={temFiltroAtivo}
+              limparFiltros={limparFiltros}
+              totalItens={equipamentosOrdenados.length}
+            />
 
-            <div className="flex flex-col gap-3">
-              {filtrosUI.map((filtro) => {
-                if (filtro.opcoes.length === 0) return null;
-                return (
-                  <div key={filtro.label} className="flex flex-wrap gap-2">
-                    <span className="font-special text-sm self-center mr-2 w-19">{filtro.label}</span>
-                    {filtro.opcoes.map(opcao => (
-                      <FilterButton
-                        key={opcao}
-                        label={opcao}
-                        isSelected={filtro.estado.includes(opcao)}
-                        onClick={() => toggleFiltro(filtro.setter, opcao)}
-                      />
-                    ))}
-                  </div>
-                );
-              })}
-
-              {temFiltroAtivo && (
-                <div className="flex mt-1">
-                  <span className="w-19 mr-2"></span>
-                  <button
-                    onClick={limparFiltros}
-                    className="text-red-700 text-xs font-bold flex items-center underline"
-                  >
-                    <X className="size-3 mr-1" /> Limpar Todos os Filtros
-                  </button>
-                </div>
-              )}
-            </div>
           </div>
         </div>
-        <div className="absolute top-1/2 left-1/2 z-0! h-full w-full -translate-x-1/2 -translate-y-1/2 rotate-[-0.5deg] p-1 bg-[linear-gradient(rgba(139,139,139,0.4),rgba(139,139,139,0.2)),url(/assets/paper.png)] shadow-[0_0_15px_rgba(0,0,0,0.15)] bg-repeat bg-size-[30%]" />
       </div>
 
+      {/* Grid de Itens */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {equipamentosOrdenados.map((equip) => {
           const tipos = Array.isArray(equip.tipo) ? equip.tipo : [equip.tipo];
@@ -311,7 +222,7 @@ export default function Equipamentos() {
                 <BookReference
                   fonte={equip.fonteLivro}
                   pagina={equip.fontePagina}
-                  onOpenReader={() => setLeitorAtivo({ fonte: equip.fonteLivro, pagina: parseInt(equip.fontePagina) })}
+                  onOpenReader={() => setLeitorAtivo({ fonte: equip.fonteLivro, pagina: parseInt(String(equip.fontePagina)) })}
                 />
               </div>
 
@@ -320,7 +231,7 @@ export default function Equipamentos() {
           );
         })}
 
-        {equipamentosFiltrados.length === 0 && (
+        {equipamentosOrdenados.length === 0 && (
           <div className="col-span-full text-center py-10 text-gray-600 font-special text-xl">
             Nenhum item encontrado com esses termos.
           </div>

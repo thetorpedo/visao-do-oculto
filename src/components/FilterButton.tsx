@@ -1,14 +1,39 @@
-export default function FilterButton({ label, isSelected, onClick }: { label: string | number; isSelected: boolean; onClick: () => void }) {
-    return (
-      <button
-        onClick={onClick}
-        className={`px-3 py-1 text-xs font-bold transition-colors border cursor-pointer ${
-          isSelected
-            ? 'bg-gray-800 text-white border-gray-800'
-            : 'bg-gray-200/50 text-gray-700 border-gray-400 hover:bg-gray-300'
-        }`}
-      >
-        {label}
-      </button>
-    );
-  }
+import type { EstadoFiltro } from "@/hooks/useFiltros";
+
+interface FilterButtonProps {
+  label: string;
+  estado?: EstadoFiltro; // novo: suporta três estados
+  isSelected?: boolean;  // legado: mantido pra compatibilidade
+  onClick: () => void;
+}
+
+export default function FilterButton({ label, estado, isSelected, onClick }: FilterButtonProps) {
+  // Compatibilidade com uso legado (isSelected booleano)
+  const estadoEfetivo: EstadoFiltro = estado ?? (isSelected ? "incluir" : "neutro");
+
+  const estilos: Record<EstadoFiltro, string> = {
+    neutro: "border-gray-400 bg-white/60 text-gray-700 hover:bg-gray-100 hover:border-gray-600",
+    incluir: "border-gray-900 bg-gray-900 text-white hover:bg-gray-700",
+    excluir: "border-red-700 bg-red-700 text-white hover:bg-red-800 line-through",
+  };
+
+  const titulo: Record<EstadoFiltro, string> = {
+    neutro: `Clique para incluir "${label}"`,
+    incluir: `Clique para excluir "${label}"`,
+    excluir: `Clique para remover filtro "${label}"`,
+  };
+
+  return (
+    <button
+      onClick={onClick}
+      title={titulo[estadoEfetivo]}
+      className={`
+        px-2.5 py-0.5 text-xs uppercase tracking-wide
+        border transition-colors duration-150 cursor-pointer select-none
+        ${estilos[estadoEfetivo]}
+      `}
+    >
+      {label}
+    </button>
+  );
+}
