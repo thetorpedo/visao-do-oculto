@@ -9,13 +9,13 @@ import 'react-pdf/dist/Page/TextLayer.css';
 // Força o Vite a tratar o worker como um arquivo estático e gera a URL correta
 pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
 
-const FONTES_VISUAIS: Record<string, { url: string; offset: number }> = {
-  "OPRPG LUXO": { url: "/files/OPRPGLUXO.jpg", offset: 0 },
-  "HQ Iniciação": { url: "/files/INICIACAO.png", offset: 2 },
-  "HQ OSNF-1":   { url: "/files/OSNF1.png", offset: 2 },
-  "HQ OSNF-2":   { url: "/files/OSNF2.png", offset: 2 },
-  "HQ DESCONJ-1":{ url: "/files/DESCONJ1.png", offset: 2 },
-};
+// const FONTES_VISUAIS: Record<string, { url: string; offset: number }> = {
+//   "OPRPG LUXO": { url: "/files/OPRPGLUXO.jpg", offset: 0 },
+//   "HQ Iniciação": { url: "/files/INICIACAO.png", offset: 2 },
+//   "HQ OSNF-1":   { url: "/files/OSNF1.png", offset: 2 },
+//   "HQ OSNF-2":   { url: "/files/OSNF2.png", offset: 2 },
+//   "HQ DESCONJ-1":{ url: "/files/DESCONJ1.png", offset: 2 },
+// };
 
 import { useData } from '@/context/DataContext';
 
@@ -75,50 +75,50 @@ export default function DocumentReader({ fonteId, paginaImpressa, isOpen, onClos
   }, [isOpen, viewMode]);
 
   // Lógica de Cache
- useEffect(() => {
-  let urlCriadaNaMemoria: string | null = null;
+  useEffect(() => {
+    let urlCriadaNaMemoria: string | null = null;
 
-  if (!isOpen) return;
+    if (!isOpen) return;
 
-  const carregar = async () => {
+    const carregar = async () => {
 
-    // Fontes de dados — tenta IndexedDB, depois /files/, depois cache
-    const blobUrl = await getBlobUrlFonte(fonteId);
-    if (blobUrl) {
-      setPdfSource(blobUrl);
-      setIframeUrl(blobUrl);
-      urlCriadaNaMemoria = blobUrl;
-      return;
-    }
-
-    // Fallback: tenta Service Worker cache com URL estática
-    const urlEstatica = `/files/${fontes[fonteId]?.nomeArquivo ?? fonteId + ".pdf"}`;
-    try {
-      if ('caches' in window) {
-        const cache = await caches.open('visao-oculto-pdfs');
-        const cached = await cache.match(urlEstatica);
-        if (cached) {
-          const blob = await cached.blob();
-          urlCriadaNaMemoria = URL.createObjectURL(blob);
-          setPdfSource(blob);
-          setIframeUrl(urlCriadaNaMemoria);
-          return;
-        }
+      // Fontes de dados — tenta IndexedDB, depois /files/, depois cache
+      const blobUrl = await getBlobUrlFonte(fonteId);
+      if (blobUrl) {
+        setPdfSource(blobUrl);
+        setIframeUrl(blobUrl);
+        urlCriadaNaMemoria = blobUrl;
+        return;
       }
-    } catch (e) {
-      console.warn("Falha ao ler cache", e);
-    }
 
-    setPdfSource(urlEstatica);
-    setIframeUrl(urlEstatica);
-  };
+      // Fallback: tenta Service Worker cache com URL estática
+      const urlEstatica = `/files/${fontes[fonteId]?.nomeArquivo ?? fonteId + ".pdf"}`;
+      try {
+        if ('caches' in window) {
+          const cache = await caches.open('visao-oculto-pdfs');
+          const cached = await cache.match(urlEstatica);
+          if (cached) {
+            const blob = await cached.blob();
+            urlCriadaNaMemoria = URL.createObjectURL(blob);
+            setPdfSource(blob);
+            setIframeUrl(urlCriadaNaMemoria);
+            return;
+          }
+        }
+      } catch (e) {
+        console.warn("Falha ao ler cache", e);
+      }
 
-  carregar();
+      setPdfSource(urlEstatica);
+      setIframeUrl(urlEstatica);
+    };
 
-  return () => {
-    if (urlCriadaNaMemoria) URL.revokeObjectURL(urlCriadaNaMemoria);
-  };
-}, [isOpen, fonteId, fontes, getBlobUrlFonte]);
+    carregar();
+
+    return () => {
+      if (urlCriadaNaMemoria) URL.revokeObjectURL(urlCriadaNaMemoria);
+    };
+  }, [isOpen, fonteId, fontes, getBlobUrlFonte]);
 
   const handleClose = () => {
     setViewMode('single');

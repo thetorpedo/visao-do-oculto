@@ -163,7 +163,7 @@ function SecaoFontes() {
     const handleBaixarFonte = async (fonte: FonteConfig) => {
         if (!fonte.nomeArquivo) return;
         // Tenta IndexedDB primeiro
-        const { default: idb } = await import("@/context/DataContext").then(m => ({ default: m }));
+        // const { default: idb } = await import("@/context/DataContext").then(m => ({ default: m }));
         // Fallback direto pra URL estática
         const a = document.createElement("a");
         a.href = `/files/${fonte.nomeArquivo}`;
@@ -231,7 +231,7 @@ function SecaoFontes() {
                         )}
                     </div>
                     <div className="flex gap-2 shrink-0">
-                        
+
                         <button
                             onClick={() => { setEditando(fonte.id); setEditOffset(fonte.offset); }}
                             className="text-xs font-special uppercase cursor-pointer text-gray-600 hover:text-gray-900 border border-gray-300 px-2 py-0.5 hover:border-gray-600"
