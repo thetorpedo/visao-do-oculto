@@ -8,6 +8,7 @@ import { useFiltros, type ConfigFiltro } from "@/hooks/useFiltros";
 
 import { ChevronDown } from "lucide-react";
 import { useMemo, useState } from "react";
+import BotaoFavoritar from "@/components/BotaoFavoritar";
 
 const CONFIGS_FILTRO: ConfigFiltro[] = [
   {
@@ -170,16 +171,19 @@ export default function Trilhas() {
                 </div>
               </div>
 
-              <BookReference
-                fonte={trilha.fonteLivro}
-                pagina={trilha.fontePagina}
-                onOpenReader={() =>
-                  setLeitorAtivo({
-                    fonte: trilha.fonteLivro,
-                    pagina: parseInt(String(trilha.fontePagina)),
-                  })
-                }
-              />
+              <div className="border-t border-dashed border-gray-400 mt-5 pt-3 flex items-center justify-between ">
+                <BookReference
+                  fonte={trilha.fonteLivro}
+                  pagina={trilha.fontePagina}
+                  onOpenReader={() =>
+                    setLeitorAtivo({
+                      fonte: trilha.fonteLivro,
+                      pagina: parseInt(String(trilha.fontePagina)),
+                    })
+                  }
+                />
+                <BotaoFavoritar itemId={trilha.id} categoria="trilhas" />
+              </div>
             </div>
 
             <div className="absolute top-1/2 left-1/2 z-0 h-full w-full -translate-x-1/2 -translate-y-1/2 rotate-1 p-1 bg-[linear-gradient(rgba(139,139,139,0.4),rgba(139,139,139,0.2)),url(/assets/paper.png)] shadow-[0_0_15px_rgba(0,0,0,0.15)] bg-repeat bg-size-[30%]" />

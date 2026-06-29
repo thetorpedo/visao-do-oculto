@@ -12,14 +12,16 @@ const NAV_LINKS = [
   { to: "/equipamentos", label: "EQUIPAM.", z: "z-[5]", margin: "-ml-5" },
   { to: "/rituais", label: "RITUAIS", z: "z-[4]", margin: "-ml-5" },
   { to: "/regras", label: "REGRAS", z: "z-[3]", margin: "-ml-5" },
+  { to: "/fontes", label: "FONTES", z: "z-[2]", margin: "-ml-5" },
+  { to: "/favoritos", label: "FAVORITOS", z: "z-[1]", margin: "-ml-5" },
 ];
 
 export default function FolderLayout() {
   const location = useLocation();
   const isHome = location.pathname === "/";
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const TOP_ROW_LINKS = NAV_LINKS.slice(4, 7);
-  const BOTTOM_ROW_LINKS = NAV_LINKS.slice(0, 4);
+  const TOP_ROW_LINKS = NAV_LINKS.slice(5, 9);
+  const BOTTOM_ROW_LINKS = NAV_LINKS.slice(0, 5);
 
   useEffect(() => {
     document.body.style.overflow = isMobileMenuOpen ? 'hidden' : 'unset';

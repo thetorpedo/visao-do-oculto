@@ -11,6 +11,8 @@ import Configuracoes from './pages/Configuracoes';
 import TelaImportacao from './pages/TelaImportacao';
 import { useData } from './context/DataContext';
 import Regras from './pages/Regras';
+import Fontes from './pages/Fontes';
+import Favoritos from './pages/Favoritos';
 
 function AppRoutes() {
   const { status } = useData();
@@ -41,6 +43,8 @@ function AppRoutes() {
           <Route path="/rituais" element={<Rituais />} />
           <Route path="/regras" element={<Regras />} />
           <Route path="/configuracoes" element={<Configuracoes />} />
+          <Route path="/fontes" element={<Fontes />} />
+          <Route path="/favoritos" element={<Favoritos />} />
         </Route>
       </Routes>
       <GlobalSearch />

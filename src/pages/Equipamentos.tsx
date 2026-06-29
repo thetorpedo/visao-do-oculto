@@ -7,6 +7,7 @@ import { useData } from "@/context/DataContext";
 import { useFiltros, type ConfigFiltro } from "@/hooks/useFiltros";
 
 import { useMemo, useState } from "react";
+import BotaoFavoritar from "@/components/BotaoFavoritar";
 
 const LinhaStatus = ({ label, valor }: { label: string; valor: string | number | null | undefined }) => {
   if (valor === null || valor === undefined || valor === "") return null;
@@ -219,11 +220,15 @@ export default function Equipamentos() {
                   </div>
                 </div>
 
-                <BookReference
+                
+                <div className="border-t border-dashed border-gray-400 mt-5 pt-3 flex items-center justify-between ">
+                  <BookReference
                   fonte={equip.fonteLivro}
                   pagina={equip.fontePagina}
                   onOpenReader={() => setLeitorAtivo({ fonte: equip.fonteLivro, pagina: parseInt(String(equip.fontePagina)) })}
                 />
+                  <BotaoFavoritar itemId={equip.id} categoria="equipamentos" />
+                </div>
               </div>
 
               <div className="absolute top-1/2 left-1/2 z-0 h-full w-full -translate-x-1/2 -translate-y-1/2 rotate-1 p-1 bg-[linear-gradient(rgba(139,139,139,0.4),rgba(139,139,139,0.2)),url(/assets/paper.png)] shadow-[0_0_15px_rgba(0,0,0,0.15)] bg-repeat bg-size-[30%]" />

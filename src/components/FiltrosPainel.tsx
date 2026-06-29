@@ -112,8 +112,8 @@ export default function FiltrosPainel({
     totalItens,
 }: FiltrosPainelProps) {
     return (
-        <div className="relative">
-            <div className="relative p-6 z-10 shadow-2xl bg-[url(/assets/paper.png)] bg-repeat bg-size-[30%]">
+        <div className="relative ">
+            <div className="relative p-6 z-10 shadow-2xl bg-[linear-gradient(rgba(249,249,249,0.5),rgba(249,249,249,0.5)),url(/assets/paper.png)] bg-repeat bg-size-[30%]">
                 <div className="flex flex-col gap-4">
 
                     {/* Busca */}

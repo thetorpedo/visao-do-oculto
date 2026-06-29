@@ -8,7 +8,7 @@ interface BookReferenceProps {
 
 export default function BookReference({ fonte, pagina, onOpenReader }: BookReferenceProps) {
   return (
-    <div className="border-t border-dashed border-gray-400 mt-5 pt-3 flex items-center justify-between">
+    <div className=" flex items-center justify-between">
       <div className="text-xs text-gray-700 font-medium flex items-center">
         <BookMarked className="size-4 mr-1.5 opacity-80" />
         <button 

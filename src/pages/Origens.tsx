@@ -1,4 +1,5 @@
 import BookReference from "@/components/BookReference";
+import BotaoFavoritar from "@/components/BotaoFavoritar";
 import DocumentReader from "@/components/DocumentReader";
 import ExpandableText from "@/components/ExpandableText";
 import FiltrosPainel from "@/components/FiltrosPainel";
@@ -112,11 +113,14 @@ export default function Origens() {
                 </div>
               </div>
 
-              <BookReference
-                fonte={origem.fonteLivro}
-                pagina={origem.fontePagina}
-                onOpenReader={() => setLeitorAtivo({ fonte: origem.fonteLivro, pagina: parseInt(String(origem.fontePagina)) })}
-              />
+              <div className="border-t border-dashed border-gray-400 mt-5 pt-3 flex items-center justify-between ">
+                <BookReference
+                  fonte={origem.fonteLivro}
+                  pagina={origem.fontePagina}
+                  onOpenReader={() => setLeitorAtivo({ fonte: origem.fonteLivro, pagina: parseInt(String(origem.fontePagina)) })}
+                />
+                <BotaoFavoritar itemId={origem.id} categoria="origens" />
+              </div>
 
             </div>
             <div className="absolute top-1/2 left-1/2 z-0 h-full w-full -translate-x-1/2 -translate-y-1/2 -rotate-1 p-1 bg-[linear-gradient(rgba(139,139,139,0.4),rgba(139,139,139,0.2)),url(/assets/paper.png)] shadow-[0_0_15px_rgba(0,0,0,0.15)] bg-repeat bg-size-[30%]" />

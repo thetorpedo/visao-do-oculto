@@ -1,4 +1,5 @@
 import BookReference from "@/components/BookReference";
+import BotaoFavoritar from "@/components/BotaoFavoritar";
 import DocumentReader from "@/components/DocumentReader";
 import FiltrosPainel from "@/components/FiltrosPainel";
 import RegraRenderer from "@/components/RegraRenderer";
@@ -258,9 +259,13 @@ export default function Regras() {
                         <div className="relative h-full">
                             <div className="relative flex flex-col justify-between z-10 w-full p-5 h-full shadow-lg bg-[linear-gradient(rgba(249,249,249,0.5),rgba(249,249,249,0.5)),url(/assets/paper.png)] bg-repeat bg-size-[30%] border border-gray-300">
                                 <div className="mb-6 border-b border-gray-400 border-dashed pb-4">
-                                    <h2 className="text-3xl sm:text-4xl font-special text-gray-900 leading-tight mb-3">
-                                        {regraSelecionada.nome}
-                                    </h2>
+                                    <div className="flex justify-between items-center mb-3">
+                                        <h2 className="text-3xl sm:text-4xl font-special text-gray-900 leading-tight">
+                                            {regraSelecionada.nome}
+                                        </h2>
+                                        <BotaoFavoritar itemId={regraSelecionada.id} categoria="regras"/>    
+                                    </div>
+                                    
                                     <div className="flex flex-wrap gap-4 items-center justify-between">
                                         <div className="flex gap-2">
                                             {regraSelecionada.categoria.map((cat: string) => (
