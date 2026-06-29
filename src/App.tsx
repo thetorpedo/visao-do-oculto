@@ -44,7 +44,7 @@ function AppRoutes() {
           <Route path="/regras" element={<Regras />} />
           <Route path="/configuracoes" element={<Configuracoes />} />
           <Route path="/fontes" element={<Fontes />} />
-          <Route path="/favoritos" element={<Favoritos />} />
+          <Route path="/colecoes" element={<Favoritos />} />
         </Route>
       </Routes>
       <GlobalSearch />

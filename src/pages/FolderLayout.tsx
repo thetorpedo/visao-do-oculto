@@ -13,7 +13,7 @@ const NAV_LINKS = [
   { to: "/rituais", label: "RITUAIS", z: "z-[4]", margin: "-ml-5" },
   { to: "/regras", label: "REGRAS", z: "z-[3]", margin: "-ml-5" },
   { to: "/fontes", label: "FONTES", z: "z-[2]", margin: "-ml-5" },
-  { to: "/favoritos", label: "FAVORITOS", z: "z-[1]", margin: "-ml-5" },
+  { to: "/colecoes", label: "COLEÇÕES", z: "z-[1]", margin: "-ml-5" },
 ];
 
 export default function FolderLayout() {
@@ -92,7 +92,7 @@ export default function FolderLayout() {
                   key={link.to}
                   to={link.to}
                   className={({ isActive }) => `
-                    font-special bg-[url(/assets/folder.jpg)] bg-blend-overlay bg-size-[170%] w-60 -mt-8 rounded-t-lg flex justify-center items-start text-black/70 text-2xl pt-4 transition-all hover:-mt-12 hover:h-16 cursor-pointer shadow-[0_0_15px_rgba(0,0,0,0.35)] 
+                    font-special bg-[url(/assets/folder.jpg)] bg-blend-overlay bg-size-[170%] w-50 -mt-8 rounded-t-lg flex justify-center items-start text-black/70 text-2xl pt-4 transition-all hover:-mt-12 hover:h-16 cursor-pointer shadow-[0_0_15px_rgba(0,0,0,0.35)] 
                     ${link.z} ${link.margin} 
                     
                     ${isActive ? 'bg-[#837156] h-14 -mt-10 z-20! shadow-[0_0_20px_rgba(0,0,0,0.75)]' : 'bg-[#7a6a51] h-12 shadow-[0_0_20px_rgba(0,0,0,0.75)]'}
@@ -109,7 +109,7 @@ export default function FolderLayout() {
                     key={link.to}
                     to={link.to}
                     className={({ isActive }) => `
-                      font-special bg-[url(/assets/folder.jpg)] bg-blend-overlay bg-size-[170%] w-60 -mt-8 rounded-t-lg flex justify-center items-start text-black/70 text-2xl pt-4 transition-all hover:-mt-12 hover:h-16 cursor-pointer shadow-[0_0_15px_rgba(0,0,0,0.35)]
+                      font-special bg-[url(/assets/folder.jpg)] bg-blend-overlay bg-size-[170%] w-50 -mt-8 rounded-t-lg flex justify-center items-start text-black/70 text-2xl pt-4 transition-all hover:-mt-12 hover:h-16 cursor-pointer shadow-[0_0_15px_rgba(0,0,0,0.35)]
                       ${link.z} ${link.margin} 
                       /* Aqui você pode colocar estilos ESPECÍFICOS para a linha de cima, se quiser */
                       ${isActive ? 'bg-[#837156] h-14 -mt-10 shadow-[0_0_15px_rgba(0,0,0,0.35),0_0_20px_rgba(0,0,0,0.75)] z-20!' : 'bg-[#7a6a51] h-12 shadow-[inset_0_-2px_4px_rgba(0,0,0,0.35),0_0_20px_rgba(0,0,0,0.75)]'}

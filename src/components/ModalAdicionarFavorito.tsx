@@ -71,7 +71,7 @@ export default function ModalAdicionarFavorito({ itemId, categoria, onClose }: M
         {/* Cabeçalho */}
         <div className="flex items-center justify-between mb-4 border-b border-gray-400 border-dashed pb-2">
           <h3 className="text-xl font-special text-gray-900 uppercase tracking-wider">
-            {favoritoAtual ? "Editar Favorito" : "Salvar nos Favoritos"}
+            {favoritoAtual ? "Editar Item Salvo" : "Salvar em Coleção"}
           </h3>
           <button onClick={onClose} className="text-gray-600 hover:text-gray-900 transition-colors cursor-pointer">
             <X className="size-5" />
@@ -81,7 +81,7 @@ export default function ModalAdicionarFavorito({ itemId, categoria, onClose }: M
         {/* Lista de Grupos */}
         <div className="max-h-60 overflow-y-auto mb-4 space-y-2 custom-scrollbar pr-2">
           {grupos.length === 0 ? (
-            <p className="text-sm text-gray-500 italic text-center py-4">Nenhum grupo criado ainda.</p>
+            <p className="text-sm text-gray-500 italic text-center py-4">Nenhuma coleção criada ainda.</p>
           ) : (
             grupos.map((grupo) => {
               const isSelecionado = gruposSelecionados.includes(grupo.id);
@@ -107,7 +107,7 @@ export default function ModalAdicionarFavorito({ itemId, categoria, onClose }: M
         <div className="flex items-center gap-2 mb-6">
           <input
             type="text"
-            placeholder="Nome do novo grupo..."
+            placeholder="Nome da nova coleção..."
             className="flex-1 border-b-2 border-gray-400 bg-transparent px-2 py-1 text-sm outline-none focus:border-gray-900 transition-colors font-medium"
             value={novoGrupoNome}
             onChange={(e) => setNovoGrupoNome(e.target.value)}

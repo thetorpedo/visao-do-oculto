@@ -311,9 +311,9 @@ export default function Favoritos() {
           ) : (
             <button
               onClick={() => setCriandoGrupo(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white font-special uppercase text-sm tracking-wide shadow-[3px_3px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all cursor-pointer"
+              className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white font-special uppercase text-sm tracking-wide hover:bg-black/70 transition-all cursor-pointer"
             >
-              <Plus className="size-4" /> Novo Grupo
+              <Plus className="size-4" /> Nova Coleção
             </button>
           )}
         </div>
@@ -329,7 +329,7 @@ export default function Favoritos() {
           {grupos.map((grupo) => (
             <button
               key={grupo.id} onClick={() => setGrupoAtivo(grupo.id)}
-              className={`group flex items-center gap-2 px-4 py-1.5 font-bold text-sm uppercase tracking-wider cursor-pointer border-2 transition-colors ${grupoAtivo === grupo.id ? "border-gray-900 bg-gray-200 text-gray-900" : "border-transparent text-gray-600 hover:bg-gray-100"}`}
+              className={`group flex items-center gap-2 px-4 py-1.5 font-bold text-sm uppercase tracking-wider cursor-pointer border-2 transition-colors ${grupoAtivo === grupo.id ? "border-gray-900 bg-gray-200 text-gray-900" : "border-1! border-dashed text-gray-600 hover:bg-gray-100"}`}
             >
               {grupo.nome}
               <span
@@ -354,7 +354,7 @@ export default function Favoritos() {
               <div key={favorito.id} className="relative p-6 bg-[url(/assets/paper.png)] border border-red-300 shadow-md flex flex-col justify-between items-center text-center gap-4">
                 <Trash2 className="size-10 text-red-300 mb-2" />
                 <p className="font-special text-red-600 uppercase">Item não encontrado ou removido ({favorito.categoria})</p>
-                <button onClick={() => removerFavorito(favorito.id)} className="text-sm underline text-red-800 font-bold cursor-pointer">Limpar este favorito</button>
+                <button onClick={() => removerFavorito(favorito.id)} className="text-sm underline text-red-800 font-bold cursor-pointer">Remover este item</button>
               </div>
             );
           }
