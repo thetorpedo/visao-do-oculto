@@ -23,7 +23,7 @@ jobs:
         run: pnpm install
 
       - name: Build
-        run: pnpm build
+        run: pnpm build:publico
 
       - name: Deploy Firebase público
         uses: FirebaseExtended/action-deploy@v0
