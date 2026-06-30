@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:privado": "tsc -b && vite build --mode privado",
+    "build:publico": "tsc -b && vite build --mode publico",
     "lint": "eslint .",
     "preview": "vite preview"
   },
