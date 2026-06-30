@@ -27,7 +27,7 @@ function AppRoutes() {
     );
   }
 
-  if (status !== 'empty') {
+  if (status === 'empty') {
     return <TelaImportacao />;
   }
 
