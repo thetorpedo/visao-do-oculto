@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { useFavoritos } from "@/context/FavoritosContext";
 import { useData } from "@/context/DataContext";
-import { Plus, X, Search, Trash2, Meh, ChevronDown } from "lucide-react";
+import { Plus, X, Trash2, Meh, ChevronDown } from "lucide-react";
 import BookReference from "@/components/BookReference";
 import ExpandableText from "@/components/ExpandableText";
 import BotaoFavoritar from "@/components/BotaoFavoritar";

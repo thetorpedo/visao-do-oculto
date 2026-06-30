@@ -21,13 +21,13 @@ function AppRoutes() {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-[url(/assets/paper.png)] bg-repeat bg-size-[30%]">
         <p className="font-special text-2xl text-gray-700 animate-pulse tracking-widest uppercase">
-          Carregando registros...
+          Carregando, só um momento...
         </p>
       </div>
     );
   }
 
-  if (status === 'empty') {
+  if (status !== 'empty') {
     return <TelaImportacao />;
   }
 

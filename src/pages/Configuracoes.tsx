@@ -341,7 +341,7 @@ function SecaoFontes() {
 // Página principal
 // ─────────────────────────────────────────
 export default function Configuracoes() {
-    const { limparTudo, exportarPacote, poderes, rituais, equipamentos, origens, trilhas } = useData();
+    const { limparTudo, exportarPacote, poderes, rituais, equipamentos, origens, trilhas, importarJson } = useData();
     const [aba, setAba] = useState<"jsons" | "fontes">("jsons");
     const [confirmarLimpar, setConfirmarLimpar] = useState(false);
 
@@ -375,6 +375,23 @@ export default function Configuracoes() {
             {aba === "jsons" ? <SecaoJsons /> : <SecaoFontes />}
 
             <div className="pt-2 flex flex-wrap gap-3">
+                <label className="flex items-center cursor-pointer gap-2 px-4 py-2 text-sm font-special uppercase tracking-wide border-2 border-gray-800 bg-gray-900 text-white hover:bg-gray-800 transition-colors shadow-sm">
+                    <Upload className="size-4" />
+                    Importar JSON geral
+                    <input
+                        type="file"
+                        accept=".json"
+                        className="hidden"
+                        onChange={async e => {
+                            const arquivo = e.target.files?.[0];
+                            if (arquivo) {
+                                await importarJson(null, arquivo);
+                                alert("Pacote importado com sucesso!");
+                            }
+                            e.target.value = '';
+                        }}
+                    />
+                </label>
                 <button
                     onClick={exportarPacote}
                     className="flex items-center cursor-pointer gap-2 px-4 py-2 text-sm font-special uppercase tracking-wide border-2 border-gray-800 bg-white text-gray-800 hover:bg-gray-100"

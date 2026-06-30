@@ -372,10 +372,25 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     const getBlobUrlFonte = useCallback(async (id: string): Promise<string | null> => {
         const blob = await dbGet<Blob>("pdfs", id);
         if (blob) return URL.createObjectURL(blob);
-        // Fallback para arquivo estático se tiver nomeArquivo configurado
+
         const nomeArquivo = state.fontes[id]?.nomeArquivo;
-        if (nomeArquivo) return `/files/${nomeArquivo}`;
-        return null;
+        if (!nomeArquivo) return null;
+
+        const urlEstatica = `/files/${nomeArquivo}`;
+
+        if ('caches' in window) {
+            try {
+                const cache = await caches.open('visao-oculto-pdfs');
+                const cached = await cache.match(urlEstatica);
+                if (cached) {
+                    const blobCache = await cached.blob();
+                    return URL.createObjectURL(blobCache);
+                }
+            } catch {
+            }
+        }
+
+        return urlEstatica;
     }, [state.fontes]);
 
     // ── Limpar tudo ──

@@ -1,7 +1,7 @@
 import Logo from "@/components/logo";
 import { useData, type Categoria } from "@/context/DataContext";
 import { baixarTemplate } from "@/lib/templates";
-import { Download, FileJson, Upload } from "lucide-react";
+import { Download, FileJson, Upload, Package } from "lucide-react";
 import { useRef, useState } from "react";
 
 const CATEGORIAS: { id: Categoria; label: string; descricao: string }[] = [
@@ -18,14 +18,15 @@ export default function TelaImportacao() {
   const [carregando, setCarregando] = useState<string | null>(null);
   const inputRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
-  const handleArquivo = async (categoria: Categoria, arquivo: File) => {
-    setCarregando(categoria);
+  const handleArquivo = async (categoria: Categoria | null, arquivo: File) => {
+    const key = categoria || "pacote";
+    setCarregando(key);
     try {
       const resultado = await importarJson(categoria, arquivo);
-      setResultados(prev => ({ ...prev, [categoria]: resultado }));
+      setResultados(prev => ({ ...prev, [key]: resultado }));
     } catch (e) {
       console.error(e);
-      setResultados(prev => ({ ...prev, [categoria]: null }));
+      setResultados(prev => ({ ...prev, [key]: null }));
     } finally {
       setCarregando(null);
     }
@@ -57,17 +58,67 @@ export default function TelaImportacao() {
               <FileJson className="size-6 text-gray-700" />
               <div>
                 <h2 className="font-special text-xl text-gray-900 uppercase tracking-wide">Importar Dados</h2>
-                <p className="text-sm text-gray-600">Selecione os arquivos JSON para cada categoria.</p>
+                <p className="text-sm text-gray-600">Importe um JSON com todas as categorias ou individualmente.</p>
               </div>
             </div>
 
             <div className="flex flex-col gap-4">
+
+              {/* ─── IMPORTAÇÃO DE PACOTE COMPLETO ─── */}
+              <div className="border-2 border-gray-900 bg-gray-900 text-white p-4 shadow-[4px_4px_0px_rgba(0,0,0,0.3)]">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div className="min-w-0">
+                    <h3 className="font-special uppercase tracking-wide flex items-center gap-2 text-lg">
+                      <Package className="size-5" /> JSON completo
+                    </h3>
+                    <p className="text-xs text-gray-300 mt-1">
+                      Aceita múltiplas categorias em um arquivo.
+                    </p>
+                    {resultados["pacote"] && (
+                      <p className="text-xs mt-2 font-bold text-green-400">
+                        ✓ {resultados["pacote"].itens} itens restaurados no total
+                        {resultados["pacote"].erros > 0 && <span className="text-amber-400 ml-2">({resultados["pacote"].erros} com erro)</span>}
+                      </p>
+                    )}
+                  </div>
+                  <div className="shrink-0 w-full sm:w-auto">
+                    <input
+                      ref={el => { inputRefs.current["pacote"] = el; }}
+                      type="file"
+                      accept=".json"
+                      className="hidden"
+                      onChange={e => {
+                        const arquivo = e.target.files?.[0];
+                        if (arquivo) handleArquivo(null, arquivo); // Null = Auto-detect (Multi-categoria)
+                        e.target.value = "";
+                      }}
+                    />
+                    <button
+                      onClick={() => inputRefs.current["pacote"]?.click()}
+                      disabled={carregando === "pacote"}
+                      className="w-full flex justify-center items-center cursor-pointer gap-2 px-4 py-2 text-sm font-special uppercase tracking-wide border-2 border-white bg-white text-gray-900 hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-wait"
+                    >
+                      <Upload className="size-4" />
+                      {carregando === "pacote" ? "Lendo..." : "Selecionar"}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Divisor Visual */}
+              <div className="flex items-center gap-4 my-2 opacity-50">
+                <div className="h-px bg-gray-800 flex-1 border-b border-dashed border-gray-400"></div>
+                <span className="font-special text-xs uppercase text-gray-700 tracking-widest">OU INDIVIDUALMENTE</span>
+                <div className="h-px bg-gray-800 flex-1 border-b border-dashed border-gray-400"></div>
+              </div>
+
+              {/* ─── IMPORTAÇÃO POR CATEGORIAS ─── */}
               {CATEGORIAS.map(cat => {
                 const resultado = resultados[cat.id];
                 const estaCarregando = carregando === cat.id;
 
                 return (
-                  <div key={cat.id} className="flex items-center justify-between gap-4 border border-dashed border-gray-400 bg-white/40 p-3">
+                  <div key={cat.id} className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border border-dashed border-gray-400 bg-white/40 p-3">
                     <div className="min-w-0">
                       <p className="font-special uppercase tracking-wide text-gray-900">{cat.label}</p>
                       <p className="text-xs text-gray-500">{cat.descricao}</p>
@@ -79,7 +130,7 @@ export default function TelaImportacao() {
                       )}
                     </div>
 
-                    <div className="shrink-0">
+                    <div className="shrink-0 flex w-full sm:w-auto gap-2">
                       <input
                         ref={el => { inputRefs.current[cat.id] = el; }}
                         type="file"
@@ -88,21 +139,22 @@ export default function TelaImportacao() {
                         onChange={e => {
                           const arquivo = e.target.files?.[0];
                           if (arquivo) handleArquivo(cat.id, arquivo);
+                          e.target.value = "";
                         }}
                       />
                       <button
                         onClick={() => inputRefs.current[cat.id]?.click()}
                         disabled={estaCarregando}
-                        className={`flex items-center gap-2 px-3 py-1.5 text-sm font-special uppercase tracking-wide border-2 transition-colors ${resultado
+                        className={`flex flex-1 justify-center items-center cursor-pointer gap-2 px-3 py-1.5 text-sm font-special uppercase tracking-wide border-2 transition-colors ${resultado
                           ? "border-green-700 bg-green-100 text-green-800 hover:bg-green-200"
                           : "border-gray-800 bg-gray-800 text-white hover:bg-gray-700"
                           } disabled:opacity-50 disabled:cursor-wait`}
                       >
                         <Upload className="size-3.5" />
-                        {estaCarregando ? "Carregando..." : resultado ? "Trocar" : "Selecionar"}
+                        {estaCarregando ? "Lendo..." : resultado ? "Trocar" : "Selecionar"}
                       </button>
                       <button onClick={() => baixarTemplate(cat.id)}
-                        className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-special uppercase border-2 border-gray-400 text-gray-600 hover:bg-gray-100">
+                        className="flex items-center justify-center cursor-pointer gap-1.5 px-3 py-1.5 text-xs font-special uppercase border-2 border-gray-400 text-gray-600 hover:bg-gray-100">
                         <Download className="size-3.5" /> Template
                       </button>
                     </div>
