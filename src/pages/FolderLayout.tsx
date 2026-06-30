@@ -1,5 +1,5 @@
-import PaperStamp from "@/components/PaperStamp";
-import SigilRain from "@/components/SigilRain";
+import PaperStamp from "@/components/paper-stamp";
+import SigilRain from "@/components/sigil-rain";
 import { Menu, Search, Settings, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";

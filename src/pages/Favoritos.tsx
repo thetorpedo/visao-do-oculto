@@ -2,11 +2,11 @@ import { useState, useMemo } from "react";
 import { useFavoritos } from "@/context/FavoritosContext";
 import { useData } from "@/context/DataContext";
 import { Plus, X, Trash2, Meh, ChevronDown } from "lucide-react";
-import BookReference from "@/components/BookReference";
-import ExpandableText from "@/components/ExpandableText";
-import BotaoFavoritar from "@/components/BotaoFavoritar";
-import DocumentReader from "@/components/DocumentReader";
-import RegraRenderer from "@/components/RegraRenderer";
+import Source from "@/components/source";
+import ExpandableText from "@/components/expandable-text";
+import SaveButton from "@/components/save-button";
+import DocumentReader from "@/components/document-reader";
+import RulesRenderer from "@/components/rules-renderer";
 import { CategoriaFavoritavel } from "@/lib/favoritos";
 import { corElemento, estiloBadgeTipo } from "@/utils/badgeUtils";
 
@@ -79,7 +79,7 @@ function RegraExpandivel({ content }: { content: string }) {
   return (
     <div className="relative">
       <div className={`transition-all duration-300 ${expandido ? "max-h-none" : "max-h-[250px] overflow-hidden"}`}>
-        <RegraRenderer content={content} />
+        <RulesRenderer content={content} />
       </div>
       <button
         onClick={() => setExpandido(!expandido)}
@@ -377,12 +377,12 @@ export default function Favoritos() {
                 </div>
 
                 <div className="flex items-center justify-between pt-2 mt-4 border-t border-dashed border-gray-400">
-                  <BookReference
+                  <Source
                     fonte={item.fonteLivro || item.fonte}
                     pagina={item.fontePagina || item.pag}
                     onOpenReader={() => setLeitorAtivo({ fonte: item.fonteLivro || item.fonte, pagina: parseInt(String(item.fontePagina || item.pag)) })}
                   />
-                  <BotaoFavoritar itemId={item.id} categoria={favorito.categoria} />
+                  <SaveButton itemId={item.id} categoria={favorito.categoria} />
                 </div>
 
               </div>

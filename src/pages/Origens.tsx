@@ -1,8 +1,8 @@
-import BookReference from "@/components/BookReference";
-import BotaoFavoritar from "@/components/BotaoFavoritar";
-import DocumentReader from "@/components/DocumentReader";
-import ExpandableText from "@/components/ExpandableText";
-import FiltrosPainel from "@/components/FiltrosPainel";
+import Source from "@/components/source";
+import SaveButton from "@/components/save-button";
+import DocumentReader from "@/components/document-reader";
+import ExpandableText from "@/components/expandable-text";
+import FilterPanel from "@/components/filter-panel";
 import { useData } from "@/context/DataContext";
 import { useFiltros, type ConfigFiltro } from "@/hooks/useFiltros";
 
@@ -72,7 +72,7 @@ export default function Origens() {
         onClose={() => setLeitorAtivo(null)}
       />
 
-      <FiltrosPainel
+      <FilterPanel
         busca={busca}
         setBusca={setBusca}
         placeholder={`Buscando entre ${origensOrdenadas.length} origens...`}
@@ -114,12 +114,12 @@ export default function Origens() {
               </div>
 
               <div className="border-t border-dashed border-gray-400 mt-5 pt-3 flex items-center justify-between ">
-                <BookReference
+                <Source
                   fonte={origem.fonteLivro}
                   pagina={origem.fontePagina}
                   onOpenReader={() => setLeitorAtivo({ fonte: origem.fonteLivro, pagina: parseInt(String(origem.fontePagina)) })}
                 />
-                <BotaoFavoritar itemId={origem.id} categoria="origens" />
+                <SaveButton itemId={origem.id} categoria="origens" />
               </div>
 
             </div>

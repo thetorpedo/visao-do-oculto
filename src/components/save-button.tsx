@@ -2,14 +2,14 @@ import { Bookmark } from "lucide-react";
 import { useState } from "react";
 import { useFavoritos } from "@/context/FavoritosContext";
 import { CategoriaFavoritavel } from "@/lib/favoritos";
-import ModalAdicionarFavorito from "./ModalAdicionarFavorito";
+import SaveModal from "./save-modal.tsx";
 
 interface BotaoFavoritarProps {
   itemId: string;
   categoria: CategoriaFavoritavel;
 }
 
-export default function BotaoFavoritar({ itemId, categoria }: BotaoFavoritarProps) {
+export default function SaveButton({ itemId, categoria }: BotaoFavoritarProps) {
   const { isFavoritado } = useFavoritos();
   const [modalAberto, setModalAberto] = useState(false);
 
@@ -31,7 +31,7 @@ export default function BotaoFavoritar({ itemId, categoria }: BotaoFavoritarProp
 
       {/* O modal só é renderizado quando o botão é clicado */}
       {modalAberto && (
-        <ModalAdicionarFavorito
+        <SaveModal
           itemId={itemId}
           categoria={categoria}
           onClose={() => setModalAberto(false)}

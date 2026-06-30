@@ -1,7 +1,7 @@
 import { CheckCircle, Download, Loader2, FileDown } from "lucide-react";
 import { useEffect, useState } from "react";
 
-export default function OfflineDownloader({ pdfsParaBaixar }: { pdfsParaBaixar: string[] }) {
+export default function CacheDownloader({ pdfsParaBaixar }: { pdfsParaBaixar: string[] }) {
   const [isDownloading, setIsDownloading] = useState(false);
   const [isCached, setIsCached] = useState(false);
 

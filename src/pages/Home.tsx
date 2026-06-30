@@ -1,6 +1,6 @@
 import Logo from "@/components/logo";
-import OfflineDownloader from "@/components/OfflineDownloader";
-import InfoPanel from "@/components/InfoPanel";
+import CacheDownloader from "@/components/cache-downloader";
+import InfoPanel from "@/components/info-panel";
 import { useData } from "@/context/DataContext";
 import { Search } from "lucide-react";
 
@@ -49,7 +49,7 @@ export default function Home() {
         <div className="w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
 
           {pdfsParaBaixar.length > 0 && (
-            <OfflineDownloader pdfsParaBaixar={pdfsParaBaixar} />
+            <CacheDownloader pdfsParaBaixar={pdfsParaBaixar} />
           )}
 
           <InfoPanel title="Lista de Atualizações">

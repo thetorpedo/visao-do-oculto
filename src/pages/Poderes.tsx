@@ -1,13 +1,13 @@
-import BookReference from "@/components/BookReference";
-import DocumentReader from "@/components/DocumentReader";
-import ExpandableText from "@/components/ExpandableText";
-import FiltrosPainel from "@/components/FiltrosPainel";
+import Source from "@/components/source";
+import DocumentReader from "@/components/document-reader";
+import ExpandableText from "@/components/expandable-text";
+import FilterPanel from "@/components/filter-panel";
 import { corElemento, estiloBadgeTipo } from "@/utils/badgeUtils";
 import { useData } from "@/context/DataContext";
 import { useFiltros, type ConfigFiltro } from "@/hooks/useFiltros";
 
 import { useMemo, useState } from "react";
-import BotaoFavoritar from "@/components/BotaoFavoritar";
+import SaveButton from "@/components/save-button";
 
 const CONFIGS_FILTRO: ConfigFiltro[] = [
   {
@@ -77,7 +77,7 @@ export default function Poderes() {
         onClose={() => setLeitorAtivo(null)}
       />
 
-      <FiltrosPainel
+      <FilterPanel
         busca={busca}
         setBusca={setBusca}
         placeholder={`Buscando entre ${poderesOrdenados.length} poderes...`}
@@ -135,12 +135,12 @@ export default function Poderes() {
 
 
               <div className="border-t border-dashed border-gray-400 mt-5 pt-3 flex items-center justify-between ">
-                <BookReference
+                <Source
                   fonte={poder.fonteLivro}
                   pagina={poder.fontePagina}
                   onOpenReader={() => setLeitorAtivo({ fonte: poder.fonteLivro, pagina: parseInt(String(poder.fontePagina)) })}
                 />
-                <BotaoFavoritar itemId={poder.id} categoria="poderes" />
+                <SaveButton itemId={poder.id} categoria="poderes" />
               </div>
 
             </div>

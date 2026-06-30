@@ -2,7 +2,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 
-export default function RegraRenderer({ content }: { content: string }) {
+export default function RulesRenderer({ content }: { content: string }) {
   return (
     <div className="text-black prose prose-sm md:prose-base max-w-none 
 

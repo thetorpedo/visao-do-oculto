@@ -1,13 +1,13 @@
-import BookReference from "@/components/BookReference";
-import DocumentReader from "@/components/DocumentReader";
-import ExpandableText from "@/components/ExpandableText";
-import FiltrosPainel from "@/components/FiltrosPainel";
+import Source from "@/components/source";
+import DocumentReader from "@/components/document-reader";
+import ExpandableText from "@/components/expandable-text";
+import FilterPanel from "@/components/filter-panel";
 import { corElemento, estiloBadgeTipo } from "@/utils/badgeUtils";
 import { useData } from "@/context/DataContext";
 import { useFiltros, type ConfigFiltro } from "@/hooks/useFiltros";
 
 import { useMemo, useState } from "react";
-import BotaoFavoritar from "@/components/BotaoFavoritar";
+import SaveButton from "@/components/save-button";
 
 const LinhaStatus = ({ label, valor }: { label: string; valor: string | number | null | undefined }) => {
   if (valor === null || valor === undefined || valor === "") return null;
@@ -126,7 +126,7 @@ export default function Equipamentos() {
             </div>
 
             {/* Painel Unificado de Filtros */}
-            <FiltrosPainel
+            <FilterPanel
               busca={busca}
               setBusca={setBusca}
               placeholder={`Buscando entre ${equipamentosOrdenados.length} itens...`}
@@ -220,14 +220,14 @@ export default function Equipamentos() {
                   </div>
                 </div>
 
-                
+
                 <div className="border-t border-dashed border-gray-400 mt-5 pt-3 flex items-center justify-between ">
-                  <BookReference
-                  fonte={equip.fonteLivro}
-                  pagina={equip.fontePagina}
-                  onOpenReader={() => setLeitorAtivo({ fonte: equip.fonteLivro, pagina: parseInt(String(equip.fontePagina)) })}
-                />
-                  <BotaoFavoritar itemId={equip.id} categoria="equipamentos" />
+                  <Source
+                    fonte={equip.fonteLivro}
+                    pagina={equip.fontePagina}
+                    onOpenReader={() => setLeitorAtivo({ fonte: equip.fonteLivro, pagina: parseInt(String(equip.fontePagina)) })}
+                  />
+                  <SaveButton itemId={equip.id} categoria="equipamentos" />
                 </div>
               </div>
 

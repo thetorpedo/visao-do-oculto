@@ -1,14 +1,14 @@
-import BookReference from "@/components/BookReference";
-import DocumentReader from "@/components/DocumentReader";
-import ExpandableText from "@/components/ExpandableText";
-import FiltrosPainel from "@/components/FiltrosPainel";
+import Source from "@/components/source";
+import DocumentReader from "@/components/document-reader";
+import ExpandableText from "@/components/expandable-text";
+import FilterPanel from "@/components/filter-panel";
 import { estiloBadgeTipo } from "@/utils/badgeUtils";
 import { useData } from "@/context/DataContext";
 import { useFiltros, type ConfigFiltro } from "@/hooks/useFiltros";
 
 import { ChevronDown } from "lucide-react";
 import { useMemo, useState } from "react";
-import BotaoFavoritar from "@/components/BotaoFavoritar";
+import SaveButton from "@/components/save-button";
 
 const CONFIGS_FILTRO: ConfigFiltro[] = [
   {
@@ -108,7 +108,7 @@ export default function Trilhas() {
         onClose={() => setLeitorAtivo(null)}
       />
 
-      <FiltrosPainel
+      <FilterPanel
         busca={busca}
         setBusca={setBusca}
         placeholder={`Buscando entre ${trilhasOrdenadas.length} trilhas...`}
@@ -172,7 +172,7 @@ export default function Trilhas() {
               </div>
 
               <div className="border-t border-dashed border-gray-400 mt-5 pt-3 flex items-center justify-between ">
-                <BookReference
+                <Source
                   fonte={trilha.fonteLivro}
                   pagina={trilha.fontePagina}
                   onOpenReader={() =>
@@ -182,7 +182,7 @@ export default function Trilhas() {
                     })
                   }
                 />
-                <BotaoFavoritar itemId={trilha.id} categoria="trilhas" />
+                <SaveButton itemId={trilha.id} categoria="trilhas" />
               </div>
             </div>
 

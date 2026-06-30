@@ -5,7 +5,7 @@ import Home from './pages/Home';
 import Origens from './pages/Origens';
 import Poderes from './pages/Poderes';
 import Trilhas from './pages/Trilhas';
-import GlobalSearch from './components/GlobalSearch';
+import GlobalSearch from './components/global-search';
 import Rituais from './pages/Rituais';
 import Configuracoes from './pages/Configuracoes';
 import TelaImportacao from './pages/TelaImportacao';

@@ -10,7 +10,7 @@ interface ModalAdicionarFavoritoProps {
   onClose: () => void;
 }
 
-export default function ModalAdicionarFavorito({ itemId, categoria, onClose }: ModalAdicionarFavoritoProps) {
+export default function SaveModal({ itemId, categoria, onClose }: ModalAdicionarFavoritoProps) {
   const {
     grupos,
     getFavoritoDeItem,
@@ -67,7 +67,7 @@ export default function ModalAdicionarFavorito({ itemId, categoria, onClose }: M
   return createPortal(
     <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
       <div className="relative w-full max-w-md p-6 bg-[url(/assets/paper.png)] bg-repeat bg-size-[30%] shadow-2xl border border-gray-400">
-        
+
         {/* Cabeçalho */}
         <div className="flex items-center justify-between mb-4 border-b border-gray-400 border-dashed pb-2">
           <h3 className="text-xl font-special text-gray-900 uppercase tracking-wider">
@@ -89,11 +89,10 @@ export default function ModalAdicionarFavorito({ itemId, categoria, onClose }: M
                 <button
                   key={grupo.id}
                   onClick={() => handleToggleGrupo(grupo.id)}
-                  className={`w-full flex items-center justify-between p-2 border-2 text-left transition-colors cursor-pointer ${
-                    isSelecionado
+                  className={`w-full flex items-center justify-between p-2 border-2 text-left transition-colors cursor-pointer ${isSelecionado
                       ? "border-gray-900 bg-gray-200"
                       : "border-transparent hover:bg-gray-100"
-                  }`}
+                    }`}
                 >
                   <span className="font-bold text-gray-800 text-sm">{grupo.nome}</span>
                   {isSelecionado && <Check className="size-4 text-gray-900" />}
@@ -130,7 +129,7 @@ export default function ModalAdicionarFavorito({ itemId, categoria, onClose }: M
           >
             Salvar Alterações
           </button>
-          
+
           {favoritoAtual && (
             <button
               onClick={handleRemover}

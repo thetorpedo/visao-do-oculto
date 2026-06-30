@@ -1,4 +1,4 @@
-import FilterButton from "@/components/FilterButton";
+import FilterButton from "@/components/filter-button";
 import { Search, X, ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
 import type { ConfigFiltro, EstadoFiltro, OperadorFiltro } from "@/hooks/useFiltros";
@@ -98,7 +98,7 @@ function LinhaFiltroExpansivel({
     );
 }
 
-export default function FiltrosPainel({
+export default function FilterPanel({
     busca,
     setBusca,
     placeholder,

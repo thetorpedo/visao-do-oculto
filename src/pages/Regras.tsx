@@ -1,8 +1,8 @@
-import BookReference from "@/components/BookReference";
-import BotaoFavoritar from "@/components/BotaoFavoritar";
-import DocumentReader from "@/components/DocumentReader";
-import FiltrosPainel from "@/components/FiltrosPainel";
-import RegraRenderer from "@/components/RegraRenderer";
+import Source from "@/components/source";
+import SaveButton from "@/components/save-button";
+import DocumentReader from "@/components/document-reader";
+import FilterPanel from "@/components/filter-panel";
+import RulesRenderer from "@/components/rules-renderer";
 import { useData } from "@/context/DataContext";
 import { useFiltros, type ConfigFiltro } from "@/hooks/useFiltros";
 import Fuse from "fuse.js";
@@ -161,7 +161,7 @@ export default function Regras() {
                 onClose={() => setLeitorAtivo(null)}
             />
 
-            <FiltrosPainel
+            <FilterPanel
                 busca={busca}
                 setBusca={setBusca}
                 placeholder={`Procurar nas ${regrasOrdenadas.length} regras...`}
@@ -263,9 +263,9 @@ export default function Regras() {
                                         <h2 className="text-3xl sm:text-4xl font-special text-gray-900 leading-tight">
                                             {regraSelecionada.nome}
                                         </h2>
-                                        <BotaoFavoritar itemId={regraSelecionada.id} categoria="regras"/>    
+                                        <SaveButton itemId={regraSelecionada.id} categoria="regras" />
                                     </div>
-                                    
+
                                     <div className="flex flex-wrap gap-4 items-center justify-between">
                                         <div className="flex gap-2">
                                             {regraSelecionada.categoria.map((cat: string) => (
@@ -275,7 +275,7 @@ export default function Regras() {
                                             ))}
                                         </div>
                                         <div className="shrink-0 [&>div]:mt-0 [&>div]:pt-0 [&>div]:border-none">
-                                            <BookReference
+                                            <Source
                                                 fonte={regraSelecionada.fonteLivro}
                                                 pagina={regraSelecionada.fontePagina}
                                                 onOpenReader={() =>
@@ -289,7 +289,7 @@ export default function Regras() {
                                     </div>
                                 </div>
                                 <div className="flex-1 mb-8 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-slate-900/60 scrollbar-track-slate-500/10">
-                                    <RegraRenderer content={descricaoComDestaquesMarkdown} />
+                                    <RulesRenderer content={descricaoComDestaquesMarkdown} />
                                 </div>
                             </div>
                             <div className="absolute top-1/2 left-1/2 -z-10 h-full w-full -translate-x-1/2 -translate-y-1/2 -rotate-1 p-1 bg-[linear-gradient(rgba(139,139,139,0.3),rgba(139,139,139,0.1)),url(/assets/paper.png)] shadow-[0_0_15px_rgba(0,0,0,0.1)] bg-repeat bg-size-[30%]" />
