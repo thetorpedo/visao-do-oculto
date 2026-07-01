@@ -1,0 +1,160 @@
+@import url('https://fonts.googleapis.com/css2?family=Nothing+You+Could+Do&family=Protest+Revolution&family=Road+Rage&family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&family=Special+Elite&family=Spectral+SC:ital,wght@0,200;1,800&display=swap');
+
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@plugin "@tailwindcss/typography";
+
+
+@font-face {
+  font-family: 'estrangeiro';
+  src: url('fonts/estrangeiro-regular.ttf-webfont.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'westsacregular';
+  src: url('/fonts/westsac-webfont.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'special_eliteregular';
+  src: url('/fonts/specialelite-regular-webfont.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'sigilos_do_outro_ladoregular';
+  src: url('/fonts/sigilosdooutrolado-regular-webfont.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'optimanormal';
+  src: url('/fonts/optima-webfont.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'optimabold';
+  src: url('/fonts/optima_b-webfont.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'gabriele_bad_ahregular';
+  src: url('/fonts/gabriele-bad-webfont.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'daisywheelregular';
+  src: url('/fonts/daisywhl-webfont.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'blurlight';
+  src: url('/fonts/blur_light_regular-webfont.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'reappeatregular';
+  src: url('/fonts/reappeat-webfont.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'nightmare_5regular';
+  src: url('/fonts/nightmare_5-webfont.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'keyesregular';
+  src: url('/fonts/keyes-webfont.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'fluoxetineregular';
+  src: url('/fonts/fluox___-webfont.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'fsteinregular';
+  src: url('/fonts/f-stein_-webfont.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'cf_crack_and_boldregular';
+  src: url('/fonts/cfcrackandbold-webfont.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: '215000eregular';
+  src: url('/fonts/215000e-webfont.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+/* 3. Configuração do Tema */
+@theme {
+  --font-sans: "Source Serif 4", serif;
+  --font-special: "special_eliteregular", sans-serif;
+
+  --font-west: "westsacregular", sans-serif;
+  --font-optima: "optimanormal", sans-serif;
+  --font-optima-bold: "optimabold", sans-serif;
+  --font-sigilos: "sigilos_do_outro_ladoregular";
+  --font-estrangeiro: "estrangeiro";
+  --font-blur: "blurlight";
+  --font-nightmare: "nightmare_5regular", serif;
+  --font-crack: "cf_crack_and_boldregular", sans-serif;
+  --font-fluoxetine: "fluoxetineregular", sans-serif;
+  --font-reappeat: "reappeatregular", sans-serif;
+  --font-keyes: "keyesregular", sans-serif;
+  --font-fstein: "fsteinregular", serif;
+  --font-daisy: "daisywheelregular", sans-serif;
+  --font-typewriter-bad: "gabriele_bad_ahregular", monospace;
+  --font-tech: "215000eregular", sans-serif;
+
+  --font-spectral: "Spectral SC", serif;
+  --font-rage: "Road Rage", cursive;
+  --font-protest: "Protest Revolution", sans-serif;
+  --font-handwriting: "Nothing You Could Do", cursive;
+}
+
+.folha-rpg {
+  position: relative;
+  background: white;
+  /* ou sua imagem de papel */
+  box-shadow:
+    2px 2px 0px #7a6a51,
+    /* Primeira camada */
+    -2px 4px 0px #6d5d44,
+    /* Segunda camada (levemente deslocada) */
+    5px 10px 15px rgba(0, 0, 0, 0.3);
+  /* Sombra real */
+}
