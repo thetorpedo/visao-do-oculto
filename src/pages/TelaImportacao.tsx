@@ -45,7 +45,7 @@ export default function TelaImportacao() {
             ))}
           </h1>
           <p className="font-special text-gray-600 text-sm tracking-wide mt-4">
-            O Visão do Oculto não disponibiliza nenhum conteúdo, <br />apenas oferece acesso facilitado aos dados que você inserir.<br />Importe os arquivos JSON de cada categoria, ou um pacote completo, para começar a usar o site.
+            O Visão do Oculto não disponibiliza nenhum conteúdo, <br />apenas oferece acesso facilitado aos dados que você inserir.<br />Importe os arquivos JSON de cada categoria, ou um pacote completo, <br />para começar a usar o site.
           </p>
         </div>
 
