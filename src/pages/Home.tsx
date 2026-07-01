@@ -3,6 +3,7 @@ import CacheDownloader from "@/components/cache-downloader";
 import InfoPanel from "@/components/info-panel";
 import { useData } from "@/context/DataContext";
 import { ExternalLink, Search } from "lucide-react";
+import GuideDropdown from "@/components/guide-dropdown";
 
 export default function Home() {
   const { poderes, rituais, equipamentos, origens, trilhas, fontes } = useData();
@@ -47,6 +48,10 @@ export default function Home() {
         </div>
 
         <div className="w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+
+          <div className="md:col-span-2">
+            <GuideDropdown />
+          </div>
 
           {pdfsParaBaixar.length > 0 && (
             <CacheDownloader pdfsParaBaixar={pdfsParaBaixar} />
