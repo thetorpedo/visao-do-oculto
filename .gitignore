@@ -28,3 +28,4 @@ dist-ssr
 /public/files/
 
 .firebase
+pnpm-workspace.yaml
