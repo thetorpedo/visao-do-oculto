@@ -2,7 +2,7 @@ import Logo from "@/components/logo";
 import CacheDownloader from "@/components/cache-downloader";
 import InfoPanel from "@/components/info-panel";
 import { useData } from "@/context/DataContext";
-import { Search } from "lucide-react";
+import { ExternalLink, Search } from "lucide-react";
 
 export default function Home() {
   const { poderes, rituais, equipamentos, origens, trilhas, fontes } = useData();
@@ -87,6 +87,12 @@ export default function Home() {
             <br />O Visão do Oculto foi desenvolvido para servir como um meio de consulta rápida para materiais e produtos que você já possui.
             <br />Este projeto não substitui a compra dos livros oficiais e não tem qualquer vínculo comercial com a Jambô Editora.
           </p>
+          <footer className="text-xs text-center py-4 opacity-60 font-special tracking-wide ">
+            <a href="https://github.com/thetorpedo/visao-do-oculto" target="_blank" rel="noopener noreferrer" >
+              <ExternalLink className="inline-block mr-2 size-4 -mt-2" />
+              [REPOSITÓRIO DO PROJETO NO GITHUB]
+            </a>
+          </footer>
         </div>
 
       </div>
