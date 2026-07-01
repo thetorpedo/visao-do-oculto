@@ -69,10 +69,10 @@ export default function Fontes() {
         <div className="space-y-6 flex-1 pb-10">
           <div className="relative p-6 bg-[url(/assets/paper.png)] bg-repeat bg-size-[30%] shadow-lg border border-gray-400">
             <h2 className="text-3xl sm:text-4xl font-special text-gray-900 leading-tight mb-2">
-              Biblioteca
+              Fontes
             </h2>
             <p className="text-gray-700 max-w-3xl">
-              Navegue diretamente pelos livros de regras, suplementos e quadrinhos.<br />Se estiver usando celular, talvez seu navegador não suporte a leitura de PDFs diretamente no site.
+              Navegue diretamente pelos arquivos de fonte.<br />Se estiver usando celular, talvez seu navegador não suporte a leitura de PDFs diretamente no site.
             </p>
           </div>
 
