@@ -6,16 +6,7 @@ import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 
-// Força o Vite a tratar o worker como um arquivo estático e gera a URL correta
 pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
-
-// const FONTES_VISUAIS: Record<string, { url: string; offset: number }> = {
-//   "OPRPG LUXO": { url: "/files/OPRPGLUXO.jpg", offset: 0 },
-//   "HQ Iniciação": { url: "/files/INICIACAO.png", offset: 2 },
-//   "HQ OSNF-1":   { url: "/files/OSNF1.png", offset: 2 },
-//   "HQ OSNF-2":   { url: "/files/OSNF2.png", offset: 2 },
-//   "HQ DESCONJ-1":{ url: "/files/DESCONJ1.png", offset: 2 },
-// };
 
 import { useData } from '@/context/DataContext';
 
@@ -32,7 +23,6 @@ export default function DocumentReader({ fonteId, paginaImpressa, isOpen, onClos
   const [iframeUrl, setIframeUrl] = useState<string>("");
   const [mounted, setMounted] = useState(false);
 
-  // Ref para calcular a largura disponível da tela
   const containerRef = useRef<HTMLDivElement>(null);
   const [pdfWidth, setPdfWidth] = useState(850);
   const { fontes, getBlobUrlFonte } = useData();
@@ -42,12 +32,10 @@ export default function DocumentReader({ fonteId, paginaImpressa, isOpen, onClos
   const offsetFonte = fonte?.offset ?? 0;
   const paginaReal = !isImage ? Number(paginaImpressa) + offsetFonte : 0;
 
-  // Garante que o Portal só renderize no lado do cliente
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Trava o scroll do fundo quando o leitor está aberto
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -57,14 +45,12 @@ export default function DocumentReader({ fonteId, paginaImpressa, isOpen, onClos
     return () => { document.body.style.overflow = 'unset'; };
   }, [isOpen]);
 
-  // Lógica de Responsividade do PDF
   useEffect(() => {
     if (!isOpen) return;
 
     const updateWidth = () => {
       if (containerRef.current) {
         const containerWidth = containerRef.current.clientWidth;
-        // No mobile usa a largura total, no desktop trava em 850px
         setPdfWidth(Math.min(containerWidth, 850));
       }
     };
@@ -74,7 +60,6 @@ export default function DocumentReader({ fonteId, paginaImpressa, isOpen, onClos
     return () => window.removeEventListener('resize', updateWidth);
   }, [isOpen, viewMode]);
 
-  // Lógica de Cache
   useEffect(() => {
     let urlCriadaNaMemoria: string | null = null;
 
@@ -82,7 +67,6 @@ export default function DocumentReader({ fonteId, paginaImpressa, isOpen, onClos
 
     const carregar = async () => {
 
-      // Fontes de dados — tenta IndexedDB, depois /files/, depois cache
       const blobUrl = await getBlobUrlFonte(fonteId);
       if (blobUrl) {
         setPdfSource(blobUrl);
@@ -91,7 +75,6 @@ export default function DocumentReader({ fonteId, paginaImpressa, isOpen, onClos
         return;
       }
 
-      // Fallback: tenta Service Worker cache com URL estática
       const urlEstatica = `/files/${fontes[fonteId]?.nomeArquivo ?? fonteId + ".pdf"}`;
       try {
         if ('caches' in window) {
@@ -125,10 +108,8 @@ export default function DocumentReader({ fonteId, paginaImpressa, isOpen, onClos
     onClose();
   };
 
-  // Se não estiver montado (Server Side), não tenta renderizar o Portal
   if (!mounted) return null;
 
-  // CREATE PORTAL: Joga o modal pro fim do HTML, burlando qualquer Z-index da aplicação!
   return createPortal(
     <div className={`fixed inset-0 z-99999 flex items-center justify-center bg-black/50 backdrop-blur-md sm:p-4 transition-all duration-300 ${isOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
       }`}>
@@ -136,10 +117,8 @@ export default function DocumentReader({ fonteId, paginaImpressa, isOpen, onClos
         <div className='relative h-full w-full'>
           <div className="relative flex flex-col justify-between z-10 w-full p-5 h-full shadow-lg bg-[linear-gradient(rgba(249,249,249,0.5),rgba(249,249,249,0.5)),url(/assets/paper.png)] bg-repeat bg-size-[30%] border border-gray-300">
 
-            {/* HEADER RESPONSIVO 1 LINHA */}
             <div className="text-center px-5 py-2 mb-3 border-2 border-gray-400 border-dashed bg-gray-200/50 text-gray-600 uppercase font-daisy tracking-wider text-xs md:text-sm leading-relaxed flex flex-row justify-between">
 
-              {/* Lado Esquerdo (Status) */}
               <div className="flex gap-2 items-center truncate ">
                 <span className="font-special -mb-1 text-base sm:text-lg  mt-0.5 truncate">
                   {isImage
@@ -150,7 +129,6 @@ export default function DocumentReader({ fonteId, paginaImpressa, isOpen, onClos
                 </span>
               </div>
 
-              {/* Lado Direito (Botões) */}
               <div className='flex flex-row gap-2 sm:gap-4 shrink-0'>
                 {!isImage && (
                   <button
@@ -176,7 +154,6 @@ export default function DocumentReader({ fonteId, paginaImpressa, isOpen, onClos
               </div>
             </div>
 
-            {/* CONTEÚDO RESPONSIVO */}
             <div
               ref={containerRef}
               className="flex-1 overflow-auto w-full mx-auto shadow-sm flex bg-black/80 border-gray-800 border justify-center custom-scrollbar relative"
@@ -196,7 +173,7 @@ export default function DocumentReader({ fonteId, paginaImpressa, isOpen, onClos
                     >
                       <Page
                         pageNumber={paginaReal}
-                        width={pdfWidth} // LARGURA DINÂMICA
+                        width={pdfWidth}
                         renderTextLayer={false}
                         renderAnnotationLayer={false}
                         className=" bg-white mx-auto"
@@ -217,9 +194,8 @@ export default function DocumentReader({ fonteId, paginaImpressa, isOpen, onClos
         </div>
 
       </div>
-      {/* Click fora para fechar (no mobile não tem muito espaço fora, mas mantém a funcionalidade) */}
       <div className="absolute inset-0 -z-10 cursor-default" onClick={handleClose}></div>
     </div>,
-    document.body // TELETRANSPORTE PRO FINAL DO HTML
+    document.body
   );
 }

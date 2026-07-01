@@ -19,7 +19,6 @@ interface FiltrosPainelProps {
     totalItens: number;
 }
 
-// Componente interno para gerenciar a expansão de cada linha individualmente
 function LinhaFiltroExpansivel({
     config,
     filtrosAtivos,
@@ -37,12 +36,10 @@ function LinhaFiltroExpansivel({
 }) {
     const [expandido, setExpandido] = useState(false);
 
-    // Se a linha tiver muitas opções (como Categorias de Regras), limitamos a visualização
     const precisaDeExpansao = config.opcoes.length > 16;
 
     return (
         <div className="flex gap-1.5 items-start border-b border-dashed border-black/20 pb-2 last:border-none">
-            {/* Rótulo e Controles Laterais */}
             <div className="flex flex-col gap-1 w-24 shrink-0 mr-1 pt-0.5">
                 <div className="flex items-center gap-1.5 justify-between">
                     <span className="text-sm font-special text-gray-600 uppercase tracking-wide truncate">
@@ -60,7 +57,6 @@ function LinhaFiltroExpansivel({
                     )}
                 </div>
 
-                {/* Botão Dinâmico Ver Mais / Ver Menos */}
                 {precisaDeExpansao && (
                     <button
                         type="button"
@@ -80,7 +76,6 @@ function LinhaFiltroExpansivel({
                 )}
             </div>
 
-            {/* Container de Tags com transição e controle de overflow */}
             <div
                 className={`flex flex-wrap gap-1.5 grow transition-all duration-200 overflow-hidden ${expandido ? "max-h-[500px]" : "max-h-[78px]"
                     }`}
@@ -116,7 +111,6 @@ export default function FilterPanel({
             <div className="relative p-6 z-10 shadow-2xl bg-[linear-gradient(rgba(249,249,249,0.5),rgba(249,249,249,0.5)),url(/assets/paper.png)] bg-repeat bg-size-[30%]">
                 <div className="flex flex-col gap-4">
 
-                    {/* Busca */}
                     <div className="flex sticky items-center border border-gray-600 bg-white/40 px-3 py-2">
                         <Search className="size-5 mr-2 shrink-0 text-gray-600" />
                         <input
@@ -133,7 +127,6 @@ export default function FilterPanel({
                         )}
                     </div>
 
-                    {/* Lista Dinâmica de Linhas de Filtros */}
                     <div className="flex flex-col gap-3">
                         {opcoesResolvidas.map(config => {
                             if (config.opcoes.length === 0) return null;
@@ -155,7 +148,6 @@ export default function FilterPanel({
                         })}
                     </div>
 
-                    {/* Botão de Limpeza Global */}
                     {temFiltroAtivo && (
                         <button
                             onClick={limparFiltros}
@@ -168,7 +160,6 @@ export default function FilterPanel({
                 </div>
             </div>
 
-            {/* Sombra de Textura Decorativa Rotacionada */}
             <div className="absolute top-1/2 left-1/2 z-0! h-full w-full -translate-x-1/2 -translate-y-1/2 rotate-[-0.5deg] p-1 bg-[linear-gradient(rgba(139,139,139,0.4),rgba(139,139,139,0.2)),url(/assets/paper.png)] shadow-[0_0_15px_rgba(0,0,0,0.15)] bg-repeat bg-size-[30%]" />
         </div>
     );

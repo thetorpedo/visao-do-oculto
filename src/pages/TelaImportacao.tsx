@@ -1,19 +1,19 @@
 import Logo from "@/components/logo";
 import { useData, type Categoria } from "@/context/DataContext";
 import { baixarTemplate } from "@/lib/templates";
-import { Download, FileJson, Upload, Package } from "lucide-react";
+import { Download, Upload, Package } from "lucide-react";
 import { useRef, useState } from "react";
 
 const CATEGORIAS: { id: Categoria; label: string; descricao: string }[] = [
   { id: "poderes", label: "Poderes", descricao: "Poderes de classe, gerais, paranormais..." },
   { id: "rituais", label: "Rituais", descricao: "Rituais de todos os elementos e círculos." },
-  { id: "equipamentos", label: "Equipamentos", descricao: "Armas, proteções, itens, modificações e maldições." },
+  { id: "equipamentos", label: "Equipamentos", descricao: "Armas, proteções, itens, modificações, maldições..." },
   { id: "origens", label: "Origens", descricao: "Origens e seus bônus." },
   { id: "trilhas", label: "Trilhas", descricao: "Trilhas para todas as classes." },
 ];
 
 export default function TelaImportacao() {
-  const { importarJson, status } = useData();
+  const { importarJson, status, entrarSemDados } = useData();
   const [resultados, setResultados] = useState<Record<string, { itens: number; erros: number } | null>>({});
   const [carregando, setCarregando] = useState<string | null>(null);
   const inputRefs = useRef<Record<string, HTMLInputElement | null>>({});
@@ -38,7 +38,6 @@ export default function TelaImportacao() {
     <div className="min-h-screen bg-[url(/assets/paper.png)] bg-repeat bg-size-[30%] flex flex-col items-center justify-center p-6">
 
       <div className="w-full max-w-2xl">
-        {/* Logo */}
         <div className="text-center mb-8">
           <h1 className="text-4xl sm:text-6xl flex flex-wrap mb-3 justify-center pointer-events-none select-none border-b-4 border-dashed border-gray-800 w-fit mx-auto pb-2">
             {'VISÃO DO OCULTO'.split("").map((char, index) => (
@@ -46,26 +45,16 @@ export default function TelaImportacao() {
             ))}
           </h1>
           <p className="font-special text-gray-600 text-sm tracking-wide mt-4">
-            O Visão do Oculto não disponibiliza nenhum conteúdo, <br />apenas oferece acesso facilitado aos dados que você inserir.
+            O Visão do Oculto não disponibiliza nenhum conteúdo, <br />apenas oferece acesso facilitado aos dados que você inserir.<br />Importe os arquivos JSON de cada categoria, ou um pacote completo, para começar a usar o site.
           </p>
         </div>
 
-        {/* Card principal */}
         <div className="relative">
           <div className="relative z-10 bg-[linear-gradient(rgba(249,249,249,0.8),rgba(249,249,249,0.8)),url(/assets/paper.png)] bg-repeat bg-size-[30%] border-2 border-gray-800 p-6 shadow-xl">
 
-            <div className="flex items-center gap-3 mb-6 pb-4 border-b-2 border-dashed border-gray-400">
-              <FileJson className="size-6 text-gray-700" />
-              <div>
-                <h2 className="font-special text-xl text-gray-900 uppercase tracking-wide">Importar Dados</h2>
-                <p className="text-sm text-gray-600">Importe um JSON com todas as categorias ou individualmente.</p>
-              </div>
-            </div>
-
             <div className="flex flex-col gap-4">
 
-              {/* ─── IMPORTAÇÃO DE PACOTE COMPLETO ─── */}
-              <div className="border-2 border-gray-900 bg-gray-900 text-white p-4 shadow-[4px_4px_0px_rgba(0,0,0,0.3)]">
+              <div className="border-2 border-gray-900 bg-gray-900 text-white p-4">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                   <div className="min-w-0">
                     <h3 className="font-special uppercase tracking-wide flex items-center gap-2 text-lg">
@@ -89,7 +78,7 @@ export default function TelaImportacao() {
                       className="hidden"
                       onChange={e => {
                         const arquivo = e.target.files?.[0];
-                        if (arquivo) handleArquivo(null, arquivo); // Null = Auto-detect (Multi-categoria)
+                        if (arquivo) handleArquivo(null, arquivo);
                         e.target.value = "";
                       }}
                     />
@@ -105,14 +94,12 @@ export default function TelaImportacao() {
                 </div>
               </div>
 
-              {/* Divisor Visual */}
               <div className="flex items-center gap-4 my-2 opacity-50">
                 <div className="h-px bg-gray-800 flex-1 border-b border-dashed border-gray-400"></div>
                 <span className="font-special text-xs uppercase text-gray-700 tracking-widest">OU INDIVIDUALMENTE</span>
                 <div className="h-px bg-gray-800 flex-1 border-b border-dashed border-gray-400"></div>
               </div>
 
-              {/* ─── IMPORTAÇÃO POR CATEGORIAS ─── */}
               {CATEGORIAS.map(cat => {
                 const resultado = resultados[cat.id];
                 const estaCarregando = carregando === cat.id;
@@ -157,10 +144,26 @@ export default function TelaImportacao() {
                         className="flex items-center justify-center cursor-pointer gap-1.5 px-3 py-1.5 text-xs font-special uppercase border-2 border-gray-400 text-gray-600 hover:bg-gray-100">
                         <Download className="size-3.5" /> Template
                       </button>
+
                     </div>
+
                   </div>
+
                 );
               })}
+            </div>
+            <div className="mt-6 pt-4 border-t-2 border-dashed border-gray-400 flex flex-col items-center gap-2">
+              <button
+                onClick={entrarSemDados}
+                className="w-full flex justify-center items-center cursor-pointer gap-2 px-4 py-3 text-sm font-special uppercase tracking-wide border-2 border-gray-800 bg-white text-gray-800 hover:bg-gray-900 hover:text-white transition-colors"
+              >
+                Entrar no site
+              </button>
+              {Object.values(resultados).some(r => r && r.itens > 0) && (
+                <p className="text-xs text-gray-400 text-center">
+                  Os dados são salvos no seu navegador — você não precisará importar novamente.
+                </p>
+              )}
             </div>
 
             {temAlgumDado && status !== "ready" && (

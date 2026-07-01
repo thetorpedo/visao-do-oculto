@@ -33,7 +33,6 @@ export default function Equipamentos() {
   const [abaAtiva, setAbaAtiva] = useState<"equipamentos" | "maldicoes">("equipamentos");
   const [leitorAtivo, setLeitorAtivo] = useState<{ fonte: string; pagina: number } | null>(null);
 
-  // Divide os dados brutos com base nas regras de negócio da aba antes de alimentar o hook
   const dadosAbaAtual = useMemo(() => {
     return equipamentosData.filter(e => {
       const tipos = Array.isArray(e.tipo) ? e.tipo : [e.tipo];
@@ -42,7 +41,6 @@ export default function Equipamentos() {
     });
   }, [abaAtiva, equipamentosData]);
 
-  // Configuração estática dos filtros baseada nos campos definidos no schema
   const configsFiltro: ConfigFiltro[] = useMemo(() => {
     return [
       { id: "tipo", label: "Tipos", opcoes: "auto", match: "array" },
@@ -70,13 +68,11 @@ export default function Equipamentos() {
     limparTudo
   } = useFiltros(dadosAbaAtual, configsFiltro);
 
-  // Altera a aba limpando os parâmetros da URL para evitar filtros órfãos cruzados
   const mudarAba = (novaAba: "equipamentos" | "maldicoes") => {
     setAbaAtiva(novaAba);
     limparTudo();
   };
 
-  // Busca textual profunda customizada sobre os dados estruturados já refinados
   const equipamentosFiltradosEBusca = useMemo(() => {
     if (!busca) return dadosFiltrados;
     const termo = busca.toLowerCase();
@@ -109,7 +105,6 @@ export default function Equipamentos() {
         <div className="relative z-10">
           <div className="flex flex-col gap-5">
 
-            {/* Abas de Navegação */}
             <div className="flex gap-2 pb-0">
               <button
                 onClick={() => mudarAba("equipamentos")}
@@ -125,7 +120,6 @@ export default function Equipamentos() {
               </button>
             </div>
 
-            {/* Painel Unificado de Filtros */}
             <FilterPanel
               busca={busca}
               setBusca={setBusca}
@@ -144,7 +138,6 @@ export default function Equipamentos() {
         </div>
       </div>
 
-      {/* Grid de Itens */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {equipamentosOrdenados.map((equip) => {
           const tipos = Array.isArray(equip.tipo) ? equip.tipo : [equip.tipo];
@@ -237,7 +230,7 @@ export default function Equipamentos() {
         })}
 
         {equipamentosOrdenados.length === 0 && (
-          <div className="col-span-full text-center py-10 text-gray-600 font-special text-xl">
+          <div className="col-span-full text-center py-10 text-black/50 font-special text-xl">
             Nenhum item encontrado com esses termos.
           </div>
         )}

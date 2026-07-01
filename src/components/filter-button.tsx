@@ -2,13 +2,12 @@ import type { EstadoFiltro } from "@/hooks/useFiltros";
 
 interface FilterButtonProps {
   label: string;
-  estado?: EstadoFiltro; // novo: suporta três estados
-  isSelected?: boolean;  // legado: mantido pra compatibilidade
+  estado?: EstadoFiltro;
+  isSelected?: boolean;
   onClick: () => void;
 }
 
 export default function FilterButton({ label, estado, isSelected, onClick }: FilterButtonProps) {
-  // Compatibilidade com uso legado (isSelected booleano)
   const estadoEfetivo: EstadoFiltro = estado ?? (isSelected ? "incluir" : "neutro");
 
   const estilos: Record<EstadoFiltro, string> = {

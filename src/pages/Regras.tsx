@@ -177,12 +177,10 @@ export default function Regras() {
 
             <div className="flex flex-col lg:flex-row gap-6 h-full min-h-[85vh]">
 
-                {/* ─── PAINEL ESQUERDO: COMPACTO ESTILO TABELA DINÂMICA ─── */}
                 <div className="w-full lg:w-1/3 flex flex-col gap-4">
                     <div className="relative h-full flex flex-col grow">
                         <div className="flex-1 relative flex flex-col z-10 w-full h-full p-1 shadow-lg bg-[linear-gradient(rgba(249,249,249,0.5),rgba(249,249,249,0.5)),url(/assets/paper.png)] bg-repeat bg-size-[30%] border border-gray-300 max-h-200 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-900/60 scrollbar-track-slate-500/10">
 
-                            {/* Cabeçalho Fixo */}
                             <div className="bg-gray-900 text-white font-special text-xs px-2.5 py-1.5 uppercase tracking-wider sticky top-0 z-20 shadow-md mb-0.5 flex justify-between items-center">
                                 <span>Nome da Regra</span>
                                 <span className="text-[10px] opacity-60">Total: {regrasOrdenadas.length}</span>
@@ -211,13 +209,11 @@ export default function Regras() {
                                                 : "hover:bg-gray-100/80 text-gray-700"
                                                 }`}
                                         >
-                                            {/* Linha de Dados Corrida */}
                                             <div className="flex justify-between items-center gap-2 w-full min-w-0">
                                                 <span className={`text-xs tracking-wide truncate leading-relaxed ${estaSelecionado ? "font-bold" : "font-medium"}`}>
                                                     <SafeHTMLText html={nomeFormatado} />
                                                 </span>
 
-                                                {/* Metadados Alinhados na Direita (Categorias e Fonte) */}
                                                 <div className="flex items-center gap-0.5 shrink-0 ml-auto">
                                                     <div className="hidden sm:flex gap-0.5 max-w-38 overflow-hidden truncate whitespace-nowrap">
                                                         {regra.categoria.slice(0, 2).map((cat: string) => (
@@ -232,7 +228,6 @@ export default function Regras() {
                                                 </div>
                                             </div>
 
-                                            {/* Sub-linha de Snippet Contextual (Só renderiza se houver busca textual ativa) */}
                                             {busca && busca.trim().length >= 2 && (
                                                 <div className="text-[11px] text-gray-500 font-normal leading-normal mt-0.5 mb-0.5 border-l-2 border-gray-400/30 pl-1.5 truncate max-w-full">
                                                     {renderSnippet(regra.descricao)}
@@ -253,7 +248,6 @@ export default function Regras() {
                     </div>
                 </div>
 
-                {/* ─── PAINEL DIREITO: LEITURA COMPLETA ─── */}
                 <div className="w-full lg:w-2/3 h-[75vh] lg:h-auto max-h-200">
                     {regraSelecionada ? (
                         <div className="relative h-full">

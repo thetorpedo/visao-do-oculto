@@ -6,7 +6,7 @@ import { z } from "zod";
 
 const FonteSchema = z.object({
     fonteLivro: z.string(),
-    fontePagina: z.string(), // sempre string após migração
+    fontePagina: z.string(),
 });
 
 // ─────────────────────────────────────────
@@ -22,7 +22,6 @@ export const PoderSchema = z
         elemento: z.string().nullable(),
         descricao: z.string(),
         preRequisitos: z.string().nullable(),
-        // afinidade só existe quando há elemento
         afinidade: z.string().nullable(),
     })
     .merge(FonteSchema)
@@ -37,7 +36,6 @@ export type Poder = z.infer<typeof PoderSchema>;
 // Equipamentos
 // ─────────────────────────────────────────
 
-// Subobjeto exclusivo de armas
 const ArmaSchema = z.object({
     armaTipo: z.string(),
     empunhadura: z.string().nullable(),
@@ -50,10 +48,9 @@ export const EquipamentoSchema = z
         id: z.string(),
         codigo: z.number().int().positive(),
         nome: z.string(),
-        // array para suportar "Item Amaldiçoado" com tipo secundário
         tipo: z.array(z.string()).min(1),
         subtipo: z.string().nullable(),
-        categoria: z.string().nullable(), // "0", "I", "II", "III", "IV"
+        categoria: z.string().nullable(), 
         espaco: z.number().nullable(),
         descricao: z.string(),
         elemento: z.string().nullable(),

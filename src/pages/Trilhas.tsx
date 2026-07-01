@@ -40,8 +40,6 @@ export default function Trilhas() {
     toggleOperador,
   } = useFiltros(trilhasData, CONFIGS_FILTRO);
 
-  // Filtra adicionalmente por texto no cliente para manter comportamento similar ao anterior 
-  // caso queira buscar nas propriedades internas da trilha, já que o useFiltros padrão foca mais em exatidão/campos estruturados.
   const trilhasFiltradasEBusca = useMemo(() => {
     if (!busca) return dadosFiltrados;
     const termo = busca.toLowerCase();

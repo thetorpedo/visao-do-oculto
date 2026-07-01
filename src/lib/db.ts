@@ -1,6 +1,5 @@
-// src/lib/db.ts
 const DB_NAME = "visao-do-oculto";
-const DB_VERSION = 2; // Atualizado para 2 para suportar os Favoritos
+const DB_VERSION = 2; 
 
 export function abrirDB(): Promise<IDBDatabase> {
     return new Promise((resolve, reject) => {
@@ -8,12 +7,10 @@ export function abrirDB(): Promise<IDBDatabase> {
         req.onupgradeneeded = (e) => {
             const db = (e.target as IDBOpenDBRequest).result;
             
-            // Stores antigas do DataContext
             if (!db.objectStoreNames.contains("dados")) db.createObjectStore("dados");
             if (!db.objectStoreNames.contains("fontes")) db.createObjectStore("fontes");
             if (!db.objectStoreNames.contains("pdfs")) db.createObjectStore("pdfs");
             
-            // Novas stores dos Favoritos
             if (!db.objectStoreNames.contains("favoritos")) db.createObjectStore("favoritos");
             if (!db.objectStoreNames.contains("grupos")) db.createObjectStore("grupos");
         };

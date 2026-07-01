@@ -152,7 +152,6 @@ export default function GlobalSearch() {
 
       <div className="relative w-full max-w-2xl bg-[url(/assets/paper.png)] bg-repeat bg-size-[30%] shadow-[0_0_40px_rgba(0,0,0,0.4)] border border-gray-300 flex flex-col max-h-[75vh] overflow-hidden animate-in fade-in zoom-in-95 duration-200">
 
-        {/* Input de Busca Dinâmico */}
         <div className="flex items-center px-4 py-2 border-b border-gray-300 bg-white text-gray-600 shadow-sm shrink-0">
           <Search className="size-4 opacity-70 mr-2.5 shrink-0" />
           <input
@@ -168,7 +167,6 @@ export default function GlobalSearch() {
           </button>
         </div>
 
-        {/* Lista Compactada Estilo Tabela */}
         <div className="overflow-y-auto p-1 bg-white/50 scrollbar-thin scrollbar-thumb-slate-900/60">
           {busca.length < 2 ? (
             <div className="p-6 text-center text-gray-500 font-special text-xs tracking-wide">
@@ -176,7 +174,7 @@ export default function GlobalSearch() {
             </div>
           ) : resultados.length === 0 ? (
             <div className="p-6 text-center text-gray-500 font-special text-xs tracking-wide">
-              Nenhum registro oculto encontrado para "{busca}".
+              Nenhum registro encontrado para "{busca}".
             </div>
           ) : (
             <div className="flex flex-col border-t border-gray-200">
@@ -214,7 +212,6 @@ export default function GlobalSearch() {
           )}
         </div>
 
-        {/* Rodapé Compacto */}
         <div className="border-t border-gray-300 bg-gray-200/80 px-3 py-1.5 flex justify-between items-center text-[11px] font-bold text-gray-500 shrink-0">
           <span>{resultados.length} resultados</span>
           <span className="flex items-center gap-1">

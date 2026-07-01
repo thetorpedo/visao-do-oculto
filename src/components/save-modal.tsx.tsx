@@ -35,15 +35,12 @@ export default function SaveModal({ itemId, categoria, onClose }: ModalAdicionar
   const handleSalvar = async () => {
     if (favoritoAtual) {
       if (gruposSelecionados.length === 0) {
-        // Se desmarcou tudo, remove o favorito
         await removerFavorito(favoritoAtual.id);
       } else {
-        // Atualiza os grupos
         await atualizarGruposFavorito(favoritoAtual.id, gruposSelecionados);
       }
     } else {
       if (gruposSelecionados.length > 0) {
-        // Cria o favorito novo
         await adicionarFavorito(itemId, categoria, gruposSelecionados);
       }
     }
@@ -68,7 +65,6 @@ export default function SaveModal({ itemId, categoria, onClose }: ModalAdicionar
     <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
       <div className="relative w-full max-w-md p-6 bg-[url(/assets/paper.png)] bg-repeat bg-size-[30%] shadow-2xl border border-gray-400">
 
-        {/* Cabeçalho */}
         <div className="flex items-center justify-between mb-4 border-b border-gray-400 border-dashed pb-2">
           <h3 className="text-xl font-special text-gray-900 uppercase tracking-wider">
             {favoritoAtual ? "Editar Item Salvo" : "Salvar em Coleção"}
@@ -78,7 +74,6 @@ export default function SaveModal({ itemId, categoria, onClose }: ModalAdicionar
           </button>
         </div>
 
-        {/* Lista de Grupos */}
         <div className="max-h-60 overflow-y-auto mb-4 space-y-2 custom-scrollbar pr-2">
           {grupos.length === 0 ? (
             <p className="text-sm text-gray-500 italic text-center py-4">Nenhuma coleção criada ainda.</p>
@@ -90,8 +85,8 @@ export default function SaveModal({ itemId, categoria, onClose }: ModalAdicionar
                   key={grupo.id}
                   onClick={() => handleToggleGrupo(grupo.id)}
                   className={`w-full flex items-center justify-between p-2 border-2 text-left transition-colors cursor-pointer ${isSelecionado
-                      ? "border-gray-900 bg-gray-200"
-                      : "border-transparent hover:bg-gray-100"
+                    ? "border-gray-900 bg-gray-200"
+                    : "border-transparent hover:bg-gray-100"
                     }`}
                 >
                   <span className="font-bold text-gray-800 text-sm">{grupo.nome}</span>
@@ -102,7 +97,6 @@ export default function SaveModal({ itemId, categoria, onClose }: ModalAdicionar
           )}
         </div>
 
-        {/* Criar Novo Grupo */}
         <div className="flex items-center gap-2 mb-6">
           <input
             type="text"
@@ -121,7 +115,6 @@ export default function SaveModal({ itemId, categoria, onClose }: ModalAdicionar
           </button>
         </div>
 
-        {/* Botões de Ação */}
         <div className="flex flex-col gap-2 pt-4 border-t border-gray-400 border-dashed">
           <button
             onClick={handleSalvar}

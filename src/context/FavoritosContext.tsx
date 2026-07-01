@@ -1,4 +1,3 @@
-// src/context/FavoritosContext.tsx
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { dbDelete, dbGet, dbGetAllKeys, dbSet } from "@/lib/db";
 import { CategoriaFavoritavel, Favorito, Grupo } from "@/lib/favoritos";
@@ -6,15 +5,15 @@ import { CategoriaFavoritavel, Favorito, Grupo } from "@/lib/favoritos";
 interface FavoritosContextValue {
     grupos: Grupo[];
     favoritos: Favorito[];
-    
+
     criarGrupo: (nome: string) => Promise<Grupo>;
     renomearGrupo: (id: string, novoNome: string) => Promise<void>;
     removerGrupo: (id: string) => Promise<void>;
-    
+
     adicionarFavorito: (itemId: string, categoria: CategoriaFavoritavel, grupoIds: string[]) => Promise<void>;
     removerFavorito: (favoritoId: string) => Promise<void>;
     atualizarGruposFavorito: (favoritoId: string, grupoIds: string[]) => Promise<void>;
-    
+
     isFavoritado: (itemId: string, categoria: CategoriaFavoritavel) => boolean;
     getFavoritoDeItem: (itemId: string, categoria: CategoriaFavoritavel) => Favorito | null;
     getItensDosGrupo: (grupoId: string) => Favorito[];
@@ -29,7 +28,7 @@ export function FavoritosProvider({ children }: { children: React.ReactNode }) {
     const carregarDados = useCallback(async () => {
         const chavesGrupos = await dbGetAllKeys("grupos");
         const gruposCarregados = await Promise.all(chavesGrupos.map(key => dbGet<Grupo>("grupos", key)));
-        
+
         const chavesFavoritos = await dbGetAllKeys("favoritos");
         const favoritosCarregados = await Promise.all(chavesFavoritos.map(key => dbGet<Favorito>("favoritos", key)));
 
@@ -59,8 +58,7 @@ export function FavoritosProvider({ children }: { children: React.ReactNode }) {
     const removerGrupo = async (id: string) => {
         await dbDelete("grupos", id);
         setGrupos(prev => prev.filter(g => g.id !== id));
-        
-        // Remove este grupo de todos os favoritos que o contêm[cite: 4]
+
         const favoritosAfetados = favoritos.filter(f => f.grupoIds.includes(id));
         for (const f of favoritosAfetados) {
             const novosGrupoIds = f.grupoIds.filter(gid => gid !== id);

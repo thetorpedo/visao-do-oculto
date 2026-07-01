@@ -67,6 +67,7 @@ interface DataContextValue extends DataState {
     exportarPacote: () => Promise<void>;
     exportarCategoria: (categoria: Categoria) => void;
     exportarArquivo: (nomeArquivo: string, categoria: Categoria) => Promise<void>;
+    entrarSemDados: () => void;
 }
 
 // ─────────────────────────────────────────
@@ -172,6 +173,10 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         fontes: {},
         arquivosImportados: [],
     });
+
+    const entrarSemDados = useCallback(() => {
+        setStatus("ready");
+    }, []);
 
     const carregarTudo = useCallback(async () => {
         setStatus("loading");
@@ -444,6 +449,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         <DataContext.Provider
             value={{
                 ...state,
+                entrarSemDados,
                 status,
                 importarJson,
                 removerArquivo,

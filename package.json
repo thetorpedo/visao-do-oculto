@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "build:privado": "tsc -b && vite build --mode privado",
-    "build:publico": "tsc -b && vite build --mode publico",
+    "build:publico": "node scripts/build-publico.mjs",
     "lint": "eslint .",
     "preview": "vite preview"
   },

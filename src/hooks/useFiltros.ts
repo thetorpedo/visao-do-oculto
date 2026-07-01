@@ -1,18 +1,14 @@
 import { useCallback, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 
-// ─────────────────────────────────────────
-// Tipos
-// ─────────────────────────────────────────
-
 export type EstadoFiltro = "neutro" | "incluir" | "excluir";
 export type OperadorFiltro = "and" | "or";
 
 export interface ConfigFiltro {
-    id: string;           // campo no item (suporta dot notation: "arma.armaTipo")
+    id: string;           
     label: string;
-    opcoes: string[] | "auto"; // "auto" extrai dos dados
-    match?: "exact" | "partial" | "array"; // default: "exact"
+    opcoes: string[] | "auto"; 
+    match?: "exact" | "partial" | "array"; 
 }
 
 export interface FiltroAtivo {
@@ -24,10 +20,6 @@ export interface FiltroAtivo {
 export interface OperadoresAtivos {
     [filtroId: string]: OperadorFiltro;
 }
-
-// ─────────────────────────────────────────
-// Utilitários
-// ─────────────────────────────────────────
 
 function getValorCampo(item: Record<string, unknown>, caminho: string): unknown {
     return caminho.split(".").reduce<unknown>((obj, key) => {
@@ -57,7 +49,6 @@ function proximoEstado(atual: EstadoFiltro): EstadoFiltro {
     return "neutro";
 }
 
-// Serializa/deserializa filtros pra URL
 function serializarFiltros(filtros: FiltroAtivo): Record<string, string> {
     const params: Record<string, string> = {};
     for (const [filtroId, opcoes] of Object.entries(filtros)) {
@@ -86,17 +77,12 @@ function deserializarFiltros(params: URLSearchParams, configs: ConfigFiltro[]): 
     return filtros;
 }
 
-// ─────────────────────────────────────────
-// Hook principal
-// ─────────────────────────────────────────
-
 export function useFiltros<T extends Record<string, unknown>>(
     dados: T[],
     configs: ConfigFiltro[]
 ) {
     const [searchParams, setSearchParams] = useSearchParams();
 
-    // Busca
     const busca = searchParams.get("busca") ?? "";
 
     const setBusca = useCallback((valor: string) => {
@@ -108,12 +94,10 @@ export function useFiltros<T extends Record<string, unknown>>(
         }, { replace: true });
     }, [setSearchParams]);
 
-    // Filtros ativos (lidos da URL)
     const filtrosAtivos = useMemo(() => {
         return deserializarFiltros(searchParams, configs);
     }, [searchParams, configs]);
 
-    // Operadores ativos (lidos da URL, padrão "or")
     const operadoresAtivos = useMemo<OperadoresAtivos>(() => {
         const ops: OperadoresAtivos = {};
         for (const config of configs) {
@@ -123,7 +107,6 @@ export function useFiltros<T extends Record<string, unknown>>(
         return ops;
     }, [searchParams, configs]);
 
-    // Alternar operador do filtro (AND <=> OR)
     const toggleOperador = useCallback((filtroId: string) => {
         setSearchParams(prev => {
             const next = new URLSearchParams(prev);
@@ -131,13 +114,12 @@ export function useFiltros<T extends Record<string, unknown>>(
             const novoOp = opAtual === "or" ? "and" : "or";
 
             if (novoOp === "and") next.set(`_op_${filtroId}`, "and");
-            else next.delete(`_op_${filtroId}`); // "or" é o omitido por padrão
+            else next.delete(`_op_${filtroId}`);
 
             return next;
         }, { replace: true });
     }, [setSearchParams]);
 
-    // Toggle de filtro
     const toggleFiltro = useCallback((filtroId: string, opcao: string) => {
         setSearchParams(prev => {
             const next = new URLSearchParams(prev);
@@ -148,14 +130,12 @@ export function useFiltros<T extends Record<string, unknown>>(
             if (!filtrosAtuais[filtroId]) filtrosAtuais[filtroId] = {};
             filtrosAtuais[filtroId][opcao] = novoEstado;
 
-            // Remove chave se todos neutros
             const temAtivo = Object.values(filtrosAtuais[filtroId]).some(e => e !== "neutro");
             if (!temAtivo) {
                 delete filtrosAtuais[filtroId];
-                next.delete(`_op_${filtroId}`); // Limpa operador se o filtro esvaziar
+                next.delete(`_op_${filtroId}`); 
             }
 
-            // Serializa de volta pra URL
             const serializado = serializarFiltros(filtrosAtuais);
             for (const [k, v] of Object.entries(serializado)) next.set(k, v);
 
@@ -191,7 +171,6 @@ export function useFiltros<T extends Record<string, unknown>>(
         }));
     }, [configs, dados]);
 
-    // Filtragem inteligente aplicando regras AND / OR customizadas
     const dadosFiltrados = useMemo(() => {
         return dados.filter(item => {
             for (const config of configs) {
@@ -225,16 +204,12 @@ export function useFiltros<T extends Record<string, unknown>>(
                     if (estado === "excluir") condicoesExcluir.push(bate);
                 }
 
-                // Se houver exclusões ("excluir"), se QUALQUER uma bater, o item cai fora imediatamente (comportamento global de exclusão)
                 if (condicoesExcluir.some(bate => bate)) return false;
 
-                // Validação da inclusão com base no operador selecionado
                 if (condicoesIncluir.length > 0) {
                     if (operador === "and") {
-                        // Modo "E": Precisa bater TODAS as opções selecionadas
                         if (!condicoesIncluir.every(bate => bate)) return false;
                     } else {
-                        // Modo "OU": Precisa bater pelo menos UMA das opções selecionadas
                         if (!condicoesIncluir.some(bate => bate)) return false;
                     }
                 }

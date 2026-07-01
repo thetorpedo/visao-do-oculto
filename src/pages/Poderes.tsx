@@ -50,7 +50,6 @@ export default function Poderes() {
     temFiltroAtivo,
   } = useFiltros(poderesData, CONFIGS_FILTRO);
 
-  // Busca textual profunda integrada
   const poderesFiltradosEBusca = useMemo(() => {
     if (!busca) return dadosFiltrados;
     const termo = busca.toLowerCase();
@@ -149,8 +148,8 @@ export default function Poderes() {
         ))}
 
         {poderesOrdenados.length === 0 && (
-          <div className="col-span-full text-center py-10 text-gray-600 font-special text-xl">
-            Nenhum poder paranormal ou mundano encontrado com esses termos.
+          <div className="col-span-full text-center py-10 text-black/50 font-special text-xl">
+            Nenhum poder encontrado com esses termos.
           </div>
         )}
       </div>

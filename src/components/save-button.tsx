@@ -13,7 +13,6 @@ export default function SaveButton({ itemId, categoria }: BotaoFavoritarProps) {
   const { isFavoritado } = useFavoritos();
   const [modalAberto, setModalAberto] = useState(false);
 
-  // Verifica se este item específico está favoritado[cite: 4]
   const favoritado = isFavoritado(itemId, categoria);
 
   return (
@@ -29,7 +28,6 @@ export default function SaveButton({ itemId, categoria }: BotaoFavoritarProps) {
         />
       </button>
 
-      {/* O modal só é renderizado quando o botão é clicado */}
       {modalAberto && (
         <SaveModal
           itemId={itemId}

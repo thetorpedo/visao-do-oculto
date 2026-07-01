@@ -62,10 +62,8 @@ export default function CacheDownloader({ pdfsParaBaixar }: { pdfsParaBaixar: st
     : 0;
 
   return (
-    // Removido o overflow-hidden e adicionado mt-4
     <div className="relative p-6 mt-4 border border-gray-800/60 bg-amber-100/30 md:col-span-2 flex flex-col items-center justify-between gap-6">
 
-      {/* Barra de Progresso de Fundo */}
       {isDownloading && (
         <div
           className="absolute inset-y-0 left-0 bg-amber-200/50 z-0 transition-all duration-300 ease-out"
@@ -73,15 +71,13 @@ export default function CacheDownloader({ pdfsParaBaixar }: { pdfsParaBaixar: st
         />
       )}
 
-      {/* Badge Superior */}
       <div className="absolute top-0 left-4 -translate-y-1/2 px-2 py-0.5 bg-gray-900 text-white font-special text-sm uppercase tracking-widest flex items-center z-10">
-        Leitura Rápida / Offline
+        CACHE DE FONTES
       </div>
 
-      {/* Container de Conteúdo (z-10 relative para ficar acima da barra de progresso) */}
       <div className="flex flex-col md:flex-row w-full items-center justify-between gap-6 z-10 relative">
         <div className="flex-1 mt-2 md:mt-0 text-center md:text-left">
-          <h4 className="font-special text-xl text-gray-900 mb-1 flex items-center justify-center md:justify-start gap-2">
+          <h4 className="font-special text-xl text-gray-900 max-sm:mb-8 mb-4 lg:mb-1 flex items-center justify-center md:justify-start gap-2">
             {isDownloading ? (
               <>Baixando Fontes...</>
             ) : isCached ? (
@@ -91,7 +87,7 @@ export default function CacheDownloader({ pdfsParaBaixar }: { pdfsParaBaixar: st
             )}
           </h4>
 
-          <p className="text-sm text-gray-700 font-medium h-10 flex items-center justify-center md:justify-start">
+          <p className="text-sm text-gray-700 font-medium h-10 max-sm:mb-5 flex items-center justify-center md:justify-start">
             {isDownloading ? (
               <span className="flex items-center gap-2 animate-pulse">
                 <FileDown className="size-4 text-gray-900" />

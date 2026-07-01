@@ -12,9 +12,6 @@ const CATEGORIAS: { id: Categoria; label: string }[] = [
     { id: "regras", label: "Regras" },
 ];
 
-// ─────────────────────────────────────────
-// Seção: JSONs
-// ─────────────────────────────────────────
 function SecaoJsons() {
     const { arquivosImportados, importarJson, removerArquivo, limparCategoria, exportarArquivo, exportarCategoria } = useData();
     const inputRefs = useRef<Record<string, HTMLInputElement | null>>({});
@@ -128,9 +125,6 @@ function SecaoJsons() {
     );
 }
 
-// ─────────────────────────────────────────
-// Seção: Fontes / PDFs
-// ─────────────────────────────────────────
 function SecaoFontes() {
     const { fontes, salvarFonte, removerFonte } = useData();
     const [novaFonte, setNovaFonte] = useState<Partial<FonteConfig>>({});
@@ -162,9 +156,6 @@ function SecaoFontes() {
 
     const handleBaixarFonte = async (fonte: FonteConfig) => {
         if (!fonte.nomeArquivo) return;
-        // Tenta IndexedDB primeiro
-        // const { default: idb } = await import("@/context/DataContext").then(m => ({ default: m }));
-        // Fallback direto pra URL estática
         const a = document.createElement("a");
         a.href = `/files/${fonte.nomeArquivo}`;
         a.download = fonte.nomeArquivo;
@@ -261,7 +252,6 @@ function SecaoFontes() {
 
     return (
         <div className="space-y-4">
-            {/* Formulário nova fonte */}
             <div className="relative">
                 <div className="relative flex flex-col justify-between z-10 w-full p-5 h-full shadow-lg bg-[linear-gradient(rgba(249,249,249,0.5),rgba(249,249,249,0.5)),url(/assets/paper.png)] bg-repeat bg-size-[30%] border border-gray-300">
                     <h3 className="font-special uppercase tracking-wide text-gray-900 mb-3 flex items-center gap-2">
@@ -311,7 +301,6 @@ function SecaoFontes() {
                 <div className="absolute top-1/2 left-1/2 z-0 h-full w-full -translate-x-1/2 -translate-y-1/2 rotate-[0.25deg] p-1 bg-[linear-gradient(rgba(139,139,139,0.4),rgba(139,139,139,0.2)),url(/assets/paper.png)] shadow-[0_0_15px_rgba(0,0,0,0.15)] bg-repeat bg-size-[30%]" />
             </div>
 
-            {/* Lista de fontes */}
             {fontesOrdenadas.length === 0 ? (
                 <p className="text-xs text-gray-400 italic text-center py-4">Nenhuma fonte configurada.</p>
             ) : (
@@ -337,9 +326,6 @@ function SecaoFontes() {
     );
 }
 
-// ─────────────────────────────────────────
-// Página principal
-// ─────────────────────────────────────────
 export default function Configuracoes() {
     const { limparTudo, exportarPacote, poderes, rituais, equipamentos, origens, trilhas, importarJson } = useData();
     const [aba, setAba] = useState<"jsons" | "fontes">("jsons");

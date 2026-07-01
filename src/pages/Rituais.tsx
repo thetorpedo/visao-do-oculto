@@ -89,7 +89,6 @@ export default function Rituais() {
     temFiltroAtivo,
   } = useFiltros(rituaisData, CONFIGS_FILTRO);
 
-  // Busca textual secundária sobre a base já filtrada por tags estruturadas
   const rituaisFiltradosEBusca = useMemo(() => {
     if (!busca) return dadosFiltrados;
     const termo = busca.toLowerCase();
@@ -200,8 +199,8 @@ export default function Rituais() {
         })}
 
         {rituaisOrdenados.length === 0 && (
-          <div className="col-span-full text-center py-10 text-gray-600 font-special text-xl">
-            Nenhum ritual esotérico encontrado nestas condições.
+          <div className="col-span-full text-center py-10 text-black/50 font-special text-xl">
+            Nenhum ritual encontrado nestas condições.
           </div>
         )}
       </div>

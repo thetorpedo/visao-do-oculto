@@ -46,7 +46,6 @@ export default function Origens() {
     temFiltroAtivo,
   } = useFiltros(origensData, CONFIGS_FILTRO);
 
-  // Filtro de string secundário integrado para busca por texto
   const origensFiltradasEBusca = useMemo(() => {
     if (!busca) return dadosFiltrados;
     const termo = busca.toLowerCase();
@@ -128,7 +127,7 @@ export default function Origens() {
         ))}
 
         {origensOrdenadas.length === 0 && (
-          <div className="col-span-full text-center py-10 text-gray-600 font-special text-xl">
+          <div className="col-span-full text-center py-10 text-black/50 font-special text-xl">
             Nenhuma origem encontrada com esses termos.
           </div>
         )}

@@ -1,3 +1,4 @@
+import Logo from "@/components/logo";
 import PaperStamp from "@/components/paper-stamp";
 import SigilRain from "@/components/sigil-rain";
 import { Menu, Search, Settings, X } from "lucide-react";
@@ -35,7 +36,9 @@ export default function FolderLayout() {
       <div className="lg:hidden fixed top-0 left-0 w-full bg-[#837156] bg-[url(/assets/folder.jpg)] bg-blend-overlay bg-size-[30%] backdrop-blur-md  border-dashed border-[#837156] z-50 flex justify-between items-center p-4 shadow-xl">
         <span className="relative">
           <span className="relative z-99 font-special text-xl text-black tracking-widest p-2 bg-[linear-gradient(rgba(249,249,249,0.5),rgba(249,249,249,0.5)),url(/assets/paper.png)] uppercase">
-            Visão do Oculto
+            {'VISÃO DO OCULTO'.split("").map((char, index) => (
+              <Logo key={index} char={char} />
+            ))}
           </span>
           <PaperStamp />
         </span>
@@ -62,20 +65,30 @@ export default function FolderLayout() {
           >
             <X className="size-10" />
           </button>
-          <div className="flex flex-col gap-8 text-center w-full px-6">
+          <div className="flex flex-col gap-3 max-w-100 text-center w-full px-6">
             {NAV_LINKS.map(link => (
               <NavLink
                 key={link.to}
                 to={link.to}
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={({ isActive }) => `
-                  font-special text-4xl uppercase tracking-wider py-4 border-b-2 border-dashed border-[#5b4f21] transition-colors
+                  font-special text-2xl uppercase tracking-wider py-2 border-b-2 border-dashed border-[#5b4f21] transition-colors
                   ${isActive ? 'text-white bg-[#5b4f21]/20' : 'text-[#fde047]/70 hover:text-[#fde047]'}
                 `}
               >
                 {link.label}
               </NavLink>
             ))}
+            <NavLink
+              to='/configuracoes'
+              onClick={() => setIsMobileMenuOpen(false)}
+              className={({ isActive }) => `
+                  font-special text-2xl uppercase tracking-wider py-2 border-b-2 border-dashed border-[#5b4f21] transition-colors
+                  ${isActive ? 'text-white bg-[#5b4f21]/20' : 'text-[#fde047]/70 hover:text-[#fde047]'}
+                `}
+            >
+              Configurações
+            </NavLink>
           </div>
         </div>
       )}
@@ -92,7 +105,7 @@ export default function FolderLayout() {
                   key={link.to}
                   to={link.to}
                   className={({ isActive }) => `
-                    font-special bg-[url(/assets/folder.jpg)] bg-blend-overlay bg-size-[170%] w-50 -mt-8 rounded-t-lg flex justify-center items-start text-black/70 text-2xl pt-4 transition-all hover:-mt-12 hover:h-16 cursor-pointer shadow-[0_0_15px_rgba(0,0,0,0.35)] 
+                    font-special bg-[url(/assets/folder.jpg)] bg-blend-overlay bg-size-[170%] w-40 xl:w-50 -mt-8 rounded-t-lg flex justify-center items-start text-black/70 text-2xl pt-4 transition-all hover:-mt-12 hover:h-16 cursor-pointer shadow-[0_0_15px_rgba(0,0,0,0.35)] 
                     ${link.z} ${link.margin} 
                     
                     ${isActive ? 'bg-[#837156] h-14 -mt-10 z-20! shadow-[0_0_20px_rgba(0,0,0,0.75)]' : 'bg-[#7a6a51] h-12 shadow-[0_0_20px_rgba(0,0,0,0.75)]'}
@@ -109,7 +122,7 @@ export default function FolderLayout() {
                     key={link.to}
                     to={link.to}
                     className={({ isActive }) => `
-                      font-special bg-[url(/assets/folder.jpg)] bg-blend-overlay bg-size-[170%] w-50 -mt-8 rounded-t-lg flex justify-center items-start text-black/70 text-2xl pt-4 transition-all hover:-mt-12 hover:h-16 cursor-pointer shadow-[0_0_15px_rgba(0,0,0,0.35)]
+                      font-special bg-[url(/assets/folder.jpg)] bg-blend-overlay bg-size-[170%] w-40 xl:w-50 -mt-8 rounded-t-lg flex justify-center items-start text-black/70 text-2xl pt-4 transition-all hover:-mt-12 hover:h-16 cursor-pointer shadow-[0_0_15px_rgba(0,0,0,0.35)]
                       ${link.z} ${link.margin} 
                       /* Aqui você pode colocar estilos ESPECÍFICOS para a linha de cima, se quiser */
                       ${isActive ? 'bg-[#837156] h-14 -mt-10 shadow-[0_0_15px_rgba(0,0,0,0.35),0_0_20px_rgba(0,0,0,0.75)] z-20!' : 'bg-[#7a6a51] h-12 shadow-[inset_0_-2px_4px_rgba(0,0,0,0.35),0_0_20px_rgba(0,0,0,0.75)]'}

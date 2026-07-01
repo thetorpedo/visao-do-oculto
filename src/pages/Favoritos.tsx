@@ -10,7 +10,6 @@ import RulesRenderer from "@/components/rules-renderer";
 import { CategoriaFavoritavel } from "@/lib/favoritos";
 import { corElemento, estiloBadgeTipo } from "@/utils/badgeUtils";
 
-// ─── COMPONENTES AUXILIARES INLINE (Para os Cards Específicos) ───
 
 const capitalizeFirst = (str: string | number | null | undefined) => {
   if (!str) return "";
@@ -91,7 +90,6 @@ function RegraExpandivel({ content }: { content: string }) {
   );
 }
 
-// ─── PÁGINA PRINCIPAL ───
 
 export default function Favoritos() {
   const { grupos, favoritos, criarGrupo, removerGrupo, removerFavorito } = useFavoritos();
@@ -128,7 +126,6 @@ export default function Favoritos() {
     return lista.find((item: any) => item.id === itemId) || null;
   };
 
-  // ─── RENDERIZADOR DE CORPO DO CARD ───
   const renderCardBody = (item: any, categoria: string) => {
     switch (categoria) {
       case "poderes":
@@ -243,7 +240,6 @@ export default function Favoritos() {
 
         return (
           <>
-            {/* Badges de Tipo e Elemento */}
             <div className="flex flex-wrap gap-2 mb-4">
               {(Array.isArray(item.tipo) ? item.tipo : [item.tipo]).map((t: string) => (
                 <span key={t} className={`text-sm uppercase font-daisy px-2 py-0.5 border ${estiloBadgeTipo(t)}`}>{t}</span>
@@ -251,14 +247,12 @@ export default function Favoritos() {
               {item.elemento && <span className={`text-sm uppercase font-daisy px-2 py-0.5 border ${corElemento(item.elemento)}`}>{item.elemento}</span>}
             </div>
 
-            {/* Status (Dano, Categoria, etc) */}
             {statusEquip.length > 0 && (
               <div className="mb-4 bg-gray-100/90 border border-gray-400/50 p-3 grid gap-x-6 gap-y-1.5 grid-cols-1 sm:grid-cols-2">
                 {statusEquip.map((s, i) => <LinhaStatus key={i} label={s.label} valor={s.valor} />)}
               </div>
             )}
 
-            {/* Descrição Completa */}
             <div className="text-sm text-gray-800 leading-relaxed">
               <ExpandableText text={item.descricao || ""} limit={300} />
             </div>
@@ -292,7 +286,6 @@ export default function Favoritos() {
         onClose={() => setLeitorAtivo(null)}
       />
 
-      {/* ─── CABEÇALHO E ABAS DE GRUPOS ─── */}
       <div className="relative p-6 bg-[url(/assets/paper.png)] bg-repeat bg-size-[30%] shadow-lg border border-gray-400">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
           <h2 className="text-3xl sm:text-4xl font-special text-gray-900 leading-tight">Minhas Coleções</h2>
@@ -344,7 +337,6 @@ export default function Favoritos() {
         </div>
       </div>
 
-      {/* ─── GRID DE CARDS ─── */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {favoritosFiltrados.map((favorito) => {
           const item = getItemData(favorito.itemId, favorito.categoria);
@@ -371,7 +363,6 @@ export default function Favoritos() {
                     </span>
                   </div>
 
-                  {/* Renderização Específica por Categoria */}
                   {renderCardBody(item, favorito.categoria)}
 
                 </div>
