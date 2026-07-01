@@ -219,26 +219,29 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
             if (config) novoState.fontes[key] = config;
         }
 
-        // 4. Configs padrão de fontes conhecidas (só preenche se ainda não existir)
-        const FONTES_DEFAULT: Record<string, Omit<FonteConfig, "id">> = {
-            OPRPG: { tipo: "dados", offset: 10, nomeArquivo: "OPRPG.pdf" },
-            SAH: { tipo: "dados", offset: 1, nomeArquivo: "SAH.pdf" },
-            AS1: { tipo: "dados", offset: 0, nomeArquivo: "AS1.pdf" },
-            AS2: { tipo: "dados", offset: 0, nomeArquivo: "AS2.pdf" },
-            AS3: { tipo: "dados", offset: 0, nomeArquivo: "AS3.pdf" },
-            AS4: { tipo: "dados", offset: 0, nomeArquivo: "AS4.pdf" },
-            AS5: { tipo: "dados", offset: 0, nomeArquivo: "AS5.pdf" },
-            AS6: { tipo: "dados", offset: 0, nomeArquivo: "AS6.pdf" },
-            OPRPGLUXO: { tipo: "visual", offset: 0, nomeArquivo: "OPRPGLUXO.jpg", label: "OPRPG Luxo" },
-            INICIACAO: { tipo: "visual", offset: 0, nomeArquivo: "INICIACAO.png", label: "HQ Iniciação" },
-            OSNF1: { tipo: "visual", offset: 0, nomeArquivo: "OSNF1.png", label: "HQ OSNF-1" },
-            OSNF2: { tipo: "visual", offset: 0, nomeArquivo: "OSNF2.png", label: "HQ OSNF-2" },
-            DESCONJ1: { tipo: "visual", offset: 0, nomeArquivo: "DESCONJ1.png", label: "HQ DESCONJ-1" },
-            OJDA: { tipo: "visual", offset: 0, nomeArquivo: "OJDA.png", label: "HQ OJDA" },
-        };
-        for (const [id, config] of Object.entries(FONTES_DEFAULT)) {
-            if (!novoState.fontes[id]) {
-                novoState.fontes[id] = { id, ...config };
+        // Fontes com arquivo físico em /files/ — só existem no deploy privado.
+        // No deploy público o usuário cadastra as fontes manualmente em Configurações.
+        if (estatico !== null) {
+            const FONTES_DEFAULT: Record<string, Omit<FonteConfig, "id">> = {
+                OPRPG: { tipo: "dados", offset: 10, nomeArquivo: "OPRPG.pdf" },
+                SAH: { tipo: "dados", offset: 1, nomeArquivo: "SAH.pdf" },
+                AS1: { tipo: "dados", offset: 0, nomeArquivo: "AS1.pdf" },
+                AS2: { tipo: "dados", offset: 0, nomeArquivo: "AS2.pdf" },
+                AS3: { tipo: "dados", offset: 0, nomeArquivo: "AS3.pdf" },
+                AS4: { tipo: "dados", offset: 0, nomeArquivo: "AS4.pdf" },
+                AS5: { tipo: "dados", offset: 0, nomeArquivo: "AS5.pdf" },
+                AS6: { tipo: "dados", offset: 0, nomeArquivo: "AS6.pdf" },
+                OPRPGLUXO: { tipo: "visual", offset: 0, nomeArquivo: "OPRPGLUXO.jpg", label: "OPRPG Luxo" },
+                INICIACAO: { tipo: "visual", offset: 0, nomeArquivo: "INICIACAO.png", label: "HQ Iniciação" },
+                OSNF1: { tipo: "visual", offset: 0, nomeArquivo: "OSNF1.png", label: "HQ OSNF-1" },
+                OSNF2: { tipo: "visual", offset: 0, nomeArquivo: "OSNF2.png", label: "HQ OSNF-2" },
+                DESCONJ1: { tipo: "visual", offset: 0, nomeArquivo: "DESCONJ1.png", label: "HQ DESCONJ-1" },
+                OJDA: { tipo: "visual", offset: 0, nomeArquivo: "OJDA.png", label: "HQ OJDA" },
+            };
+            for (const [id, config] of Object.entries(FONTES_DEFAULT)) {
+                if (!novoState.fontes[id]) {
+                    novoState.fontes[id] = { id, ...config };
+                }
             }
         }
 
