@@ -55,7 +55,7 @@ export default function Home() {
           {is_private ? (
             <InfoPanel title="Lista de Atualizações">
               <div className="flex flex-col gap-2">
-                <UpdateItem version="v2.0" date="(30/06/26)" text="Muitas melhorias, e versão pública." />
+                <UpdateItem version="v2.0" date="(01/07/26)" text="Muitas melhorias, e versão pública." />
                 <UpdateItem version="v1.3" date="(25/06/26)" text="Adicionado conteúdo do AS6; Atualizado conteúdo do AS5 1.1." />
                 <UpdateItem version="v1.2" date="(27/05/26)" text="Adicionado conteúdo do AS5." />
                 <UpdateItem version="v1.1" date="(19/05/26)" text="Adicionado rituais." />
@@ -66,7 +66,7 @@ export default function Home() {
           ) : (
             <InfoPanel title="Lista de Atualizações">
               <div className="flex flex-col gap-2">
-                <UpdateItem version="v2.0" date="(30/06/26)" text="Primeira versão pública!" />
+                <UpdateItem version="v2.0" date="(01/07/26)" text="Primeira versão pública!" />
               </div>
             </InfoPanel>
           )}
