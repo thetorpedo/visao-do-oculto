@@ -179,7 +179,7 @@ export default function Regras() {
 
                 <div className="w-full lg:w-1/3 flex flex-col gap-4">
                     <div className="relative h-full flex flex-col grow">
-                        <div className="flex-1 relative flex flex-col z-10 w-full h-full p-1 shadow-lg bg-[linear-gradient(rgba(249,249,249,0.5),rgba(249,249,249,0.5)),url(/assets/paper.png)] bg-repeat bg-size-[30%] border border-gray-300 max-h-200 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-900/60 scrollbar-track-slate-500/10">
+                        <div className="flex-1 relative flex flex-col z-10 w-full h-full p-1 shadow-lg bg-[linear-gradient(rgba(249,249,249,0.5),rgba(249,249,249,0.5)),url(/assets/paper.png)] bg-repeat bg-size-[30%] border border-gray-300 max-h-60 sm:max-h-200 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-900/60 scrollbar-track-slate-500/10">
 
                             <div className="bg-gray-900 text-white font-special text-xs px-2.5 py-1.5 uppercase tracking-wider sticky top-0 z-20 shadow-md mb-0.5 flex justify-between items-center">
                                 <span>Nome da Regra</span>
