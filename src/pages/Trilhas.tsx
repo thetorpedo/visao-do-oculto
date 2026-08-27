@@ -6,9 +6,10 @@ import { estiloBadgeTipo } from "@/utils/badgeUtils";
 import { useData } from "@/context/DataContext";
 import { useFiltros, type ConfigFiltro } from "@/hooks/useFiltros";
 
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Pencil } from "lucide-react";
 import { useMemo, useState } from "react";
 import SaveButton from "@/components/save-button";
+import ModalCriarRegistro from "@/components/modal-create";
 
 const CONFIGS_FILTRO: ConfigFiltro[] = [
   {
@@ -26,6 +27,9 @@ const CONFIGS_FILTRO: ConfigFiltro[] = [
 export default function Trilhas() {
   const { trilhas: trilhasData } = useData();
   const [leitorAtivo, setLeitorAtivo] = useState<{ fonte: string; pagina: number } | null>(null);
+  const [modalCriarAberto, setModalCriarAberto] = useState(false);
+  const [editando, setEditando] = useState<typeof trilhasOrdenadas[0] | null>(null);
+
 
   const {
     busca,
@@ -99,6 +103,19 @@ export default function Trilhas() {
 
   return (
     <div className="space-y-6">
+      {modalCriarAberto && (
+        <ModalCriarRegistro
+          categoria="trilhas"
+          onClose={() => setModalCriarAberto(false)}
+        />
+      )}
+      {editando && (
+        <ModalCriarRegistro
+          categoria="trilhas"
+          itemInicial={editando}
+          onClose={() => setEditando(null)}
+        />
+      )}
       <DocumentReader
         fonteId={leitorAtivo?.fonte || ""}
         paginaImpressa={leitorAtivo?.pagina || 0}
@@ -118,6 +135,7 @@ export default function Trilhas() {
         totalItens={trilhasOrdenadas.length}
         operadoresAtivos={operadoresAtivos}
         toggleOperador={toggleOperador}
+        onCriarNovo={() => setModalCriarAberto(true)}
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -180,7 +198,16 @@ export default function Trilhas() {
                     })
                   }
                 />
-                <SaveButton itemId={trilha.id} categoria="trilhas" />
+                <div className="flex flex-row gap-2">
+                  <button
+                    onClick={() => setEditando(trilha)}
+                    className="flex items-center justify-center p-1.5 transition-colors hover:bg-gray-200 cursor-pointer rounded"
+                    title="Editar"
+                  >
+                    <Pencil className="size-5 transition-all text-gray-500 hover:text-gray-900" />
+                  </button>
+                  <SaveButton itemId={trilha.id} categoria="trilhas" />
+                </div>
               </div>
             </div>
 

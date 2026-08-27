@@ -68,6 +68,7 @@ interface DataContextValue extends DataState {
     exportarCategoria: (categoria: Categoria) => void;
     exportarArquivo: (nomeArquivo: string, categoria: Categoria) => Promise<void>;
     entrarSemDados: () => void;
+    salvarRegistro: (categoria: Categoria, item: any) => Promise<void>;
 }
 
 // ─────────────────────────────────────────
@@ -448,6 +449,51 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         URL.revokeObjectURL(url);
     }, []);
 
+    // ── Salvar Registro Individual (Homebrew) ──
+    const salvarRegistro = useCallback(async (categoria: Categoria, item: any) => {
+        const schema = SCHEMAS[categoria];
+
+        const itemCompleto = {
+            ...item,
+            id: item.id || `hb_${crypto.randomUUID()}`,
+            codigo: item.codigo || Date.now()
+        };
+
+        const result = schema.safeParse(itemCompleto);
+
+        if (!result.success) {
+            console.error("Erro de validação:", result.error.flatten());
+            const fieldErrors = result.error.flatten().fieldErrors;
+            const errorMsg = Object.entries(fieldErrors)
+                .map(([field, msgs]) => `${field.toUpperCase()}: ${Array.isArray(msgs) ? msgs.join(", ") : String(msgs ?? "")}`)
+                .join(" | ");
+            throw new Error(`Erro: ${errorMsg}`);
+        }
+
+        const itemValidado = result.data as typeof itemCompleto;
+
+        const nomeArquivo = "meus-homebrews.json";
+        const key = `${categoria}:${nomeArquivo}`;
+
+        const itensExistentes = await dbGet<unknown[]>("dados", key) || [];
+        const novaLista = itensExistentes.some((i: any) => i.id === itemValidado.id)
+            ? itensExistentes.map((i: any) => i.id === itemValidado.id ? itemValidado : i)
+            : [itemValidado, ...itensExistentes];
+
+        await dbSet("dados", key, novaLista);
+
+        setState((prev) => {
+            const jaExiste = prev.arquivosImportados.find(a => a.nome === nomeArquivo && a.categoria === categoria);
+            return {
+                ...prev,
+                [categoria]: [itemValidado, ...(prev[categoria] as any[])],
+                arquivosImportados: jaExiste
+                    ? prev.arquivosImportados.map(a => a.nome === nomeArquivo && a.categoria === categoria ? { ...a, itens: novaLista.length } : a)
+                    : [...prev.arquivosImportados, { nome: nomeArquivo, categoria, itens: novaLista.length }]
+            };
+        });
+    }, []);
+
     return (
         <DataContext.Provider
             value={{
@@ -463,7 +509,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
                 limparTudo,
                 exportarPacote,
                 exportarCategoria,
-                exportarArquivo
+                exportarArquivo,
+                salvarRegistro,
             }}
         >
             {children}

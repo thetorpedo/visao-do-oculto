@@ -7,6 +7,8 @@ import { useData } from "@/context/DataContext";
 import { useFiltros, type ConfigFiltro } from "@/hooks/useFiltros";
 import Fuse from "fuse.js";
 import { useEffect, useMemo, useState } from "react";
+import ModalCriarRegistro from "@/components/modal-create";
+import { Pencil } from "lucide-react";
 
 const CONFIGS_FILTRO: ConfigFiltro[] = [
     {
@@ -36,6 +38,8 @@ export default function Regras() {
     const { regras: regrasData } = useData();
     const [leitorAtivo, setLeitorAtivo] = useState<{ fonte: string; pagina: number } | null>(null);
     const [regraSelecionada, setRegraSelecionada] = useState<any | null>(null);
+    const [modalCriarAberto, setModalCriarAberto] = useState(false);
+    const [editando, setEditando] = useState<typeof regrasOrdenadas[0] | null>(null);
 
     const {
         busca,
@@ -154,6 +158,19 @@ export default function Regras() {
 
     return (
         <div className="flex flex-col gap-6 h-full min-h-[85vh]">
+            {modalCriarAberto && (
+                <ModalCriarRegistro
+                    categoria="regras"
+                    onClose={() => setModalCriarAberto(false)}
+                />
+            )}
+            {editando && (
+                <ModalCriarRegistro
+                    categoria="regras"
+                    itemInicial={editando}
+                    onClose={() => setEditando(null)}
+                />
+            )}
             <DocumentReader
                 fonteId={leitorAtivo?.fonte || ""}
                 paginaImpressa={leitorAtivo?.pagina || 0}
@@ -173,6 +190,7 @@ export default function Regras() {
                 temFiltroAtivo={temFiltroAtivo}
                 limparFiltros={limparFiltros}
                 totalItens={regrasOrdenadas.length}
+                onCriarNovo={() => setModalCriarAberto(true)}
             />
 
             <div className="flex flex-col lg:flex-row gap-6 h-full min-h-[85vh]">
@@ -257,7 +275,16 @@ export default function Regras() {
                                         <h2 className="text-3xl sm:text-4xl font-special text-gray-900 leading-tight">
                                             {regraSelecionada.nome}
                                         </h2>
-                                        <SaveButton itemId={regraSelecionada.id} categoria="regras" />
+                                        <div className="flex flex-row gap-2">
+                                            <button
+                                                onClick={() => setEditando(regraSelecionada)}
+                                                className="flex items-center justify-center p-1.5 transition-colors hover:bg-gray-200 cursor-pointer rounded"
+                                                title="Editar"
+                                            >
+                                                <Pencil className="size-5 transition-all text-gray-500 hover:text-gray-900" />
+                                            </button>
+                                            <SaveButton itemId={regraSelecionada.id} categoria="regras" />
+                                        </div>
                                     </div>
 
                                     <div className="flex flex-wrap gap-4 items-center justify-between">

@@ -8,6 +8,8 @@ import { useFiltros, type ConfigFiltro } from "@/hooks/useFiltros";
 
 import { useMemo, useState } from "react";
 import SaveButton from "@/components/save-button";
+import ModalCriarRegistro from "@/components/modal-create";
+import { Pencil } from "lucide-react";
 
 const CONFIGS_FILTRO: ConfigFiltro[] = [
   {
@@ -36,6 +38,8 @@ const CONFIGS_FILTRO: ConfigFiltro[] = [
 export default function Poderes() {
   const { poderes: poderesData } = useData();
   const [leitorAtivo, setLeitorAtivo] = useState<{ fonte: string; pagina: number } | null>(null);
+  const [modalCriarAberto, setModalCriarAberto] = useState(false);
+  const [poderEditando, setPoderEditando] = useState<typeof poderesOrdenados[0] | null>(null);
 
   const {
     busca,
@@ -69,6 +73,19 @@ export default function Poderes() {
 
   return (
     <div className="space-y-6">
+      {modalCriarAberto && (
+        <ModalCriarRegistro
+          categoria="poderes"
+          onClose={() => setModalCriarAberto(false)}
+        />
+      )}
+      {poderEditando && (
+        <ModalCriarRegistro
+          categoria="poderes"
+          itemInicial={poderEditando}
+          onClose={() => setPoderEditando(null)}
+        />
+      )}
       <DocumentReader
         fonteId={leitorAtivo?.fonte || ""}
         paginaImpressa={leitorAtivo?.pagina || 0}
@@ -88,6 +105,7 @@ export default function Poderes() {
         temFiltroAtivo={temFiltroAtivo}
         limparFiltros={limparFiltros}
         totalItens={poderesOrdenados.length}
+        onCriarNovo={() => setModalCriarAberto(true)}
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -139,7 +157,16 @@ export default function Poderes() {
                   pagina={poder.fontePagina}
                   onOpenReader={() => setLeitorAtivo({ fonte: poder.fonteLivro, pagina: parseInt(String(poder.fontePagina)) })}
                 />
-                <SaveButton itemId={poder.id} categoria="poderes" />
+                <div className="flex flex-row gap-2">
+                  <button
+                    onClick={() => setPoderEditando(poder)}
+                    className="flex items-center justify-center p-1.5 transition-colors hover:bg-gray-200 cursor-pointer rounded"
+                    title="Editar"
+                  >
+                    <Pencil className="size-5 transition-all text-gray-500 hover:text-gray-900" />
+                  </button>
+                  <SaveButton itemId={poder.id} categoria="poderes" />
+                </div>
               </div>
 
             </div>

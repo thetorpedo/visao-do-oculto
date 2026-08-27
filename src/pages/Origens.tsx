@@ -7,6 +7,8 @@ import { useData } from "@/context/DataContext";
 import { useFiltros, type ConfigFiltro } from "@/hooks/useFiltros";
 
 import { useMemo, useState } from "react";
+import ModalCriarRegistro from "@/components/modal-create";
+import { Pencil } from "lucide-react";
 
 const CONFIGS_FILTRO: ConfigFiltro[] = [
   {
@@ -32,6 +34,8 @@ const CONFIGS_FILTRO: ConfigFiltro[] = [
 export default function Origens() {
   const { origens: origensData } = useData();
   const [leitorAtivo, setLeitorAtivo] = useState<{ fonte: string; pagina: number } | null>(null);
+  const [modalCriarAberto, setModalCriarAberto] = useState(false);
+  const [origemEditando, setOrigemEditando] = useState<typeof origensOrdenadas[0] | null>(null);
 
   const {
     busca,
@@ -64,6 +68,19 @@ export default function Origens() {
 
   return (
     <div className="space-y-6">
+      {modalCriarAberto && (
+        <ModalCriarRegistro
+          categoria="origens"
+          onClose={() => setModalCriarAberto(false)}
+        />
+      )}
+      {origemEditando && (
+        <ModalCriarRegistro
+          categoria="origens"
+          itemInicial={origemEditando}
+          onClose={() => setOrigemEditando(null)}
+        />
+      )}
       <DocumentReader
         fonteId={leitorAtivo?.fonte || ""}
         paginaImpressa={leitorAtivo?.pagina || 0}
@@ -83,6 +100,7 @@ export default function Origens() {
         temFiltroAtivo={temFiltroAtivo}
         limparFiltros={limparFiltros}
         totalItens={origensOrdenadas.length}
+        onCriarNovo={() => setModalCriarAberto(true)}
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -118,7 +136,16 @@ export default function Origens() {
                   pagina={origem.fontePagina}
                   onOpenReader={() => setLeitorAtivo({ fonte: origem.fonteLivro, pagina: parseInt(String(origem.fontePagina)) })}
                 />
-                <SaveButton itemId={origem.id} categoria="origens" />
+                <div className="flex flex-row gap-2">
+                  <button
+                    onClick={() => setOrigemEditando(origem)}
+                    className="flex items-center justify-center p-1.5 transition-colors hover:bg-gray-200 cursor-pointer rounded"
+                    title="Editar"
+                  >
+                    <Pencil className="size-5 transition-all text-gray-500 hover:text-gray-900" />
+                  </button>
+                  <SaveButton itemId={origem.id} categoria="origens" />
+                </div>
               </div>
 
             </div>

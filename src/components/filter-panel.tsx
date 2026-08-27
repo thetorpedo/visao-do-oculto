@@ -1,5 +1,5 @@
 import FilterButton from "@/components/filter-button";
-import { Search, X, ChevronDown, ChevronUp } from "lucide-react";
+import { Search, X, ChevronDown, ChevronUp, Plus } from "lucide-react";
 import { useState } from "react";
 import type { ConfigFiltro, EstadoFiltro, OperadorFiltro } from "@/hooks/useFiltros";
 
@@ -17,6 +17,7 @@ interface FiltrosPainelProps {
     limparFiltros: () => void;
 
     totalItens: number;
+    onCriarNovo?: () => void;
 }
 
 function LinhaFiltroExpansivel({
@@ -77,7 +78,7 @@ function LinhaFiltroExpansivel({
             </div>
 
             <div
-                className={`flex flex-wrap gap-1.5 grow transition-all duration-200 overflow-hidden ${expandido ? "max-h-[500px]" : "max-h-[78px]"
+                className={`flex flex-wrap gap-1.5 grow transition-all duration-200 overflow-hidden ${expandido ? "max-h-125" : "max-h-19.5"
                     }`}
             >
                 {config.opcoes.map(opcao => (
@@ -105,27 +106,37 @@ export default function FilterPanel({
     temFiltroAtivo,
     limparFiltros,
     totalItens,
+    onCriarNovo,
 }: FiltrosPainelProps) {
     return (
         <div className="relative ">
             <div className="relative p-6 z-10 shadow-2xl bg-[linear-gradient(rgba(249,249,249,0.5),rgba(249,249,249,0.5)),url(/assets/paper.png)] bg-repeat bg-size-[30%]">
                 <div className="flex flex-col gap-4">
 
-                    <div className="flex sticky items-center border border-gray-600 bg-white/40 px-3 py-2">
-                        <Search className="size-5 mr-2 shrink-0 text-gray-600" />
-                        <input
-                            type="text"
-                            placeholder={placeholder ?? `Buscando entre ${totalItens} registros...`}
-                            className="w-full bg-transparent outline-none font-medium text-sm"
-                            value={busca}
-                            onChange={e => setBusca(e.target.value)}
-                        />
-                        {busca && (
-                            <button onClick={() => setBusca("")} className="ml-2 text-gray-400 hover:text-gray-700 cursor-pointer">
-                                <X className="size-4" />
+                    <div className="flex flex-row gap-2">
+                        <div className="flex w-full sticky items-center border border-gray-600 bg-white/40 px-3 py-2">
+                            <Search className="size-5 mr-2 shrink-0 text-gray-600" />
+                            <input
+                                type="text"
+                                placeholder={placeholder ?? `Buscando entre ${totalItens} registros...`}
+                                className="w-full bg-transparent outline-none font-medium text-sm"
+                                value={busca}
+                                onChange={e => setBusca(e.target.value)}
+                            />
+                            {busca && (
+                                <button onClick={() => setBusca("")} className="ml-2 text-gray-400 hover:text-gray-700 cursor-pointer">
+                                    <X className="size-4" />
+                                </button>
+                            )}
+                        </div>
+                        {onCriarNovo && (
+                            <button
+                                onClick={onCriarNovo}
+                                className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white font-special uppercase text-sm tracking-wide transition-all cursor-pointer shrink-0 h-full"
+                            >
+                                <Plus className="size-4" /> Criar Novo
                             </button>
-                        )}
-                    </div>
+                        )}</div>
 
                     <div className="flex flex-col gap-3">
                         {opcoesResolvidas.map(config => {

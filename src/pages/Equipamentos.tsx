@@ -8,6 +8,8 @@ import { useFiltros, type ConfigFiltro } from "@/hooks/useFiltros";
 
 import { useMemo, useState } from "react";
 import SaveButton from "@/components/save-button";
+import ModalCriarRegistro from "@/components/modal-create";
+import { Pencil } from "lucide-react";
 
 const LinhaStatus = ({ label, valor }: { label: string; valor: string | number | null | undefined }) => {
   if (valor === null || valor === undefined || valor === "") return null;
@@ -32,6 +34,9 @@ export default function Equipamentos() {
   const { equipamentos: equipamentosData } = useData();
   const [abaAtiva, setAbaAtiva] = useState<"equipamentos" | "maldicoes">("equipamentos");
   const [leitorAtivo, setLeitorAtivo] = useState<{ fonte: string; pagina: number } | null>(null);
+  const [modalCriarAberto, setModalCriarAberto] = useState(false);
+  const [editando, setEditando] = useState<typeof equipamentosOrdenados[0] | null>(null);
+
 
   const dadosAbaAtual = useMemo(() => {
     return equipamentosData.filter(e => {
@@ -94,6 +99,19 @@ export default function Equipamentos() {
 
   return (
     <div className="space-y-6">
+      {modalCriarAberto && (
+        <ModalCriarRegistro
+          categoria="equipamentos"
+          onClose={() => setModalCriarAberto(false)}
+        />
+      )}
+      {editando && (
+        <ModalCriarRegistro
+          categoria="equipamentos"
+          itemInicial={editando}
+          onClose={() => setEditando(null)}
+        />
+      )}
       <DocumentReader
         fonteId={leitorAtivo?.fonte || ""}
         paginaImpressa={leitorAtivo?.pagina || 0}
@@ -132,6 +150,7 @@ export default function Equipamentos() {
               temFiltroAtivo={temFiltroAtivo}
               limparFiltros={limparFiltros}
               totalItens={equipamentosOrdenados.length}
+              onCriarNovo={() => setModalCriarAberto(true)}
             />
 
           </div>
@@ -220,7 +239,16 @@ export default function Equipamentos() {
                     pagina={equip.fontePagina}
                     onOpenReader={() => setLeitorAtivo({ fonte: equip.fonteLivro, pagina: parseInt(String(equip.fontePagina)) })}
                   />
-                  <SaveButton itemId={equip.id} categoria="equipamentos" />
+                  <div className="flex flex-row gap-2">
+                    <button
+                      onClick={() => setEditando(equip)}
+                      className="flex items-center justify-center p-1.5 transition-colors hover:bg-gray-200 cursor-pointer rounded"
+                      title="Editar"
+                    >
+                      <Pencil className="size-5 transition-all text-gray-500 hover:text-gray-900" />
+                    </button>
+                    <SaveButton itemId={equip.id} categoria="equipamentos" />
+                  </div>
                 </div>
               </div>
 
