@@ -40,10 +40,10 @@ function LinhaFiltroExpansivel({
     const precisaDeExpansao = config.opcoes.length > 16;
 
     return (
-        <div className="flex gap-1.5 items-start border-b border-dashed border-black/20 pb-2 last:border-none">
+        <div className="flex gap-1.5 items-start border-b border-dashed border-black/20 pb-1 last:border-none">
             <div className="flex flex-col gap-1 w-24 shrink-0 mr-1 pt-0.5">
                 <div className="flex items-center gap-1.5 justify-between">
-                    <span className="text-sm font-special text-gray-600 uppercase tracking-wide truncate">
+                    <span className="text-sm font-special text-black/80 lead uppercase tracking-wide truncate">
                         {config.label}:
                     </span>
                     {possuiSelecoes && toggleOperador && (
@@ -78,7 +78,7 @@ function LinhaFiltroExpansivel({
             </div>
 
             <div
-                className={`flex flex-wrap gap-1.5 grow transition-all duration-200 overflow-hidden ${expandido ? "max-h-125" : "max-h-19.5"
+                className={`flex flex-wrap gap-1 grow transition-all duration-200 overflow-hidden ${expandido ? "max-h-125" : "max-h-19.5"
                     }`}
             >
                 {config.opcoes.map(opcao => (
@@ -138,7 +138,7 @@ export default function FilterPanel({
                             </button>
                         )}</div>
 
-                    <div className="flex flex-col gap-3">
+                    <div className="flex flex-col gap-1">
                         {opcoesResolvidas.map(config => {
                             if (config.opcoes.length === 0) return null;
 

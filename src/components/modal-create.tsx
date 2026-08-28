@@ -251,15 +251,14 @@ export default function ModalCriarRegistro({
     onClose: () => void;
 }) {
     const dataCtx = useData();
-    const { salvarRegistro } = dataCtx;
+    const { salvarRegistro, removerRegistro } = dataCtx;
     const [erro, setErro] = useState("");
     const [salvando, setSalvando] = useState(false);
+    const [excluindo, setExcluindo] = useState(false);
     const [formData, setFormData] = useState<any>(() =>
         itemInicial ? itemParaForm(categoria, itemInicial) : estadoInicial(categoria)
     );
 
-    // Coleta valores únicos já usados em cada campo "livre" da categoria atual,
-    // pra alimentar os ComboBox/ComboBoxCsv como sugestões.
     const opcoes = useMemo(() => {
         const dados: any[] = (dataCtx as any)[categoria] ?? [];
         const unicosDe = (campo: string) =>
@@ -318,7 +317,6 @@ export default function ModalCriarRegistro({
         }
     }, [dataCtx, categoria]);
 
-    // Campos de arma ficam dentro de um objeto aninhado (`arma`), então são extraídos à parte.
     const opcoesArma = useMemo(() => {
         const dados: any[] = (dataCtx as any).equipamentos ?? [];
         const armas = dados.map((item) => item?.arma).filter(Boolean);
@@ -342,7 +340,6 @@ export default function ModalCriarRegistro({
         setFormData((prev: any) => ({ ...prev, [name]: val }));
     };
 
-    // Handler compatível com a assinatura (name, value) do ComboBox/ComboBoxCsv
     const handleComboChange = (name: string, value: string) => {
         setFormData((prev: any) => ({ ...prev, [name]: value }));
     };
@@ -382,6 +379,25 @@ export default function ModalCriarRegistro({
             setErro(e.message || "Erro ao salvar registro.");
         } finally {
             setSalvando(false);
+        }
+    };
+
+    const handleExcluir = async () => {
+        if (!itemInicial?.id) return;
+
+        if (!window.confirm(`Tem certeza que deseja excluir "${formData.nome}"? Se for um item original do livro que você editou, ele voltará ao padrão original.`)) {
+            return;
+        }
+
+        try {
+            setErro("");
+            setExcluindo(true);
+            await removerRegistro(categoria, itemInicial.id);
+            onClose();
+        } catch (e: any) {
+            setErro(e.message || "Erro ao excluir registro.");
+        } finally {
+            setExcluindo(false);
         }
     };
 
@@ -800,26 +816,46 @@ export default function ModalCriarRegistro({
                             </Secao>
                         </div>
 
-                        <div className="p-3 border-t-2 border-dashed border-gray-400 flex justify-end gap-3">
-                            <button
-                                onClick={onClose}
-                                className="px-4 py-2 text-sm font-special uppercase cursor-pointer tracking-wide border-2 border-gray-400 text-gray-700 hover:bg-gray-300 "
-                            >
-                                Cancelar
-                            </button>
-                            <button
-                                onClick={handleSalvar}
-                                disabled={salvando}
-                                className="flex items-center gap-2 px-6 py-2 cursor-pointer bg-black text-white font-special uppercase tracking-wide border-2 border-gray-900 hover:bg-gray-800 disabled:opacity-50"
-                            >
-                                <Save className="size-4" /> {salvando ? "Salvando..." : "Salvar"}
-                            </button>
+                        <div className="p-3 border-t-2 border-dashed border-gray-400 flex items-center justify-between gap-3">
+
+                            {itemInicial ? (
+                                <button
+                                    type="button"
+                                    onClick={handleExcluir}
+                                    disabled={salvando || excluindo}
+                                    className="flex items-center gap-2 px-4 py-2 text-sm font-special uppercase cursor-pointer tracking-wide border-2 border-red-700 text-red-700 hover:bg-red-700 hover:text-white disabled:opacity-50 transition-colors"
+                                    title="Excluir este item"
+                                >
+                                    <Trash2 className="size-4" />
+                                    <span className="hidden sm:inline">{excluindo ? "Excluindo..." : "Excluir"}</span>
+                                </button>
+                            ) : (
+                                <div />
+                            )}
+
+                            <div className="flex gap-3">
+                                <button
+                                    type="button"
+                                    onClick={onClose}
+                                    disabled={salvando || excluindo}
+                                    className="px-4 py-2 text-sm font-special uppercase cursor-pointer tracking-wide border-2 border-gray-400 text-gray-700 hover:bg-gray-300 disabled:opacity-50 transition-colors"
+                                >
+                                    Cancelar
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={handleSalvar}
+                                    disabled={salvando || excluindo}
+                                    className="flex items-center gap-2 px-6 py-2 cursor-pointer bg-black text-white font-special uppercase tracking-wide border-2 border-gray-900 hover:bg-gray-800 disabled:opacity-50 transition-colors"
+                                >
+                                    <Save className="size-4" /> {salvando ? "Salvando..." : "Salvar"}
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <div className="absolute top-1/2 left-1/2 z-0 h-full w-full -translate-x-1/2 -translate-y-1/2 rotate-1 p-1 bg-[linear-gradient(rgba(139,139,139,0.4),rgba(139,139,139,0.2)),url(/assets/paper.png)] shadow-[0_0_15px_rgba(0,0,0,0.15)] bg-repeat bg-size-[30%]" />
                 </div>
             </div>
-
         </div>,
         document.body
     );

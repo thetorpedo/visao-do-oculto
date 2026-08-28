@@ -32,7 +32,7 @@ function GlobalModals() {
         isOpen={leitor.isOpen}
         onClose={fecharLeitor}
       />
-      {modal.categoria && (
+      {modal.isOpen && modal.categoria && (
         <ModalCriarRegistro
           categoria={modal.categoria}
           itemInicial={modal.itemInicial ?? undefined}

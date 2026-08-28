@@ -1,10 +1,6 @@
 import { createContext, useCallback, useContext, useState } from "react";
 import type { Categoria } from "@/context/DataContext";
 
-// ─────────────────────────────────────────
-// Tipos
-// ─────────────────────────────────────────
-
 interface LeitorState {
     fonteId: string;
     pagina: number;
@@ -18,21 +14,15 @@ interface ModalState {
 }
 
 interface UIContextValue {
-    // Leitor
     leitor: LeitorState;
     abrirLeitor: (fonteId: string, pagina: number) => void;
     fecharLeitor: () => void;
 
-    // Modal criar/editar
     modal: ModalState;
     abrirCriar: (categoria: Categoria) => void;
     abrirEditar: (categoria: Categoria, item: any) => void;
     fecharModal: () => void;
 }
-
-// ─────────────────────────────────────────
-// Context
-// ─────────────────────────────────────────
 
 const UIContext = createContext<UIContextValue | null>(null);
 
@@ -66,7 +56,11 @@ export function UIProvider({ children }: { children: React.ReactNode }) {
     }, []);
 
     const fecharModal = useCallback(() => {
-        setModal((prev) => ({ ...prev, isOpen: false }));
+        setModal({
+            categoria: null,
+            itemInicial: null,
+            isOpen: false,
+        });
     }, []);
 
     return (

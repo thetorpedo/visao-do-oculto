@@ -69,6 +69,7 @@ interface DataContextValue extends DataState {
     exportarArquivo: (nomeArquivo: string, categoria: Categoria) => Promise<void>;
     entrarSemDados: () => void;
     salvarRegistro: (categoria: Categoria, item: any) => Promise<void>;
+    removerRegistro: (categoria: Categoria, id: string) => Promise<void>;
 }
 
 // ─────────────────────────────────────────
@@ -494,6 +495,19 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         });
     }, []);
 
+    // ── Remover Registro Individual (Homebrew) ──
+    const removerRegistro = useCallback(async (categoria: Categoria, id: string) => {
+        const nomeArquivo = "meus-homebrews.json";
+        const key = `${categoria}:${nomeArquivo}`;
+
+        const itensExistentes = await dbGet<any[]>("dados", key) || [];
+        const novaLista = itensExistentes.filter((i: any) => i.id !== id);
+
+        await dbSet("dados", key, novaLista);
+
+        await carregarTudo();
+    }, [carregarTudo]);
+
     return (
         <DataContext.Provider
             value={{
@@ -511,6 +525,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
                 exportarCategoria,
                 exportarArquivo,
                 salvarRegistro,
+                removerRegistro,
             }}
         >
             {children}
