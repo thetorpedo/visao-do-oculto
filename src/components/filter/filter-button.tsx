@@ -28,7 +28,7 @@ export default function FilterButton({ label, estado, isSelected, onClick }: Fil
       title={titulo[estadoEfetivo]}
       className={`
         px-2.5 py-0 text-sm uppercase tracking-tight font-daisy
-        border transition-colors duration-150 cursor-pointer select-none truncate
+        border cursor-pointer select-none truncate
         ${estilos[estadoEfetivo]}
       `}
     >

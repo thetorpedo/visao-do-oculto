@@ -1,10 +1,10 @@
 import { estiloBadgeTipo, corElemento } from "@/utils/badgeUtils";
-import ExpandableText from "../expandable-text";
-import RulesRenderer from "../rules-renderer";
+import ExpandableText from "./expandable-text";
+import RulesRenderer from "./rules-renderer";
 import { ChevronDown, Pencil } from "lucide-react";
 import { useState } from "react";
-import Source from "../source";
-import SaveButton from "../save-button";
+import Source from "./source";
+import SaveButton from "../favorite/save-button";
 import { useUI } from "@/context/UiContext";
 import PaperDiv from "./paper-div";
 import { Categoria } from "@/context/DataContext";

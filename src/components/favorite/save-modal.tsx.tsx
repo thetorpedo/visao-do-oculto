@@ -2,11 +2,11 @@ import { useState } from "react";
 import { createPortal } from "react-dom";
 import { X, Plus, Trash2, Check } from "lucide-react";
 import { useFavoritos } from "@/context/FavoritosContext";
-import { CategoriaFavoritavel } from "@/lib/favoritos";
+import { Categoria } from "@/context/DataContext";
 
 interface ModalAdicionarFavoritoProps {
   itemId: string;
-  categoria: CategoriaFavoritavel;
+  categoria: Categoria;
   onClose: () => void;
 }
 
@@ -62,7 +62,7 @@ export default function SaveModal({ itemId, categoria, onClose }: ModalAdicionar
   };
 
   return createPortal(
-    <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+    <div className="fixed inset-0 z-99999 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
       <div className="relative w-full max-w-md p-6 bg-[url(/assets/paper.png)] bg-repeat bg-size-[30%] shadow-2xl border border-gray-400">
 
         <div className="flex items-center justify-between mb-4 border-b border-gray-400 border-dashed pb-2">
@@ -118,7 +118,7 @@ export default function SaveModal({ itemId, categoria, onClose }: ModalAdicionar
         <div className="flex flex-col gap-2 pt-4 border-t border-gray-400 border-dashed">
           <button
             onClick={handleSalvar}
-            className="w-full py-2 bg-gray-900 text-white font-special uppercase tracking-wider hover:bg-gray-800 transition-colors cursor-pointer shadow-[3px_3px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"
+            className="w-full py-2 bg-gray-900 text-white font-special uppercase tracking-wider hover:bg-gray-800 transition-colors cursor-pointer shadow-[3px_3px_0px_rgba(0,0,0,1)] hover:translate-x-px hover:translate-y-px hover:shadow-none"
           >
             Salvar Alterações
           </button>

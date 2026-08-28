@@ -9,7 +9,7 @@ import 'react-pdf/dist/Page/TextLayer.css';
 pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
 
 import { useData } from '@/context/DataContext';
-import FolderDiv from './ui/folder-div';
+import FolderDiv from '../ui/folder-div';
 
 interface DocumentReaderProps {
   fonteId: string;

@@ -1,7 +1,7 @@
-import Source from "@/components/source";
-import SaveButton from "@/components/save-button";
+import Source from "@/components/ui/source";
+import SaveButton from "@/components/favorite/save-button";
 import FilterPanel from "@/components/filter-panel";
-import RulesRenderer from "@/components/rules-renderer";
+import RulesRenderer from "@/components/ui/rules-renderer";
 import PaperDiv from "@/components/ui/paper-div";
 import { useData } from "@/context/DataContext";
 import { useUI } from "@/context/UiContext";

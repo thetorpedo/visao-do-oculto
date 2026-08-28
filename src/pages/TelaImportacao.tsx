@@ -1,4 +1,4 @@
-import Logo from "@/components/logo";
+import Logo from "@/components/home/logo";
 import { useData, type Categoria } from "@/context/DataContext";
 import { baixarTemplate } from "@/lib/templates";
 import { Download, Upload, Package } from "lucide-react";

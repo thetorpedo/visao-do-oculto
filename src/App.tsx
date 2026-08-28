@@ -5,15 +5,15 @@ import Home from './pages/Home';
 import Origens from './pages/Origens';
 import Poderes from './pages/Poderes';
 import Trilhas from './pages/Trilhas';
-import GlobalSearch from './components/global-search';
+import GlobalSearch from './components/modals/global-search';
 import Rituais from './pages/Rituais';
 import Configuracoes from './pages/Configuracoes';
 import TelaImportacao from './pages/TelaImportacao';
 import Favoritos from './pages/Favoritos';
 import Fontes from './pages/Fontes';
 import Regras from './pages/Regras';
-import DocumentReader from './components/document-reader';
-import ModalCriarRegistro from './components/modal-create';
+import DocumentReader from './components/modals/document-reader';
+import ModalCriarRegistro from './components/modals/modal-create';
 import { useData } from './context/DataContext';
 import { UIProvider, useUI } from './context/UiContext';
 

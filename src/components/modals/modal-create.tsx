@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { X, Save, Plus, Trash2 } from "lucide-react";
 import { useData, type Categoria } from "@/context/DataContext";
-import ComboBox, { ComboBoxCsv } from "@/components/combo-box";
+import ComboBox, { ComboBoxCsv } from "@/components/ui/combo-box";
 
 // ─────────────────────────────────────────
 // Helpers de normalização
