@@ -1,4 +1,4 @@
-import FilterButton from "@/components/filter-button";
+import FilterButton from "@/components/filter/filter-button";
 import { Search, X, ChevronDown, ChevronUp, Plus } from "lucide-react";
 import { useState } from "react";
 import type { ConfigFiltro, EstadoFiltro, OperadorFiltro } from "@/hooks/useFiltros";
