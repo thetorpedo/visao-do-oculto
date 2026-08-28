@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { useData } from "@/context/DataContext";
 import { useFiltros, type ConfigFiltro } from "@/hooks/useFiltros";
-import FilterPanel from "@/components/filter-panel";
+import FilterPanel from "@/components/filter/filter-panel";
 import { useUI } from "@/context/UiContext";
 import ItemCard from "@/components/ui/item-card";
 

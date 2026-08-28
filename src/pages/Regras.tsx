@@ -1,6 +1,5 @@
 import Source from "@/components/ui/source";
 import SaveButton from "@/components/favorite/save-button";
-import FilterPanel from "@/components/filter-panel";
 import RulesRenderer from "@/components/ui/rules-renderer";
 import PaperDiv from "@/components/ui/paper-div";
 import { useData } from "@/context/DataContext";
@@ -11,6 +10,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Pencil } from "lucide-react";
 import { badgeClass } from "@/components/ui/item-card";
 import { estiloBadgeTipo } from "@/utils/badgeUtils";
+import FilterPanel from "@/components/filter/filter-panel";
 
 const CONFIGS_FILTRO: ConfigFiltro[] = [
     {

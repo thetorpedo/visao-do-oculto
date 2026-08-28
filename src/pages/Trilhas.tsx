@@ -1,4 +1,4 @@
-import FilterPanel from "@/components/filter-panel";
+import FilterPanel from "@/components/filter/filter-panel";
 import { useData } from "@/context/DataContext";
 import { useFiltros, type ConfigFiltro } from "@/hooks/useFiltros";
 import { useMemo } from "react";

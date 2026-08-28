@@ -1,9 +1,9 @@
-import FilterPanel from "@/components/filter-panel";
 import { useData } from "@/context/DataContext";
 import { useFiltros, type ConfigFiltro } from "@/hooks/useFiltros";
 import { useMemo } from "react";
 import ItemCard from "@/components/ui/item-card";
 import { useUI } from "@/context/UiContext";
+import FilterPanel from "@/components/filter/filter-panel";
 
 const CONFIGS_FILTRO: ConfigFiltro[] = [
   {
