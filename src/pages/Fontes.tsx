@@ -115,9 +115,9 @@ export default function Fontes() {
                   onClick={() => setFonteAberta(null)}
                   className="flex items-center gap-2 px-3 py-1.5 border-2 border-gray-800 bg-white hover:bg-gray-100 transition-colors font-special uppercase text-sm tracking-wide shrink-0 cursor-pointer"
                 >
-                  <ArrowLeft className="size-4 -mb-0.5" /> <span className="-mb-1">Voltar</span>
+                  <ArrowLeft className="size-4 -mb-0.5" /> <span className="">Voltar</span>
                 </button>
-                <h2 className="font-special text-xl truncate hidden sm:block -mb-1 mt-1 text-gray-900">
+                <h2 className="font-special text-xl truncate hidden sm:block mt-1 text-gray-900">
                   Lendo: {fonteAtual?.label || fonteAtual?.id}
                 </h2>
               </div>

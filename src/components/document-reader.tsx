@@ -118,7 +118,7 @@ export default function DocumentReader({ fonteId, paginaImpressa, isOpen, onClos
         <div className="text-center px-5 py-2 mb-3 border-2 border-gray-400 border-dashed bg-gray-200/50 text-gray-600 uppercase font-daisy tracking-wider text-xs md:text-sm leading-relaxed flex flex-row justify-between">
 
           <div className="flex gap-2 items-center truncate ">
-            <span className="font-special -mb-1 text-base sm:text-lg  mt-0.5 truncate">
+            <span className="font-special text-base sm:text-lg  mt-0.5 truncate">
               {isImage
                 ? `VISUAL // ${fonteId}`
                 : viewMode === 'single'
@@ -134,9 +134,9 @@ export default function DocumentReader({ fonteId, paginaImpressa, isOpen, onClos
                 className="flex items-center group cursor-pointer gap-2 px-4 py-2 text-sm font-special uppercase tracking-wide border-2 border-gray-800 bg-white text-gray-800 hover:bg-gray-100"
               >
                 {viewMode === 'single' ? (
-                  <><span className="shrink-0 -mb-1">Ver arquivo completo</span></>
+                  <><span className="shrink-0">Ver arquivo completo</span></>
                 ) : (
-                  <><span className="shrink-0 -mb-1">Voltar</span> </>
+                  <><span className="shrink-0">Voltar</span> </>
                 )}
               </button>
             )}
@@ -144,7 +144,7 @@ export default function DocumentReader({ fonteId, paginaImpressa, isOpen, onClos
             <button
               onClick={handleClose}
               className="flex items-center gap-2  cursor-pointer bg-gray-900/80 text-white border-white px-4 py-2 text-sm font-special uppercase tracking-wide hover:bg-red-900">
-              <span className="-mb-1">
+              <span className="">
                 FECHAR
               </span>
               <span ><X className="size-3.5" /></span>
