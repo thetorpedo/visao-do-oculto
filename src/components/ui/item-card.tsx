@@ -15,12 +15,21 @@ const capitalizeFirst = (str: string | number | null | undefined) => {
     return s.charAt(0).toUpperCase() + s.slice(1);
 };
 
-const badgeClass = "text-sm uppercase font-daisy px-2 py-1 border whitespace-nowrap flex items-center justify-center";
+const formatarDescricao = (nome: string, descricao: string) => {
+    if (!descricao) return "";
+    const nomeEscapado = nome.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(`^${nomeEscapado}[\\.\\-\\:\\s]*`, 'i');
+    const textoLimpo = descricao.replace(regex, '').trim();
+    if (!textoLimpo) return "";
+    return textoLimpo.charAt(0).toUpperCase() + textoLimpo.slice(1);
+};
+
+export const badgeClass = "text-sm uppercase font-daisy px-2 py-1 border whitespace-nowrap flex items-center justify-center";
 
 const LinhaStatus = ({ label, valor }: { label: string; valor: string | number | null | undefined }) => {
     if (valor === null || valor === undefined || valor === "") return null;
     return (
-        <div className="flex flex-wrap justify-between items-baseline border-b border-dashed border-gray-300 py-1 gap-x-2 gap-y-0.5">
+        <div className="flex flex-wrap justify-between items-baseline border-b border-dashed border-gray-400/80 py-1 gap-x-2 gap-y-0.5">
             <span className="font-special text-xs text-gray-600 uppercase tracking-wide shrink-0">{label}:</span>
             <span className="font-bold text-gray-900 text-sm text-right wrap-break-word">{capitalizeFirst(valor)}</span>
         </div>
@@ -150,7 +159,7 @@ export const RenderCardBody = (item: any, categoria: string) => {
 
                     {item.preRequisitos && (
                         <div className="flex mb-4 flex-row min-h-7">
-                            <div className="flex items-center px-3 py-1 text-white font-special font-normal text-sm  bg-gray-900 shrink-0">
+                            <div className="flex items-center px-3 py-1 text-white font-special font-normal text-sm bg-gray-900 shrink-0">
                                 Pré-requisitos:
                             </div>
                             <div className="flex items-center px-3 py-1 grow bg-gray-200 border border-l-0 border-dashed border-gray-400">
@@ -259,6 +268,13 @@ export const RenderCardBody = (item: any, categoria: string) => {
             );
 
         case "equipamentos":
+            const tipos = Array.isArray(item.tipo) ? item.tipo : [item.tipo];
+            const isArma = tipos.includes("Arma");
+            const isAmaldicoado = tipos.includes("Item Amaldiçoado");
+            const hideSubtipo = isAmaldicoado && !isArma;
+
+            const showCatEsp = !tipos.includes('Modificação') && !tipos.includes('Maldição');
+
             const statusEquip = [
                 { label: "Proficiência", valor: item.arma?.armaTipo },
                 { label: "Empunhadura", valor: item.arma?.empunhadura },
@@ -273,20 +289,43 @@ export const RenderCardBody = (item: any, categoria: string) => {
             return (
                 <>
                     <div className="flex flex-wrap gap-2 mb-4">
-                        {(Array.isArray(item.tipo) ? item.tipo : [item.tipo]).map((t: string) => (
+                        <div className="w-full flex gap-2">
+                            {showCatEsp && item.categoria && (
+                                <div className="flex items-center justify-center overflow-hidden h-5">
+                                    <span className="bg-gray-900 text-white font-special text-xs px-2 h-full flex items-center uppercase">Cat</span>
+                                    <span className="font-bold text-gray-900 bg-white/70 border border-l-0 border-dashed border-gray-600 px-2 h-full text-sm flex items-center">{item.categoria}</span>
+                                </div>
+                            )}
+
+                            {showCatEsp && item.espaco !== undefined && item.espaco !== null && (
+                                <div className="flex items-center justify-center overflow-hidden h-5">
+                                    <span className="bg-gray-900 text-white font-special text-xs px-2 h-full flex items-center uppercase">Esp</span>
+                                    <span className="font-bold text-gray-900 bg-white/70 border border-l-0 border-dashed border-gray-600 px-2 h-full text-sm flex items-center">{item.espaco}</span>
+                                </div>
+                            )}
+                        </div>
+
+                        {tipos.map((t: string) => (
                             <span key={t} className={`${badgeClass} ${estiloBadgeTipo(t)}`}>{t}</span>
                         ))}
+
+                        {item.subtipo && !hideSubtipo && (
+                            <span className={`${badgeClass} border-dashed border-gray-400 bg-gray-200/50 text-gray-700`}>
+                                {item.subtipo}
+                            </span>
+                        )}
+
                         {item.elemento && <span className={`${badgeClass} ${corElemento(item.elemento)}`}>{item.elemento}</span>}
                     </div>
 
-                    {statusEquip.length > 0 && (
+                    {(isArma || tipos.includes("Proteção")) && statusEquip.length > 0 && (
                         <div className="mb-4 bg-gray-100/90 border border-gray-400/50 p-3 grid gap-x-6 gap-y-1.5 grid-cols-1 sm:grid-cols-2">
                             {statusEquip.map((s, i) => <LinhaStatus key={i} label={s.label} valor={s.valor} />)}
                         </div>
                     )}
 
                     <div className="text-sm text-gray-800 leading-relaxed mb-2">
-                        <ExpandableText text={item.descricao || ""} limit={300} />
+                        <ExpandableText text={formatarDescricao(item.nome, item.descricao || "")} limit={isArma ? 250 : 500} />
                     </div>
                 </>
             );

@@ -19,68 +19,46 @@ const CONFIGS_FILTRO: ConfigFiltro[] = [
 ];
 
 export default function Trilhas() {
-  const { trilhas: trilhasData } = useData();
-
-  const {
-    busca,
-    setBusca,
-    filtrosAtivos,
-    toggleFiltro,
-    limparFiltros,
-    opcoesResolvidas,
-    dadosFiltrados,
-    temFiltroAtivo,
-    operadoresAtivos,
-    toggleOperador,
-  } = useFiltros(trilhasData, CONFIGS_FILTRO);
-
-  const trilhasFiltradasEBusca = useMemo(() => {
-    if (!busca) return dadosFiltrados;
-    const termo = busca.toLowerCase();
-    return dadosFiltrados.filter(
-      (t) =>
-        t.nome.toLowerCase().includes(termo) ||
-        (t.descricao && t.descricao.toLowerCase().includes(termo)) ||
-        (t.especial && t.especial.toLowerCase().includes(termo)) ||
-        t.nex10.toLowerCase().includes(termo) ||
-        t.nex40.toLowerCase().includes(termo) ||
-        (t.nex65 && t.nex65.toLowerCase().includes(termo)) ||
-        (t.nex99 && t.nex99.toLowerCase().includes(termo))
-    );
-  }, [dadosFiltrados, busca]);
-
-  const trilhasOrdenadas = useMemo(() => {
-    if (busca.length > 2) return trilhasFiltradasEBusca;
-    return [...trilhasFiltradasEBusca].sort((a, b) => a.nome.localeCompare(b.nome));
-  }, [trilhasFiltradasEBusca, busca]);
-
-
+  const { trilhas } = useData();
   const { abrirCriar } = useUI();
+
+  const filtros = useFiltros(trilhas, CONFIGS_FILTRO);
+
+  const trilhasExibidas = useMemo(() => {
+    let resultado = filtros.dadosFiltrados;
+
+    if (filtros.busca) {
+      const termo = filtros.busca.toLowerCase();
+      resultado = resultado.filter(
+        (t) =>
+          t.nome.toLowerCase().includes(termo) ||
+          (t.descricao && t.descricao.toLowerCase().includes(termo)) ||
+          (t.especial && t.especial.toLowerCase().includes(termo)) ||
+          (t.nex10 && t.nex10.toLowerCase().includes(termo)) ||
+          (t.nex40 && t.nex40.toLowerCase().includes(termo)) ||
+          (t.nex65 && t.nex65.toLowerCase().includes(termo)) ||
+          (t.nex99 && t.nex99.toLowerCase().includes(termo))
+      );
+    }
+
+    return resultado.sort((a, b) => a.nome.localeCompare(b.nome));
+  }, [filtros.dadosFiltrados, filtros.busca]);
 
   return (
     <div className="space-y-6">
       <FilterPanel
-        busca={busca}
-        setBusca={setBusca}
-        placeholder={`Buscando entre ${trilhasOrdenadas.length} trilhas...`}
-        opcoesResolvidas={opcoesResolvidas}
-        filtrosAtivos={filtrosAtivos}
-        toggleFiltro={toggleFiltro}
-        temFiltroAtivo={temFiltroAtivo}
-        limparFiltros={limparFiltros}
-        totalItens={trilhasOrdenadas.length}
-        operadoresAtivos={operadoresAtivos}
-        toggleOperador={toggleOperador}
+        {...filtros}
+        placeholder={`Buscando entre ${trilhasExibidas.length} trilhas...`}
+        totalItens={trilhasExibidas.length}
         onCriarNovo={() => abrirCriar('trilhas')}
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {trilhasOrdenadas.map((trilha) => (
+        {trilhasExibidas.map((trilha) => (
           <ItemCard key={trilha.id} item={trilha} categoria="trilhas" />
-
         ))}
 
-        {trilhasOrdenadas.length === 0 && (
+        {trilhasExibidas.length === 0 && (
           <div className="col-span-full text-center py-10 text-gray-600 font-special text-xl">
             Nenhuma trilha encontrada com esses termos.
           </div>

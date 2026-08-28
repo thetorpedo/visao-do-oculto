@@ -1,14 +1,16 @@
 import Source from "@/components/source";
 import SaveButton from "@/components/save-button";
-import DocumentReader from "@/components/document-reader";
 import FilterPanel from "@/components/filter-panel";
 import RulesRenderer from "@/components/rules-renderer";
+import PaperDiv from "@/components/ui/paper-div";
 import { useData } from "@/context/DataContext";
+import { useUI } from "@/context/UiContext";
 import { useFiltros, type ConfigFiltro } from "@/hooks/useFiltros";
 import Fuse from "fuse.js";
 import { useEffect, useMemo, useState } from "react";
-import ModalCriarRegistro from "@/components/modal-create";
 import { Pencil } from "lucide-react";
+import { badgeClass } from "@/components/ui/item-card";
+import { estiloBadgeTipo } from "@/utils/badgeUtils";
 
 const CONFIGS_FILTRO: ConfigFiltro[] = [
     {
@@ -35,32 +37,19 @@ function SafeHTMLText({ html }: { html: string }) {
 }
 
 export default function Regras() {
-    const { regras: regrasData } = useData();
-    const [leitorAtivo, setLeitorAtivo] = useState<{ fonte: string; pagina: number } | null>(null);
+    const { regras } = useData();
+    const { abrirCriar, abrirEditar, abrirLeitor } = useUI();
     const [regraSelecionada, setRegraSelecionada] = useState<any | null>(null);
-    const [modalCriarAberto, setModalCriarAberto] = useState(false);
-    const [editando, setEditando] = useState<typeof regrasOrdenadas[0] | null>(null);
 
-    const {
-        busca,
-        setBusca,
-        filtrosAtivos,
-        operadoresAtivos,
-        toggleOperador,
-        toggleFiltro,
-        limparFiltros,
-        opcoesResolvidas,
-        dadosFiltrados,
-        temFiltroAtivo,
-    } = useFiltros(regrasData, CONFIGS_FILTRO);
+    const filtros = useFiltros(regras, CONFIGS_FILTRO);
 
     const dadosHigienizadosParaFuse = useMemo(() => {
-        return regrasData.map(r => ({
+        return regras.map(r => ({
             id: r.id,
             nomeLimpo: removerMarkdown(r.nome),
             descricaoLimpa: removerMarkdown(r.descricao)
         }));
-    }, [regrasData]);
+    }, [regras]);
 
     const fuse = useMemo(() => {
         return new Fuse(dadosHigienizadosParaFuse, {
@@ -78,17 +67,17 @@ export default function Regras() {
     }, [dadosHigienizadosParaFuse]);
 
     const regrasOrdenadas = useMemo(() => {
-        if (!busca || busca.trim().length < 2) {
-            return [...dadosFiltrados].sort((a, b) => a.nome.localeCompare(b.nome));
+        if (!filtros.busca || filtros.busca.trim().length < 2) {
+            return [...filtros.dadosFiltrados].sort((a, b) => a.nome.localeCompare(b.nome));
         }
 
-        const resultadoFuse = fuse.search(busca);
-        const idsFiltrados = new Set(dadosFiltrados.map((d) => d.id));
-        const termo = busca.toLowerCase().trim();
+        const resultadoFuse = fuse.search(filtros.busca);
+        const idsFiltrados = new Set(filtros.dadosFiltrados.map((d) => d.id));
+        const termo = filtros.busca.toLowerCase().trim();
 
         const filtrados = resultadoFuse
             .filter((res) => idsFiltrados.has(res.item.id))
-            .map(res => regrasData.find(r => r.id === res.item.id)!);
+            .map(res => regras.find(r => r.id === res.item.id)!);
 
         return filtrados.sort((a, b) => {
             const temExatoA = a.descricao.toLowerCase().includes(termo) || a.nome.toLowerCase().includes(termo);
@@ -97,7 +86,7 @@ export default function Regras() {
             if (!temExatoA && temExatoB) return 1;
             return 0;
         });
-    }, [dadosFiltrados, busca, fuse, regrasData]);
+    }, [filtros.dadosFiltrados, filtros.busca, fuse, regras]);
 
     useEffect(() => {
         if (regrasOrdenadas.length > 0 && !regrasOrdenadas.find((r) => r.id === regraSelecionada?.id)) {
@@ -109,11 +98,11 @@ export default function Regras() {
 
     const renderSnippet = (descricaoBruta: string) => {
         const textoLimpo = removerMarkdown(descricaoBruta);
-        if (!busca || busca.trim().length < 2) {
+        if (!filtros.busca || filtros.busca.trim().length < 2) {
             return textoLimpo.length > 60 ? `${textoLimpo.slice(0, 60)}...` : textoLimpo;
         }
 
-        const termo = busca.toLowerCase().trim();
+        const termo = filtros.busca.toLowerCase().trim();
         let start = textoLimpo.toLowerCase().indexOf(termo);
 
         if (start === -1) start = textoLimpo.toLowerCase().indexOf(termo.slice(0, Math.max(3, termo.length - 2)));
@@ -137,9 +126,9 @@ export default function Regras() {
 
     const descricaoComDestaquesMarkdown = useMemo(() => {
         if (!regraSelecionada) return "";
-        if (!busca || busca.trim().length < 2) return regraSelecionada.descricao;
+        if (!filtros.busca || filtros.busca.trim().length < 2) return regraSelecionada.descricao;
 
-        const termoRaw = busca.trim();
+        const termoRaw = filtros.busca.trim();
         const textoOriginal = regraSelecionada.descricao;
 
         let termoValido = termoRaw;
@@ -154,67 +143,34 @@ export default function Regras() {
         const regex = new RegExp(`(${termoEscapado})`, 'gi');
 
         return textoOriginal.replace(regex, '<mark class="bg-yellow-200 text-gray-900 px-0.5 rounded-sm font-semibold">$1</mark>');
-    }, [regraSelecionada, busca]);
+    }, [regraSelecionada, filtros.busca]);
 
     return (
         <div className="flex flex-col gap-6 h-full min-h-[85vh]">
-            {modalCriarAberto && (
-                <ModalCriarRegistro
-                    categoria="regras"
-                    onClose={() => setModalCriarAberto(false)}
-                />
-            )}
-            {editando && (
-                <ModalCriarRegistro
-                    categoria="regras"
-                    itemInicial={editando}
-                    onClose={() => setEditando(null)}
-                />
-            )}
-            <DocumentReader
-                fonteId={leitorAtivo?.fonte || ""}
-                paginaImpressa={leitorAtivo?.pagina || 0}
-                isOpen={!!leitorAtivo}
-                onClose={() => setLeitorAtivo(null)}
-            />
-
             <FilterPanel
-                busca={busca}
-                setBusca={setBusca}
+                {...filtros}
                 placeholder={`Procurar nas ${regrasOrdenadas.length} regras...`}
-                opcoesResolvidas={opcoesResolvidas}
-                filtrosAtivos={filtrosAtivos}
-                operadoresAtivos={operadoresAtivos}
-                toggleOperador={toggleOperador}
-                toggleFiltro={toggleFiltro}
-                temFiltroAtivo={temFiltroAtivo}
-                limparFiltros={limparFiltros}
                 totalItens={regrasOrdenadas.length}
-                onCriarNovo={() => setModalCriarAberto(true)}
+                onCriarNovo={() => abrirCriar('regras')}
             />
 
             <div className="flex flex-col lg:flex-row gap-6 h-full min-h-[85vh]">
 
                 <div className="w-full lg:w-1/3 flex flex-col gap-4">
-                    <div className="relative h-full flex flex-col grow">
-                        <div className="flex-1 relative flex flex-col z-10 w-full h-full p-1 shadow-lg bg-[linear-gradient(rgba(249,249,249,0.5),rgba(249,249,249,0.5)),url(/assets/paper.png)] bg-repeat bg-size-[30%] border border-gray-300 max-h-60 sm:max-h-200 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-900/60 scrollbar-track-slate-500/10">
-
-                            <div className="bg-gray-900 text-white font-special text-xs px-2.5 py-1.5 uppercase tracking-wider sticky top-0 z-20 shadow-md mb-0.5 flex justify-between items-center">
-                                <span>Nome da Regra</span>
-                                <span className="text-[10px] opacity-60">Total: {regrasOrdenadas.length}</span>
-                            </div>
+                    <div className="relative h-full flex flex-col grow group">
+                        <PaperDiv className="flex-1 flex flex-col w-full h-full p-1! max-h-60 sm:max-h-200 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-900/60 scrollbar-track-slate-500/10">
 
                             <div className="flex flex-col border-t border-gray-200">
                                 {regrasOrdenadas.map((regra) => {
                                     const estaSelecionado = regraSelecionada?.id === regra.id;
+                                    const termoRaw = filtros.busca.trim();
 
-                                    const termoRaw = busca.trim();
                                     let termoValido = termoRaw;
                                     if (regra.nome.toLowerCase().indexOf(termoValido.toLowerCase()) === -1 && termoValido.length > 4) {
                                         termoValido = termoRaw.slice(0, termoRaw.length - 1);
                                     }
                                     const regexNome = new RegExp(`(${termoValido.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'i');
-                                    const nomeFormatado = busca && busca.trim().length >= 2
+                                    const nomeFormatado = filtros.busca && filtros.busca.trim().length >= 2
                                         ? regra.nome.replace(regexNome, `<mark class="bg-yellow-200 text-gray-900 font-semibold px-0.5 rounded-sm">$1</mark>`)
                                         : regra.nome;
 
@@ -222,9 +178,7 @@ export default function Regras() {
                                         <div
                                             key={regra.id}
                                             onClick={() => setRegraSelecionada(regra)}
-                                            className={`group flex flex-col py-1 px-2 text-left transition-all border-b border-gray-200 cursor-pointer select-none relative ${estaSelecionado
-                                                ? "bg-gray-300/70 text-gray-900 shadow-sm"
-                                                : "hover:bg-gray-100/80 text-gray-700"
+                                            className={`group flex flex-col py-1 px-2 text-left transition-all border-b border-gray-200 cursor-pointer select-none relative ${estaSelecionado ? "bg-gray-300/70 text-gray-900 shadow-sm" : "hover:bg-gray-100/80 text-gray-700"
                                                 }`}
                                         >
                                             <div className="flex justify-between items-center gap-2 w-full min-w-0">
@@ -233,20 +187,20 @@ export default function Regras() {
                                                 </span>
 
                                                 <div className="flex items-center gap-0.5 shrink-0 ml-auto">
-                                                    <div className="hidden sm:flex gap-0.5 max-w-38 overflow-hidden truncate whitespace-nowrap">
+                                                    <div className="hidden sm:flex gap-0.5 max-w-40 overflow-hidden truncate whitespace-nowrap">
                                                         {regra.categoria.slice(0, 2).map((cat: string) => (
-                                                            <span key={cat} className="text-[9px] font-bold max-w-20 truncate uppercase tracking-tight text-gray-500/80 bg-gray-400/10 border border-gray-400/20 px-0.5 py-0">
+                                                            <span key={cat} className="text-[10px] max-w-20 font-semibold truncate uppercase tracking-tight text-gray-600 bg-gray-400/10 border border-gray-400/50 px-1 py-0">
                                                                 {cat}
                                                             </span>
                                                         ))}
                                                     </div>
-                                                    <span className="font-special text-[9px] tracking-tight uppercase font-bold text-gray-500 bg-white/80 border border-gray-300 px-1 rounded-xs">
+                                                    <span className="font-semibold text-[10px] tracking-tight text-gray-600 bg-white/80 border border-gray-300 px-1">
                                                         {regra.fonteLivro}
                                                     </span>
                                                 </div>
                                             </div>
 
-                                            {busca && busca.trim().length >= 2 && (
+                                            {filtros.busca && filtros.busca.trim().length >= 2 && (
                                                 <div className="text-[11px] text-gray-500 font-normal leading-normal mt-0.5 mb-0.5 border-l-2 border-gray-400/30 pl-1.5 truncate max-w-full">
                                                     {renderSnippet(regra.descricao)}
                                                 </div>
@@ -261,23 +215,23 @@ export default function Regras() {
                                     Nenhuma regra atende a estes filtros.
                                 </div>
                             )}
-                        </div>
-                        <div className="absolute top-1/2 left-1/2 -z-10 h-full w-full -translate-x-1/2 -translate-y-1/2 rotate-1 p-1 bg-[linear-gradient(rgba(139,139,139,0.3),rgba(139,139,139,0.1)),url(/assets/paper.png)] shadow-[0_0_15px_rgba(0,0,0,0.1)] bg-repeat bg-size-[30%]" />
+                        </PaperDiv>
                     </div>
                 </div>
 
                 <div className="w-full lg:w-2/3 h-[75vh] lg:h-auto max-h-200">
                     {regraSelecionada ? (
-                        <div className="relative h-full">
-                            <div className="relative flex flex-col justify-between z-10 w-full p-5 h-full shadow-lg bg-[linear-gradient(rgba(249,249,249,0.5),rgba(249,249,249,0.5)),url(/assets/paper.png)] bg-repeat bg-size-[30%] border border-gray-300">
-                                <div className="mb-6 border-b border-gray-400 border-dashed pb-4">
-                                    <div className="flex justify-between items-center mb-3">
+                        <div className="relative h-full group">
+                            <PaperDiv className="flex flex-col h-full w-full">
+                                <div className="mb-4 border-b border-gray-400 border-dashed pb-4">
+                                    <div className="flex justify-between items-start mb-4 gap-2">
                                         <h2 className="text-3xl sm:text-4xl font-special text-gray-900 leading-tight">
                                             {regraSelecionada.nome}
                                         </h2>
-                                        <div className="flex flex-row gap-2">
+
+                                        <div className="flex flex-row gap-2 shrink-0">
                                             <button
-                                                onClick={() => setEditando(regraSelecionada)}
+                                                onClick={() => abrirEditar("regras", regraSelecionada)}
                                                 className="flex items-center justify-center p-1.5 transition-colors hover:bg-gray-200 cursor-pointer rounded"
                                                 title="Editar"
                                             >
@@ -290,30 +244,23 @@ export default function Regras() {
                                     <div className="flex flex-wrap gap-4 items-center justify-between">
                                         <div className="flex gap-2">
                                             {regraSelecionada.categoria.map((cat: string) => (
-                                                <span key={cat} className="text-xs uppercase font-bold bg-gray-800 text-white px-2 py-0.5 tracking-wide shadow-sm">
-                                                    {cat}
-                                                </span>
+                                                <span key={cat} className={`${badgeClass} ${estiloBadgeTipo('default')}`}>{cat}</span>
                                             ))}
                                         </div>
                                         <div className="shrink-0 [&>div]:mt-0 [&>div]:pt-0 [&>div]:border-none">
                                             <Source
                                                 fonte={regraSelecionada.fonteLivro}
                                                 pagina={regraSelecionada.fontePagina}
-                                                onOpenReader={() =>
-                                                    setLeitorAtivo({
-                                                        fonte: regraSelecionada.fonteLivro,
-                                                        pagina: parseInt(String(regraSelecionada.fontePagina)),
-                                                    })
-                                                }
+                                                onOpenReader={() => abrirLeitor(regraSelecionada.fonteLivro, parseInt(String(regraSelecionada.fontePagina)))}
                                             />
                                         </div>
                                     </div>
                                 </div>
-                                <div className="flex-1 mb-8 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-slate-900/60 scrollbar-track-slate-500/10">
+
+                                <div className="flex-1 mb-2 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-slate-900/60 scrollbar-track-slate-500/10">
                                     <RulesRenderer content={descricaoComDestaquesMarkdown} />
                                 </div>
-                            </div>
-                            <div className="absolute top-1/2 left-1/2 -z-10 h-full w-full -translate-x-1/2 -translate-y-1/2 -rotate-1 p-1 bg-[linear-gradient(rgba(139,139,139,0.3),rgba(139,139,139,0.1)),url(/assets/paper.png)] shadow-[0_0_15px_rgba(0,0,0,0.1)] bg-repeat bg-size-[30%]" />
+                            </PaperDiv>
                         </div>
                     ) : (
                         <div className="flex flex-col items-center justify-center h-full bg-gray-200/40 border-2 border-dashed border-gray-400 p-10 text-center">
