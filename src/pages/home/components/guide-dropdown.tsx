@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { ChevronDown, BookOpen, Bookmark } from "lucide-react";
 
 type Secao = {
   id: string;
   titulo: string;
-  conteudo: React.ReactNode;
+  conteudo: ReactNode;
 };
 
 const SECOES: Secao[] = [
@@ -66,7 +66,7 @@ const SECOES: Secao[] = [
           <span className="mx-1 px-1 text-[10px] font-bold uppercase bg-gray-200 border border-gray-400 text-gray-700 hover:bg-gray-300 cursor-pointer select-none transition-colors rounded-xs"
           >E</span>
           para exigir todos ou aceitar qualquer um dos filtros ativos.
-          </p>
+        </p>
       </div>
     ),
   },
@@ -393,14 +393,14 @@ function SecaoDropdown({ secao }: { secao: Secao }) {
   return (
     <div className="border border-dashed border-gray-400 bg-white/40">
       <button
-        onClick={() => setAberto(v => !v)}
-        className="w-full flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-gray-100/50 transition-colors"
+        onClick={() => setAberto((v) => !v)}
+        className="flex w-full items-center justify-between px-4 py-3 transition-colors hover:bg-gray-100/50"
       >
-        <span className="font-special uppercase tracking-wide text-gray-900 text-sm">{secao.titulo}</span>
+        <span className="font-special text-sm tracking-wide text-gray-900 uppercase">{secao.titulo}</span>
         <ChevronDown className={`size-4 text-gray-500 transition-transform duration-200 ${aberto ? "rotate-180" : ""}`} />
       </button>
       {aberto && (
-        <div className="px-4 pb-4 pt-1 border-t border-dashed border-gray-300 animate-in slide-in-from-top-1 duration-150">
+        <div className="animate-in slide-in-from-top-1 border-t border-dashed border-gray-300 px-4 pt-1 pb-4 duration-150">
           {secao.conteudo}
         </div>
       )}
@@ -413,21 +413,21 @@ export default function GuideDropdown() {
 
   return (
     <div className="relative w-full">
-      <div className="relative z-10 bg-black/10 bg-repeat bg-size-[30%] border border-black/40">
+      <div className="relative z-10 border border-black/40 bg-black/5">
         <button
-          onClick={() => setAberto(v => !v)}
-          className="w-full flex items-center justify-between px-5 py-4 cursor-pointer hover:bg-white/40 transition-colors"
+          onClick={() => setAberto((v) => !v)}
+          className="flex w-full items-center justify-between px-5 py-4 transition-colors hover:bg-white/40"
         >
           <div className="flex items-center gap-3">
             <BookOpen className="size-5 text-gray-700" />
-            <span className="font-special uppercase tracking-wider text-gray-900">Guia & Documentação</span>
+            <span className="font-special tracking-wider text-gray-900 uppercase">Guia & Documentação</span>
           </div>
           <ChevronDown className={`size-5 text-gray-500 transition-transform duration-200 ${aberto ? "rotate-180" : ""}`} />
         </button>
 
         {aberto && (
-          <div className="border-t border-dashed border-gray-400 p-4 space-y-2 animate-in slide-in-from-top-2 duration-150">
-            {SECOES.map(secao => (
+          <div className="animate-in slide-in-from-top-2 space-y-2 border-t border-dashed border-gray-400 p-4 duration-150">
+            {SECOES.map((secao) => (
               <SecaoDropdown key={secao.id} secao={secao} />
             ))}
           </div>

@@ -10,6 +10,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
 
 import { useData } from '@/context/DataContext';
 import FolderDiv from '../ui/folder-div';
+import { Button } from '../ui/button';
 
 interface DocumentReaderProps {
   fonteId: string;
@@ -112,75 +113,75 @@ export default function DocumentReader({ fonteId, paginaImpressa, isOpen, onClos
   if (!mounted) return null;
 
   return createPortal(
-    <div className={`fixed inset-0 z-99999 flex items-center justify-center bg-black/50 backdrop-blur-md sm:p-4 transition-all duration-300 ${isOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
-      }`}>
-      <FolderDiv>
-        <div className="text-center px-5 py-2 mb-3 border-2 border-gray-400 border-dashed bg-gray-200/50 text-gray-600 uppercase font-daisy tracking-wider text-xs md:text-sm leading-relaxed flex flex-row justify-between">
+    <div className={`fixed inset-0 z-99999 flex items-center justify-center bg-black/50 backdrop-blur-md p-2 sm:p-4 transition-all duration-300 ${isOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"}`}>
 
+      <FolderDiv className="max-w-5xl h-[95vh] sm:h-[90vh]">
+        <div className="text-center px-2   py-2 mb-3 border-b-2 border-black/40 border-dashed text-black/90 uppercase font-daisy tracking-wider text-xs md:text-sm leading-relaxed flex flex-row justify-between">
           <div className="flex gap-2 items-center truncate ">
-            <span className="font-special text-base sm:text-lg  mt-0.5 truncate">
+            <span className="font-special text-base sm:text-lg mt-0.5 truncate">
               {isImage
-                ? `VISUAL // ${fonteId}`
+                ? `IMAGEM // ${fonteId}`
                 : viewMode === 'single'
                   ? `${fonteId} - Página ${paginaImpressa}`
                   : `${fonteId} - Completo`}
             </span>
           </div>
 
-          <div className='flex flex-row gap-2 sm:gap-4 shrink-0'>
+          <div className='flex flex-row gap-2  shrink-0'>
             {!isImage && (
-              <button
+              <Button
                 onClick={() => setViewMode(viewMode === 'single' ? 'full' : 'single')}
-                className="flex items-center group cursor-pointer gap-2 px-4 py-2 text-sm font-special uppercase tracking-wide border-2 border-gray-800 bg-white text-gray-800 hover:bg-gray-100"
+                variant='outline'
+                className='uppercase'
               >
                 {viewMode === 'single' ? (
                   <><span className="shrink-0">Ver arquivo completo</span></>
                 ) : (
                   <><span className="shrink-0">Voltar</span> </>
                 )}
-              </button>
+              </Button>
             )}
 
-            <button
+            <Button
               onClick={handleClose}
-              className="flex items-center gap-2  cursor-pointer bg-gray-900/80 text-white border-white px-4 py-2 text-sm font-special uppercase tracking-wide hover:bg-red-900">
-              <span className="">
+
+            >              <span className="">
                 FECHAR
               </span>
               <span ><X className="size-3.5" /></span>
-            </button>
+            </Button>
           </div>
         </div>
 
         <div
           ref={containerRef}
-          className="flex-1 overflow-auto w-full mx-auto shadow-sm flex bg-black/80 border-gray-800 border justify-center custom-scrollbar relative"
+          className="flex-1 min-h-0 overflow-auto w-full mx-auto shadow-sm flex bg-black/80 border-gray-800 border justify-center scrollbar-thumb-white relative"
         >
           {isOpen && pdfSource && (
-            <div className="p-0 animate-in fade-in zoom-in-95  h-full duration-300 w-full flex justify-center">
+            <div className="p-0 animate-in fade-in zoom-in-95 h-full duration-300 w-full flex justify-center">
               {isImage ? (
                 <img
                   src={pdfSource as string}
                   alt={fonteId}
-                  className="max-w-full max-h-[85vh] sm:max-h-[75vh] object-contain w-full border border-white/5"
+                  className="max-w-full h-full object-contain w-full border border-white/5"
                 />
               ) : viewMode === 'single' ? (
                 <Document
                   file={pdfSource}
-                  loading={<div className="font-special animate-pulse w-full h-full pt-20 text-center">Carregando Fonte...</div>}
+                  loading={<div className="font-special animate-pulse w-full h-full pt-20 text-center text-white">Carregando Fonte...</div>}
                 >
                   <Page
                     pageNumber={paginaReal}
                     width={pdfWidth}
                     renderTextLayer={false}
                     renderAnnotationLayer={false}
-                    className=" bg-white mx-auto"
+                    className="bg-white mx-auto"
                   />
                 </Document>
               ) : (
                 <iframe
                   src={`${iframeUrl}#page=${paginaReal}`}
-                  className="w-full! h-full min-h-[90vh] sm:min-h-[75vh] border-none invert-[0.05] contrast-[1.1]"
+                  className="w-full h-full border-none invert-[0.05] contrast-[1.1]"
                   title="Leitor Completo"
                 />
               )}
@@ -188,6 +189,7 @@ export default function DocumentReader({ fonteId, paginaImpressa, isOpen, onClos
           )}
         </div>
       </FolderDiv>
+
       <div className="absolute inset-0 -z-10 cursor-default" onClick={handleClose}></div>
     </div>,
     document.body

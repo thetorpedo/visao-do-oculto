@@ -1,8 +1,8 @@
 import { Bookmark } from "lucide-react";
 import { useState } from "react";
 import { useFavoritos } from "@/context/FavoritosContext";
-import SaveModal from "./save-modal.tsx";
 import { Categoria } from "@/context/DataContext.tsx";
+import SaveModal from "./save-modal.tsx";
 
 interface BotaoFavoritarProps {
   itemId: string;

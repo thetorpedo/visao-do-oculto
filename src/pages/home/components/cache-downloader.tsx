@@ -103,17 +103,17 @@ export default function CacheDownloader({ pdfsParaBaixar }: { pdfsParaBaixar: st
 
         <div className="shrink-0 flex items-center justify-center w-full md:w-auto">
           {isDownloading ? (
-            <button disabled className="flex items-center gap-2 bg-gray-900 text-white border-2 border-gray-900 px-6 py-3 font-special uppercase tracking-wider cursor-wait min-w-[200px] justify-center shadow-sm">
+            <button disabled className="flex items-center gap-2 bg-gray-900 text-white border-2 border-gray-900 px-6 py-3 font-special uppercase tracking-wider cursor-wait min-w-50 justify-center shadow-sm">
               <Loader2 className="size-5 animate-spin" /> {progressPercentage}%
             </button>
           ) : isCached ? (
-            <div className="flex items-center gap-2 bg-green-100 text-green-800 border-2 border-green-800 px-6 py-3 font-special uppercase tracking-wider min-w-[200px] justify-center shadow-sm">
+            <div className="flex items-center gap-2 bg-green-100 text-green-800 border-2 border-green-800 px-6 py-3 font-special uppercase tracking-wider min-w-50 justify-center shadow-sm">
               <CheckCircle className="size-5" /> ARQUIVOS SALVOS
             </div>
           ) : (
             <button
               onClick={handleCachePDFs}
-              className="flex items-center justify-center gap-2 bg-white text-gray-900 hover:bg-gray-900 hover:text-white border-2 border-gray-900 px-6 py-3 font-special uppercase tracking-wider transition-all cursor-pointer shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 min-w-[200px]"
+              className="flex items-center justify-center gap-2 bg-white text-gray-900 hover:bg-gray-900 hover:text-white border-2 border-gray-900 px-6 py-3 font-special uppercase tracking-wider transition-all cursor-pointer shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 min-w-50"
             >
               <Download className="size-5" /> BAIXAR
             </button>

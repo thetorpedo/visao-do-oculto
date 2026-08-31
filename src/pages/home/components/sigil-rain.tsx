@@ -16,24 +16,26 @@ export default function SigilRain() {
     const chars = "abcdefghijklmnopqrstuvwxyABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const fontSize = 28;
     const columns = width / fontSize;
-    const drops = Array(Math.floor(columns)).fill(1);
+    const drops = Array(Math.floor(columns)).fill(0).map(() =>
+      Math.floor(Math.random() * (height / fontSize))
+    );
 
     const draw = () => {
-      ctx.fillStyle = "rgba(22, 10, 3, 0.3)"; 
+      ctx.fillStyle = "rgba(22, 10, 3, 0.3)";
       ctx.fillRect(0, 0, width, height);
 
       ctx.font = `${fontSize}px 'sigilos_do_outro_ladoregular', monospace`;
-      
+
       for (let i = 0; i < drops.length; i++) {
         const text = chars[Math.floor(Math.random() * chars.length)];
-        
+
         ctx.shadowBlur = 20;
         ctx.shadowColor = "#fde047";
-        
-        ctx.fillStyle = "rgba(253, 224, 71, 0.9)"; 
+
+        ctx.fillStyle = "rgba(253, 224, 71, 0.9)";
         ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-        
-        ctx.fillStyle = "#fef3c6"; 
+
+        ctx.fillStyle = "#fef3c6";
         ctx.shadowBlur = 1;
         ctx.fillText(text, i * fontSize, drops[i] * fontSize);
 

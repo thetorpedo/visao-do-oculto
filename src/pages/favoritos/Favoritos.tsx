@@ -4,6 +4,7 @@ import { Categoria, useData } from "@/context/DataContext";
 import { Plus, X, Trash2, Meh } from "lucide-react";
 import ItemCard from "@/components/ui/item-card";
 import { Button } from "@/components/ui/button";
+import PaperDiv from "@/components/ui/paper-div";
 
 export default function Favoritos() {
   const { grupos, favoritos, criarGrupo, removerGrupo, removerFavorito } = useFavoritos();
@@ -43,7 +44,7 @@ export default function Favoritos() {
   return (
     <div className="space-y-6 min-h-[85vh]">
 
-      <div className="relative p-6 bg-[url(/assets/paper.png)] bg-repeat bg-size-[30%] shadow-lg border border-gray-400">
+      <PaperDiv>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
           <h2 className="text-3xl sm:text-4xl font-special text-gray-900 leading-tight">Minhas Coleções</h2>
 
@@ -94,8 +95,8 @@ export default function Favoritos() {
             </Button>
           ))}
         </div>
-      </div>
 
+      </PaperDiv>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {favoritosFiltrados.map((favorito) => {
           const item = getItemData(favorito.itemId, favorito.categoria);

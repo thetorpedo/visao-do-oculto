@@ -4,7 +4,7 @@ import RulesRenderer from "./rules-renderer";
 import { ChevronDown, Pencil } from "lucide-react";
 import { useState } from "react";
 import Source from "./source";
-import SaveButton from "../favorite/save-button";
+import SaveButton from "../../pages/favoritos/components/save-button";
 import { useUI } from "@/context/UiContext";
 import PaperDiv from "./paper-div";
 import { Categoria } from "@/context/DataContext";

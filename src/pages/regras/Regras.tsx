@@ -1,5 +1,5 @@
 import Source from "@/components/ui/source";
-import SaveButton from "@/components/favorite/save-button";
+import SaveButton from "@/pages/favoritos/components/save-button";
 import RulesRenderer from "@/components/ui/rules-renderer";
 import PaperDiv from "@/components/ui/paper-div";
 import { useData } from "@/context/DataContext";
