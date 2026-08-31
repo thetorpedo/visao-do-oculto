@@ -5,11 +5,16 @@ import FilterPanel from "@/components/filter/filter-panel";
 import { useUI } from "@/context/UiContext";
 import ItemCard from "@/components/ui/item-card";
 
+const TABS = [
+  { id: "equipamentos", label: "Equipamentos" },
+  { id: "maldicoes", label: "Modificações & Maldições" },
+] as const;
+
 export default function Equipamentos() {
   const { equipamentos } = useData();
   const { abrirCriar } = useUI();
 
-  const [abaAtiva, setAbaAtiva] = useState<"equipamentos" | "maldicoes">("equipamentos");
+  const [abaAtiva, setTab] = useState<"equipamentos" | "maldicoes">("equipamentos");
 
   const dadosAbaAtual = useMemo(() => {
     return equipamentos.filter(e => {
@@ -34,8 +39,8 @@ export default function Equipamentos() {
 
   const filtros = useFiltros(dadosAbaAtual, configsFiltro);
 
-  const mudarAba = (novaAba: "equipamentos" | "maldicoes") => {
-    setAbaAtiva(novaAba);
+  const changeTab = (novaAba: "equipamentos" | "maldicoes") => {
+    setTab(novaAba);
     filtros.limparTudo();
   };
 
@@ -60,32 +65,40 @@ export default function Equipamentos() {
 
   return (
     <div className="space-y-6">
-      <div className="relative -mt-8">
-        <div className="relative z-10">
-          <div className="flex flex-col gap-5">
+      <div className="relative -mt-2 sm:-mt-6">
 
-            <div className="flex gap-2 pb-0">
-              <button
-                onClick={() => mudarAba("equipamentos")}
-                className={`px-4 pt-1.5 pb-0.5 text-sm sm:text-base cursor-pointer font-special uppercase tracking-wider transition-colors border-2 border-gray-800 ${abaAtiva === "equipamentos" ? "bg-gray-800 text-white" : "bg-white/40 text-gray-800 hover:bg-white/80"}`}
-              >
-                Equipamentos
-              </button>
-              <button
-                onClick={() => mudarAba("maldicoes")}
-                className={`px-4 pt-1.5 pb-0.5 text-sm sm:text-base cursor-pointer font-special uppercase tracking-wider transition-colors border-2 border-gray-800 ${abaAtiva === "maldicoes" ? "bg-gray-800 text-white" : "bg-white/40 text-gray-800 hover:bg-white/80"}`}
-              >
-                Modificações & Maldições
-              </button>
-            </div>
+        <div className="relative z-0 flex items-end gap-2 pl-2 sm:pl-6 -mb-0.5">
+          {TABS.map((tab) => {
+            const isActive = abaAtiva === tab.id;
+            return (
+              <div className="relative h-12 flex items-end -mb-1 shadow-lg">
+                <button
+                  key={tab.id}
+                  onClick={() => changeTab(tab.id)}
+                  className={`
+                   flex cursor-pointer items-start justify-center
+                  bg-[url(/assets/paper.png)] bg-blend-overlay bg-size-[300%]
+                  px-4 pt-2 sm:px-6 sm:pt-2.5 font-daisy text-xs sm:text-base uppercase transition-all
+                  ${isActive
+                      ? "z-10 h-11 sm:h-12 bg-yellow-400/50 text-gray-900 shadow-[inset_0_-8px_5px_rgba(0,0,0,0.20)]"
+                      : "z-0 h-9 sm:h-10 bg-yellow-400/30 text-gray-900/60 hover:h-10 sm:hover:h-11 hover:bg-yellow-400/50 hover:text-gray-900 shadow-[inset_0_-8px_5px_rgba(0,0,0,0.10)]"
+                    }
+                `}
+                >
+                  <span className="truncate">{tab.label}</span>
+                </button>
+              </div>
+            );
+          })}
+        </div>
 
-            <FilterPanel
-              {...filtros}
-              placeholder={`Buscando entre ${equipamentosExibidos.length} itens...`}
-              totalItens={equipamentosExibidos.length}
-              onCriarNovo={() => abrirCriar('equipamentos')}
-            />
-          </div>
+        <div className="relative z-10 flex flex-col gap-5">
+          <FilterPanel
+            {...filtros}
+            placeholder={`Buscando entre ${equipamentosExibidos.length} itens...`}
+            totalItens={equipamentosExibidos.length}
+            onCriarNovo={() => abrirCriar('equipamentos')}
+          />
         </div>
       </div>
 

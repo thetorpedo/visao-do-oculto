@@ -13,7 +13,7 @@ import Favoritos from './pages/favoritos/Favoritos';
 import Fontes from './pages/fontes/Fontes';
 import Regras from './pages/regras/Regras';
 import DocumentReader from './components/modals/document-reader';
-import ModalCriarRegistro from './components/modals/modal-create';
+import ModalCriarRegistro from './components/modals/create/modal-create';
 import { useData } from './context/DataContext';
 import { UIProvider, useUI } from './context/UiContext';
 

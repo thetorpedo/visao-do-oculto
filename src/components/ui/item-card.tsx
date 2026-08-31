@@ -1,6 +1,6 @@
 import { estiloBadgeTipo, corElemento } from "@/utils/badgeUtils";
 import ExpandableText from "./expandable-text";
-import RulesRenderer from "./rules-renderer";
+import MarkdownRenderer from "./markdown-renderer";
 import { ChevronDown, Pencil } from "lucide-react";
 import { useState } from "react";
 import Source from "./source";
@@ -81,7 +81,7 @@ function NexDropdown({ label, text }: { label: string; text?: string | null }) {
             </button>
             {isOpen && (
                 <div className="p-3 border border-t-0 border-dashed border-gray-400 bg-gray-200 text-sm whitespace-pre-wrap text-justify text-gray-800 leading-relaxed ">
-                    {descricao}
+                    <MarkdownRenderer content={descricao} isCompact />
                 </div>
             )}
         </div>
@@ -93,7 +93,7 @@ function RegraExpandivel({ content }: { content: string }) {
     return (
         <div className="relative">
             <div className={`transition-all duration-300 ${expandido ? "max-h-none" : "max-h-62.5 overflow-hidden"}`}>
-                <RulesRenderer content={content} isCompact={true} />
+                <MarkdownRenderer content={content} isCompact={true} />
             </div>
             <button
                 onClick={() => setExpandido(!expandido)}

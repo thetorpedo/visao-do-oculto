@@ -113,7 +113,7 @@ export default function DocumentReader({ fonteId, paginaImpressa, isOpen, onClos
   if (!mounted) return null;
 
   return createPortal(
-    <div className={`fixed inset-0 z-99999 flex items-center justify-center bg-black/50 backdrop-blur-md p-2 sm:p-4 transition-all duration-300 ${isOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"}`}>
+    <div className={`fixed inset-0 z-49 flex items-center justify-center bg-black/50 backdrop-blur-md p-2 sm:p-4 transition-all duration-300 ${isOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"}`}>
 
       <FolderDiv className="max-w-5xl h-[95vh] sm:h-[90vh]">
         <div className="text-center px-2   py-2 mb-3 border-b-2 border-black/40 border-dashed text-black/90 uppercase font-daisy tracking-wider text-xs md:text-sm leading-relaxed flex flex-row justify-between">

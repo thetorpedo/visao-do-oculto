@@ -1,5 +1,5 @@
+import { FonteConfig } from "@/context/DataContext";
 import { useEffect, useState } from "react";
-import { FonteConfig } from "./DataContext";
 
 const CACHE_NAME = "visao-oculto-pdfs";
 

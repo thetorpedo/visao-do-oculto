@@ -1,8 +1,9 @@
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import remarkBreaks from 'remark-breaks';
 import rehypeRaw from 'rehype-raw';
 
-export default function RulesRenderer({ content, isCompact = false }: { content: string, isCompact?: boolean }) {
+export default function MarkdownRenderer({ content, isCompact = false }: { content: string, isCompact?: boolean }) {
   return (
     <div className={`text-black prose max-w-none 
       prose-headings:font-blur prose-headings:font-normal prose-headings:border-b prose-headings:text-black
@@ -20,7 +21,7 @@ export default function RulesRenderer({ content, isCompact = false }: { content:
         : "prose-sm md:prose-base prose-h1:border-b-2 prose-h2:border-b-2 prose-h2:text-3xl prose-h2:mt-10! prose-h1:text-4xl"
       }`}
     >
-      <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+      <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]} rehypePlugins={[rehypeRaw]}>
         {content}
       </ReactMarkdown>
     </div>

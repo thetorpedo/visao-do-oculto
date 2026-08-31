@@ -1,8 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { badgeClass } from "@/components/ui/item-card";
 import PaperDiv from "@/components/ui/paper-div";
 import { FonteConfig } from "@/context/DataContext";
-import { estiloBadgeTipo } from "@/utils/badgeUtils";
 import { ArrowLeft, Loader2 } from "lucide-react";
 
 export default function FonteLeitor({

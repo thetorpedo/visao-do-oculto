@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import PaperDiv from "@/components/ui/paper-div";
 import FonteCard from "@/pages/fontes/components/fonte-card";
 import FonteLeitor from "@/pages/fontes/components/fonte-leitor";
-import { useFonteMedia } from "@/hooks/UseFontMedia";
+import { useFonteMedia } from "@/hooks/useFontMedia.ts";
 
 export default function Fontes() {
   const { fontes, getBlobUrlFonte } = useData();

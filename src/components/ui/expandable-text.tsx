@@ -1,4 +1,5 @@
 import { useState } from "react";
+import MarkdownRenderer from "./markdown-renderer";
 
 const capitalizeFirst = (str: string | null | undefined) => {
   if (!str) return "";
@@ -10,21 +11,21 @@ export default function ExpandableText({ text, limit = 250 }: { text: string; li
   const [isExpanded, setIsExpanded] = useState(false);
   if (!text) return null;
 
-  const textoExibido = isExpanded ? text : `${text.substring(0, limit)}...`;
-
-  if (text.length <= limit) {
-    return <p className="text-sm whitespace-pre-wrap text-justify text-gray-800 leading-relaxed">{capitalizeFirst(text)}</p>;
-  }
+  const textoCompleto = capitalizeFirst(text);
+  const cabe = textoCompleto.length <= limit;
+  const textoExibido = isExpanded || cabe ? textoCompleto : `${textoCompleto.substring(0, limit)}...`;
 
   return (
-    <span className="text-sm text-justify whitespace-pre-wrap text-gray-800 leading-relaxed">
-        {capitalizeFirst(textoExibido)}
+    <div className="text-sm text-justify text-gray-800 leading-relaxed [&_.prose]:text-sm [&_p]:mb-2 last:[&_p]:mb-0">
+      <MarkdownRenderer content={textoExibido} isCompact />
+      {!cabe && (
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="ml-2 text-xs cursor-pointer whitespace-pre-wrap font-bold text-gray-600 hover:text-black underline uppercase tracking-tighter"
+          className="mt-1 text-xs cursor-pointer font-bold text-gray-600 hover:text-black underline uppercase tracking-tighter"
         >
           {isExpanded ? "[ Ler menos ]" : "[ Ler mais ]"}
         </button>
-    </span>
+      )}
+    </div>
   );
 }

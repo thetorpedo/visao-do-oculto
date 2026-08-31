@@ -1,6 +1,6 @@
 import Source from "@/components/ui/source";
 import SaveButton from "@/pages/favoritos/components/save-button";
-import RulesRenderer from "@/components/ui/rules-renderer";
+import MarkdownRenderer from "@/components/ui/markdown-renderer";
 import PaperDiv from "@/components/ui/paper-div";
 import { useData } from "@/context/DataContext";
 import { useUI } from "@/context/UiContext";
@@ -182,19 +182,19 @@ export default function Regras() {
                                                 }`}
                                         >
                                             <div className="flex justify-between items-center gap-2 w-full min-w-0">
-                                                <span className={`text-xs tracking-wide truncate leading-relaxed ${estaSelecionado ? "font-bold" : "font-medium"}`}>
+                                                <span className={`text-xs tracking-wide text-black truncate leading-relaxed ${estaSelecionado ? "font-bold" : "font-medium"}`}>
                                                     <SafeHTMLText html={nomeFormatado} />
                                                 </span>
 
                                                 <div className="flex items-center gap-0.5 shrink-0 ml-auto">
                                                     <div className="hidden sm:flex gap-0.5 max-w-40 overflow-hidden truncate whitespace-nowrap">
                                                         {regra.categoria.slice(0, 2).map((cat: string) => (
-                                                            <span key={cat} className="text-[10px] max-w-20 font-semibold truncate uppercase tracking-tight text-gray-600 bg-gray-400/10 border border-gray-400/50 px-1 py-0">
+                                                            <span key={cat} className="text-[10px] max-w-20 font-semibold truncate uppercase tracking-tight text-black/60 bg-black/10  border-gray-400/50 px-1 py-0">
                                                                 {cat}
                                                             </span>
                                                         ))}
                                                     </div>
-                                                    <span className="font-semibold text-[10px] tracking-tight text-gray-600 bg-white/80 border border-gray-300 px-1">
+                                                    <span className="font-semibold text-[10px] border border-dashed tracking-tight text-gray-600 bg-white/80  border-gray-400/70 px-1">
                                                         {regra.fonteLivro}
                                                     </span>
                                                 </div>
@@ -258,7 +258,7 @@ export default function Regras() {
                                 </div>
 
                                 <div className="flex-1 mb-2 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-slate-900/60 scrollbar-track-slate-500/10">
-                                    <RulesRenderer content={descricaoComDestaquesMarkdown} />
+                                    <MarkdownRenderer content={descricaoComDestaquesMarkdown} />
                                 </div>
                             </PaperDiv>
                         </div>
