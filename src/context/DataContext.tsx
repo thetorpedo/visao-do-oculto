@@ -53,8 +53,9 @@ interface DataState {
     regras: Regra[];
     fontes: Record<string, FonteConfig>;
     arquivosImportados: ArquivoImportado[];
+    overrides: Record<Categoria, any[]>;
+    exclusoes: Record<Categoria, string[]>;
 }
-
 interface DataContextValue extends DataState {
     status: "loading" | "empty" | "ready";
     importarJson: (categoria: Categoria | null, arquivos: File | File[]) => Promise<{ ok: boolean; itens: number; erros: number }>;
@@ -68,6 +69,10 @@ interface DataContextValue extends DataState {
     exportarCategoria: (categoria: Categoria) => void;
     exportarArquivo: (nomeArquivo: string, categoria: Categoria) => Promise<void>;
     entrarSemDados: () => void;
+    salvarRegistro: (categoria: Categoria, item: any) => Promise<void>;
+    removerRegistro: (categoria: Categoria, id: string) => Promise<void>;
+    reverterOverride: (categoria: Categoria, id: string) => Promise<void>;
+    reverterExclusao: (categoria: Categoria, id: string) => Promise<void>;
 }
 
 // ─────────────────────────────────────────
@@ -84,6 +89,10 @@ const SCHEMAS: Record<Categoria, z.ZodTypeAny> = {
 };
 
 const CATEGORIAS: Categoria[] = ["poderes", "rituais", "equipamentos", "origens", "trilhas", "regras"];
+
+const chaveOverrides = (categoria: Categoria) => `${categoria}:__overrides__`;
+const chaveExclusoes = (categoria: Categoria) => `${categoria}:__exclusoes__`;
+const ehChaveEspecial = (key: string) => key.endsWith(":__overrides__") || key.endsWith(":__exclusoes__");
 
 // ─────────────────────────────────────────
 // Carregamento estático (deploy privado)
@@ -172,6 +181,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         regras: [],
         fontes: {},
         arquivosImportados: [],
+        overrides: { poderes: [], rituais: [], equipamentos: [], origens: [], trilhas: [], regras: [] },
+        exclusoes: { poderes: [], rituais: [], equipamentos: [], origens: [], trilhas: [], regras: [] },
     });
 
     const entrarSemDados = useCallback(() => {
@@ -190,6 +201,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
             regras: [],
             fontes: {},
             arquivosImportados: [],
+            overrides: { poderes: [], rituais: [], equipamentos: [], origens: [], trilhas: [], regras: [] },
+            exclusoes: { poderes: [], rituais: [], equipamentos: [], origens: [], trilhas: [], regras: [] },
         };
 
         // 1. Tenta carregar estático via index.json (deploy privado)
@@ -204,6 +217,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         // 2. Carrega do IndexedDB (concatena por cima do estático)
         const keys = await dbGetAllKeys("dados");
         for (const key of keys) {
+            if (ehChaveEspecial(key)) continue; // __overrides__ / __exclusoes__ não são "arquivos"
+
             const [categoria, nomeArquivo] = key.split(":") as [Categoria, string];
             const itens = await dbGet<unknown[]>("dados", key);
             if (!itens || itens.length === 0) continue;
@@ -243,6 +258,22 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
                     novoState.fontes[id] = { id, ...config };
                 }
             }
+        }
+
+        for (const categoria of CATEGORIAS) {
+            const overrides = await dbGet<any[]>("dados", chaveOverrides(categoria)) || [];
+            const exclusoes = await dbGet<string[]>("dados", chaveExclusoes(categoria)) || [];
+
+            novoState.overrides[categoria] = overrides;
+            novoState.exclusoes[categoria] = exclusoes;
+
+            if (overrides.length === 0 && exclusoes.length === 0) continue;
+
+            const overrideMap = new Map(overrides.map((o: any) => [o.id, o]));
+
+            (novoState[categoria] as any[]) = (novoState[categoria] as any[])
+                .filter((i) => !exclusoes.includes(i.id))
+                .map((i) => overrideMap.get(i.id) ?? i);
         }
 
         const temDados = CATEGORIAS.some((c) => (novoState[c] as unknown[]).length > 0);
@@ -448,6 +479,115 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         URL.revokeObjectURL(url);
     }, []);
 
+    const salvarRegistro = useCallback(async (categoria: Categoria, item: any) => {
+        const schema = SCHEMAS[categoria];
+        const isEdit = !!item.id;
+
+        const itemCompleto = {
+            ...item,
+            id: item.id || `hb_${crypto.randomUUID()}`,
+            codigo: item.codigo || Date.now()
+        };
+
+        const result = schema.safeParse(itemCompleto);
+
+        if (!result.success) {
+            console.error("Erro de validação:", result.error.flatten());
+            const fieldErrors = result.error.flatten().fieldErrors;
+            const errorMsg = Object.entries(fieldErrors)
+                .map(([field, msgs]) => `${field.toUpperCase()}: ${Array.isArray(msgs) ? msgs.join(", ") : String(msgs ?? "")}`)
+                .join(" | ");
+            throw new Error(`Erro: ${errorMsg}`);
+        }
+
+        const itemValidado = result.data as typeof itemCompleto;
+
+        let keyDestino: string | null = null;
+        if (isEdit) {
+            const todasChaves = await dbGetAllKeys("dados");
+            for (const key of todasChaves) {
+                if (!key.startsWith(`${categoria}:`)) continue;
+                if (ehChaveEspecial(key)) continue;
+
+                const itens = await dbGet<any[]>("dados", key) || [];
+                if (itens.some((i: any) => i.id === itemValidado.id)) {
+                    keyDestino = key;
+                    break;
+                }
+            }
+        }
+
+        if (keyDestino) {
+            const itensExistentes = await dbGet<any[]>("dados", keyDestino) || [];
+            const novaLista = itensExistentes.map((i: any) => i.id === itemValidado.id ? itemValidado : i);
+            await dbSet("dados", keyDestino, novaLista);
+        } else if (isEdit) {
+            const overrideKey = chaveOverrides(categoria);
+            const overridesExistentes = await dbGet<any[]>("dados", overrideKey) || [];
+            const novosOverrides = [
+                itemValidado,
+                ...overridesExistentes.filter((i: any) => i.id !== itemValidado.id),
+            ];
+            await dbSet("dados", overrideKey, novosOverrides);
+        } else {
+            const nomeArquivo = "meus-homebrews.json";
+            const key = `${categoria}:${nomeArquivo}`;
+            const itensExistentes = await dbGet<any[]>("dados", key) || [];
+            await dbSet("dados", key, [itemValidado, ...itensExistentes]);
+        }
+
+        await carregarTudo();
+    }, [carregarTudo]);
+
+    const removerRegistro = useCallback(async (categoria: Categoria, id: string) => {
+        const todasChaves = await dbGetAllKeys("dados");
+        let removidoDeArquivo = false;
+
+        for (const key of todasChaves) {
+            if (!key.startsWith(`${categoria}:`)) continue;
+            if (ehChaveEspecial(key)) continue;
+
+            const itens = await dbGet<any[]>("dados", key) || [];
+            if (!itens.some((i: any) => i.id === id)) continue;
+
+            const novaLista = itens.filter((i: any) => i.id !== id);
+            await dbSet("dados", key, novaLista);
+            removidoDeArquivo = true;
+        }
+
+        if (!removidoDeArquivo) {
+            const exclusaoKey = chaveExclusoes(categoria);
+            const exclusoesExistentes = await dbGet<string[]>("dados", exclusaoKey) || [];
+            if (!exclusoesExistentes.includes(id)) {
+                await dbSet("dados", exclusaoKey, [...exclusoesExistentes, id]);
+            }
+        }
+
+        const overrideKey = chaveOverrides(categoria);
+        const overridesExistentes = await dbGet<any[]>("dados", overrideKey) || [];
+        if (overridesExistentes.some((i: any) => i.id === id)) {
+            await dbSet("dados", overrideKey, overridesExistentes.filter((i: any) => i.id !== id));
+        }
+
+        await carregarTudo();
+    }, [carregarTudo]);
+
+    // ── Reverter override (volta a mostrar a versão original do arquivo estático) ──
+    const reverterOverride = useCallback(async (categoria: Categoria, id: string) => {
+        const overrideKey = chaveOverrides(categoria);
+        const overridesExistentes = await dbGet<any[]>("dados", overrideKey) || [];
+        await dbSet("dados", overrideKey, overridesExistentes.filter((i: any) => i.id !== id));
+        await carregarTudo();
+    }, [carregarTudo]);
+
+    // ── Reverter exclusão (restaura item excluído do arquivo estático) ──
+    const reverterExclusao = useCallback(async (categoria: Categoria, id: string) => {
+        const exclusaoKey = chaveExclusoes(categoria);
+        const exclusoesExistentes = await dbGet<string[]>("dados", exclusaoKey) || [];
+        await dbSet("dados", exclusaoKey, exclusoesExistentes.filter((i: string) => i !== id));
+        await carregarTudo();
+    }, [carregarTudo]);
+
     return (
         <DataContext.Provider
             value={{
@@ -463,7 +603,11 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
                 limparTudo,
                 exportarPacote,
                 exportarCategoria,
-                exportarArquivo
+                exportarArquivo,
+                salvarRegistro,
+                removerRegistro,
+                reverterOverride,
+                reverterExclusao,
             }}
         >
             {children}
