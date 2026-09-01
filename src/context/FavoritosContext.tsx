@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { dbDelete, dbGet, dbGetAllKeys, dbSet } from "@/lib/db";
-import { CategoriaFavoritavel, Favorito, Grupo } from "@/lib/favoritos";
+import { Favorito, Grupo } from "@/lib/favoritos";
+import { Categoria } from "./DataContext";
 
 interface FavoritosContextValue {
     grupos: Grupo[];
@@ -10,12 +11,12 @@ interface FavoritosContextValue {
     renomearGrupo: (id: string, novoNome: string) => Promise<void>;
     removerGrupo: (id: string) => Promise<void>;
 
-    adicionarFavorito: (itemId: string, categoria: CategoriaFavoritavel, grupoIds: string[]) => Promise<void>;
+    adicionarFavorito: (itemId: string, categoria: Categoria, grupoIds: string[]) => Promise<void>;
     removerFavorito: (favoritoId: string) => Promise<void>;
     atualizarGruposFavorito: (favoritoId: string, grupoIds: string[]) => Promise<void>;
 
-    isFavoritado: (itemId: string, categoria: CategoriaFavoritavel) => boolean;
-    getFavoritoDeItem: (itemId: string, categoria: CategoriaFavoritavel) => Favorito | null;
+    isFavoritado: (itemId: string, categoria: Categoria) => boolean;
+    getFavoritoDeItem: (itemId: string, categoria: Categoria) => Favorito | null;
     getItensDosGrupo: (grupoId: string) => Favorito[];
 }
 
@@ -66,7 +67,7 @@ export function FavoritosProvider({ children }: { children: React.ReactNode }) {
         }
     };
 
-    const adicionarFavorito = async (itemId: string, categoria: CategoriaFavoritavel, grupoIds: string[]) => {
+    const adicionarFavorito = async (itemId: string, categoria: Categoria, grupoIds: string[]) => {
         const novoFavorito: Favorito = { id: crypto.randomUUID(), itemId, categoria, grupoIds, adicionadoEm: Date.now() };
         await dbSet("favoritos", novoFavorito.id, novoFavorito);
         setFavoritos(prev => [novoFavorito, ...prev]);
@@ -85,11 +86,11 @@ export function FavoritosProvider({ children }: { children: React.ReactNode }) {
         setFavoritos(prev => prev.map(f => f.id === favoritoId ? favoritoAtualizado : f));
     };
 
-    const isFavoritado = (itemId: string, categoria: CategoriaFavoritavel) => {
+    const isFavoritado = (itemId: string, categoria: Categoria) => {
         return favoritos.some(f => f.itemId === itemId && f.categoria === categoria);
     };
 
-    const getFavoritoDeItem = (itemId: string, categoria: CategoriaFavoritavel) => {
+    const getFavoritoDeItem = (itemId: string, categoria: Categoria) => {
         return favoritos.find(f => f.itemId === itemId && f.categoria === categoria) || null;
     };
 
