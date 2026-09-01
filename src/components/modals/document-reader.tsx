@@ -31,6 +31,7 @@ export default function DocumentReader({ fonteId, paginaImpressa, isOpen, onClos
 
   const fonte = fontes[fonteId];
   const isImage = paginaImpressa === '~' || fonte?.tipo === "visual";
+  console.log("DocumentReader: fonteId", fonteId, "paginaImpressa", paginaImpressa, "isImage", isImage, "fonte?.tipo", fonte?.tipo);
   const offsetFonte = fonte?.offset ?? 0;
   const paginaReal = !isImage ? Number(paginaImpressa) + offsetFonte : 0;
 
@@ -80,6 +81,7 @@ export default function DocumentReader({ fonteId, paginaImpressa, isOpen, onClos
       }
 
       const urlEstatica = `/files/${fontes[fonteId]?.nomeArquivo ?? fonteId + ".pdf"}`;
+      console.log("DocumentReader: carregando urlEstatica", urlEstatica);
       try {
         if ('caches' in window) {
           const cache = await caches.open('visao-oculto-pdfs');
@@ -135,7 +137,7 @@ export default function DocumentReader({ fonteId, paginaImpressa, isOpen, onClos
                 onClick={() => setViewMode(viewMode === 'single' ? 'full' : 'single')}
                 variant='outline'
                 size="sm"
-                className='uppercase !px-2 sm:!px-3'
+                className='uppercase px-2! sm:px-3!'
                 title={viewMode === 'single' ? 'Ver arquivo completo' : 'Voltar'}
               >
                 {viewMode === 'single' ? (

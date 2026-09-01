@@ -7,7 +7,7 @@ import Source from "./source";
 import SaveButton from "../../pages/favoritos/components/save-button";
 import { useUI } from "@/context/UiContext";
 import PaperDiv from "./paper-div";
-import { Categoria } from "@/context/DataContext";
+import { Categoria, useData } from "@/context/DataContext";
 
 const capitalizeFirst = (str: string | number | null | undefined) => {
     if (!str) return "";
@@ -107,6 +107,17 @@ function RegraExpandivel({ content }: { content: string }) {
 
 export default function ItemCard({ item, categoria, showCategory }: { item: any, categoria: Categoria, showCategory?: boolean }) {
     const { abrirLeitor, abrirEditar } = useUI();
+    const { fontes } = useData();
+
+    const fonteConfig =
+        fontes[item.fonteLivro] ??
+        Object.values(fontes).find(f => f.label === item.fonteLivro || f.id === item.fonteLivro);
+
+    const paginaBruta = item.fontePagina ?? item.pag;
+    const paginaParaLeitor =
+        paginaBruta === '~' || paginaBruta === undefined || paginaBruta === null || Number.isNaN(Number(paginaBruta))
+            ? '~'
+            : parseInt(String(paginaBruta), 10);
 
     return (
         <div key={item.id} className="relative group flex h-full">
@@ -128,7 +139,9 @@ export default function ItemCard({ item, categoria, showCategory }: { item: any,
                     <Source
                         fonte={item.fonteLivro || item.fonte}
                         pagina={item.fontePagina || item.pag}
-                        onOpenReader={() => abrirLeitor(item.fonteLivro, parseInt(String(item.fontePagina)))}
+                        onOpenReader={() =>
+                            abrirLeitor(fonteConfig?.id ?? item.fonteLivro, paginaParaLeitor)
+                        }
                     />
                     <div className="flex flex-row gap-2">
                         <button

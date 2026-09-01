@@ -3,7 +3,7 @@ import type { Categoria } from "@/context/DataContext";
 
 interface LeitorState {
     fonteId: string;
-    pagina: number;
+    pagina: number | '~';
     isOpen: boolean;
 }
 
@@ -15,7 +15,7 @@ interface ModalState {
 
 interface UIContextValue {
     leitor: LeitorState;
-    abrirLeitor: (fonteId: string, pagina: number) => void;
+    abrirLeitor: (fonteId: string, pagina: number | '~') => void;
     fecharLeitor: () => void;
 
     modal: ModalState;
@@ -39,7 +39,7 @@ export function UIProvider({ children }: { children: React.ReactNode }) {
         isOpen: false,
     });
 
-    const abrirLeitor = useCallback((fonteId: string, pagina: number) => {
+    const abrirLeitor = useCallback((fonteId: string, pagina: number | '~') => {
         setLeitor({ fonteId, pagina, isOpen: true });
     }, []);
 
