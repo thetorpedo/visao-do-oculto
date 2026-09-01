@@ -530,7 +530,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
             ];
             await dbSet("dados", overrideKey, novosOverrides);
         } else {
-            const nomeArquivo = "meus-homebrews.json";
+            const nomeArquivo = "meus-registros.json";
             const key = `${categoria}:${nomeArquivo}`;
             const itensExistentes = await dbGet<any[]>("dados", key) || [];
             await dbSet("dados", key, [itemValidado, ...itensExistentes]);
