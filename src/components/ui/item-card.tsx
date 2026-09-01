@@ -159,7 +159,7 @@ export const RenderCardBody = (item: any, categoria: string) => {
 
                     {item.preRequisitos && (
                         <div className="flex mb-4 flex-row min-h-7">
-                            <div className="flex items-center px-3 py-1 text-white font-special font-normal text-sm bg-gray-900 shrink-0">
+                            <div className="flex items-center px-3 py-1 text-white font-special font-normal text-sm bg-gray-900 ">
                                 Pré-requisitos:
                             </div>
                             <div className="flex items-center px-3 py-1 grow bg-gray-200 border border-l-0 border-dashed border-gray-400">

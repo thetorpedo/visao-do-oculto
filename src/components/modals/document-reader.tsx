@@ -1,4 +1,4 @@
-import { X } from 'lucide-react';
+import { X, Maximize2, Minimize2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Document, Page, pdfjs } from 'react-pdf';
@@ -53,7 +53,9 @@ export default function DocumentReader({ fonteId, paginaImpressa, isOpen, onClos
     const updateWidth = () => {
       if (containerRef.current) {
         const containerWidth = containerRef.current.clientWidth;
-        setPdfWidth(Math.min(containerWidth, 850));
+        // Em telas pequenas usa quase toda a largura disponível, sem exagerar o padding
+        const isMobile = window.innerWidth < 640;
+        setPdfWidth(Math.min(containerWidth - (isMobile ? 8 : 0), 850));
       }
     };
 
@@ -113,42 +115,46 @@ export default function DocumentReader({ fonteId, paginaImpressa, isOpen, onClos
   if (!mounted) return null;
 
   return createPortal(
-    <div className={`fixed inset-0 z-49 flex items-center justify-center bg-black/50 backdrop-blur-md p-2 sm:p-4 transition-all duration-300 ${isOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"}`}>
+    <div className={`fixed inset-0 z-49 flex items-center justify-center bg-black/50 backdrop-blur-md p-0 sm:p-4 transition-all duration-300 ${isOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"}`}>
 
-      <FolderDiv className="max-w-5xl h-[95vh] sm:h-[90vh]">
-        <div className="text-center px-2   py-2 mb-3 border-b-2 border-black/40 border-dashed text-black/90 uppercase font-daisy tracking-wider text-xs md:text-sm leading-relaxed flex flex-row justify-between">
-          <div className="flex gap-2 items-center truncate ">
-            <span className="font-special text-base sm:text-lg mt-0.5 truncate">
+      <FolderDiv className="max-w-5xl max-lg:mt-15 h-[85vh] lg:h-[90vh] rounded-none sm:rounded-md">
+        <div className="text-center px-2 py-2 mb-2 sm:mb-3 border-b-2 border-black/40 border-dashed text-black/90 uppercase font-daisy tracking-wider text-xs md:text-sm leading-relaxed flex flex-row items-center justify-between gap-2">
+          <div className="flex gap-2 items-center truncate min-w-0">
+            <span className="font-special text-sm sm:text-lg mt-0.5 truncate">
               {isImage
                 ? `IMAGEM // ${fonteId}`
                 : viewMode === 'single'
-                  ? `${fonteId} - Página ${paginaImpressa}`
+                  ? `${fonteId} - Pág. ${paginaImpressa}`
                   : `${fonteId} - Completo`}
             </span>
           </div>
 
-          <div className='flex flex-row gap-2  shrink-0'>
+          <div className='flex flex-row gap-1.5 sm:gap-2 shrink-0'>
             {!isImage && (
               <Button
                 onClick={() => setViewMode(viewMode === 'single' ? 'full' : 'single')}
                 variant='outline'
-                className='uppercase'
+                size="sm"
+                className='uppercase !px-2 sm:!px-3'
+                title={viewMode === 'single' ? 'Ver arquivo completo' : 'Voltar'}
               >
                 {viewMode === 'single' ? (
-                  <><span className="shrink-0">Ver arquivo completo</span></>
+                  <>
+                    <Maximize2 className="size-3.5 sm:hidden" />
+                    <span className="hidden sm:inline shrink-0">Ver arquivo completo</span>
+                  </>
                 ) : (
-                  <><span className="shrink-0">Voltar</span> </>
+                  <>
+                    <Minimize2 className="size-3.5 sm:hidden" />
+                    <span className="hidden sm:inline shrink-0">Voltar</span>
+                  </>
                 )}
               </Button>
             )}
 
-            <Button
-              onClick={handleClose}
-
-            >              <span className="">
-                FECHAR
-              </span>
-              <span ><X className="size-3.5" /></span>
+            <Button onClick={handleClose} size="sm" className="px-2! sm:px-3!">
+              <span className="hidden sm:inline">FECHAR</span>
+              <span><X className="size-3.5" /></span>
             </Button>
           </div>
         </div>
@@ -168,7 +174,7 @@ export default function DocumentReader({ fonteId, paginaImpressa, isOpen, onClos
               ) : viewMode === 'single' ? (
                 <Document
                   file={pdfSource}
-                  loading={<div className="font-special animate-pulse w-full h-full pt-20 text-center text-white">Carregando Fonte...</div>}
+                  loading={<div className="font-special animate-pulse w-full h-full pt-20 text-center text-white text-sm px-4">Carregando Fonte...</div>}
                 >
                   <Page
                     pageNumber={paginaReal}

@@ -135,6 +135,90 @@ function JsonSection() {
     );
 }
 
+function OverridesSection() {
+    const { overrides, exclusoes, reverterOverride, reverterExclusao } = useData();
+
+    const hasAny = CATEGORIES.some(
+        cat => (overrides[cat.id]?.length ?? 0) > 0 || (exclusoes[cat.id]?.length ?? 0) > 0
+    );
+
+    if (!hasAny) {
+        return (
+            <p className="text-xs text-gray-400 italic text-center py-4">
+                Nenhum override ou exclusão registrado.
+            </p>
+        );
+    }
+
+    return (
+        <div className="space-y-8">
+            {CATEGORIES.map(cat => {
+                const ov = overrides[cat.id] ?? [];
+                const ex = exclusoes[cat.id] ?? [];
+                if (ov.length === 0 && ex.length === 0) return null;
+
+                return (
+                    <PaperDiv key={cat.id}>
+                        <h3 className="font-special uppercase tracking-wide text-gray-900 mb-3">{cat.label}</h3>
+
+                        {ov.length > 0 && (
+                            <div className="mb-4">
+                                <p className="font-special text-xs uppercase text-gray-500 tracking-wider mb-1">
+                                    Itens editados (overrides)
+                                </p>
+                                <div className="flex flex-col gap-1.5">
+                                    {ov.map((item: any) => (
+                                        <div
+                                            key={item.id}
+                                            className="flex items-center justify-between gap-3 bg-white/60 border border-gray-300 px-3 py-1.5"
+                                        >
+                                            <span className="text-sm font-medium text-gray-800 truncate">
+                                                {item.nome ?? item.titulo ?? item.id}
+                                            </span>
+                                            <button
+                                                onClick={() => reverterOverride(cat.id, item.id)}
+                                                className="text-xs font-special uppercase cursor-pointer text-gray-600 hover:text-gray-900 border border-gray-300 px-2 py-0.5 hover:border-gray-600 shrink-0"
+                                                title="Descartar edição e voltar ao valor original do arquivo"
+                                            >
+                                                Reverter
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {ex.length > 0 && (
+                            <div>
+                                <p className="font-special text-xs uppercase text-gray-500 tracking-wider mb-1">
+                                    Itens excluídos
+                                </p>
+                                <div className="flex flex-col gap-1.5">
+                                    {ex.map((id: string) => (
+                                        <div
+                                            key={id}
+                                            className="flex items-center justify-between gap-3 bg-white/60 border border-gray-300 px-3 py-1.5"
+                                        >
+                                            <span className="text-sm font-medium text-gray-800 truncate">{id}</span>
+                                            <button
+                                                onClick={() => reverterExclusao(cat.id, id)}
+                                                className="text-xs font-special uppercase cursor-pointer text-gray-600 hover:text-gray-900 border border-gray-300 px-2 py-0.5 hover:border-gray-600 shrink-0"
+                                                title="Restaurar item excluído"
+                                            >
+                                                Restaurar
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </PaperDiv>
+                );
+            })}
+        </div>
+    );
+}
+
 function SourcesSection() {
     const { fontes, salvarFonte, removerFonte } = useData();
     const [newSource, setNewSource] = useState<Partial<FonteConfig>>({});
@@ -332,9 +416,13 @@ function SourcesSection() {
 }
 
 export default function Configuracoes() {
-    const { limparTudo, exportarPacote, poderes, rituais, equipamentos, origens, trilhas, importarJson } = useData();
-    const [activeTab, setActiveTab] = useState<"jsons" | "fontes">("jsons");
+    const {
+        limparTudo, exportarPacote, poderes, rituais, equipamentos,
+        origens, trilhas, importarJson,
+    } = useData();
+    const [activeTab, setActiveTab] = useState<"jsons" | "fontes" | "overrides">("jsons");
     const [confirmClear, setConfirmClear] = useState(false);
+    const isPrivate = import.meta.env.VITE_MODO === "privado";
 
     const totalItems = poderes.length + rituais.length + equipamentos.length + origens.length + trilhas.length;
 
@@ -359,6 +447,11 @@ export default function Configuracoes() {
                     >
                         Fontes & PDFs
                     </Button>
+                    {isPrivate && (
+                        <Button onClick={() => setActiveTab("overrides")} variant={activeTab === "overrides" ? 'default' : 'secondary'}>
+                            Overrides & Exclusões
+                        </Button>
+                    )}
                 </div>
 
                 <div className="flex flex-wrap gap-3">
@@ -410,7 +503,7 @@ export default function Configuracoes() {
                 </div>
             </div>
 
-            {activeTab === "jsons" ? <JsonSection /> : <SourcesSection />}
+            {activeTab === "jsons" ? <JsonSection /> : activeTab === "fontes" ? <SourcesSection /> : <OverridesSection />}
         </div>
     );
 }

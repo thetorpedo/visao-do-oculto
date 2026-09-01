@@ -92,14 +92,14 @@ export default function Home() {
             </ul>
           </InfoPanel>
 
-          {isPrivate && pdfsToDownload.length > 0 && (
-            <div className="sm:col-span-2">
-              <CacheDownloader pdfsParaBaixar={pdfsToDownload} />
-            </div>
-          )}
         </div>
       </section>
 
+      {isPrivate && pdfsToDownload.length > 0 && (
+        <div className="col-span-2">
+          <CacheDownloader pdfsParaBaixar={pdfsToDownload} />
+        </div>
+      )}
       <footer className="col-span-2 flex flex-col gap-8">
         <GuideDropdown />
         <p className="border-2 border-dashed border-black/40 bg-black/5 p-5 text-center font-daisy text-xs leading-relaxed tracking-wider text-black/70 uppercase md:text-sm">
