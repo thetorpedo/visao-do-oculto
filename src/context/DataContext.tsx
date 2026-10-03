@@ -234,7 +234,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
             if (config) novoState.fontes[key] = config;
         }
 
-        // Fontes com arquivo físico em /files/ — só existem no deploy privado.
+        // Isso aqui é só para o deploy privado, que já vem com fontes/PDFs em build.
+        // Fontes com arquivo físico em /files/, só existem no deploy privado.
         // No deploy público o usuário cadastra as fontes manualmente em Configurações.
         if (estatico !== null) {
             const FONTES_DEFAULT: Record<string, Omit<FonteConfig, "id">> = {

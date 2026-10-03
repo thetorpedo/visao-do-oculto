@@ -63,7 +63,7 @@ export default function TelaImportacao() {
               </button>
               {Object.values(resultados).some(r => r && r.itens > 0) && (
                 <p className="text-xs text-gray-400 text-center">
-                  Os dados são salvos no seu navegador — você não precisará importar novamente.
+                  Os dados são salvos no seu navegador, você não precisará importar novamente.
                 </p>
               )}
             </div>
@@ -180,7 +180,7 @@ export default function TelaImportacao() {
 
             {temAlgumDado && (
               <p className="text-center text-xs text-gray-400 mt-4">
-                Os dados são salvos no seu navegador — você não precisará importar novamente.
+                Os dados são salvos no seu navegador, você não precisará importar novamente.
               </p>
             )}
           </FolderDiv>

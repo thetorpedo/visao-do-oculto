@@ -18,7 +18,7 @@ import { useData } from './context/DataContext';
 import { UIProvider, useUI } from './context/UiContext';
 
 // ─────────────────────────────────────────
-// Modais globais — montados uma vez no topo
+// Modais globais montados uma vez no topo
 // ─────────────────────────────────────────
 
 function GlobalModals() {

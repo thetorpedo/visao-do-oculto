@@ -237,7 +237,7 @@ export function ComboBoxCsv({
                 </ul>
             )}
             <p className="text-[10px] text-gray-500 mt-0.5">
-                Separe múltiplos valores por vírgula — o dropdown sugere com base no já cadastrado.
+                Separe múltiplos valores por vírgula, o dropdown sugere com base no já cadastrado.
             </p>
         </div>
     );

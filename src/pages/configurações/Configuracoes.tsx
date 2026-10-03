@@ -373,7 +373,7 @@ function SourcesSection() {
                     </div>
                     <div className="sm:col-span-2">
                         <label className="text-xs font-special uppercase text-gray-600 block mb-1">
-                            Arquivo <span className="normal-case text-gray-400">(PDF ou imagem — detectado automaticamente)</span>
+                            Arquivo <span className="normal-case text-gray-400">(PDF ou imagem)</span>
                         </label>
                         <input
                             ref={inputPdfRef}
