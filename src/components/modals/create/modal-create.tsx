@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { createPortal } from "react-dom";
 import { X, Save, Plus, Trash2 } from "lucide-react";
 import { useData, type Categoria } from "@/context/DataContext";
@@ -314,10 +314,31 @@ export default function ModalCriarRegistro({
                                             <input name="especial" value={formData.especial} onChange={handleChange} className={inputCls} placeholder="Ex: Precisa ser treinado em Medicina..." />
                                         </Campo>
                                     </div>
-                                    <Campo spanfull label="NEX 10% (Ou Estágio 2)"><textarea name="nex10" value={formData.nex10} onChange={handleChange} rows={2} className={textareaCls} /></Campo>
-                                    <Campo spanfull label="NEX 40% (Ou Estágio 4)"><textarea name="nex40" value={formData.nex40} onChange={handleChange} rows={2} className={textareaCls} /></Campo>
-                                    <Campo spanfull label="NEX 65%"><textarea name="nex65" value={formData.nex65} onChange={handleChange} rows={2} className={textareaCls} /></Campo>
-                                    <Campo spanfull label="NEX 99%"><textarea name="nex99" value={formData.nex99} onChange={handleChange} rows={2} className={textareaCls} /></Campo>
+                                    {(["nex10", "nex40", "nex65", "nex99"] as const).map((campo, index) => {
+                                        const rotulo = ["NEX 10% (Ou Estágio 2)", "NEX 40% (Ou Estágio 4)", "NEX 65%", "NEX 99%"][index];
+                                        return (
+                                            <Fragment key={campo}>
+                                                <Campo spanfull label={`${rotulo} - Título`}>
+                                                    <input
+                                                        name={`${campo}Titulo`}
+                                                        value={formData[`${campo}Titulo`]}
+                                                        onChange={handleChange}
+                                                        className={inputCls}
+                                                        placeholder="Ex: Golpe Brutal"
+                                                    />
+                                                </Campo>
+                                                <Campo spanfull label={`${rotulo} - Descrição`}>
+                                                    <textarea
+                                                        name={`${campo}Descricao`}
+                                                        value={formData[`${campo}Descricao`]}
+                                                        onChange={handleChange}
+                                                        rows={2}
+                                                        className={textareaCls}
+                                                    />
+                                                </Campo>
+                                            </Fragment>
+                                        );
+                                    })}
                                 </Secao>
                             )}
 
