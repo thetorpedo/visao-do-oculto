@@ -77,12 +77,12 @@ export default function Home() {
       </header >
 
       <section className="mx-auto flex h-full w-full max-w-6xl flex-col gap-8">
-        <div className="grid h-full grid-cols-1 gap-8 mt-2 sm:grid-cols-2">
+        <div className="grid h-full grid-cols-1 gap-8 mt-2">
           <InfoPanel title="Lista de Atualizações">
             <ChangelogList entries={isPrivate ? UPDATES_PRIVATE : UPDATES_PUBLIC} />
           </InfoPanel>
 
-          <InfoPanel title="Funcionalidades Planejadas">
+          {/* <InfoPanel title="Funcionalidades Planejadas">
             <ul className="list-inside list-disc space-y-2 text-gray-800 marker:text-gray-500">
               {PLANNED_FEATURES.map((feature) => (
                 <li key={feature} className="border-b border-dashed border-gray-400/60 pb-1">
@@ -90,7 +90,7 @@ export default function Home() {
                 </li>
               ))}
             </ul>
-          </InfoPanel>
+          </InfoPanel> */}
 
         </div>
       </section>

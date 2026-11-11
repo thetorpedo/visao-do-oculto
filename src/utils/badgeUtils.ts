@@ -20,7 +20,7 @@ export const estiloBadgeTipo = (tipo: string) => {
         case "Sobrevivente": return "text-orange-900 border-dashed border-orange-300 bg-orange-200/30";
 
         // Poderes
-        case "Paranormal": return "text-gray-900 border-dashed border-gray-500 bg-gray-300/50";
+        case "Paranormal": return "text-black border-dashed border-black";
         case "Sacrifício": return "text-rose-900 border-dashed border-rose-300 bg-rose-200/30";
 
         // Equipamentos
