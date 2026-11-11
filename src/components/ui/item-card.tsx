@@ -1,5 +1,5 @@
 import { estiloBadgeTipo, corElemento } from "@/utils/badgeUtils";
-import ExpandableText from "./expandable-text";
+import ExpandableText, { ExpandableTextToggle } from "./expandable-text";
 import MarkdownRenderer from "./markdown-renderer";
 import { ChevronDown, Pencil } from "lucide-react";
 import { useState } from "react";
@@ -52,8 +52,8 @@ function AprimoramentoDropdown({ aprimoramento }: { aprimoramento: { nome: strin
                 </div>
             </button>
             {isOpen && (
-                <div className="p-3 border border-t-0 border-dashed border-gray-400 bg-gray-200 text-sm whitespace-pre-wrap text-justify text-gray-800 leading-relaxed ">
-                    {capitalizeFirst(aprimoramento.descricao)}
+                <div className="p-3 border border-t-0 border-dashed border-gray-400 bg-gray-200 text-sm text-justify text-gray-800 leading-relaxed">
+                    <MarkdownRenderer content={capitalizeFirst(aprimoramento.descricao)} isCompact />
                 </div>
             )}
         </div>
@@ -92,15 +92,13 @@ function RegraExpandivel({ content }: { content: string }) {
     const [expandido, setExpandido] = useState(false);
     return (
         <div className="relative">
-            <div className={`transition-all duration-300 ${expandido ? "max-h-none" : "max-h-62.5 overflow-hidden"}`}>
+            <div className={`transition-all duration-300 ${expandido ? "max-h-none" : "max-h-40 overflow-hidden"}`}>
                 <MarkdownRenderer content={content} isCompact={true} />
             </div>
-            <button
+            <ExpandableTextToggle
+                expanded={expandido}
                 onClick={() => setExpandido(!expandido)}
-                className="mt-3 text-xs font-bold uppercase underline py-1 text-gray-600 cursor-pointer hover:text-gray-900"
-            >
-                {expandido ? "[Ler menos]" : "[Ler mais...]"}
-            </button>
+            />
         </div>
     );
 }
@@ -168,7 +166,7 @@ export const RenderCardBody = (item: any, categoria: string) => {
                         <span className={`${badgeClass} ${estiloBadgeTipo(item.tipo)}`}>{item.tipo}</span>
                         {item.elemento && <span className={`${badgeClass} ${corElemento(item.elemento)}`}>{item.elemento}</span>}
                     </div>
-                    <div className="mb-4 text-sm text-gray-800 leading-relaxed"><ExpandableText text={item.descricao} limit={220} /></div>
+                    <div className="mb-4 text-sm text-gray-800 leading-relaxed"><ExpandableText text={item.descricao} limit={item.afinidade ? 180 : item.preRequisitos ? 240 : 320} /></div>
 
                     {item.preRequisitos && (
                         <div className="flex mb-4 flex-row min-h-7">
@@ -184,7 +182,7 @@ export const RenderCardBody = (item: any, categoria: string) => {
                     {item.afinidade && (
                         <div className={`mb-3 px-3 py-2 border-l-4 ${corElemento(item.elemento).replace('bg-', 'border-').split(' ')[1]} bg-gray-300/30`}>
                             <span className="font-special text-base tracking-wider block uppercase text-gray-900 mb-1">Afinidade:</span>
-                            <div className="text-sm text-gray-800 leading-relaxed"><ExpandableText text={item.afinidade} limit={200} /></div>
+                            <div className="text-sm text-gray-800 leading-relaxed"><ExpandableText text={item.afinidade} limit={160} /></div>
                         </div>
                     )}
                 </>
@@ -210,7 +208,7 @@ export const RenderCardBody = (item: any, categoria: string) => {
                         </div>
                     )}
 
-                    <div className="mb-4 text-sm text-gray-800 leading-relaxed"><ExpandableText text={item.descricao} limit={200} /></div>
+                    <div className="mb-4 text-sm text-gray-800 leading-relaxed"><ExpandableText text={item.descricao} limit={item.aprimoramentos?.length ? 180 : 300} /></div>
 
                     {item.aprimoramentos && item.aprimoramentos.length > 0 && (
                         <div className="mt-2">
@@ -223,7 +221,7 @@ export const RenderCardBody = (item: any, categoria: string) => {
         case "origens":
             return (
                 <>
-                    <div className="text-sm text-gray-800 leading-relaxed mb-4"><ExpandableText text={item.descricao} limit={400} /></div>
+                    <div className="text-sm text-gray-800 leading-relaxed mb-4"><ExpandableText text={item.descricao} limit={180} /></div>
 
                     <div className="flex mb-4 flex-row min-h-7">
                         <div className="flex items-center px-3 py-1 text-white font-special font-normal text-sm bg-gray-900">
@@ -236,7 +234,7 @@ export const RenderCardBody = (item: any, categoria: string) => {
 
                     <div className="mb-3 bg-gray-200 border border-gray-400/50 px-3 py-2">
                         <span className="font-special text-base tracking-wider block uppercase text-gray-900 mb-1">{item.tecnicaNome}:</span>
-                        <div className="text-sm text-gray-800 leading-relaxed"><ExpandableText text={item.tecnicaDescricao} limit={400} /></div>
+                        <div className="text-sm text-gray-800 leading-relaxed"><ExpandableText text={item.tecnicaDescricao} limit={220} /></div>
                     </div>
                 </>
             );
@@ -248,7 +246,7 @@ export const RenderCardBody = (item: any, categoria: string) => {
                         <span className={`${badgeClass} ${estiloBadgeTipo(item.tipo)}`}>{item.tipo}</span>
                     </div>
 
-                    <div className="mb-4 text-sm text-gray-800 leading-relaxed"><ExpandableText text={item.descricao ?? ""} limit={400} /></div>
+                    <div className="mb-4 text-sm text-gray-800 leading-relaxed"><ExpandableText text={item.descricao ?? ""} limit={item.especial ? 180 : 260} /></div>
 
                     {item.especial && (
                         <div className="mb-4 bg-gray-400/20 border border-gray-400/50 px-3 py-2">
@@ -338,7 +336,7 @@ export const RenderCardBody = (item: any, categoria: string) => {
                     )}
 
                     <div className="text-sm text-gray-800 leading-relaxed mb-2">
-                        <ExpandableText text={formatarDescricao(item.nome, item.descricao || "")} limit={isArma ? 250 : 500} />
+                        <ExpandableText text={formatarDescricao(item.nome, item.descricao || "")} limit={isArma ? (statusEquip.length > 4 ? 160 : 280) : 240} />
                     </div>
                 </>
             );
@@ -356,7 +354,7 @@ export const RenderCardBody = (item: any, categoria: string) => {
                         </div>
                     )}
                     <div className="text-sm text-gray-800 leading-relaxed mb-2">
-                        <ExpandableText text={item.descricao || ""} limit={300} />
+                        <ExpandableText text={item.descricao || ""} limit={240} />
                     </div>
                 </>
             );

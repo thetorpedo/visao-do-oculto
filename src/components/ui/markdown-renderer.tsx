@@ -3,9 +3,17 @@ import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
 import rehypeRaw from 'rehype-raw';
 
-export default function MarkdownRenderer({ content, isCompact = false }: { content: string, isCompact?: boolean }) {
+export default function MarkdownRenderer({
+  content,
+  isCompact = false,
+  inline = false,
+}: {
+  content: string;
+  isCompact?: boolean;
+  inline?: boolean;
+}) {
   return (
-    <div className={`text-black prose max-w-none 
+    <div className={`${inline ? "inline prose-p:inline prose-p:my-0 prose-p:mr-1" : ""} text-black prose max-w-none
       prose-headings:font-blur prose-headings:font-normal prose-headings:border-b prose-headings:text-black
       prose-table:bg-gray-400/30 prose-table:p-5  prose-table:font-special
       prose-th:border-b-2 prose-th:pb-0 prose-th:font-optima-bold prose-th:text-base

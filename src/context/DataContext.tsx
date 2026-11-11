@@ -247,6 +247,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
                 AS4: { tipo: "dados", offset: 0, nomeArquivo: "AS4.pdf" },
                 AS5: { tipo: "dados", offset: 0, nomeArquivo: "AS5.pdf" },
                 AS6: { tipo: "dados", offset: 0, nomeArquivo: "AS6.pdf" },
+                AS7: { tipo: "dados", offset: 0, nomeArquivo: "AS7.pdf" },
+                AS9: { tipo: "dados", offset: 0, nomeArquivo: "AS9.pdf" },
                 OPRPGLUXO: { tipo: "visual", offset: 0, nomeArquivo: "OPRPGLUXO.jpg", label: "OPRPG Luxo" },
                 INICIACAO: { tipo: "visual", offset: 0, nomeArquivo: "INICIACAO.png", label: "HQ Iniciação" },
                 OSNF1: { tipo: "visual", offset: 0, nomeArquivo: "OSNF1.png", label: "HQ OSNF-1" },

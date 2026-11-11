@@ -7,6 +7,26 @@ export const csvParaArray = (v: string) =>
 
 export type Aprimoramento = { nome: string; custo: string; descricao: string };
 
+function separarHabilidade(texto: string | null | undefined) {
+  const valor = texto ?? "";
+  const ponto = valor.indexOf(".");
+
+  if (ponto === -1) return { titulo: valor, descricao: "" };
+
+  return {
+    titulo: valor.slice(0, ponto).trim(),
+    descricao: valor.slice(ponto + 1).trim(),
+  };
+}
+
+function juntarHabilidade(titulo: string, descricao: string) {
+  const nome = titulo.trim();
+  const efeito = descricao.trim();
+  if (!nome) return efeito;
+  if (!efeito) return nome;
+  return `${nome.replace(/\.$/, "")}. ${efeito}`;
+}
+
 export function estadoInicial(categoria: Categoria): any {
   const base = { nome: "", descricao: "", fonteLivro: "Homebrew", fontePagina: "1" };
 
@@ -20,7 +40,19 @@ export function estadoInicial(categoria: Categoria): any {
     case "rituais":
       return { ...base, elemento: "", circulo: "1", execucao: "", alcance: "", alvo: "", area: "", duracao: "", resistencia: "", aprimoramentos: [] as Aprimoramento[] };
     case "trilhas":
-      return { ...base, tipo: "", especial: "", nex10: "", nex40: "", nex65: "", nex99: "" };
+      return {
+        ...base,
+        tipo: "",
+        especial: "",
+        nex10Titulo: "",
+        nex10Descricao: "",
+        nex40Titulo: "",
+        nex40Descricao: "",
+        nex65Titulo: "",
+        nex65Descricao: "",
+        nex99Titulo: "",
+        nex99Descricao: "",
+      };
     case "regras":
       return { ...base, categoria: "" };
   }
@@ -97,10 +129,10 @@ export function montarPayload(categoria: Categoria, f: any) {
                 ...comum,
                 tipo: f.tipo,
                 especial: vazioParaNull(f.especial),
-                nex10: f.nex10,
-                nex40: f.nex40,
-                nex65: vazioParaNull(f.nex65),
-                nex99: vazioParaNull(f.nex99),
+                nex10: juntarHabilidade(f.nex10Titulo, f.nex10Descricao),
+                nex40: juntarHabilidade(f.nex40Titulo, f.nex40Descricao),
+                nex65: vazioParaNull(juntarHabilidade(f.nex65Titulo, f.nex65Descricao)),
+                nex99: vazioParaNull(juntarHabilidade(f.nex99Titulo, f.nex99Descricao)),
             };
 
         case "regras":
@@ -131,7 +163,23 @@ export function itemParaForm(categoria: Categoria, item: any): any {
       case "rituais":
           return { ...base, elemento: (item.elemento ?? []).join(", "), circulo: String(item.circulo ?? 1), execucao: item.execucao ?? "", alcance: item.alcance ?? "", alvo: item.alvo ?? "", area: item.area ?? "", duracao: item.duracao ?? "", resistencia: item.resistencia ?? "", aprimoramentos: item.aprimoramentos ?? [] };
       case "trilhas":
-          return { ...base, tipo: item.tipo ?? "", especial: item.especial ?? "", nex10: item.nex10 ?? "", nex40: item.nex40 ?? "", nex65: item.nex65 ?? "", nex99: item.nex99 ?? "" };
+          const nex10 = separarHabilidade(item.nex10);
+          const nex40 = separarHabilidade(item.nex40);
+          const nex65 = separarHabilidade(item.nex65);
+          const nex99 = separarHabilidade(item.nex99);
+          return {
+              ...base,
+              tipo: item.tipo ?? "",
+              especial: item.especial ?? "",
+              nex10Titulo: nex10.titulo,
+              nex10Descricao: nex10.descricao,
+              nex40Titulo: nex40.titulo,
+              nex40Descricao: nex40.descricao,
+              nex65Titulo: nex65.titulo,
+              nex65Descricao: nex65.descricao,
+              nex99Titulo: nex99.titulo,
+              nex99Descricao: nex99.descricao,
+          };
       case "regras":
           return { ...base, categoria: (item.categoria ?? []).join(", ") };
       default:

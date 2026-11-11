@@ -3,6 +3,11 @@ import { ChangelogEntry } from "./changelog-panel";
 export const PLANNED_FEATURES = ["Ameaças.", "Dark mode?", "Melhorar responsividade."];
 export const UPDATES_PUBLIC: ChangelogEntry[] = [
   {
+    version: "v2.2",
+    date: "11/11/26",
+    changes: ["Melhorias de interface", "Editor de markdown"],
+  },
+  {
     version: "v2.1",
     date: "01/09/26",
     changes: ["Interface de criação, edição e exclusão de registros", "Melhorias gerais", "Refatoração do código"],
@@ -15,6 +20,11 @@ export const UPDATES_PUBLIC: ChangelogEntry[] = [
 ];
 
 export const UPDATES_PRIVATE: ChangelogEntry[] = [
+  {
+    version: "v2.2",
+    date: "11/11/26",
+    changes: ["Adicionado conteúdo do AS9", "Melhorias de interface", "Editor de markdown"],
+  },
   {
     version: "v2.1",
     date: "01/09/26",
