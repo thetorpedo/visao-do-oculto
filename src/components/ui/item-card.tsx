@@ -52,8 +52,8 @@ function AprimoramentoDropdown({ aprimoramento }: { aprimoramento: { nome: strin
                 </div>
             </button>
             {isOpen && (
-                <div className="p-3 border border-t-0 border-dashed border-gray-400 bg-gray-200 text-sm whitespace-pre-wrap text-justify text-gray-800 leading-relaxed ">
-                    {capitalizeFirst(aprimoramento.descricao)}
+                <div className="p-3 border border-t-0 border-dashed border-gray-400 bg-gray-200 text-sm text-justify text-gray-800 leading-relaxed">
+                    <MarkdownRenderer content={capitalizeFirst(aprimoramento.descricao)} isCompact />
                 </div>
             )}
         </div>

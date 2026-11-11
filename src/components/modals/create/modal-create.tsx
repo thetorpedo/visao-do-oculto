@@ -8,6 +8,7 @@ import { Dialog, DialogClose, DialogContent, DialogFooter, DialogTitle, DialogTr
 import { useFormOptions } from "@/hooks/useFormOptions";
 import { Secao, Campo, inputCls, textareaCls } from "./form-layout";
 import { itemParaForm, estadoInicial, Aprimoramento, montarPayload } from "./utils/form-utils";
+import MarkdownEditor from "./markdown-editor";
 
 
 export default function ModalCriarRegistro({
@@ -118,7 +119,11 @@ export default function ModalCriarRegistro({
                                 </div>
                                 <div className="col-span-2 md:col-span-3">
                                     <Campo label={categoria === "origens" ? "Descrição *" : "Descrição (Suporta Markdown) *"}>
-                                        <textarea name="descricao" value={formData.descricao} onChange={handleChange} rows={categoria === "origens" ? 3 : 4} className={textareaCls} />
+                                        <MarkdownEditor
+                                            value={formData.descricao}
+                                            onChange={(value) => handleComboChange("descricao", value)}
+                                            rows={8}
+                                        />
                                     </Campo>
                                 </div>
 
@@ -165,7 +170,12 @@ export default function ModalCriarRegistro({
                                     </div>
                                     <div className="col-span-2 md:col-span-3">
                                         <Campo label="Afinidade (opcional, requer elemento)">
-                                            <textarea name="afinidade" value={formData.afinidade} onChange={handleChange} rows={2} className={textareaCls} placeholder="Ex: Aumenta o dano em 10..." />
+                                            <MarkdownEditor
+                                                value={formData.afinidade}
+                                                onChange={(value) => handleComboChange("afinidade", value)}
+                                                rows={6}
+                                                placeholder="Ex: Aumenta o dano em 10..."
+                                            />
                                         </Campo>
                                     </div>
                                 </Secao>
@@ -297,7 +307,12 @@ export default function ModalCriarRegistro({
                                                             <input placeholder="Nome (ex: 'Discente')" value={a.nome} onChange={(e) => changeAprimoramento(idx, "nome", e.target.value)} className={inputCls} />
                                                             <input placeholder="Custo (ex: '+3 PE')" value={a.custo} onChange={(e) => changeAprimoramento(idx, "custo", e.target.value)} className={inputCls} />
                                                         </div>
-                                                        <textarea placeholder="Descrição" value={a.descricao} onChange={(e) => changeAprimoramento(idx, "descricao", e.target.value)} rows={2} className={textareaCls} />
+                                                        <MarkdownEditor
+                                                            value={a.descricao}
+                                                            onChange={(value) => changeAprimoramento(idx, "descricao", value)}
+                                                            rows={6}
+                                                            placeholder="Descrição"
+                                                        />
                                                     </div>
                                                 ))}
                                                 {formData.aprimoramentos.length === 0 && <p className="text-sm text-gray-500 italic">Nenhum aprimoramento adicionado.</p>}
@@ -328,12 +343,10 @@ export default function ModalCriarRegistro({
                                                     />
                                                 </Campo>
                                                 <Campo spanfull label={`${rotulo} - Descrição`}>
-                                                    <textarea
-                                                        name={`${campo}Descricao`}
+                                                    <MarkdownEditor
                                                         value={formData[`${campo}Descricao`]}
-                                                        onChange={handleChange}
-                                                        rows={2}
-                                                        className={textareaCls}
+                                                        onChange={(value) => handleComboChange(`${campo}Descricao`, value)}
+                                                        rows={6}
                                                     />
                                                 </Campo>
                                             </Fragment>
@@ -361,7 +374,12 @@ export default function ModalCriarRegistro({
                                     </div>
                                     <div className="col-span-2 md:col-span-3">
                                         <Campo label="Descrição da Habilidade *">
-                                            <textarea name="tecnicaDescricao" value={formData.tecnicaDescricao} onChange={handleChange} rows={2} className={textareaCls} placeholder="Ex: Sempre que cura um personagem..." />
+                                            <MarkdownEditor
+                                                value={formData.tecnicaDescricao}
+                                                onChange={(value) => handleComboChange("tecnicaDescricao", value)}
+                                                rows={6}
+                                                placeholder="Ex: Sempre que cura um personagem..."
+                                            />
                                         </Campo>
                                     </div>
                                 </Secao>
