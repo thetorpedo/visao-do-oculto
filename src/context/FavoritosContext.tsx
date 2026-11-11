@@ -63,7 +63,12 @@ export function FavoritosProvider({ children }: { children: React.ReactNode }) {
         const favoritosAfetados = favoritos.filter(f => f.grupoIds.includes(id));
         for (const f of favoritosAfetados) {
             const novosGrupoIds = f.grupoIds.filter(gid => gid !== id);
-            await atualizarGruposFavorito(f.id, novosGrupoIds);
+            if (novosGrupoIds.length === 0) {
+                await dbDelete("favoritos", f.id);
+                setFavoritos(prev => prev.filter(favorito => favorito.id !== f.id));
+            } else {
+                await atualizarGruposFavorito(f.id, novosGrupoIds);
+            }
         }
     };
 

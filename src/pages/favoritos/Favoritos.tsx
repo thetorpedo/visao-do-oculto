@@ -29,7 +29,7 @@ export default function Favoritos() {
 
   const handleRemoverGrupo = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    if (confirm("Tem certeza que deseja apagar este grupo? Os itens não serão excluídos, apenas removidos desta pasta.")) {
+    if (confirm("Tem certeza que deseja apagar esta coleção? Os favoritos que também estiverem em outras coleções serão mantidos; os que ficarem sem coleção serão removidos.")) {
       await removerGrupo(id);
       if (grupoAtivo === id) setGrupoAtivo("todos");
     }
