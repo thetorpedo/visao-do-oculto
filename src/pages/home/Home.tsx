@@ -7,7 +7,7 @@ import { ExternalLink, Heart, Search } from "lucide-react";
 import { useState } from "react";
 import DonateModal from "@/pages/home/components/donate-modal";
 import ChangelogList from "@/pages/home/components/changelog-panel";
-import { PLANNED_FEATURES, UPDATES_PRIVATE, UPDATES_PUBLIC } from "@/pages/home/components/changelog";
+import { UPDATES_PRIVATE, UPDATES_PUBLIC } from "@/pages/home/components/changelog";
 
 const REPO_URL = "https://github.com/thetorpedo/visao-do-oculto";
 
