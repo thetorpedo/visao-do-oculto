@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import ItemCard from "@/components/ui/item-card";
 import { useUI } from "@/context/UiContext";
 import FilterPanel from "@/components/filter/filter-panel";
+import { ordenarPorRelevancia } from "@/utils/searchUtils";
 
 const CONFIGS_FILTRO: ConfigFiltro[] = [
   {
@@ -33,8 +34,8 @@ export default function Rituais() {
   const rituaisExibidos = useMemo(() => {
     let resultado = filtros.dadosFiltrados;
 
-    if (filtros.busca) {
-      const termo = filtros.busca.toLowerCase();
+    const termo = filtros.busca.trim().toLowerCase();
+    if (termo) {
       resultado = resultado.filter(
         (r) =>
           r.nome.toLowerCase().includes(termo) ||
@@ -44,7 +45,12 @@ export default function Rituais() {
       );
     }
 
-    return resultado.sort((a, b) => a.nome.localeCompare(b.nome));
+    return ordenarPorRelevancia(resultado, filtros.busca, (r) => [
+      r.nome,
+      r.descricao,
+      ...r.elemento,
+      ...(r.aprimoramentos?.map((ap) => ap.descricao) ?? []),
+    ]);
   }, [filtros.dadosFiltrados, filtros.busca]);
 
   return (

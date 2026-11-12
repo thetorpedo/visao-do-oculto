@@ -4,6 +4,7 @@ import { useFiltros, type ConfigFiltro } from "@/hooks/useFiltros";
 import FilterPanel from "@/components/filter/filter-panel";
 import { useUI } from "@/context/UiContext";
 import ItemCard from "@/components/ui/item-card";
+import { ordenarPorRelevancia } from "@/utils/searchUtils";
 
 const TABS = [
   { id: "equipamentos", label: "Equipamentos" },
@@ -28,6 +29,7 @@ export default function Equipamentos() {
     return [
       { id: "tipo", label: "Tipos", opcoes: "auto", match: "array" },
       { id: "subtipo", label: "Subtipos", opcoes: "auto" },
+      { id: "espaco", label: "Espaços", opcoes: "auto" },
       { id: "arma.armaTipo", label: "Uso Arma", opcoes: "auto" },
       { id: "arma.catArma", label: "Cat Arma", opcoes: "auto" },
       { id: "arma.empunhadura", label: "Empunh", opcoes: "auto" },
@@ -47,8 +49,8 @@ export default function Equipamentos() {
   const equipamentosExibidos = useMemo(() => {
     let resultado = filtros.dadosFiltrados;
 
-    if (filtros.busca) {
-      const termo = filtros.busca.toLowerCase();
+    const termo = filtros.busca.trim().toLowerCase();
+    if (termo) {
       resultado = resultado.filter(
         (e) =>
           e.nome.toLowerCase().includes(termo) ||
@@ -60,7 +62,14 @@ export default function Equipamentos() {
       );
     }
 
-    return resultado.sort((a, b) => a.nome.localeCompare(b.nome));
+    return ordenarPorRelevancia(resultado, filtros.busca, (e) => [
+      e.nome,
+      e.descricao,
+      e.subtipo,
+      e.tipoDano,
+      e.elemento,
+      e.arma?.armaTipo,
+    ]);
   }, [filtros.dadosFiltrados, filtros.busca]);
 
   return (

@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import ItemCard from "@/components/ui/item-card";
 import { useUI } from "@/context/UiContext";
 import FilterPanel from "@/components/filter/filter-panel";
+import { ordenarPorRelevancia } from "@/utils/searchUtils";
 
 const CONFIGS_FILTRO: ConfigFiltro[] = [
   {
@@ -38,8 +39,8 @@ export default function Poderes() {
   const poderesExibidos = useMemo(() => {
     let resultado = filtros.dadosFiltrados;
 
-    if (filtros.busca) {
-      const termo = filtros.busca.toLowerCase();
+    const termo = filtros.busca.trim().toLowerCase();
+    if (termo) {
       resultado = resultado.filter(
         (p) =>
           p.nome.toLowerCase().includes(termo) ||
@@ -49,7 +50,12 @@ export default function Poderes() {
       );
     }
 
-    return resultado.sort((a, b) => a.nome.localeCompare(b.nome));
+    return ordenarPorRelevancia(resultado, filtros.busca, (p) => [
+      p.nome,
+      p.descricao,
+      p.preRequisitos,
+      p.afinidade,
+    ]);
   }, [filtros.dadosFiltrados, filtros.busca]);
 
   return (

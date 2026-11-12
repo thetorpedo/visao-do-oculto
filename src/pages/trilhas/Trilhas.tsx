@@ -4,6 +4,7 @@ import { useFiltros, type ConfigFiltro } from "@/hooks/useFiltros";
 import { useMemo } from "react";
 import ItemCard from "@/components/ui/item-card";
 import { useUI } from "@/context/UiContext";
+import { ordenarPorRelevancia } from "@/utils/searchUtils";
 
 const CONFIGS_FILTRO: ConfigFiltro[] = [
   {
@@ -27,8 +28,8 @@ export default function Trilhas() {
   const trilhasExibidas = useMemo(() => {
     let resultado = filtros.dadosFiltrados;
 
-    if (filtros.busca) {
-      const termo = filtros.busca.toLowerCase();
+    const termo = filtros.busca.trim().toLowerCase();
+    if (termo) {
       resultado = resultado.filter(
         (t) =>
           t.nome.toLowerCase().includes(termo) ||
@@ -41,7 +42,15 @@ export default function Trilhas() {
       );
     }
 
-    return resultado.sort((a, b) => a.nome.localeCompare(b.nome));
+    return ordenarPorRelevancia(resultado, filtros.busca, (t) => [
+      t.nome,
+      t.descricao,
+      t.especial,
+      t.nex10,
+      t.nex40,
+      t.nex65,
+      t.nex99,
+    ]);
   }, [filtros.dadosFiltrados, filtros.busca]);
 
   return (
