@@ -67,13 +67,14 @@ export default function Regras() {
     }, [dadosHigienizadosParaFuse]);
 
     const regrasOrdenadas = useMemo(() => {
-        if (!filtros.busca || filtros.busca.trim().length < 2) {
+        const termoBusca = filtros.busca.trim();
+        if (!termoBusca) {
             return [...filtros.dadosFiltrados].sort((a, b) => a.nome.localeCompare(b.nome));
         }
 
-        const resultadoFuse = fuse.search(filtros.busca);
+        const resultadoFuse = fuse.search(termoBusca);
         const idsFiltrados = new Set(filtros.dadosFiltrados.map((d) => d.id));
-        const termo = filtros.busca.toLowerCase().trim();
+        const termo = termoBusca.toLowerCase();
 
         const filtrados = resultadoFuse
             .filter((res) => idsFiltrados.has(res.item.id))

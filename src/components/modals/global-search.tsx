@@ -4,6 +4,7 @@ import { Search, X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import FolderDiv from "../ui/folder-div";
 import PaperDiv from "../ui/paper-div";
+import { ordenarPorRelevancia } from "@/utils/searchUtils";
 
 function removerMarkdown(texto: string): string {
   if (!texto) return "";
@@ -63,33 +64,26 @@ export default function GlobalSearch() {
       return [];
     }
 
-    const termo = busca.toLowerCase().trim();
-    const resultadoFuse = fuse.search(busca);
-    const indicesEncontradosPeloFuse = new Set(resultadoFuse.map(res => res.item.globalIndex));
-    const candidatos = resultadoFuse.map(res => dadosGlobais[res.item.globalIndex]);
+    const termo = busca.trim().toLowerCase();
+    const resultadoFuse = fuse.search(termo);
+    const indicesExatos = new Set<number>();
 
     dadosGlobais.forEach((item, idx) => {
-      if (!indicesEncontradosPeloFuse.has(idx)) {
-        const nomeContem = item.nome.toLowerCase().includes(termo);
-        const descContem = (item.descricao || "").toLowerCase().includes(termo);
-
-        if (nomeContem || descContem) {
-          candidatos.push(item);
-        }
+      if (item.nome.toLowerCase().includes(termo) || (item.descricao || "").toLowerCase().includes(termo)) {
+        indicesExatos.add(idx);
       }
     });
 
-    return candidatos.sort((a, b) => {
-      const descA = (a.descricao || "").toLowerCase();
-      const descB = (b.descricao || "").toLowerCase();
-      const temExatoA = descA.includes(termo) || a.nome.toLowerCase().includes(termo);
-      const temExatoB = descB.includes(termo) || b.nome.toLowerCase().includes(termo);
+    const resultadosExatos = ordenarPorRelevancia(
+      [...indicesExatos].map((idx) => dadosGlobais[idx]),
+      termo,
+      (item) => [item.nome, item.descricao],
+    );
+    const resultadosAproximados = resultadoFuse
+      .filter((resultado) => !indicesExatos.has(resultado.item.globalIndex))
+      .map((resultado) => dadosGlobais[resultado.item.globalIndex]);
 
-      if (temExatoA && !temExatoB) return -1;
-      if (!temExatoA && temExatoB) return 1;
-
-      return a.nome.localeCompare(b.nome);
-    }).slice(0, 15);
+    return [...resultadosExatos, ...resultadosAproximados].slice(0, 15);
   }, [busca, fuse, dadosGlobais]);
 
   useEffect(() => {

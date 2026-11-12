@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import ItemCard from "@/components/ui/item-card";
 import { useUI } from "@/context/UiContext";
 import FilterPanel from "@/components/filter/filter-panel";
+import { ordenarPorRelevancia } from "@/utils/searchUtils";
 
 const CONFIGS_FILTRO: ConfigFiltro[] = [
   {
@@ -30,16 +31,20 @@ export default function Origens() {
   const origensExibidas = useMemo(() => {
     let resultado = filtros.dadosFiltrados;
 
-    if (filtros.busca) {
-      const termo = filtros.busca.toLowerCase();
+    const termo = filtros.busca.trim().toLowerCase();
+    if (termo) {
       resultado = resultado.filter((o) =>
-        o.nome.toLowerCase().includes(termo) ||
-        o.descricao.toLowerCase().includes(termo) ||
-        o.tecnicaDescricao.toLowerCase().includes(termo)
+        (o.nome ?? "").toLowerCase().includes(termo) ||
+        (o.descricao ?? "").toLowerCase().includes(termo) ||
+        (o.tecnicaDescricao ?? "").toLowerCase().includes(termo)
       );
     }
 
-    return resultado.sort((a, b) => a.nome.localeCompare(b.nome));
+    return ordenarPorRelevancia(resultado, filtros.busca, (o) => [
+      o.nome,
+      o.descricao,
+      o.tecnicaDescricao,
+    ]);
   }, [filtros.dadosFiltrados, filtros.busca]);
 
   return (
