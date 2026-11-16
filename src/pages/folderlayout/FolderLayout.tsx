@@ -1,9 +1,9 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
-import { BookMarked, BookText, Bookmark, Menu, Search, Settings, X, type LucideIcon } from "lucide-react";
-import GlitchTitle from "@/pages/home/components/glitch-title";
-import PaperStamp from "@/components/ui/paper-stamp";
+import { BookText, Bookmark, Menu, Search, Settings, X, type LucideIcon } from "lucide-react";
 import SigilRain from "@/pages/home/components/sigil-rain";
+import PaperDiv from "@/components/ui/paper-div";
+import GlitchTitle from "../home/components/glitch-title";
 
 interface NavItem {
   to: string;
@@ -123,78 +123,141 @@ export default function FolderLayout() {
   const bottomRowLinks = NAV_LINKS.slice(0, 5);
   const topRowLinks = NAV_LINKS.slice(5);
 
+  const abaAtualLabel =
+    ALL_MOBILE_LINKS.find((item) => item.to === pathname)?.label ?? "INÍCIO";
+
   useEffect(() => {
     document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
+    if (!isMobileMenuOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsMobileMenuOpen(false);
+    };
+    window.addEventListener("keydown", handleKeyDown);
     return () => {
       document.body.style.overflow = "";
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, [isMobileMenuOpen]);
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-[#453b13] bg-[radial-gradient(#5b4f21_1px,transparent_1px)] bg-size-[16px_16px] lg:bg-black">
+    <div className="relative flex min-h-screen flex-col items-center justify-start lg:justify-center overflow-x-hidden bg-[#453b13] bg-[radial-gradient(#5b4f21_1px,transparent_1px)] bg-size-[16px_16px] lg:bg-black">
       <SigilRain />
 
-      <header className="fixed top-0 left-0 z-50 flex w-full items-center justify-between bg-[#837156] bg-[url(/assets/folder.jpg)] bg-size-[30%] bg-blend-overlay p-3 shadow-xl backdrop-blur-md sm:p-4 lg:hidden">
-        <span className="relative min-w-0">
-          <span className="relative z-99 block truncate bg-[linear-gradient(rgba(249,249,249,0.5),rgba(249,249,249,0.5)),url(/assets/paper.png)] p-2 font-special text-base tracking-widest text-black uppercase sm:text-xl">
-            <GlitchTitle text="VISÃO DO OCULTO" inline />
-          </span>
-          <PaperStamp />
-        </span>
+      {/* Navbar Mobile */}
+      <header className="fixed top-0 left-0 z-50 flex h-14 w-full items-center justify-between border-b border-black/40 bg-[#6e5e46] bg-[url(/assets/folder.jpg)] bg-size-[40%] bg-blend-overlay px-3 shadow-[0_4px_16px_rgba(0,0,0,0.45)] lg:hidden">
+        <NavLink
+          to="/"
+          className="flex min-w-0 items-center gap-2"
+        >
+          <PaperDiv className="p-0! flex flex-row items-center">
+            <span className="truncate bg-[linear-gradient(rgba(249,249,249,0.75),rgba(249,249,249,0.75)),url(/assets/paper.png)] bg-size-[200%] px-2.5 py-1 font-special text-sm tracking-wider text-gray-900 uppercase mx-auto ">
+              <GlitchTitle text="VISÃO DO OCULTO" inline />
+            </span>
 
-        <div className="flex shrink-0 items-center gap-2 sm:gap-4">
+            {!isHome && (
+              <span className="truncate px-2 -mb-0.5 font-daisy text-xs tracking-wider text-black/80 uppercase">
+                {abaAtualLabel}
+              </span>
+            )}
+          </PaperDiv>
+        </NavLink>
+
+        <div className="flex shrink-0 items-center gap-2">
           <button
             type="button"
             onClick={() => window.dispatchEvent(new Event("open-global-search"))}
-            className="relative flex size-11 cursor-pointer items-center justify-center text-black"
+            className="flex h-9 cursor-pointer items-center gap-1.5  bg-[linear-gradient(rgba(249,249,249,0.8),rgba(249,249,249,0.8)),url(/assets/paper.png)] bg-size-[200%] px-2.5 text-gray-900 shadow-xs active:translate-y-0.5"
             aria-label="Abrir pesquisa"
           >
-            <Search className="relative z-99 size-7 bg-[linear-gradient(rgba(249,249,249,0.5),rgba(249,249,249,0.5)),url(/assets/paper.png)] sm:size-8" />
-            <PaperStamp />
+            <Search className="size-4 shrink-0 text-gray-800" />
+            <span className="hidden xs:inline font-special text-xs uppercase tracking-wide text-gray-700">
+              Buscar
+            </span>
           </button>
 
           <button
             type="button"
             onClick={() => setIsMobileMenuOpen(true)}
-            className="relative flex size-11 cursor-pointer items-center justify-center text-black"
+            className="flex size-9 cursor-pointer items-center justify-center bg-black text-white shadow-xs active:translate-y-0.5"
             aria-label="Abrir menu"
           >
-            <Menu className="relative z-99 size-7 bg-[linear-gradient(rgba(249,249,249,0.5),rgba(249,249,249,0.5)),url(/assets/paper.png)] sm:size-8" />
-            <PaperStamp />
+            <Menu className="size-5" />
           </button>
         </div>
       </header>
 
+      {/* Menu Mobile estilo Dossiê */}
       {isMobileMenuOpen && (
-        <nav className="fixed inset-0 z-60 flex animate-in flex-col items-center justify-center overflow-y-auto bg-[#160a03]/95 fade-in py-16 backdrop-blur-lg duration-200 lg:hidden">
-          <button
-            type="button"
-            onClick={() => setIsMobileMenuOpen(false)}
-            className="absolute top-6 right-6 cursor-pointer p-2 text-[#fde047] transition-transform hover:rotate-90"
-            aria-label="Fechar menu"
+        <div
+          className="fixed inset-0 z-60 flex items-start justify-center bg-black/70 backdrop-blur-xs p-3 pt-16 animate-in fade-in duration-150 lg:hidden"
+          onClick={() => setIsMobileMenuOpen(false)}
+        >
+          <nav
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-md rounded-md border border-black/50 bg-[#837156] bg-[url(/assets/folder.jpg)] bg-size-[35%] bg-blend-overlay p-3 shadow-2xl animate-in zoom-in-95 duration-150"
           >
-            <X className="size-9 sm:size-10" />
-          </button>
-          <div className="flex w-full max-w-100 flex-col gap-2 px-6 text-center sm:gap-3">
-            {ALL_MOBILE_LINKS.map(({ to, label }) => (
-              <NavLink
-                key={to}
-                to={to}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className={({ isActive }) => `
-                  border-b-2 border-dashed border-[#5b4f21] py-2 font-special text-xl tracking-wider uppercase
-                  transition-colors sm:text-2xl
-                  ${isActive ? "bg-[#5b4f21]/20 text-white" : "text-[#fde047]/70 hover:text-[#fde047]"}
-                `}
-              >
-                {label}
-              </NavLink>
-            ))}
-          </div>
-        </nav>
+            <div className="relative border border-gray-300 bg-[linear-gradient(rgba(249,249,249,0.6),rgba(249,249,249,0.6)),url(/assets/paper.png)] bg-repeat bg-size-[30%] p-4 shadow-md">
+              <div className="mb-3 flex items-center justify-between border-b-2 border-dashed border-gray-400 pb-2">
+                <span className="font-special text-sm tracking-widest text-gray-800 uppercase">
+                  Arquivos & Seções
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex size-7 cursor-pointer items-center justify-center text-gray-700 hover:text-red-700"
+                  aria-label="Fechar menu"
+                >
+                  <X className="size-5" />
+                </button>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                {NAV_LINKS.map(({ to, label }) => (
+                  <NavLink
+                    key={to}
+                    to={to}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={({ isActive }) => `
+                      flex items-center justify-center border px-3 py-2.5 text-center font-special text-sm tracking-wider uppercase transition-all
+                      ${isActive
+                        ? "border-gray-900 bg-gray-900 text-white shadow-xs"
+                        : "border-dashed border-gray-400 bg-white/60 text-gray-800 hover:bg-white"
+                      }
+                    `}
+                  >
+                    {label}
+                  </NavLink>
+                ))}
+              </div>
+
+              <div className="mt-4 border-t-2 border-dashed border-gray-400 pt-3">
+                <div className="grid grid-cols-3 gap-2">
+                  {SIDE_MARKERS.map(({ to, label, icon: Icon, activeColor, inactiveColor }) => (
+                    <NavLink
+                      key={to}
+                      to={to}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={({ isActive }) => `
+                        flex flex-col items-center justify-center gap-1 border border-black/20 px-2 py-2 text-center font-special text-[11px] uppercase transition-all
+                        bg-[url(/assets/paper.png)] bg-blend-overlay bg-size-[300%]
+                        ${isActive
+                          ? `${activeColor} ring-2 ring-gray-900 font-bold shadow-xs`
+                          : `${inactiveColor} shadow-2xs`
+                        }
+                      `}
+                    >
+                      <Icon className="size-4 shrink-0" />
+                      <span className="truncate w-full">{label}</span>
+                    </NavLink>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </nav>
+        </div>
       )}
 
-      <main className="relative z-10 mx-auto mt-20 -mb-1 w-[92%] pb-8 sm:w-[90%] md:w-[88%] lg:mt-20 lg:w-4/5">
+      <main className="relative z-10 mx-auto mt-16 -mb-1 w-[96%] pb-6 sm:w-[92%] md:w-[88%] lg:mt-20 lg:w-4/5 lg:pb-8">
         {/* Abas desktop */}
         <div className="hidden flex-row flex-wrap-reverse justify-between lg:flex">
           <div className="flex flex-col gap-11">
@@ -211,9 +274,9 @@ export default function FolderLayout() {
           </div>
         </div>
 
-        <div className="relative h-8 w-full rounded-t-md z-10 bg-[#837156] bg-[url(/assets/folder.jpg)] bg-size-[30%] bg-blend-overlay lg:rounded-t-none" />
+        <div className="relative hidden h-8 w-full rounded-t-md z-10 bg-[#837156] bg-[url(/assets/folder.jpg)] bg-size-[30%] bg-blend-overlay lg:block lg:rounded-t-none" />
 
-        <div className="relative h-full rounded-b-lg  bg-[#837156] bg-[url(/assets/folder.jpg)] bg-size-[30%] bg-blend-overlay p-2 shadow-2xl/90 sm:p-4 lg:p-6">
+        <div className="relative h-full rounded-md lg:rounded-t-none lg:rounded-b-lg bg-[#837156] bg-[url(/assets/folder.jpg)] bg-size-[30%] bg-blend-overlay p-2 sm:p-4 lg:p-6 shadow-2xl/90">
           {/* Marcadores laterais (Fontes, Coleções, Configurações) */}
           <div className="hidden lg:flex flex-col items-end gap-2.5 absolute top-6 right-full z-0">
             {SIDE_MARKERS.map((marker) => (

@@ -310,7 +310,7 @@ export default function Ameacas() {
                 </div>
 
                 {/* Ficha completa à direita */}
-                <div className="w-full lg:w-2/3 h-[75vh] lg:h-auto max-h-200">
+                <div className="w-full lg:w-2/3 h-auto lg:max-h-200">
                     {ameacaSelecionada ? (
                         <div className="relative h-full group">
                             <PaperDiv className="flex flex-col h-full w-full">

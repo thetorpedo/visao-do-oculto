@@ -1,13 +1,23 @@
+import { useEffect } from "react";
 import { X } from "lucide-react";
 
 const PIX_KEY = "ecc154c8-61ba-46ee-8f47-cd9d52df8a33";
 
 export default function DonateModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+    useEffect(() => {
+        if (!open) return;
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === "Escape") onClose();
+        };
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [open, onClose]);
+
     if (!open) return null;
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-70 flex items-center justify-center bg-black/60 backdrop-blur-sm"
             onClick={onClose}
         >
             <div

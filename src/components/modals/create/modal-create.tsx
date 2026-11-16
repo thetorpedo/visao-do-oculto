@@ -1,6 +1,6 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { X, Save, Plus, Trash2 } from "lucide-react";
+import { X, Save, Plus, Trash2, RotateCcw } from "lucide-react";
 import { useData, type Categoria } from "@/context/DataContext";
 import ComboBox, { ComboBoxCsv } from "@/components/ui/combo-box";
 import { Button } from "@/components/ui/button";
@@ -17,6 +17,7 @@ import {
 } from "./utils/form-utils";
 import MarkdownEditor from "./markdown-editor";
 
+const rascunhosModal = new Map<string, any>();
 
 export default function ModalCriarRegistro({
     categoria,
@@ -30,12 +31,37 @@ export default function ModalCriarRegistro({
     const { salvarRegistro, removerRegistro } = useData();
     const { opcoes, opcoesArma } = useFormOptions(categoria);
 
+    const chaveRascunho = `${categoria}:${itemInicial?.id ?? "novo"}`;
+
     const [erro, setErro] = useState("");
     const [salvando, setSalvando] = useState(false);
     const [excluindo, setExcluindo] = useState(false);
-    const [formData, setFormData] = useState<any>(() =>
-        itemInicial ? itemParaForm(categoria, itemInicial) : estadoInicial(categoria)
-    );
+    const [formData, setFormData] = useState<any>(() => {
+        const salvo = rascunhosModal.get(chaveRascunho);
+        if (salvo) return salvo;
+        return itemInicial ? itemParaForm(categoria, itemInicial) : estadoInicial(categoria);
+    });
+
+    useEffect(() => {
+        rascunhosModal.set(chaveRascunho, formData);
+    }, [chaveRascunho, formData]);
+
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === "Escape" && !e.defaultPrevented) {
+                onClose();
+            }
+        };
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [onClose]);
+
+    const handleResetar = () => {
+        const estadoPadrao = itemInicial ? itemParaForm(categoria, itemInicial) : estadoInicial(categoria);
+        rascunhosModal.delete(chaveRascunho);
+        setFormData(estadoPadrao);
+        setErro("");
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value, type } = e.target as HTMLInputElement;
@@ -120,6 +146,7 @@ export default function ModalCriarRegistro({
             setSalvando(true);
             const payload = montarPayload(categoria, formData);
             await salvarRegistro(categoria, payload);
+            rascunhosModal.delete(chaveRascunho);
             onClose();
         } catch (e: any) {
             setErro(e.message || "Erro ao salvar registro.");
@@ -134,6 +161,7 @@ export default function ModalCriarRegistro({
             setErro("");
             setExcluindo(true);
             await removerRegistro(categoria, itemInicial.id);
+            rascunhosModal.delete(chaveRascunho);
             onClose();
         } catch (e: any) {
             setErro(e.message || "Erro ao excluir registro.");
@@ -143,20 +171,20 @@ export default function ModalCriarRegistro({
     };
 
     return createPortal(
-        <div className="fixed inset-0 z-49 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={onClose}>
-            <div className="relative bg-[#837156] bg-[url(/assets/folder.jpg)] bg-blend-overlay bg-size-[30%] p-2 sm:p-6 lg:p-6 shadow-2xl/90 rounded-lg max-w-4xl h-dvh sm:h-[90vh] w-full" onClick={e => e.stopPropagation()}>
+        <div className="fixed inset-0 z-70 flex items-center justify-center bg-black/60 backdrop-blur-sm p-2 sm:p-4" onClick={onClose}>
+            <div className="relative bg-[#837156] bg-[url(/assets/folder.jpg)] bg-blend-overlay bg-size-[30%] p-2 sm:p-6 lg:p-6 shadow-2xl/90 rounded-lg max-w-4xl h-[92dvh] sm:h-[90vh] w-full" onClick={e => e.stopPropagation()}>
                 <div className="relative h-full">
-                    <div className="relative flex flex-col justify-between z-10 w-full p-5 h-full shadow-lg bg-[linear-gradient(rgba(249,249,249,0.5),rgba(249,249,249,0.5)),url(/assets/paper.png)] bg-repeat bg-size-[30%] border border-gray-300">
-                        <div className="flex items-center justify-between p-3 border-b-2 border-dashed border-gray-400">
-                            <h3 className="text-xl font-special text-gray-900 uppercase tracking-wider">
-                                Criar Novo Registro - {categoria}
+                    <div className="relative flex flex-col justify-between z-10 w-full p-3 sm:p-5 h-full shadow-lg bg-[linear-gradient(rgba(249,249,249,0.5),rgba(249,249,249,0.5)),url(/assets/paper.png)] bg-repeat bg-size-[30%] border border-gray-300">
+                        <div className="flex items-center justify-between p-2.5 sm:p-3 border-b-2 border-dashed border-gray-400">
+                            <h3 className="text-base sm:text-xl font-special text-gray-900 uppercase tracking-wider truncate pr-2">
+                                {itemInicial ? "Editar Registro" : "Criar Novo Registro"} - {categoria}
                             </h3>
-                            <button onClick={onClose} className="text-black hover:text-red-700 cursor-pointer">
+                            <button onClick={onClose} className="text-black hover:text-red-700 cursor-pointer shrink-0">
                                 <X className="size-5" />
                             </button>
                         </div>
 
-                        <div className="p-5 overflow-y-auto flex-1 space-y-5 custom-scrollbar">
+                        <div className="p-2.5 sm:p-5 overflow-y-auto flex-1 space-y-5 custom-scrollbar">
                             {erro && (
                                 <div className="p-3 bg-red-100 text-red-800 border-l-4 border-red-800 text-sm font-bold whitespace-pre-wrap">
                                     {erro}
@@ -702,9 +730,19 @@ export default function ModalCriarRegistro({
                                 <div />
                             )}
 
-                            <div className="flex gap-3">
+                            <div className="flex gap-2 sm:gap-3">
+                                <Button
+                                    type="button"
+                                    onClick={handleResetar}
+                                    disabled={salvando || excluindo}
+                                    variant="outline"
+                                    title="Limpar alterações"
+                                >
+                                    <RotateCcw className="size-4" />
+                                    <span className="hidden sm:inline">Limpar</span>
+                                </Button>
                                 <Button type="button" onClick={onClose} disabled={salvando || excluindo} variant="outline">
-                                    Cancelar
+                                    Fechar
                                 </Button>
                                 <Button type="button" onClick={handleSalvar} disabled={salvando || excluindo} variant="default">
                                     <Save className="size-4" /> {salvando ? "Salvando..." : "Salvar"}

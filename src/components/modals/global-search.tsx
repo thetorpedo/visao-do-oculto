@@ -122,9 +122,6 @@ export default function GlobalSearch() {
   useEffect(() => {
     if (isOpen) {
       setTimeout(() => inputRef.current?.focus(), 50);
-    } else {
-      setBusca("");
-      setIndiceSelecionado(0);
     }
   }, [isOpen]);
 
@@ -188,7 +185,7 @@ export default function GlobalSearch() {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center px-4 bg-black/50 backdrop-blur-sm">
+    <div className="fixed inset-0 z-70 flex items-start justify-center px-4 bg-black/50 backdrop-blur-sm">
       <div className="absolute inset-0" onClick={() => setIsOpen(false)} />
 
       <FolderDiv className="relative w-full my-auto max-w-2xl flex flex-col max-h-[75vh] overflow-hidden animate-in fade-in zoom-in-95 duration-200">
