@@ -242,7 +242,7 @@ export default function GlobalSearch() {
                   >
                     <PaperDiv
                       className={`group flex flex-col py-3 px-3 text-left shadow-none! transition-all ${estaSelecionado
-                        ? "bg-[linear-gradient(rgba(253,224,71,0.22),rgba(253,224,71,0.22)),url(/assets/paper.png)]"
+                        ? "bg-[linear-gradient(rgba(253,224,71,0.22),rgba(253,224,71,0.22)),url(/assets/paper.png)] dark:bg-[linear-gradient(rgba(34,197,94,0.28),rgba(34,197,94,0.28)),url(/assets/paper.png)] dark:border-emerald-400!"
                         : ""
                         }`}
                     >

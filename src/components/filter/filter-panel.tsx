@@ -222,7 +222,7 @@ export default function FilterPanel({
 
     return (
         <div className="relative">
-            <div className="relative p-3.5 sm:p-6 z-10 shadow-2xl bg-[linear-gradient(rgba(249,249,249,0.5),rgba(249,249,249,0.5)),url(/assets/paper.png)] bg-repeat bg-size-[30%]">
+            <div className="relative p-3.5 sm:p-6 z-10 shadow-2xl bg-[linear-gradient(rgba(249,249,249,0.5),rgba(249,249,249,0.5)),url(/assets/paper.png)] dark:bg-[#1e2220] dark:bg-none dark:border dark:border-zinc-700/80 bg-repeat bg-size-[30%]">
                 <div className="flex flex-col gap-3 sm:gap-4">
                     <div className="flex flex-row gap-1.5 sm:gap-2">
                         <BuscaInput
@@ -270,7 +270,7 @@ export default function FilterPanel({
                 </div>
             </div>
 
-            <div className="absolute top-1/2 left-1/2 z-0! h-full w-full -translate-x-1/2 -translate-y-1/2 rotate-[-0.5deg] p-1 bg-[linear-gradient(rgba(139,139,139,0.4),rgba(139,139,139,0.2)),url(/assets/paper.png)] shadow-[0_0_15px_rgba(0,0,0,0.15)] bg-repeat bg-size-[30%]" />
+            <div className="absolute top-1/2 left-1/2 z-0! h-full w-full -translate-x-1/2 -translate-y-1/2 rotate-[-0.5deg] p-1 bg-[linear-gradient(rgba(139,139,139,0.4),rgba(139,139,139,0.2)),url(/assets/paper.png)] shadow-[0_0_15px_rgba(0,0,0,0.15)] bg-repeat bg-size-[30%] pointer-events-none dark:hidden" />
         </div>
     );
 }

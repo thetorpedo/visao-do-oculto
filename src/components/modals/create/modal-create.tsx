@@ -172,9 +172,9 @@ export default function ModalCriarRegistro({
 
     return createPortal(
         <div className="fixed inset-0 z-70 flex items-center justify-center bg-black/60 backdrop-blur-sm p-2 sm:p-4" onClick={onClose}>
-            <div className="relative bg-[#837156] bg-[url(/assets/folder.jpg)] bg-blend-overlay bg-size-[30%] p-2 sm:p-6 lg:p-6 shadow-2xl/90 rounded-lg max-w-4xl h-[92dvh] sm:h-[90vh] w-full" onClick={e => e.stopPropagation()}>
+            <div className="relative bg-[#837156] dark:bg-[#141716] bg-[url(/assets/folder.jpg)] dark:bg-none dark:border dark:border-zinc-800 bg-blend-overlay bg-size-[30%] p-2 sm:p-6 lg:p-6 shadow-2xl/90 rounded-lg dark:rounded-none! max-w-4xl h-[92dvh] sm:h-[90vh] w-full" onClick={e => e.stopPropagation()}>
                 <div className="relative h-full">
-                    <div className="relative flex flex-col justify-between z-10 w-full p-3 sm:p-5 h-full shadow-lg bg-[linear-gradient(rgba(249,249,249,0.5),rgba(249,249,249,0.5)),url(/assets/paper.png)] bg-repeat bg-size-[30%] border border-gray-300">
+                    <div className="relative flex flex-col justify-between z-10 w-full p-3 sm:p-5 h-full shadow-lg bg-[linear-gradient(rgba(249,249,249,0.5),rgba(249,249,249,0.5)),url(/assets/paper.png)] dark:bg-[#1e2220] dark:bg-none bg-repeat bg-size-[30%] border border-gray-300 dark:border-zinc-700/80 dark:text-zinc-100">
                         <div className="flex items-center justify-between p-2.5 sm:p-3 border-b-2 border-dashed border-gray-400">
                             <h3 className="text-base sm:text-xl font-special text-gray-900 uppercase tracking-wider truncate pr-2">
                                 {itemInicial ? "Editar Registro" : "Criar Novo Registro"} - {categoria}
@@ -750,7 +750,7 @@ export default function ModalCriarRegistro({
                             </div>
                         </div>
                     </div>
-                    <div className="absolute top-1/2 left-1/2 z-0 h-full w-full -translate-x-1/2 -translate-y-1/2 rotate-1 p-1 bg-[linear-gradient(rgba(139,139,139,0.4),rgba(139,139,139,0.2)),url(/assets/paper.png)] shadow-[0_0_15px_rgba(0,0,0,0.15)] bg-repeat bg-size-[30%]" />
+                    <div className="absolute top-1/2 left-1/2 z-0 h-full w-full -translate-x-1/2 -translate-y-1/2 rotate-1 p-1 bg-[linear-gradient(rgba(139,139,139,0.4),rgba(139,139,139,0.2)),url(/assets/paper.png)] shadow-[0_0_15px_rgba(0,0,0,0.15)] bg-repeat bg-size-[30%] pointer-events-none dark:hidden" />
                 </div>
             </div>
         </div>,

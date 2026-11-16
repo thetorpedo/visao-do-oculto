@@ -11,9 +11,9 @@ export default function FilterButton({ label, estado, isSelected, onClick }: Fil
   const estadoEfetivo: EstadoFiltro = estado ?? (isSelected ? "incluir" : "neutro");
 
   const estilos: Record<EstadoFiltro, string> = {
-    neutro: "border-gray-400/50 bg-white/60 text-gray-700 hover:bg-gray-100 hover:border-gray-600",
-    incluir: "border-gray-900 bg-gray-900 text-white hover:bg-gray-700",
-    excluir: "border-red-700 bg-red-700 text-white hover:bg-red-800 line-through",
+    neutro: "border-gray-400/50 bg-white/60 text-gray-700 hover:bg-gray-100 hover:border-gray-600 dark:border-zinc-700/80 dark:bg-[#141716] dark:text-zinc-300 dark:hover:bg-[#1c211f] dark:hover:border-zinc-500 dark:hover:text-zinc-100",
+    incluir: "border-gray-900 bg-gray-900 text-white hover:bg-gray-700 dark:border-emerald-500/70 dark:bg-emerald-950/80 dark:text-emerald-300 dark:hover:bg-emerald-900/80",
+    excluir: "border-red-700 bg-red-700 text-white hover:bg-red-800 line-through dark:border-red-500/70 dark:bg-red-950/80 dark:text-red-300",
   };
 
   const titulo: Record<EstadoFiltro, string> = {

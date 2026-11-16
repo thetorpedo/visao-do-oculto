@@ -1,5 +1,7 @@
-import { createContext, useCallback, useContext, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import type { Categoria } from "@/context/DataContext";
+
+export type Tema = "claro" | "estrangeiro";
 
 interface LeitorState {
     fonteId: string;
@@ -14,6 +16,9 @@ interface ModalState {
 }
 
 interface UIContextValue {
+    tema: Tema;
+    toggleTema: () => void;
+
     leitor: LeitorState;
     abrirLeitor: (fonteId: string, pagina: number | '~') => void;
     fecharLeitor: () => void;
@@ -27,6 +32,25 @@ interface UIContextValue {
 const UIContext = createContext<UIContextValue | null>(null);
 
 export function UIProvider({ children }: { children: React.ReactNode }) {
+    const [tema, setTema] = useState<Tema>(() => {
+        const salvo = localStorage.getItem("vdo-tema");
+        return salvo === "estrangeiro" ? "estrangeiro" : "claro";
+    });
+
+    useEffect(() => {
+        const root = document.documentElement;
+        if (tema === "estrangeiro") {
+            root.classList.add("dark");
+        } else {
+            root.classList.remove("dark");
+        }
+        localStorage.setItem("vdo-tema", tema);
+    }, [tema]);
+
+    const toggleTema = useCallback(() => {
+        setTema((prev) => (prev === "claro" ? "estrangeiro" : "claro"));
+    }, []);
+
     const [leitor, setLeitor] = useState<LeitorState>({
         fonteId: "",
         pagina: 0,
@@ -66,6 +90,8 @@ export function UIProvider({ children }: { children: React.ReactNode }) {
     return (
         <UIContext.Provider
             value={{
+                tema,
+                toggleTema,
                 leitor,
                 abrirLeitor,
                 fecharLeitor,

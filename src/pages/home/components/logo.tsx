@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useUI } from "@/context/UiContext";
 
 const GLITCH_MIN_INTERVAL = 2000;
 const GLITCH_MAX_INTERVAL = 6000;
@@ -7,6 +8,8 @@ const GLITCH_MAX_DURATION = 150;
 
 export default function Logo({ char }: { char: string }) {
   const [isGlitching, setIsGlitching] = useState(false);
+  const { tema } = useUI();
+  const isEstrangeiro = tema === "estrangeiro";
 
   useEffect(() => {
     let timeoutId: ReturnType<typeof setTimeout>;
@@ -31,13 +34,17 @@ export default function Logo({ char }: { char: string }) {
 
   const displayChar = char === "Ã" && isGlitching ? "a" : char;
 
+  const glitchClass = isEstrangeiro
+    ? "font-estrangeiro lowercase -mt-2 text-emerald-300 [text-shadow:0_0_10px_#4ade80,0_0_30px_#16a34a]"
+    : "font-sigilos -mt-2 text-amber-950/60 [text-shadow:0_0_10px_#fde047,0_0_30px_#ca8a04]";
+
   return (
     <span className="relative inline-block">
       <span className="pointer-events-none font-special opacity-0">{char}</span>
       <span
         className={`absolute inset-0 flex items-center justify-center transition-all duration-75 ${isGlitching
-          ? "font-sigilos -mt-2 text-amber-950/60 [text-shadow:0_0_10px_#fde047,0_0_30px_#ca8a04]"
-          : "font-typewriter-bad text-black"
+          ? glitchClass
+          : "font-typewriter-bad text-black dark:text-emerald-50"
           }`}
       >
         {displayChar}

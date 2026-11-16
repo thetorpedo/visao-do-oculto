@@ -141,7 +141,7 @@
 
 @font-face {
   font-family: 'estrangeiro';
-  src: url('fonts/estrangeiro-regular.ttf-webfont.woff2') format('woff2');
+  src: url('/fonts/estrangeiro-regular.ttf-webfont.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
 }
@@ -291,4 +291,85 @@
     /* Segunda camada (levemente deslocada) */
     5px 10px 15px rgba(0, 0, 0, 0.3);
   /* Sombra real */
+}
+
+/* Tema Dark — Estrangeiro / Console */
+.dark mark {
+  background-color: rgba(16, 185, 129, 0.32) !important;
+  color: #ecfdf5 !important;
+}
+
+.dark .text-gray-900,
+.dark .text-black {
+  color: #f4f4f5 !important;
+}
+
+.dark .text-gray-800,
+.dark .text-gray-700,
+.dark .text-black\/90,
+.dark .text-black\/80,
+.dark .text-black\/70 {
+  color: #d4d4d8 !important;
+}
+
+.dark .text-gray-600,
+.dark .text-gray-500,
+.dark .text-gray-400,
+.dark .text-black\/60,
+.dark .text-black\/50 {
+  color: #a1a1aa !important;
+}
+
+.dark .bg-white,
+.dark .bg-white\/80,
+.dark .bg-white\/70,
+.dark .bg-white\/60,
+.dark .bg-white\/40,
+.dark .bg-gray-100,
+.dark .bg-gray-100\/90,
+.dark .bg-gray-100\/80,
+.dark .bg-gray-200,
+.dark .bg-gray-200\/80,
+.dark .bg-gray-200\/60,
+.dark .bg-gray-200\/50,
+.dark .bg-gray-200\/40,
+.dark .bg-gray-300\/30,
+.dark .bg-gray-400\/20,
+.dark .bg-black\/5,
+.dark .bg-black\/10 {
+  background-color: #131615 !important;
+}
+
+.dark .bg-gray-300\/70 {
+  background-color: rgba(16, 185, 129, 0.18) !important;
+}
+
+.dark .border-gray-800,
+.dark .border-gray-700,
+.dark .border-gray-600,
+.dark .border-gray-500,
+.dark .border-gray-400,
+.dark .border-gray-400\/80,
+.dark .border-gray-400\/70,
+.dark .border-gray-400\/60,
+.dark .border-gray-400\/50,
+.dark .border-gray-300,
+.dark .border-gray-200,
+.dark .border-black,
+.dark .border-black\/50,
+.dark .border-black\/40,
+.dark .border-black\/30,
+.dark .border-black\/20 {
+  border-color: rgba(82, 91, 86, 0.65) !important;
+}
+
+.dark .bg-gray-900,
+.dark .bg-black {
+  background-color: #262e2a !important;
+  color: #6ee7b7 !important;
+}
+
+.dark .bg-gray-900 *,
+.dark .bg-black * {
+  color: inherit;
 }

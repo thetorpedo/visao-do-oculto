@@ -186,7 +186,7 @@ export default function TelaImportacao() {
               </p>
             )}
           </FolderDiv>
-          <div className="absolute top-1/2 left-1/2 z-0 h-full w-full -translate-x-1/2 -translate-y-1/2 rotate-[-0.5deg] p-1 bg-[linear-gradient(rgba(139,139,139,0.3),rgba(139,139,139,0.1)),url(/assets/paper.png)] shadow-[0_0_20px_rgba(0,0,0,0.2)] bg-repeat bg-size-[30%]" />
+          <div className="absolute top-1/2 left-1/2 z-0 h-full w-full -translate-x-1/2 -translate-y-1/2 rotate-[-0.5deg] p-1 bg-[linear-gradient(rgba(139,139,139,0.3),rgba(139,139,139,0.1)),url(/assets/paper.png)] shadow-[0_0_20px_rgba(0,0,0,0.2)] bg-repeat bg-size-[30%] pointer-events-none dark:hidden" />
         </div>
 
         <p className="text-center text-xs text-gray-400 font-special mt-6 uppercase tracking-wider px-2">
