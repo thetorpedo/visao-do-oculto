@@ -159,14 +159,6 @@ const BlocoSchema = z.object({
     descricao: z.string(),
 });
 
-const AtaqueSchema = z.object({
-    nome: z.string(),
-    tags: z.array(z.string()),
-    teste: z.string(),
-    dano: z.string(),
-    critico: z.string().nullable(),
-});
-
 export const AmeacaSchema = z
     .object({
         id: z.string(),
@@ -204,7 +196,6 @@ export const AmeacaSchema = z
         }),
         pericias: z.array(z.object({ nome: z.string(), valor: z.string() })),
         deslocamento: z.string(),
-        ataques: z.array(AtaqueSchema).optional().default([]),
         blocos: z.array(BlocoSchema),
         observacoes: z.string().nullable(),
     })

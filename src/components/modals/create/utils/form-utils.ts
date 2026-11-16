@@ -309,31 +309,13 @@ export function itemParaForm(categoria: Categoria, item: any): any {
                   nome: p.nome ?? "",
                   valor: p.valor ?? "",
               })),
-              blocos: [
-                  ...(item.ataques && item.ataques.length > 0
-                      ? [
-                            {
-                                secao: "acoes" as const,
-                                acao: "Padrão",
-                                titulo: "Agredir",
-                                tags: "",
-                                descricao: item.ataques
-                                    .map(
-                                        (a: any) =>
-                                            `**${a.nome}**${a.tags?.length ? ` *(${a.tags.join(", ")})*` : ""} — Teste ${a.teste} | Dano ${a.dano}${a.critico ? ` | Crítico ${a.critico}` : ""}`
-                                    )
-                                    .join("\n\n"),
-                            },
-                        ]
-                      : []),
-                  ...(item.blocos ?? []).map((b: any) => ({
-                      secao: b.secao === "tracos" || !b.secao ? "caracteristicas" : b.secao,
-                      acao: b.acao ?? "",
-                      titulo: b.titulo ?? "",
-                      tags: (b.tags ?? []).join(", "),
-                      descricao: b.descricao ?? "",
-                  })),
-              ],
+              blocos: (item.blocos ?? []).map((b: any) => ({
+                  secao: b.secao === "tracos" || !b.secao ? "caracteristicas" : b.secao,
+                  acao: b.acao ?? "",
+                  titulo: b.titulo ?? "",
+                  tags: (b.tags ?? []).join(", "),
+                  descricao: b.descricao ?? "",
+              })),
               observacoes: item.observacoes ?? "",
           };
       default:

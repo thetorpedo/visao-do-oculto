@@ -69,7 +69,6 @@ function extrairTextoBusca(a: Ameaca): string {
         a.apresentacao ?? "",
         a.observacoes ?? "",
         ...(a.grupos ?? []),
-        ...(a.ataques ?? []).map((atk) => `${atk.nome} ${(atk.tags ?? []).join(" ")} ${atk.dano}`),
         ...(a.blocos ?? []).map((b) => `${b.titulo} ${(b.tags ?? []).join(" ")} ${b.descricao}`),
     ];
     return removerMarkdown(partes.filter(Boolean).join(" "));

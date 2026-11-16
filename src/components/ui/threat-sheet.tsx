@@ -33,10 +33,10 @@ function LinhaFicha({
 }) {
     return (
         <div className="flex flex-col sm:flex-row min-h-8">
-            <div className="flex items-center px-3 py-1 text-white font-special font-normal text-xs uppercase tracking-wider bg-gray-900 sm:w-36 shrink-0">
+            <div className="flex items-center px-3 py-1 text-white font-special font-normal text-xs uppercase tracking-wider bg-black sm:w-36 shrink-0">
                 {rotulo}
             </div>
-            <div className="flex items-center px-3 py-1.5 grow bg-gray-200/80 border border-t-0 sm:border-t sm:border-l-0 border-dashed border-gray-400 text-sm text-gray-900">
+            <div className="flex items-center px-3 py-1.5 grow bg-gray-200/80 border border-t-0 sm:border-t sm:border-l-0 border-dashed border-gray-400 text-sm text-black">
                 <div className="w-full">{children}</div>
             </div>
         </div>
@@ -71,18 +71,17 @@ export default function ThreatSheet({ ameaca, hideChrome = false }: ThreatSheetP
         (b) => b.secao === "caracteristicas" || b.secao === "tracos"
     );
     const acoes = blocos.filter((b) => b.secao === "acoes");
-    const ataquesLegados = ameaca.ataques ?? [];
     const comportamentos = blocos.filter((b) => b.secao === "comportamento");
     const enigmas = blocos.filter((b) => b.secao === "enigma");
 
     return (
-        <div className="flex flex-col h-full w-full text-gray-900">
+        <div className="flex flex-col h-full w-full text-black">
             {/* Cabeçalho fixo no topo (como em Regras.tsx) */}
             {!hideChrome && (
                 <div className="mb-4 border-b border-gray-400 border-dashed pb-4 shrink-0">
                     <div className="flex justify-between items-start mb-3 gap-3">
                         <div className="min-w-0">
-                            <h2 className="text-3xl sm:text-4xl font-special text-gray-900 leading-tight uppercase wrap-break-word">
+                            <h2 className="text-3xl sm:text-4xl font-special text-black leading-tight uppercase wrap-break-word">
                                 {ameaca.nome}
                             </h2>
                             <p className="font-special text-xs sm:text-sm uppercase tracking-widest text-gray-600 mt-0.5">
@@ -91,11 +90,11 @@ export default function ThreatSheet({ ameaca, hideChrome = false }: ThreatSheetP
                         </div>
 
                         <div className="flex items-center gap-2 shrink-0">
-                            <div className="bg-gray-900 text-white px-3 py-1 border border-gray-900 flex items-baseline gap-1.5">
-                                <span className="font-daisy text-xs uppercase tracking-widest text-gray-300">
+                            <div className="bg-black text-white px-3 py-1 border border-black flex items-center gap-1.5">
+                                <span className="font-keyes text-sm uppercase tracking-widest text-white">
                                     VD
                                 </span>
-                                <span className="font-special text-xl sm:text-2xl font-bold leading-none">
+                                <span className="font-keyes text-xl sm:text-2xl font-normal leading-none">
                                     {ameaca.vd}
                                 </span>
                             </div>
@@ -105,7 +104,7 @@ export default function ThreatSheet({ ameaca, hideChrome = false }: ThreatSheetP
                                 className="flex items-center justify-center p-1.5 transition-colors hover:bg-gray-200 cursor-pointer rounded"
                                 title="Editar"
                             >
-                                <Pencil className="size-5 transition-all text-gray-500 hover:text-gray-900" />
+                                <Pencil className="size-5 transition-all text-gray-500 hover:text-black" />
                             </button>
                             <SaveButton itemId={ameaca.id} categoria="ameacas" />
                         </div>
@@ -143,7 +142,7 @@ export default function ThreatSheet({ ameaca, hideChrome = false }: ThreatSheetP
                             )}
                         </div>
 
-                        <div className="shrink-0 ml-auto [&>div]:mt-0 [&>div]:pt-0 [&>div]:border-none">
+                        <div className="shrink-0 ml-auto [&>div]:mt-0 [&>div]:pt-0 [&>div]:border-none self-end">
                             <Source
                                 fonte={ameaca.fonteLivro}
                                 pagina={ameaca.fontePagina}
@@ -185,11 +184,11 @@ export default function ThreatSheet({ ameaca, hideChrome = false }: ThreatSheetP
                             ["VIG", ameaca.atributos.vig],
                         ] as const
                     ).map(([sigla, valor]) => (
-                        <div key={sigla} className="flex flex-col shadow-2xs">
-                            <span className="bg-gray-900 text-white font-special text-[11px] uppercase tracking-widest py-0.5">
+                        <div key={sigla} className="flex flex-col">
+                            <span className="bg-black text-white font-special text-xs uppercase tracking-widest py-1">
                                 {sigla}
                             </span>
-                            <span className="font-special text-xl sm:text-2xl font-bold text-gray-900 py-1.5 bg-white/80 border border-t-0 border-dashed border-gray-400">
+                            <span className="font-special text-xl sm:text-2xl font-bold text-black py-1.5 bg-white/80 border border-t-0 border-dashed border-gray-400">
                                 {valor ?? "—"}
                             </span>
                         </div>
@@ -248,33 +247,33 @@ export default function ThreatSheet({ ameaca, hideChrome = false }: ThreatSheetP
                             {(ameaca.resistencias.length > 0 ||
                                 ameaca.imunidades.length > 0 ||
                                 ameaca.vulnerabilidades.length > 0) && (
-                                <div className="border-t border-dashed border-gray-400/70 pt-1 space-y-0.5 text-xs">
-                                    {ameaca.resistencias.length > 0 && (
-                                        <p>
-                                            <strong className="font-special uppercase text-gray-700 mr-1">
-                                                Resistências:
-                                            </strong>
-                                            {ameaca.resistencias.join(", ")}
-                                        </p>
-                                    )}
-                                    {ameaca.imunidades.length > 0 && (
-                                        <p>
-                                            <strong className="font-special uppercase text-gray-700 mr-1">
-                                                Imunidades:
-                                            </strong>
-                                            {ameaca.imunidades.join(", ")}
-                                        </p>
-                                    )}
-                                    {ameaca.vulnerabilidades.length > 0 && (
-                                        <p>
-                                            <strong className="font-special uppercase text-gray-700 mr-1">
-                                                Vulnerabilidades:
-                                            </strong>
-                                            {ameaca.vulnerabilidades.join(", ")}
-                                        </p>
-                                    )}
-                                </div>
-                            )}
+                                    <div className="border-t border-dashed border-gray-400/70 pt-1 space-y-0.5 text-xs">
+                                        {ameaca.resistencias.length > 0 && (
+                                            <p>
+                                                <strong className="font-keyes uppercase text-black/70 mr-1">
+                                                    Resistências:
+                                                </strong>
+                                                {ameaca.resistencias.join(", ")}
+                                            </p>
+                                        )}
+                                        {ameaca.imunidades.length > 0 && (
+                                            <p>
+                                                <strong className="font-keyes uppercase text-black/70 mr-1">
+                                                    Imunidades:
+                                                </strong>
+                                                {ameaca.imunidades.join(", ")}
+                                            </p>
+                                        )}
+                                        {ameaca.vulnerabilidades.length > 0 && (
+                                            <p>
+                                                <strong className="font-keyes uppercase text-black/70 mr-1">
+                                                    Vulnerabilidades:
+                                                </strong>
+                                                {ameaca.vulnerabilidades.join(", ")}
+                                            </p>
+                                        )}
+                                    </div>
+                                )}
                         </div>
                     </LinhaFicha>
 
@@ -299,7 +298,7 @@ export default function ThreatSheet({ ameaca, hideChrome = false }: ThreatSheetP
                 {/* Características */}
                 {caracteristicas.length > 0 && (
                     <div className="space-y-2">
-                        <h3 className="font-special text-xs uppercase tracking-widest text-white bg-gray-900 px-3 py-1">
+                        <h3 className="font-special text-xs uppercase tracking-widest text-white bg-black px-3 py-1">
                             Características
                         </h3>
                         <div className="space-y-2">
@@ -310,11 +309,11 @@ export default function ThreatSheet({ ameaca, hideChrome = false }: ThreatSheetP
                                 >
                                     <div className="flex flex-wrap items-center gap-1.5">
                                         {bloco.acao && (
-                                            <span className="text-[11px] font-special uppercase bg-gray-900 text-white px-2 py-0.5">
+                                            <span className="text-[11px] font-special uppercase bg-black text-white px-2 py-0.5">
                                                 {bloco.acao} ◆
                                             </span>
                                         )}
-                                        <span className="font-special font-bold text-sm uppercase text-gray-900">
+                                        <span className="font-special font-bold text-sm uppercase text-black">
                                             {bloco.titulo}
                                         </span>
                                         {bloco.tags.map((tag) => (
@@ -333,58 +332,13 @@ export default function ThreatSheet({ ameaca, hideChrome = false }: ThreatSheetP
                     </div>
                 )}
 
-                {/* Ações (junto com eventuais ataques legados) */}
-                {(acoes.length > 0 || ataquesLegados.length > 0) && (
+                {/* Ações */}
+                {acoes.length > 0 && (
                     <div className="space-y-2">
-                        <h3 className="font-special text-xs uppercase tracking-widest text-white bg-gray-900 px-3 py-1">
+                        <h3 className="font-special text-xs uppercase tracking-widest text-white bg-black px-3 py-1">
                             Ações
                         </h3>
                         <div className="space-y-2">
-                            {ataquesLegados.length > 0 && (
-                                <div className="bg-white/60 border border-dashed border-gray-400 p-3 space-y-2">
-                                    <div className="flex flex-wrap items-center gap-1.5">
-                                        <span className="text-[11px] font-special uppercase bg-gray-900 text-white px-2 py-0.5">
-                                            Padrão ◆
-                                        </span>
-                                        <span className="font-special font-bold text-sm uppercase text-gray-900">
-                                            Agredir
-                                        </span>
-                                    </div>
-                                    <div className="space-y-1.5">
-                                        {ataquesLegados.map((atk, i) => (
-                                            <div
-                                                key={`atk-${i}`}
-                                                className="border-l-2 border-gray-400 pl-2.5 py-0.5 text-sm"
-                                            >
-                                                <div className="flex flex-wrap items-center gap-1.5">
-                                                    <strong className="font-special uppercase text-xs text-gray-900">
-                                                        {atk.nome}
-                                                    </strong>
-                                                    {atk.tags.map((t) => (
-                                                        <span
-                                                            key={t}
-                                                            className="text-[10px] font-daisy uppercase px-1.5 py-0 bg-gray-200 border border-dashed border-gray-400 text-gray-800"
-                                                        >
-                                                            {t}
-                                                        </span>
-                                                    ))}
-                                                </div>
-                                                <p className="text-xs sm:text-sm text-gray-800">
-                                                    <strong>Teste</strong> {atk.teste} |{" "}
-                                                    <strong>Dano</strong> {atk.dano}
-                                                    {atk.critico ? (
-                                                        <>
-                                                            {" "}
-                                                            | <strong>Crítico</strong> {atk.critico}
-                                                        </>
-                                                    ) : null}
-                                                </p>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-
                             {acoes.map((bloco, i) => (
                                 <div
                                     key={`acao-${i}`}
@@ -392,17 +346,17 @@ export default function ThreatSheet({ ameaca, hideChrome = false }: ThreatSheetP
                                 >
                                     <div className="flex flex-wrap items-center gap-1.5">
                                         {bloco.acao && (
-                                            <span className="text-[11px] font-special uppercase bg-gray-900 text-white px-2 py-0.5">
+                                            <span className="text-[11px] font-special uppercase bg-black text-white px-2 py-0.5">
                                                 {bloco.acao} ◆
                                             </span>
                                         )}
-                                        <span className="font-special font-bold text-sm uppercase text-gray-900">
+                                        <span className="font-special font-bold text-sm uppercase text-black">
                                             {bloco.titulo}
                                         </span>
                                         {bloco.tags.map((tag) => (
                                             <span
                                                 key={tag}
-                                                className={`${badgeSmall} ${corTagBloco(tag)} text-[10px]`}
+                                                className={`${badgeSmall} ${corTagBloco(tag)} text-[11px]`}
                                             >
                                                 {tag}
                                             </span>
@@ -418,7 +372,7 @@ export default function ThreatSheet({ ameaca, hideChrome = false }: ThreatSheetP
                 {/* Comportamento */}
                 {comportamentos.length > 0 && (
                     <div className="space-y-2">
-                        <h3 className="font-special text-xs uppercase tracking-widest text-white bg-gray-900 px-3 py-1">
+                        <h3 className="font-special text-xs uppercase tracking-widest text-white bg-black px-3 py-1">
                             Comportamento
                         </h3>
                         <div className="space-y-2">
@@ -429,11 +383,11 @@ export default function ThreatSheet({ ameaca, hideChrome = false }: ThreatSheetP
                                 >
                                     <div className="flex flex-wrap items-center gap-1.5">
                                         {bloco.acao && (
-                                            <span className="text-[11px] font-special uppercase bg-gray-900 text-white px-2 py-0.5">
+                                            <span className="text-[11px] font-special uppercase bg-black text-white px-2 py-0.5">
                                                 {bloco.acao} ◆
                                             </span>
                                         )}
-                                        <span className="font-special font-bold text-sm uppercase text-gray-900">
+                                        <span className="font-special font-bold text-sm uppercase text-black">
                                             {bloco.titulo}
                                         </span>
                                         {bloco.tags.map((tag) => (
@@ -458,11 +412,11 @@ export default function ThreatSheet({ ameaca, hideChrome = false }: ThreatSheetP
                         {enigmas.map((bloco, i) => (
                             <div
                                 key={`enigma-${i}`}
-                                className="border-2 border-dashed border-gray-900 bg-gray-900/5 p-3 space-y-2"
+                                className="border-2 border-dashed border-black bg-black/5 p-3 space-y-2"
                             >
                                 <div className="flex flex-wrap items-center justify-between gap-2">
                                     <div className="flex items-center gap-2">
-                                        <span className="bg-gray-900 text-white font-special text-xs uppercase tracking-widest px-2.5 py-0.5">
+                                        <span className="bg-black text-white font-special text-xs uppercase tracking-widest px-2.5 py-0.5">
                                             ◆ {bloco.titulo || "Enigma de Medo"}
                                         </span>
                                         {bloco.acao && (

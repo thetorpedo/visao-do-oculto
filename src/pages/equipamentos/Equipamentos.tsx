@@ -29,7 +29,7 @@ export default function Equipamentos() {
     return [
       { id: "tipo", label: "Tipos", opcoes: "auto", match: "array" },
       { id: "subtipo", label: "Subtipos", opcoes: "auto" },
-      { id: "espaco", label: "Espaços", opcoes: "auto" },
+      ...(abaAtiva === "equipamentos" ? [{ id: "espaco", label: "Espaços", opcoes: "auto" as const }] : []),
       { id: "arma.armaTipo", label: "Uso Arma", opcoes: "auto" },
       { id: "arma.catArma", label: "Cat Arma", opcoes: "auto" },
       { id: "arma.empunhadura", label: "Empunh", opcoes: "auto" },
