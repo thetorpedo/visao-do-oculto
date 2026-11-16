@@ -16,7 +16,7 @@ function SafeHTMLText({ html }: { html: string }) {
 }
 
 export default function GlobalSearch() {
-  const { poderes, rituais, equipamentos, origens, trilhas, regras } = useData();
+  const { poderes, rituais, equipamentos, origens, trilhas, regras, ameacas } = useData();
 
   const [isOpen, setIsOpen] = useState(false);
   const [busca, setBusca] = useState("");
@@ -34,7 +34,18 @@ export default function GlobalSearch() {
       globalType: "Regra",
       link: `/regras?busca=${encodeURIComponent(item.nome)}`
     })),
-  ], [poderes, rituais, equipamentos, origens, trilhas, regras]);
+    ...ameacas.map(item => ({
+      ...item,
+      descricao: [
+        `${item.tipo} • ${item.tamanho} (VD ${item.vd})`,
+        item.apresentacao ?? "",
+        ...(item.blocos ?? []).map(b => `${b.titulo}: ${b.descricao}`),
+        item.observacoes ?? "",
+      ].filter(Boolean).join(" — "),
+      globalType: "Ameaça",
+      link: `/ameacas?id=${encodeURIComponent(item.id)}`
+    })),
+  ], [poderes, rituais, equipamentos, origens, trilhas, regras, ameacas]);
 
   const dadosHigienizadosParaFuse = useMemo(() => {
     return dadosGlobais.map((item, idx) => ({
@@ -152,7 +163,7 @@ export default function GlobalSearch() {
           <input
             ref={inputRef}
             type="text"
-            placeholder="Pesquisar origens, poderes, rituais, regras..."
+            placeholder="Pesquisar origens, poderes, rituais, regras, ameaças..."
             className="grow bg-transparent outline-none font-special text-sm placeholder:text-black/40 text-black/90"
             value={busca}
             onChange={(e) => setBusca(e.target.value)}

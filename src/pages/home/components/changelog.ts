@@ -1,6 +1,6 @@
 import { ChangelogEntry } from "./changelog-panel";
 
-export const PLANNED_FEATURES = ["Ameaças.", "Dark mode?", "Melhorar responsividade."];
+export const PLANNED_FEATURES = ["Dark mode?", "Melhorar responsividade."];
 export const UPDATES_PUBLIC: ChangelogEntry[] = [
   {
     version: "v2.2",

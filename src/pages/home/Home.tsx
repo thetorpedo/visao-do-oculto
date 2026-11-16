@@ -12,12 +12,12 @@ import { UPDATES_PRIVATE, UPDATES_PUBLIC } from "@/pages/home/components/changel
 const REPO_URL = "https://github.com/thetorpedo/visao-do-oculto";
 
 export default function Home() {
-  const { poderes, rituais, equipamentos, origens, trilhas, fontes } = useData();
+  const { poderes, rituais, equipamentos, origens, trilhas, regras, ameacas, fontes } = useData();
   const isPrivate = import.meta.env.VITE_MODO === "privado";
   const [showDonate, setShowDonate] = useState(false);
 
   const totalItems =
-    poderes.length + rituais.length + equipamentos.length + origens.length + trilhas.length;
+    poderes.length + rituais.length + equipamentos.length + origens.length + trilhas.length + regras.length + ameacas.length;
 
   const pdfsToDownload = Object.values(fontes)
     .filter((f) => f.nomeArquivo)

@@ -23,6 +23,7 @@ const SECOES: Secao[] = [
               ["Equipam.", "Armas, proteções, itens, maldições e modificações"],
               ["Rituais", "Rituais de todos os elementos e círculos"],
               ["Regras", "Regras do sistema com busca e leitura"],
+              ["Ameaças", "Bestiário com fichas de criaturas e NPCs"],
               ["Fontes", "Acesso direto aos PDFs e imagens cadastrados"],
               ["Coleções", "Seus favoritos organizados em grupos"],
               ["⚙️", "Configurações, importação e exportação de dados"],
@@ -363,6 +364,63 @@ const SECOES: Secao[] = [
         </table>
 
         <p className="text-xs text-gray-500">A categoria é um array de tags livres - use o que fizer sentido para organização e filtragem.</p>
+      </div>
+    ),
+  },
+  {
+    id: "json-ameacas",
+    titulo: "Criando JSONs - Ameaças",
+    conteudo: (
+      <div className="text-sm text-gray-700 space-y-3">
+        <pre className="bg-gray-100 border border-gray-300 p-2 text-xs font-mono overflow-x-auto whitespace-pre">{`{
+  "id": "roy_stevens",
+  "codigo": 1,
+  "nome": "Roy Stevens",
+  "vd": 160,
+  "tipo": "Pessoa",
+  "tamanho": "Médio",
+  "elementos": [],
+  "elementosSecundarios": [],
+  "grupos": [],
+  "apresentacao": null,
+  "sentidos": { "percepcao": "4d20+10", "iniciativa": "2d20+10", "extras": [] },
+  "defesa": { "valor": 32, "fortitude": "3d20+15", "reflexos": "2d20+10", "vontade": "4d20+15" },
+  "pv": 250,
+  "machucado": null,
+  "resistencias": [],
+  "imunidades": [],
+  "vulnerabilidades": [],
+  "atributos": { "agi": 2, "for": 3, "int": 3, "pre": 4, "vig": 5 },
+  "pericias": [
+    { "nome": "Atletismo", "valor": "3d20+10" }
+  ],
+  "deslocamento": "9m | 6□",
+  "blocos": [
+    { "secao": "caracteristicas", "acao": null, "titulo": "Técnicas de Resgate", "tags": [], "descricao": "Texto em Markdown." },
+    { "secao": "acoes", "acao": "Padrão", "titulo": "Agredir", "tags": ["Corpo a corpo"], "descricao": "**Combate Marcial:** Teste 3d20+20 | Dano 2d6+15 impacto." },
+    { "secao": "acoes", "acao": "Livre", "titulo": "Luta Tática", "tags": [], "descricao": "Texto em Markdown." }
+  ],
+  "observacoes": null,
+  "fonteLivro": "AS6",
+  "fontePagina": "1"
+}`}</pre>
+
+        <table className="w-full text-xs border-collapse">
+          <thead><tr className="bg-gray-900 text-white font-special"><th className="p-1 text-left">Campo</th><th className="p-1 text-left">Observação</th></tr></thead>
+          <tbody>
+            {[
+              ["elementos / elementosSecundarios", "Arrays de strings (podem ser [] se não tiver elemento)"],
+              ["machucado", "Inteiro ou null (se null, o site calcula metade dos PV arredondada para baixo)"],
+              ["blocos", "Lista de habilidades com secao ('caracteristicas', 'acoes', 'comportamento' ou 'enigma'), acao (ou null), titulo, tags e descricao em Markdown"],
+              ["apresentacao / observacoes", "Texto em Markdown ou null"],
+            ].map(([campo, obs]) => (
+              <tr key={campo} className="border-b border-dashed border-gray-200">
+                <td className="py-1 pr-2 font-mono text-gray-900 whitespace-nowrap">{campo}</td>
+                <td className="py-1 text-gray-600">{obs}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     ),
   },

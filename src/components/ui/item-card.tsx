@@ -1,8 +1,9 @@
 import { estiloBadgeTipo, corElemento } from "@/utils/badgeUtils";
 import ExpandableText, { ExpandableTextToggle } from "./expandable-text";
 import MarkdownRenderer from "./markdown-renderer";
-import { ChevronDown, Pencil } from "lucide-react";
+import { ChevronDown, ChevronRight, Pencil } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Source from "./source";
 import SaveButton from "../../pages/favoritos/components/save-button";
 import { useUI } from "@/context/UiContext";
@@ -99,6 +100,154 @@ function RegraExpandivel({ content }: { content: string }) {
                 expanded={expandido}
                 onClick={() => setExpandido(!expandido)}
             />
+        </div>
+    );
+}
+
+function AmeacaCardBody({ item }: { item: any }) {
+    const navigate = useNavigate();
+    const machucadoValor = item.machucado ?? Math.floor((item.pv ?? 0) / 2);
+    const caracteristicas = (item.blocos ?? []).filter(
+        (b: any) => b.secao === "caracteristicas" || b.secao === "tracos"
+    );
+    const acoes = (item.blocos ?? []).filter((b: any) => b.secao === "acoes");
+    const temEnigma = (item.blocos ?? []).some((b: any) => b.secao === "enigma");
+
+    return (
+        <div className="space-y-3">
+            {/* Cabeçalho de badges do card */}
+            <div className="flex flex-col gap-1.5">
+                <div className="flex flex-wrap items-center gap-1.5">
+                    <span className="bg-gray-900 text-white font-special text-sm uppercase px-2.5 py-0.5 font-bold">
+                        VD {item.vd}
+                    </span>
+                    <span className={`${badgeClass} ${estiloBadgeTipo("default")} text-xs py-0.5`}>
+                        {item.tipo} • {item.tamanho}
+                    </span>
+                    {(item.elementos ?? []).map((e: string) => (
+                        <span key={`p-${e}`} className={`${badgeClass} ${corElemento(e)} text-xs py-0.5`}>
+                            {e}
+                        </span>
+                    ))}
+                    {(item.grupos ?? []).map((g: string) => (
+                        <span key={`g-${g}`} className={`${badgeClass} ${estiloBadgeTipo("default")} text-xs py-0.5`}>
+                            {g}
+                        </span>
+                    ))}
+                    {temEnigma && (
+                        <span className="text-[11px] font-special uppercase px-2 py-0.5 border border-dashed border-gray-900 bg-gray-900/10 text-gray-900 font-bold">
+                            ◆ Enigma
+                        </span>
+                    )}
+                </div>
+                {(item.elementosSecundarios ?? []).length > 0 && (
+                    <div className="flex flex-wrap items-center gap-1">
+                        {(item.elementosSecundarios ?? []).map((e: string) => (
+                            <span
+                                key={`s-${e}`}
+                                title="Elemento secundário"
+                                className={`${badgeClass} ${corElemento(e)} text-[10px] px-1.5 py-0`}
+                            >
+                                {e}
+                            </span>
+                        ))}
+                    </div>
+                )}
+            </div>
+
+            {/* Atributos compactos */}
+            {item.atributos && (
+                <div className="grid grid-cols-5 gap-1.5 text-center">
+                    {(
+                        [
+                            ["AGI", item.atributos.agi],
+                            ["FOR", item.atributos.for],
+                            ["INT", item.atributos.int],
+                            ["PRE", item.atributos.pre],
+                            ["VIG", item.atributos.vig],
+                        ] as const
+                    ).map(([sigla, valor]) => (
+                        <div key={sigla} className="flex flex-col">
+                            <span className="bg-gray-900 text-white font-special text-[10px] uppercase tracking-wider py-0.5">
+                                {sigla}
+                            </span>
+                            <span className="font-special text-base font-bold text-gray-900 py-0.5 bg-white/70 border border-t-0 border-dashed border-gray-400">
+                                {valor ?? "—"}
+                            </span>
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            {/* Painel de status resumido */}
+            <div className="bg-gray-100/90 border border-gray-400/50 p-3 space-y-1">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1">
+                    <LinhaStatus label="PV" valor={`${item.pv} (Mach. ${machucadoValor})`} />
+                    <LinhaStatus label="Defesa" valor={item.defesa?.valor} />
+                    <LinhaStatus
+                        label="Resistências"
+                        valor={
+                            item.defesa
+                                ? `F ${item.defesa.fortitude} • R ${item.defesa.reflexos} • V ${item.defesa.vontade}`
+                                : null
+                        }
+                    />
+                    <LinhaStatus label="Desloc." valor={item.deslocamento} />
+                    <LinhaStatus
+                        label="Sentidos"
+                        valor={
+                            item.sentidos
+                                ? `Perc. ${item.sentidos.percepcao} • Inic. ${item.sentidos.iniciativa}`
+                                : null
+                        }
+                    />
+                    {item.vulnerabilidades?.length > 0 && (
+                        <LinhaStatus label="Vulnerável" valor={item.vulnerabilidades.join(", ")} />
+                    )}
+                </div>
+                {item.resistencias?.length > 0 && (
+                    <LinhaStatus label="RD / Resist." valor={item.resistencias.join(", ")} />
+                )}
+            </div>
+
+            {/* Lista rápida de Características e Ações */}
+            {(caracteristicas.length > 0 || acoes.length > 0) && (
+                <div className="bg-gray-200/60 border border-dashed border-gray-400 px-3 py-2 space-y-1.5 text-xs">
+                    {caracteristicas.length > 0 && (
+                        <div>
+                            <span className="font-special uppercase text-gray-700 font-bold mr-1.5">
+                                Características:
+                            </span>
+                            <span className="text-gray-900 font-medium">
+                                {caracteristicas.map((c: any) => c.titulo).join(" • ")}
+                            </span>
+                        </div>
+                    )}
+                    {acoes.length > 0 && (
+                        <div>
+                            <span className="font-special uppercase text-gray-700 font-bold mr-1.5">
+                                Ações:
+                            </span>
+                            <span className="text-gray-900 font-medium">
+                                {acoes
+                                    .map((a: any) => (a.acao ? `${a.acao} ◆ ${a.titulo}` : a.titulo))
+                                    .join(" • ")}
+                            </span>
+                        </div>
+                    )}
+                </div>
+            )}
+
+            <div className="pt-1">
+                <button
+                    type="button"
+                    onClick={() => navigate(`/ameacas?id=${encodeURIComponent(item.id)}`)}
+                    className="inline-flex cursor-pointer items-center bg-black/5 gap-0.5 px-1.5 py-0.5 font-special text-[11px] text-black/80 transition-colors hover:bg-black/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-800"
+                >
+                    Ler completo
+                    <ChevronRight className="size-2.5" />
+                </button>
+            </div>
         </div>
     );
 }
@@ -277,6 +426,9 @@ export const RenderCardBody = (item: any, categoria: string) => {
                     </div>
                 </>
             );
+
+        case "ameacas":
+            return <AmeacaCardBody item={item} />;
 
         case "equipamentos":
             const tipos = Array.isArray(item.tipo) ? item.tipo : [item.tipo];

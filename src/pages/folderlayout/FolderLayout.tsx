@@ -18,13 +18,14 @@ interface DesktopTabProps extends NavItem {
 }
 
 const NAV_LINKS: NavItem[] = [
-  { to: "/", label: "INÍCIO", z: "z-[9]", margin: "" },
-  { to: "/origens", label: "ORIGENS", z: "z-[8]", margin: "-ml-5" },
-  { to: "/poderes", label: "PODERES", z: "z-[7]", margin: "-ml-5" },
-  { to: "/trilhas", label: "TRILHAS", z: "z-[6]", margin: "-ml-5" },
-  { to: "/equipamentos", label: "EQUIPAM.", z: "z-[5]", margin: "-ml-5" },
-  { to: "/rituais", label: "RITUAIS", z: "z-[4]", margin: "-ml-5" },
-  { to: "/regras", label: "REGRAS", z: "z-[3]", margin: "-ml-5" },
+  { to: "/", label: "INÍCIO", z: "z-[10]", margin: "" },
+  { to: "/origens", label: "ORIGENS", z: "z-[9]", margin: "-ml-5" },
+  { to: "/poderes", label: "PODERES", z: "z-[8]", margin: "-ml-5" },
+  { to: "/trilhas", label: "TRILHAS", z: "z-[7]", margin: "-ml-5" },
+  { to: "/equipamentos", label: "EQUIPAM.", z: "z-[6]", margin: "-ml-5" },
+  { to: "/rituais", label: "RITUAIS", z: "z-[5]", margin: "-ml-5" },
+  { to: "/regras", label: "REGRAS", z: "z-[4]", margin: "-ml-5" },
+  { to: "/ameacas", label: "AMEAÇAS", z: "z-[3]", margin: "-ml-5" },
   { to: "/fontes", label: "FONTES", z: "z-[2]", margin: "-ml-5" },
   { to: "/colecoes", label: "COLEÇÕES", z: "z-[1]", margin: "-ml-5" },
 ];
@@ -67,7 +68,7 @@ export default function FolderLayout() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const bottomRowLinks = NAV_LINKS.slice(0, 5);
-  const topRowLinks = NAV_LINKS.slice(5, 9);
+  const topRowLinks = NAV_LINKS.slice(5, 10);
 
   useEffect(() => {
     document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";

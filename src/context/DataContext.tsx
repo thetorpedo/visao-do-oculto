@@ -12,12 +12,14 @@ import {
     RitualSchema,
     TrilhaSchema,
     RegraSchema,
+    AmeacaSchema,
     type Regra,
     type Equipamento,
     type Origem,
     type Poder,
     type Ritual,
     type Trilha,
+    type Ameaca,
 } from "@/lib/schemas";
 import { z } from "zod";
 
@@ -27,7 +29,7 @@ import { dbGet, dbSet, dbDelete, dbGetAllKeys, dbClear } from "@/lib/db";
 // Tipos
 // ─────────────────────────────────────────
 
-export type Categoria = "poderes" | "rituais" | "equipamentos" | "origens" | "trilhas" | "regras";
+export type Categoria = "poderes" | "rituais" | "equipamentos" | "origens" | "trilhas" | "regras" | "ameacas";
 
 export interface FonteConfig {
     id: string;
@@ -51,6 +53,7 @@ interface DataState {
     origens: Origem[];
     trilhas: Trilha[];
     regras: Regra[];
+    ameacas: Ameaca[];
     fontes: Record<string, FonteConfig>;
     arquivosImportados: ArquivoImportado[];
     overrides: Record<Categoria, any[]>;
@@ -86,9 +89,10 @@ const SCHEMAS: Record<Categoria, z.ZodTypeAny> = {
     origens: OrigemSchema,
     trilhas: TrilhaSchema,
     regras: RegraSchema,
+    ameacas: AmeacaSchema,
 };
 
-const CATEGORIAS: Categoria[] = ["poderes", "rituais", "equipamentos", "origens", "trilhas", "regras"];
+const CATEGORIAS: Categoria[] = ["poderes", "rituais", "equipamentos", "origens", "trilhas", "regras", "ameacas"];
 
 const chaveOverrides = (categoria: Categoria) => `${categoria}:__overrides__`;
 const chaveExclusoes = (categoria: Categoria) => `${categoria}:__exclusoes__`;
@@ -139,7 +143,7 @@ async function carregarEstatico(): Promise<{
     if (!index) return null;
 
     const dados: Record<Categoria, unknown[]> = {
-        poderes: [], rituais: [], equipamentos: [], origens: [], trilhas: [], regras: []
+        poderes: [], rituais: [], equipamentos: [], origens: [], trilhas: [], regras: [], ameacas: []
     };
     const arquivos: ArquivoImportado[] = [];
 
@@ -179,10 +183,11 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         origens: [],
         trilhas: [],
         regras: [],
+        ameacas: [],
         fontes: {},
         arquivosImportados: [],
-        overrides: { poderes: [], rituais: [], equipamentos: [], origens: [], trilhas: [], regras: [] },
-        exclusoes: { poderes: [], rituais: [], equipamentos: [], origens: [], trilhas: [], regras: [] },
+        overrides: { poderes: [], rituais: [], equipamentos: [], origens: [], trilhas: [], regras: [], ameacas: [] },
+        exclusoes: { poderes: [], rituais: [], equipamentos: [], origens: [], trilhas: [], regras: [], ameacas: [] },
     });
 
     const entrarSemDados = useCallback(() => {
@@ -199,10 +204,11 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
             origens: [],
             trilhas: [],
             regras: [],
+            ameacas: [],
             fontes: {},
             arquivosImportados: [],
-            overrides: { poderes: [], rituais: [], equipamentos: [], origens: [], trilhas: [], regras: [] },
-            exclusoes: { poderes: [], rituais: [], equipamentos: [], origens: [], trilhas: [], regras: [] },
+            overrides: { poderes: [], rituais: [], equipamentos: [], origens: [], trilhas: [], regras: [], ameacas: [] },
+            exclusoes: { poderes: [], rituais: [], equipamentos: [], origens: [], trilhas: [], regras: [], ameacas: [] },
         };
 
         // 1. Tenta carregar estático via index.json (deploy privado)

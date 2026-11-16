@@ -12,6 +12,7 @@ const CATEGORIES: { id: Categoria; label: string }[] = [
     { id: "origens", label: "Origens" },
     { id: "trilhas", label: "Trilhas" },
     { id: "regras", label: "Regras" },
+    { id: "ameacas", label: "Ameaças" },
 ];
 
 function JsonSection() {
@@ -418,13 +419,13 @@ function SourcesSection() {
 export default function Configuracoes() {
     const {
         limparTudo, exportarPacote, poderes, rituais, equipamentos,
-        origens, trilhas, importarJson,
+        origens, trilhas, regras, ameacas, importarJson,
     } = useData();
     const [activeTab, setActiveTab] = useState<"jsons" | "fontes" | "overrides">("jsons");
     const [confirmClear, setConfirmClear] = useState(false);
     const isPrivate = import.meta.env.VITE_MODO === "privado";
 
-    const totalItems = poderes.length + rituais.length + equipamentos.length + origens.length + trilhas.length;
+    const totalItems = poderes.length + rituais.length + equipamentos.length + origens.length + trilhas.length + regras.length + ameacas.length;
 
     return (
         <div className="space-y-6 mx-auto">

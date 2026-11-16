@@ -13,6 +13,8 @@ const CATEGORIAS: { id: Categoria; label: string; descricao: string }[] = [
   { id: "equipamentos", label: "Equipamentos", descricao: "Armas, proteções, itens, modificações, maldições..." },
   { id: "origens", label: "Origens", descricao: "Origens e seus bônus." },
   { id: "trilhas", label: "Trilhas", descricao: "Trilhas para todas as classes." },
+  { id: "regras", label: "Regras", descricao: "Regras do sistema, condições, ações, combate..." },
+  { id: "ameacas", label: "Ameaças", descricao: "Criaturas e NPCs do bestiário." },
 ];
 
 export default function TelaImportacao() {
