@@ -130,6 +130,9 @@ function LinhaFiltroExpansivel({
     const [expandido, setExpandido] = useState(false);
 
     const precisaDeExpansao = config.opcoes.length > MAX_OPCOES_VISIVEIS;
+    const opcoesVisiveis = expandido
+        ? config.opcoes
+        : config.opcoes.slice(0, MAX_OPCOES_VISIVEIS);
 
     return (
         <div className="flex gap-1.5 items-start border-b border-dashed border-black/20 pb-1 last:border-none">
@@ -148,11 +151,8 @@ function LinhaFiltroExpansivel({
                 )}
             </div>
 
-            <div
-                className={`flex flex-wrap gap-1 grow transition-all duration-200 overflow-hidden ${expandido ? "max-h-125" : "max-h-19.5"
-                    }`}
-            >
-                {config.opcoes.map(opcao => (
+            <div className="flex flex-wrap gap-1 grow">
+                {opcoesVisiveis.map(opcao => (
                     <FilterButton
                         key={opcao}
                         label={opcao}

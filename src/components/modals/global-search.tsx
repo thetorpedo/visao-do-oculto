@@ -2,6 +2,7 @@ import { useData } from "@/context/DataContext";
 import Fuse from "fuse.js";
 import { Search, X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import FolderDiv from "../ui/folder-div";
 import PaperDiv from "../ui/paper-div";
 import { ordenarPorRelevancia } from "@/utils/searchUtils";
@@ -17,10 +18,13 @@ function SafeHTMLText({ html }: { html: string }) {
 
 export default function GlobalSearch() {
   const { poderes, rituais, equipamentos, origens, trilhas, regras, ameacas } = useData();
+  const navigate = useNavigate();
 
   const [isOpen, setIsOpen] = useState(false);
   const [busca, setBusca] = useState("");
+  const [indiceSelecionado, setIndiceSelecionado] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+  const itemRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 
   const dadosGlobais = useMemo(() => [
     ...origens.map(item => ({ ...item, globalType: "Origem", link: `/origens?busca=${encodeURIComponent(item.nome)}` })),
@@ -120,8 +124,38 @@ export default function GlobalSearch() {
       setTimeout(() => inputRef.current?.focus(), 50);
     } else {
       setBusca("");
+      setIndiceSelecionado(0);
     }
   }, [isOpen]);
+
+  useEffect(() => {
+    setIndiceSelecionado(0);
+  }, [busca]);
+
+  useEffect(() => {
+    itemRefs.current[indiceSelecionado]?.scrollIntoView({ block: "nearest" });
+  }, [indiceSelecionado]);
+
+  const abrirResultado = (link: string) => {
+    setIsOpen(false);
+    navigate(link);
+  };
+
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (resultados.length === 0) return;
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setIndiceSelecionado((prev) => (prev + 1) % resultados.length);
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setIndiceSelecionado((prev) => (prev - 1 + resultados.length) % resultados.length);
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      const itemAtivo = resultados[indiceSelecionado] ?? resultados[0];
+      if (itemAtivo) abrirResultado(itemAtivo.link);
+    }
+  };
 
   const renderSnippet = (descricaoBruta: string) => {
     const textoLimpo = removerMarkdown(descricaoBruta || "");
@@ -167,6 +201,7 @@ export default function GlobalSearch() {
             className="grow bg-transparent outline-none font-special text-sm placeholder:text-black/40 text-black/90"
             value={busca}
             onChange={(e) => setBusca(e.target.value)}
+            onKeyDown={handleInputKeyDown}
           />
           <button onClick={() => setIsOpen(false)} className="text-black/90 p-1 cursor-pointer">
             <X className="size-4" />
@@ -185,6 +220,7 @@ export default function GlobalSearch() {
           ) : (
             <div className="overflow-y-auto flex flex-col mt-2">
               {resultados.map((item, idx) => {
+                const estaSelecionado = idx === indiceSelecionado;
                 const termoRaw = busca.trim();
                 let termoValido = termoRaw;
                 if (item.nome.toLowerCase().indexOf(termoValido.toLowerCase()) === -1 && termoValido.length > 4) {
@@ -196,10 +232,23 @@ export default function GlobalSearch() {
                 return (
                   <a
                     key={idx}
+                    ref={(el) => {
+                      itemRefs.current[idx] = el;
+                    }}
                     href={item.link}
-                    className="py-2"
+                    onMouseEnter={() => setIndiceSelecionado(idx)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      abrirResultado(item.link);
+                    }}
+                    className="py-1.5 px-1"
                   >
-                    <PaperDiv className='group flex flex-col py-3 px-3 text-left shadow-none!'>
+                    <PaperDiv
+                      className={`group flex flex-col py-3 px-3 text-left shadow-none! transition-all ${estaSelecionado
+                        ? "bg-[linear-gradient(rgba(253,224,71,0.22),rgba(253,224,71,0.22)),url(/assets/paper.png)]"
+                        : ""
+                        }`}
+                    >
                       <div className="flex justify-between items-center gap-2 w-full min-w-0">
                         <span className="text-sm text-black/90 font-special truncate">
                           <SafeHTMLText html={nomeFormatado} />
@@ -222,9 +271,17 @@ export default function GlobalSearch() {
 
         <div className="bg-black px-3 py-1.5 flex justify-between items-center text-xs font-daisy text-white shrink-0">
           <span>{resultados.length} resultados</span>
-          <span className="flex items-center gap-1">
-            <kbd className="bg-white text-black px-1 font-mono text-[9px]">ESC</kbd> Fechar
-          </span>
+          <div className="flex items-center gap-3">
+            <span className="flex items-center gap-1">
+              <kbd className="bg-white text-black px-1 font-mono text-[9px]">↑↓</kbd> Navegar
+            </span>
+            <span className="flex items-center gap-1">
+              <kbd className="bg-white text-black px-1 font-mono text-[9px]">ENTER</kbd> Abrir
+            </span>
+            <span className="flex items-center gap-1">
+              <kbd className="bg-white text-black px-1 font-mono text-[9px]">ESC</kbd> Fechar
+            </span>
+          </div>
         </div>
       </FolderDiv>
     </div>

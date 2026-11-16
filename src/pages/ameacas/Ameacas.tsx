@@ -48,7 +48,7 @@ const CONFIGS_FILTRO: ConfigFiltro[] = [
     },
     {
         id: "temEnigma",
-        label: "Enigma de Medo",
+        label: "Enigma",
         opcoes: ["Sim", "Não"],
     },
     {
@@ -235,25 +235,23 @@ export default function Ameacas() {
                                     const nomeFormatado =
                                         filtros.busca && filtros.busca.trim().length >= 2
                                             ? ameaca.nome.replace(
-                                                  regexNome,
-                                                  `<mark class="bg-yellow-200 text-gray-900 font-semibold px-0.5 rounded-sm">$1</mark>`
-                                              )
+                                                regexNome,
+                                                `<mark class="bg-yellow-200 text-gray-900 font-semibold px-0.5 rounded-sm">$1</mark>`
+                                            )
                                             : ameaca.nome;
 
                                     return (
                                         <div
                                             key={ameaca.id}
                                             onClick={() => setAmeacaSelecionada(ameaca)}
-                                            className={`group grid grid-cols-[1fr_auto_auto_auto_auto] items-center gap-2 py-1.5 px-2 text-left transition-all border-b border-gray-200 cursor-pointer select-none relative ${
-                                                estaSelecionado
+                                            className={`group grid grid-cols-[1fr_auto_auto_auto_auto] items-center gap-2 py-1.5 px-2 text-left transition-all border-b border-gray-200 cursor-pointer select-none relative ${estaSelecionado
                                                     ? "bg-gray-300/70 text-gray-900 shadow-xs"
                                                     : "hover:bg-gray-100/80 text-gray-700"
-                                            }`}
+                                                }`}
                                         >
                                             <span
-                                                className={`text-xs tracking-wide text-black truncate leading-relaxed min-w-0 ${
-                                                    estaSelecionado ? "font-bold" : "font-medium"
-                                                }`}
+                                                className={`text-xs tracking-wide text-black truncate leading-relaxed min-w-0 ${estaSelecionado ? "font-bold" : "font-medium"
+                                                    }`}
                                             >
                                                 <SafeHTMLText html={nomeFormatado} />
                                             </span>
@@ -268,7 +266,7 @@ export default function Ameacas() {
 
                                             <div className="flex items-center gap-0.5 shrink-0">
                                                 {ameaca.elementos.length === 0 &&
-                                                ameaca.elementosSecundarios.length === 0 ? (
+                                                    ameaca.elementosSecundarios.length === 0 ? (
                                                     <span className="text-[10px] text-gray-400 px-1">—</span>
                                                 ) : (
                                                     <>

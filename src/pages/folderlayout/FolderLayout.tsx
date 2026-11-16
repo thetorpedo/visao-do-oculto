@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
-import { Menu, Search, Settings, X } from "lucide-react";
+import { BookMarked, BookText, Bookmark, Menu, Search, Settings, X, type LucideIcon } from "lucide-react";
 import GlitchTitle from "@/pages/home/components/glitch-title";
 import PaperStamp from "@/components/ui/paper-stamp";
 import SigilRain from "@/pages/home/components/sigil-rain";
@@ -10,6 +10,14 @@ interface NavItem {
   label: string;
   z?: string;
   margin?: string;
+}
+
+interface SideMarkerItem {
+  to: string;
+  label: string;
+  icon: LucideIcon;
+  activeColor: string;
+  inactiveColor: string;
 }
 
 interface DesktopTabProps extends NavItem {
@@ -26,12 +34,36 @@ const NAV_LINKS: NavItem[] = [
   { to: "/rituais", label: "RITUAIS", z: "z-[5]", margin: "-ml-5" },
   { to: "/regras", label: "REGRAS", z: "z-[4]", margin: "-ml-5" },
   { to: "/ameacas", label: "AMEAÇAS", z: "z-[3]", margin: "-ml-5" },
-  { to: "/fontes", label: "FONTES", z: "z-[2]", margin: "-ml-5" },
-  { to: "/colecoes", label: "COLEÇÕES", z: "z-[1]", margin: "-ml-5" },
+];
+
+const SIDE_MARKERS: SideMarkerItem[] = [
+  {
+    to: "/colecoes",
+    label: "Coleções",
+    icon: Bookmark,
+    activeColor: "bg-rose-400/75 text-gray-900",
+    inactiveColor: "bg-rose-400/45 text-gray-900/70 hover:bg-rose-400/70 hover:text-gray-900",
+  },
+  {
+    to: "/fontes",
+    label: "Fontes",
+    icon: BookText,
+    activeColor: "bg-sky-400/75 text-gray-900",
+    inactiveColor: "bg-sky-400/45 text-gray-900/70 hover:bg-sky-400/70 hover:text-gray-900",
+  },
+  {
+    to: "/configuracoes",
+    label: "Configurações",
+    icon: Settings,
+    activeColor: "bg-amber-400/75 text-gray-900",
+    inactiveColor: "bg-amber-400/45 text-gray-900/70 hover:bg-amber-400/70 hover:text-gray-900",
+  },
 ];
 
 const ALL_MOBILE_LINKS: NavItem[] = [
   ...NAV_LINKS,
+  { to: "/fontes", label: "FONTES" },
+  { to: "/colecoes", label: "COLEÇÕES" },
   { to: "/configuracoes", label: "Configurações" },
 ];
 
@@ -62,13 +94,34 @@ function DesktopTab({
   );
 }
 
+function SideMarker({ to, label, icon: Icon, activeColor, inactiveColor }: SideMarkerItem) {
+  return (
+    <NavLink
+      to={to}
+      title={label}
+      aria-label={label}
+      className={({ isActive }) => `
+        flex cursor-pointer items-center justify-start
+        bg-[url(/assets/paper.png)] bg-blend-overlay bg-size-[300%]
+        pl-2.5 pr-3 py-2.5 rounded-l-xs transition-all
+        ${isActive
+          ? `w-13 ${activeColor} shadow-[inset_-8px_0_5px_rgba(0,0,0,0.22),-4px_4px_10px_rgba(0,0,0,0.45)]`
+          : `w-10 hover:w-12 ${inactiveColor} shadow-[inset_-8px_0_5px_rgba(0,0,0,0.15),-2px_3px_6px_rgba(0,0,0,0.35)]`
+        }
+      `}
+    >
+      <Icon className="size-5 shrink-0" />
+    </NavLink>
+  );
+}
+
 export default function FolderLayout() {
   const { pathname } = useLocation();
   const isHome = pathname === "/";
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const bottomRowLinks = NAV_LINKS.slice(0, 5);
-  const topRowLinks = NAV_LINKS.slice(5, 10);
+  const topRowLinks = NAV_LINKS.slice(5);
 
   useEffect(() => {
     document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
@@ -156,15 +209,18 @@ export default function FolderLayout() {
               ))}
             </div>
           </div>
-
-          <DesktopTab to="/configuracoes" label="Configurações" className="w-fit px-4">
-            <Settings className="-mt-0.5" />
-          </DesktopTab>
         </div>
 
         <div className="relative h-8 w-full rounded-t-md z-10 bg-[#837156] bg-[url(/assets/folder.jpg)] bg-size-[30%] bg-blend-overlay lg:rounded-t-none" />
 
         <div className="relative h-full rounded-b-lg  bg-[#837156] bg-[url(/assets/folder.jpg)] bg-size-[30%] bg-blend-overlay p-2 shadow-2xl/90 sm:p-4 lg:p-6">
+          {/* Marcadores laterais (Fontes, Coleções, Configurações) */}
+          <div className="hidden lg:flex flex-col items-end gap-2.5 absolute top-6 right-full z-0">
+            {SIDE_MARKERS.map((marker) => (
+              <SideMarker key={marker.to} {...marker} />
+            ))}
+          </div>
+
           {isHome && (
             <>
               <div className="pointer-events-none absolute top-1/2 left-1/2 z-11 h-[95%] w-[97%] -translate-x-1/2 -translate-y-1/2 rotate-1 bg-[linear-gradient(rgba(79,79,79,0.2),rgba(79,79,79,0.2)),url(/assets/paper.png)] bg-repeat bg-size-[30%] p-1 shadow-[0_0_40px_rgba(0,0,0,0.25)]" />
