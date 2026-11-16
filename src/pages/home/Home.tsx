@@ -4,8 +4,9 @@ import GlitchTitle from "@/pages/home/components/glitch-title";
 import InfoPanel from "@/pages/home/components/info-panel";
 import ItemCard from "@/components/ui/item-card";
 import { useData, type Categoria } from "@/context/DataContext";
-import { ExternalLink, Heart, Search, Shuffle } from "lucide-react";
+import { ExternalLink, Heart, Search, Shield, Shuffle } from "lucide-react";
 import { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import DonateModal from "@/pages/home/components/donate-modal";
 import ChangelogList from "@/pages/home/components/changelog-panel";
 import { UPDATES_PRIVATE, UPDATES_PUBLIC } from "@/pages/home/components/changelog";
@@ -96,6 +97,25 @@ export default function Home() {
           </div>
         </button>
 
+        <Link
+          to="/escudo"
+          className="group mt-3 flex items-center justify-between border border-gray-800 dark:border-zinc-700 bg-white/70 dark:bg-[#131615] px-4 py-2.5 transition-all hover:bg-white dark:hover:border-emerald-500/60 shadow-xs text-left"
+        >
+          <div className="flex items-center gap-3">
+            <Shield className="size-5 shrink-0 text-gray-800 dark:text-emerald-400 group-hover:scale-110 transition-transform" />
+            <div>
+              <span className="font-special text-sm sm:text-base text-gray-900 dark:text-zinc-100 tracking-wider uppercase block">
+                Escudo do Mestre
+              </span>
+              <span className="font-daisy text-xs text-gray-600 dark:text-zinc-400">
+                Grid em tela cheia com 6 slots para registros, iniciativa & PV, dados e condições
+              </span>
+            </div>
+          </div>
+          <span className="font-special text-xs uppercase tracking-wider text-gray-800 dark:text-emerald-300 border border-gray-400 dark:border-zinc-700 px-2 py-1 hidden sm:inline">
+            Acessar →
+          </span>
+        </Link>
       </header>
 
       <section className="mx-auto grid w-full max-w-7xl grid-cols-1 items-start gap-8 md:grid-cols-2">

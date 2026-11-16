@@ -15,6 +15,7 @@ import Regras from './pages/regras/Regras';
 import Ameacas from './pages/ameacas/Ameacas';
 import DocumentReader from './components/modals/document-reader';
 import ModalCriarRegistro from './components/modals/create/modal-create';
+import Escudo from './pages/escudo/Escudo';
 import { useData } from './context/DataContext';
 import { UIProvider, useUI } from './context/UiContext';
 
@@ -81,6 +82,7 @@ function AppRoutes() {
           <Route path="/colecoes" element={<Favoritos />} />
           <Route path="/configuracoes" element={<Configuracoes />} />
         </Route>
+        <Route path="/escudo" element={<Escudo />} />
       </Routes>
       <GlobalSearch />
       <GlobalModals />

@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
-import { BookText, Bookmark, Menu, Moon, Search, Settings, Sun, X, type LucideIcon } from "lucide-react";
+import { BookText, Bookmark, Menu, Moon, Search, Settings, Shield, Sun, X, type LucideIcon } from "lucide-react";
 import SigilRain from "@/pages/home/components/sigil-rain";
 import PaperDiv from "@/components/ui/paper-div";
 import GlitchTitle from "../home/components/glitch-title";
@@ -39,6 +39,13 @@ const NAV_LINKS: NavItem[] = [
 
 const SIDE_MARKERS: SideMarkerItem[] = [
   {
+    to: "/escudo",
+    label: "Escudo do Mestre",
+    icon: Shield,
+    activeColor: "bg-emerald-400/75 text-gray-900",
+    inactiveColor: "bg-emerald-400/45 text-gray-900/70 hover:bg-emerald-400/70 hover:text-gray-900",
+  },
+  {
     to: "/colecoes",
     label: "Coleções",
     icon: Bookmark,
@@ -63,6 +70,7 @@ const SIDE_MARKERS: SideMarkerItem[] = [
 
 const ALL_MOBILE_LINKS: NavItem[] = [
   ...NAV_LINKS,
+  { to: "/escudo", label: "ESCUDO" },
   { to: "/fontes", label: "FONTES" },
   { to: "/colecoes", label: "COLEÇÕES" },
   { to: "/configuracoes", label: "Configurações" },
@@ -246,7 +254,7 @@ export default function FolderLayout() {
               </div>
 
               <div className="mt-4 border-t-2 border-dashed border-gray-400 pt-3">
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-2 xs:grid-cols-4 gap-2">
                   {SIDE_MARKERS.map(({ to, label, icon: Icon, activeColor, inactiveColor }) => (
                     <NavLink
                       key={to}

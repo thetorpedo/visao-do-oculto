@@ -28,12 +28,20 @@ export function ExpandableTextToggle({
   );
 }
 
-export default function ExpandableText({ text, limit = 160 }: { text: string; limit?: number }) {
+export default function ExpandableText({
+  text,
+  limit = 160,
+  forceExpand = false,
+}: {
+  text: string;
+  limit?: number;
+  forceExpand?: boolean;
+}) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const textoCompleto = capitalizeFirst(text);
-  const cabe = textoCompleto.length <= limit;
-  const isCollapsedExcerpt = !isExpanded && !cabe;
+  const cabe = forceExpand || textoCompleto.length <= limit;
+  const isCollapsedExcerpt = !forceExpand && !isExpanded && !cabe;
   const textoExibido = isCollapsedExcerpt ? `${textoCompleto.substring(0, limit)}...` : textoCompleto;
 
   if (!text) return null;
@@ -41,7 +49,7 @@ export default function ExpandableText({ text, limit = 160 }: { text: string; li
   return (
     <div className="text-sm text-justify text-gray-800 dark:text-zinc-300 leading-relaxed [&_.prose]:text-sm [&_p]:mb-2 last:[&_p]:mb-0">
       <MarkdownRenderer content={textoExibido} isCompact inline={isCollapsedExcerpt} />
-      {!cabe && (
+      {!cabe && !forceExpand && (
         <div className={isCollapsedExcerpt ? "inline" : "mt-1"}>
           <ExpandableTextToggle
             expanded={isExpanded}
