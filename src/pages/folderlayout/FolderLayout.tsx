@@ -171,7 +171,7 @@ export default function FolderLayout() {
           <button
             type="button"
             onClick={toggleTema}
-            className="flex size-9 cursor-pointer items-center justify-center bg-emerald-500/80 text-gray-950 shadow-xs active:translate-y-0.5"
+            className="flex size-9 cursor-pointer items-center justify-center bg-white/50 text-black shadow-xs active:translate-y-0.5"
             title={isEstrangeiro ? "Tema Claro" : "Tema Estrangeiro (Dark)"}
             aria-label="Alternar tema"
           >

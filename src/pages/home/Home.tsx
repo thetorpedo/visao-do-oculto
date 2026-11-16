@@ -2,19 +2,35 @@ import CacheDownloader from "@/pages/home/components/cache-downloader";
 import GuideDropdown from "@/pages/home/components/guide-dropdown";
 import GlitchTitle from "@/pages/home/components/glitch-title";
 import InfoPanel from "@/pages/home/components/info-panel";
-import { useData } from "@/context/DataContext";
-import { ExternalLink, Heart, Search } from "lucide-react";
-import { useState } from "react";
+import ItemCard from "@/components/ui/item-card";
+import { useData, type Categoria } from "@/context/DataContext";
+import { ExternalLink, Heart, Search, Shuffle } from "lucide-react";
+import { useMemo, useState } from "react";
 import DonateModal from "@/pages/home/components/donate-modal";
 import ChangelogList from "@/pages/home/components/changelog-panel";
 import { UPDATES_PRIVATE, UPDATES_PUBLIC } from "@/pages/home/components/changelog";
 
 const REPO_URL = "https://github.com/thetorpedo/visao-do-oculto";
 
+const ROTULO_CATEGORIA: Record<string, string> = {
+  poderes: "Poder",
+  rituais: "Ritual",
+  equipamentos: "Equipamento",
+  origens: "Origem",
+  trilhas: "Trilha",
+  ameacas: "Ameaça",
+};
+
+function sortear<T>(lista: T[]): T | null {
+  if (lista.length === 0) return null;
+  return lista[Math.floor(Math.random() * lista.length)];
+}
+
 export default function Home() {
   const { poderes, rituais, equipamentos, origens, trilhas, regras, ameacas, fontes } = useData();
   const isPrivate = import.meta.env.VITE_MODO === "privado";
   const [showDonate, setShowDonate] = useState(false);
+  const [semente, setSemente] = useState(0);
 
   const totalItems =
     poderes.length + rituais.length + equipamentos.length + origens.length + trilhas.length + regras.length + ameacas.length;
@@ -23,12 +39,23 @@ export default function Home() {
     .filter((f) => f.nomeArquivo)
     .map((f) => `/files/${f.nomeArquivo}`);
 
-  return (
-    <div className="flex min-h-full w-full flex-col gap-8 p-4 sm:p-8 md:grid md:grid-cols-2">
-      <header className="mx-auto w-full max-w-6xl text-center">
-        <GlitchTitle text="VISÃO DO OCULTO" />
+  const registroSorteado = useMemo(() => {
+    const todos: { categoria: Categoria; item: any }[] = [
+      ...poderes.map((item) => ({ categoria: "poderes" as Categoria, item })),
+      ...rituais.map((item) => ({ categoria: "rituais" as Categoria, item })),
+      ...equipamentos.map((item) => ({ categoria: "equipamentos" as Categoria, item })),
+      ...origens.map((item) => ({ categoria: "origens" as Categoria, item })),
+      ...trilhas.map((item) => ({ categoria: "trilhas" as Categoria, item })),
+      ...ameacas.map((item) => ({ categoria: "ameacas" as Categoria, item })),
+    ];
+    return sortear(todos);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [totalItems, semente]);
 
-        <div className="mb-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 sm:gap-6">
+  return (
+    <div className="flex min-h-full w-full flex-col gap-8 p-4 sm:p-8">
+      <header className="mx-auto w-full max-w-5xl text-center mt-2 mb-6">
+        <div className="mb-2 flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
           <a
             href={REPO_URL}
             target="_blank"
@@ -38,9 +65,6 @@ export default function Home() {
             <ExternalLink className="size-3" />
             Repositório no GitHub
           </a>
-
-          <span className="hidden text-gray-300 sm:inline">|</span>
-
           <button
             onClick={() => setShowDonate(true)}
             className="flex items-center gap-1 border-b border-dashed border-gray-400 font-special text-sm tracking-wide text-black/80 transition-colors hover:text-red-600"
@@ -49,22 +73,19 @@ export default function Home() {
             Apoiar o projeto
           </button>
         </div>
-
-        <p className="my-2 hidden text-center text-sm text-black/60 italic sm:block">
-          Use o atalho <span className="font-daisy">[CTRL] + [K]</span> em qualquer página do site para usar a busca global.
-        </p>
+        <GlitchTitle text="VISÃO DO OCULTO" />
 
         <button
           onClick={() => window.dispatchEvent(new Event("open-global-search"))}
-          className="group flex h-14 w-full items-center justify-between border border-gray-800 bg-white/60 px-4 transition-all"
+          className="group mt-2 flex h-14 w-full cursor-pointer items-center justify-between border border-gray-800 dark:border-zinc-700 bg-white/70 dark:bg-[#131615] px-4 shadow-sm transition-all hover:bg-white dark:hover:border-emerald-500/60"
         >
-          <div className="flex w-full items-center text-gray-600">
-            <Search className="mr-3 size-5 shrink-0" />
-            <span className="font-special text-base tracking-wide sm:text-lg">
+          <div className="flex w-full items-center text-gray-600 transition-colors group-hover:text-gray-900 dark:group-hover:text-zinc-100">
+            <Search className="mr-3 size-5 shrink-0 dark:text-emerald-400" />
+            <span className="truncate font-special text-sm tracking-wide sm:text-lg">
               Pesquisar entre {totalItems} registros...
             </span>
           </div>
-          <div className="hidden shrink-0 items-center gap-1 sm:flex">
+          <div className="ml-3 hidden shrink-0 items-center gap-1 sm:flex">
             <kbd className="border-2 border-dashed border-gray-700 px-1 py-0.5 font-daisy text-sm font-bold text-gray-700">
               CTRL
             </kbd>
@@ -74,34 +95,43 @@ export default function Home() {
             </kbd>
           </div>
         </button>
-      </header >
 
-      <section className="mx-auto flex h-full w-full max-w-6xl flex-col gap-8">
-        <div className="grid h-full grid-cols-1 gap-8 mt-2">
-          <InfoPanel title="Lista de Atualizações">
-            <ChangelogList entries={isPrivate ? UPDATES_PRIVATE : UPDATES_PUBLIC} />
-          </InfoPanel>
+      </header>
 
-          {/* <InfoPanel title="Funcionalidades Planejadas">
-            <ul className="list-inside list-disc space-y-2 text-gray-800 marker:text-gray-500">
-              {PLANNED_FEATURES.map((feature) => (
-                <li key={feature} className="border-b border-dashed border-gray-400/60 pb-1">
-                  {feature}
-                </li>
-              ))}
-            </ul>
-          </InfoPanel> */}
+      <section className="mx-auto grid w-full max-w-7xl grid-cols-1 items-start gap-8 md:grid-cols-2">
+        {registroSorteado && (
+          <div className="relative border border-black/40 bg-black/5 p-4 pt-6 sm:p-6 sm:pt-7">
+            <div className="absolute top-0 left-4 flex -translate-y-1/2 items-center bg-gray-900 px-2 py-0.5 font-special text-xs tracking-widest text-white uppercase sm:text-sm">
+              Registro sorteado • {ROTULO_CATEGORIA[registroSorteado.categoria]}
+            </div>
 
-        </div>
+            <button
+              onClick={() => setSemente((s) => s + 1)}
+              className="absolute top-0 right-4 flex -translate-y-1/2 cursor-pointer items-center gap-1.5 border border-black/40 bg-[#e6dfcf] dark:bg-[#1e2220] px-2 py-0.5 font-special text-xs uppercase tracking-wider text-black/80 transition-colors hover:bg-white dark:hover:border-emerald-500/60 sm:text-sm"
+              title="Sortear outro registro"
+            >
+              <Shuffle className="size-3.5" />
+              Sortear outro
+            </button>
+
+            <ItemCard
+              key={`${registroSorteado.categoria}-${registroSorteado.item.id}`}
+              item={registroSorteado.item}
+              categoria={registroSorteado.categoria}
+            />
+          </div>
+        )}
+
+        <InfoPanel title="Lista de Atualizações">
+          <ChangelogList entries={isPrivate ? UPDATES_PRIVATE : UPDATES_PUBLIC} />
+        </InfoPanel>
       </section>
 
-      {isPrivate && pdfsToDownload.length > 0 && (
-        <div className="col-span-2">
-          <CacheDownloader pdfsParaBaixar={pdfsToDownload} />
-        </div>
-      )}
-      <footer className="col-span-2 flex flex-col gap-8">
+      <div className="mx-auto w-full max-w-7xl space-y-8">
+        {isPrivate && pdfsToDownload.length > 0 && <CacheDownloader pdfsParaBaixar={pdfsToDownload} />}
+
         <GuideDropdown />
+
         <p className="border-2 border-dashed border-black/40 bg-black/5 p-5 text-center font-daisy text-xs leading-relaxed tracking-wider text-black/70 uppercase md:text-sm">
           Todo o conteúdo original de Ordem Paranormal pertence à Jambô Editora e ao universo criado por Cellbit.
           <br />
@@ -109,7 +139,7 @@ export default function Home() {
           <br />
           Este projeto não substitui a compra dos livros oficiais e não tem qualquer vínculo comercial com a Jambô Editora.
         </p>
-      </footer>
+      </div>
 
       <DonateModal open={showDonate} onClose={() => setShowDonate(false)} />
     </div>
