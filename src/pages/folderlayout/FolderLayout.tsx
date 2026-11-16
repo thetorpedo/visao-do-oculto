@@ -145,7 +145,7 @@ export default function FolderLayout() {
   }, [isMobileMenuOpen]);
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-start lg:justify-center overflow-x-hidden bg-[#453b13] dark:bg-[#040c07] bg-[radial-gradient(#5b4f21_1px,transparent_1px)] dark:bg-[radial-gradient(#123520_1px,transparent_1px)] bg-size-[16px_16px] lg:bg-black lg:dark:bg-[#020804]">
+    <div className="relative flex min-h-screen flex-col items-center justify-start lg:justify-center overflow-x-hidden bg-[#453b13] dark:bg-[#040c07] bg-[radial-gradient(#5b4f21_1px,transparent_1px)] dark:bg-[radial-gradient(#123520_1px,transparent_1px)] overflow-hidden bg-size-[16px_16px] lg:bg-black lg:dark:bg-[#020804]">
       <SigilRain />
 
       {/* Navbar Mobile */}
