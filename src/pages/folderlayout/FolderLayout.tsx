@@ -300,7 +300,7 @@ export default function FolderLayout() {
             <button
               type="button"
               onClick={toggleTema}
-              title={isEstrangeiro ? "Modo Claro" : "Modo Estrangeiro (Dark)"}
+              title={isEstrangeiro ? "Modo Claro" : "Modo Escuro"}
               aria-label="Alternar tema"
               className={`
                 flex cursor-pointer items-center justify-start
