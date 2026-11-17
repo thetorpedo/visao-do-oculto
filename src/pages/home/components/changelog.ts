@@ -3,6 +3,11 @@ import { ChangelogEntry } from "./changelog-panel";
 export const PLANNED_FEATURES = ["Dark mode?", "Melhorar responsividade."];
 export const UPDATES_PUBLIC: ChangelogEntry[] = [
   {
+    version: "v2.3",
+    date: "17/11/26",
+    changes: ["Suporte a Ameaças", "Escudo do Mestre", "Modo Escuro", "Melhorias de interface", "Melhorias gerais"],
+  },
+  {
     version: "v2.2",
     date: "11/11/26",
     changes: ["Melhorias de interface", "Editor de markdown"],
@@ -20,6 +25,11 @@ export const UPDATES_PUBLIC: ChangelogEntry[] = [
 ];
 
 export const UPDATES_PRIVATE: ChangelogEntry[] = [
+  {
+    version: "v2.3",
+    date: "17/11/26",
+    changes: ["Suporte a Ameaças", "Escudo do Mestre", "Modo Escuro", "Melhorias de interface", "Melhorias gerais"],
+  },
   {
     version: "v2.2",
     date: "11/11/26",

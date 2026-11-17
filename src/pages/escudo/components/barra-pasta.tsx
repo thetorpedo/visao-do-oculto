@@ -217,10 +217,9 @@ export default function BarraPasta({
             >
                 <Link
                     to="/"
-                    title="Voltar para o Dossiê"
-                    className={cn(ABA_BASE, ABA_INATIVA, "-ml-2 z-30 w-28 items-start sm:w-36 xl:w-44")}
+                    className={cn(ABA_BASE, ABA_INATIVA, "z-30 w-28 items-start sm:w-36 xl:w-44")}
                 >
-                    <span className={cn(TEXTO_ABA, "flex items-center gap-1.5")}>
+                    <span className={cn(TEXTO_ABA, "flex items-center gap-1.5 -ml-2")}>
                         <ArrowLeft className="size-4 shrink-0" />
                         Voltar
                     </span>

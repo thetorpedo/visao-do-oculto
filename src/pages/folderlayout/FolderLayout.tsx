@@ -300,7 +300,7 @@ export default function FolderLayout() {
           </div>
         </div>
 
-        <div className="relative hidden h-8 w-full rounded-t-md z-10 bg-[#837156] bg-[url(/assets/folder.jpg)] bg-size-[30%] bg-blend-overlay lg:block lg:rounded-t-none dark:hidden!" />
+        <div className="relative hidden h-8 w-full rounded-t-md z-10 bg-[#837156] bg-[url(/assets/folder.jpg)] bg-size-[30%] bg-blend-overlay lg:block lg:rounded-tl-none dark:hidden!" />
 
         <div className="relative h-full rounded-md lg:rounded-t-none lg:rounded-b-lg dark:rounded-none! bg-[#837156] dark:bg-[#141716] bg-[url(/assets/folder.jpg)] dark:bg-none bg-size-[30%] bg-blend-overlay dark:border dark:border-zinc-800 p-2 sm:p-4 lg:p-6 shadow-2xl/90">
           {/* Marcadores laterais (Coleções, Fontes, Configurações, Tema) */}
