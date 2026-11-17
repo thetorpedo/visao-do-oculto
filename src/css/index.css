@@ -293,6 +293,15 @@
   /* Sombra real */
 }
 
+/* Utilitário para scroll horizontal sem barra de rolagem visual */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 /* Tema Dark — Estrangeiro / Console */
 .dark mark {
   background-color: rgba(16, 185, 129, 0.32) !important;

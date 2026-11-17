@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Check, Edit2, Maximize2, Minimize2, Moon, Plus, Sun, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,13 +8,13 @@ import { cn } from "@/lib/utils";
 import type { Painel } from "@/hooks/useEscudo";
 
 const ABA_BASE =
-    "relative flex cursor-pointer items-start justify-center rounded-t-lg bg-[url(/assets/folder.jpg)] bg-size-[240%] bg-blend-overlay pt-3.5 font-special transition-all dark:m-0! dark:h-11! dark:items-center! dark:rounded-none! dark:border dark:bg-none dark:pt-0!";
+    "relative flex cursor-pointer items-start justify-center rounded-t-lg bg-[url(/assets/folder.jpg)] bg-size-[240%] bg-blend-overlay pt-3.5 font-special transition-all shrink-0 dark:m-0! dark:h-11! dark:items-center! dark:rounded-none! dark:border dark:bg-none dark:pt-0!";
 const ABA_ATIVA =
     "-mt-10 h-14 bg-[#837156] shadow-[0_0_20px_rgba(0,0,0,0.75)] dark:border-emerald-500/60 dark:bg-[#222925]! dark:text-emerald-300 dark:shadow-none";
 const ABA_INATIVA =
     "-mt-8 h-12 bg-[#7a6a51] shadow-[inset_0_-2px_4px_rgba(0,0,0,0.35),0_0_20px_rgba(0,0,0,0.75)] hover:-mt-10 hover:h-14 dark:border-zinc-800 dark:bg-[#121514] dark:text-zinc-400 dark:shadow-none dark:hover:border-zinc-600 dark:hover:bg-[#1a1e1c] dark:hover:text-zinc-200";
 const TEXTO_ABA =
-    "truncate font-special text-xs font-bold uppercase tracking-wider text-black/80 sm:text-sm xl:text-base dark:text-zinc-200";
+    "truncate font-special text-xs uppercase tracking-wider text-black/80 sm:text-sm xl:text-xl dark:text-zinc-200";
 
 function useFullscreen() {
     const [ativo, setAtivo] = useState(false);
@@ -79,10 +79,17 @@ interface MesaTabProps {
 }
 
 function MesaTab({ painel, indice, ativo, podeRemover, onSelecionar, onRemover, onRenomear }: MesaTabProps) {
+    const tabRef = useRef<HTMLDivElement>(null);
     const [editando, setEditando] = useState(false);
     const [nome, setNome] = useState(painel.nome);
 
     if (!ativo && editando) setEditando(false);
+
+    useEffect(() => {
+        if (ativo && tabRef.current) {
+            tabRef.current.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
+        }
+    }, [ativo]);
 
     const iniciarEdicao = () => {
         setNome(painel.nome);
@@ -96,36 +103,41 @@ function MesaTab({ painel, indice, ativo, podeRemover, onSelecionar, onRemover, 
 
     return (
         <div
-            className={cn(ABA_BASE, "w-32 sm:w-40 xl:w-48", ativo ? ABA_ATIVA : ABA_INATIVA)}
+            ref={tabRef}
+            className={cn(ABA_BASE, "w-32 sm:w-40 xl:w-48 shrink-0", ativo ? ABA_ATIVA : ABA_INATIVA)}
             style={{ zIndex: ativo ? 25 : 20 - indice }}
         >
             {ativo && editando ? (
-                <div className="flex w-full items-center gap-1 px-2.5 dark:mt-0">
+                <div className="flex w-full items-center h-full gap-1 px-2.5 dark:mt-0">
                     <Input
                         autoFocus
                         value={nome}
                         onChange={(e) => setNome(e.target.value)}
+                        onFocus={(e) => {
+                            const el = e.currentTarget;
+                            el.select();
+                            requestAnimationFrame(() => el.select());
+                        }}
                         onKeyDown={(e) => {
                             if (e.key === "Enter") salvar();
                             if (e.key === "Escape") setEditando(false);
                         }}
-                        className="h-6 border-black/40 bg-black/40 px-2 uppercase tracking-wider text-white dark:border-emerald-500/60 dark:bg-black/40"
+                        className="h-10 border text-sm! border-black! bg-black/50 px-2 uppercase tracking-wider text-white dark:border-emerald-500/60 dark:bg-black/40"
                     />
-                    <Button variant="ghost" size="icon-xs" className="text-emerald-400" title="Salvar nome" onClick={salvar}>
+                    <Button variant="default" size="icon-sm" className="text-white h-full grow" title="Salvar nome" onClick={salvar}>
                         <Check />
                     </Button>
                 </div>
             ) : (
-                <div onClick={onSelecionar} className="flex h-full w-full select-none items-center justify-between px-3">
+                <div onClick={onSelecionar} className="flex h-full w-full select-none items-center justify-between px-3 -mt-1">
                     <span className={TEXTO_ABA}>{painel.nome}</span>
 
                     {ativo && (
-                        <div className="ml-1 flex shrink-0 items-center">
+                        <div className="ml-1 flex shrink-0 gap-1 items-center">
                             <Button
                                 variant="ghost"
-                                size="icon-xs"
-                                className="text-black/50 hover:bg-transparent hover:text-black dark:text-zinc-400 dark:hover:bg-transparent dark:hover:text-emerald-300"
-                                title="Renomear mesa"
+                                size="icon-sm"
+                                className="hover:border hover:border-dashed hover:border-black hover:text-black hover:bg-transparent"
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     iniciarEdicao();
@@ -136,9 +148,8 @@ function MesaTab({ painel, indice, ativo, podeRemover, onSelecionar, onRemover, 
                             {podeRemover && (
                                 <Button
                                     variant="ghost"
-                                    size="icon-xs"
-                                    className="text-black/50 hover:bg-transparent hover:text-red-700 dark:text-zinc-400 dark:hover:bg-transparent dark:hover:text-red-400"
-                                    title="Excluir mesa"
+                                    size="icon-sm"
+                                    className="hover:border hover:border-dashed hover:border-red-900 hover:text-red-900 hover:bg-transparent"
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         onRemover();
@@ -171,13 +182,20 @@ export default function BarraPasta({ paineis, ativoId, onSelecionar, onAdicionar
 
     return (
         <div className="z-20 flex w-full flex-row items-end justify-between dark:mb-2">
-            <div className="z-10 flex flex-row items-end gap-2">
+            <div
+                onWheel={(e) => {
+                    if (e.deltaY !== 0 && e.currentTarget.scrollWidth > e.currentTarget.clientWidth) {
+                        e.currentTarget.scrollLeft += e.deltaY;
+                    }
+                }}
+                className="no-scrollbar z-10 flex min-w-0 flex-1 flex-row items-end gap-2 overflow-x-auto pt-10 pb-0 -mt-10 dark:pt-0 dark:mt-0 dark:pb-0"
+            >
                 <Link
                     to="/"
                     title="Voltar para o Dossiê"
                     className={cn(ABA_BASE, ABA_INATIVA, "z-30 w-28 items-start sm:w-36 xl:w-44")}
                 >
-                    <span className={cn(TEXTO_ABA, "flex items-center gap-1.5 px-1")}>
+                    <span className={cn(TEXTO_ABA, "flex items-center gap-1.5 -ml-2")}>
                         <ArrowLeft className="size-4 shrink-0" />
                         Voltar
                     </span>
@@ -206,12 +224,12 @@ export default function BarraPasta({ paineis, ativoId, onSelecionar, onAdicionar
                 </button>
             </div>
 
-            <div className="flex flex-row items-end gap-1.5 sm:gap-2">
+            <div className="flex shrink-0 flex-row items-end gap-1.5 sm:gap-2 ml-2 mr-2 -mb-1">
                 <Marcador
                     titulo={fullscreen.ativo ? "Sair da Tela Cheia" : "Tela Cheia"}
                     onClick={fullscreen.alternar}
                     ativo={fullscreen.ativo}
-                    className="bg-sky-400/80"
+                    className="bg-orange-400/45"
                 >
                     {fullscreen.ativo ? <Minimize2 className="size-5" /> : <Maximize2 className="size-5" />}
                 </Marcador>
@@ -222,7 +240,7 @@ export default function BarraPasta({ paineis, ativoId, onSelecionar, onAdicionar
                     className={
                         isEstrangeiro
                             ? "bg-emerald-400/80 text-gray-950 dark:text-emerald-400!"
-                            : "bg-amber-400/80 hover:bg-amber-400"
+                            : "bg-emerald-400/45 hover:bg-emerald-400/60"
                     }
                 >
                     {isEstrangeiro ? <Sun className="size-5" /> : <Moon className="size-5" />}

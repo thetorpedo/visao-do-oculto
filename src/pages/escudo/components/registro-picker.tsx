@@ -17,6 +17,17 @@ const ROTULO_CATEGORIA: Record<Categoria, string> = {
     ameacas: "Ameaça",
 };
 
+const ROTULO_PLURAL: Record<Categoria | "todos", string> = {
+    todos: "Todos",
+    ameacas: "Ameaças",
+    poderes: "Poderes",
+    rituais: "Rituais",
+    equipamentos: "Equipamentos",
+    origens: "Origens",
+    trilhas: "Trilhas",
+    regras: "Regras",
+};
+
 const CATEGORIAS: Categoria[] = ["ameacas", "poderes", "rituais", "equipamentos", "origens", "trilhas", "regras"];
 const LIMITE_RESULTADOS = 100;
 
@@ -183,7 +194,7 @@ export default function RegistroPicker({
                             className={cn("border-solid uppercase tracking-wide", estiloFiltro(categoriaFiltro === cat))}
                             onClick={() => alterarCategoria(cat)}
                         >
-                            {cat === "todos" ? "Todos" : `${ROTULO_CATEGORIA[cat]}s`}
+                            {ROTULO_PLURAL[cat]}
                         </Button>
                     ))}
                 </div>
@@ -206,7 +217,7 @@ export default function RegistroPicker({
                             >
                                 <PaperDiv
                                     className={cn(
-                                        "flex flex-col px-3 py-2.5 text-left shadow-none! transition-all",
+                                        "flex flex-col px-3 py-2! mb-1 text-left shadow-none! transition-all",
                                         idx === indiceSelecionado
                                             ? "bg-[linear-gradient(rgba(253,224,71,0.22),rgba(253,224,71,0.22)),url(/assets/paper.png)] dark:border-emerald-400! dark:bg-[linear-gradient(rgba(34,197,94,0.28),rgba(34,197,94,0.28)),url(/assets/paper.png)]"
                                             : "hover:bg-black/5 dark:hover:bg-white/5"
@@ -229,7 +240,7 @@ export default function RegistroPicker({
                                     </div>
 
                                     {item.descricao && (
-                                        <p className="mt-1 line-clamp-1 font-daisy text-xs text-black/70 dark:text-zinc-400">
+                                        <p className="mt-1 line-clamp-1 text-xs text-black/70 dark:text-zinc-400">
                                             {removerMarkdown(item.descricao)}
                                         </p>
                                     )}

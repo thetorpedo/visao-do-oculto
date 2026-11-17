@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type FocusEvent } from "react";
 import { ChevronRight, Heart, Minus, Plus, RotateCcw, Trash2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -26,10 +26,28 @@ const VAZIO: DadosIniciativa = { rodada: 1, turnoId: null, combatentes: [], most
 const SEM_SPINNER =
     "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none";
 
-const PRETO = "bg-gray-900 text-white hover:bg-black dark:border-zinc-700 dark:bg-zinc-900 dark:text-white dark:hover:bg-black";
+const PRETO = "bg-black text-white hover:bg-black dark:border-zinc-700 dark:bg-zinc-900 dark:text-white dark:hover:bg-black border-0";
 const ROTULO_BTN = "h-7 px-2.5 font-special text-[11px] uppercase tracking-wider";
+const ROTULO_COLUNA = "font-daisy text-xs uppercase tracking-tight text-black/60 dark:text-zinc-400";
+const LARGURA_INICIATIVA = "w-[4.75rem]";
+const LARGURA_PV = "w-[9.25rem]";
 
-const inteiro = (texto: string, minimo = -Infinity) => Math.max(minimo, parseInt(texto, 10) || 0);
+const tratarSubstituicaoZero = (novoTexto: string, textoAnterior: string): string => {
+    let val = novoTexto.trim();
+    if (textoAnterior === "0") {
+        if (/^[+-]?[1-9]0$/.test(val)) val = val.slice(0, -1);
+        else if (/^[+-]?0[0-9]+$/.test(val)) val = val.replace(/^([+-]?)0+/, "$1") || "0";
+    } else if (/^[+-]?0[0-9]+$/.test(val)) {
+        val = val.replace(/^([+-]?)0+/, "$1") || "0";
+    }
+    return val;
+};
+
+const selecionarAoFocar = (e: FocusEvent<HTMLInputElement>) => {
+    const el = e.currentTarget;
+    el.select();
+    requestAnimationFrame(() => el.select());
+};
 
 /** Clique = ±1, Shift+clique ou clique direito = ±5. */
 function Passo({ delta, onPasso, titulo }: { delta: 1 | -1; onPasso: (valor: number) => void; titulo: string }) {
@@ -37,7 +55,7 @@ function Passo({ delta, onPasso, titulo }: { delta: 1 | -1; onPasso: (valor: num
 
     return (
         <Button
-            className={cn(PRETO, "h-6 w-5")}
+            className={cn(PRETO, "h-6 w-5 border-0!")}
             title={`${titulo} — clique: ${sinal}1 · direito/Shift: ${sinal}5`}
             aria-label={titulo}
             onClick={(e) => onPasso(e.shiftKey ? delta * 5 : delta)}
@@ -69,7 +87,7 @@ export default function SlotIniciativa({ dados, onChange }: { dados?: DadosInici
         const novo: Combatente = {
             id: crypto.randomUUID(),
             tipo: "jogador",
-            nome: `Combatente ${estado.combatentes.length + 1}`,
+            nome: `Participante ${estado.combatentes.length + 1}`,
             iniciativa: 10,
             pv: 20,
             pvMax: 20,
@@ -105,20 +123,13 @@ export default function SlotIniciativa({ dados, onChange }: { dados?: DadosInici
     return (
         <div className="flex h-full min-h-0 flex-col text-gray-900 dark:text-zinc-100">
             <div className="flex shrink-0 flex-wrap items-center justify-between gap-x-2 gap-y-1 border-b border-black/20 bg-black/5 px-2 py-1.5 dark:border-zinc-800 dark:bg-[#151917]">
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1 h-full ">
                     <div
-                        className="flex items-baseline gap-1 border-2 border-black/40 bg-white/70 px-1.5 py-px dark:border-zinc-600 dark:bg-[#121514]"
-                        title="Rodada atual"
+                        className="flex  gap-1 h-full items-end  border border-dashed  border-black/40 bg-white/50 px-1.5 py-px dark:border-zinc-600 dark:bg-[#121514]"
                     >
-                        <span className="font-special text-[9px] uppercase tracking-widest text-gray-500 dark:text-zinc-400">Rodada</span>
-                        <span className="font-special text-lg font-bold leading-none text-gray-950 dark:text-zinc-100">{estado.rodada}</span>
+                        <span className="font-daisy text-xs -mt-0.5 uppercase tracking-tight text-black/80 dark:text-zinc-400">Rodada</span>
+                        <span className="font-special text-lg  pb-0.5 font-bold leading-none text-gray-950 dark:text-zinc-100">{estado.rodada}</span>
                     </div>
-
-                    {ordenados.length > 0 && (
-                        <Button className={cn(PRETO, ROTULO_BTN, "gap-0.5")} onClick={proximoTurno}>
-                            Próx <ChevronRight className="size-3.5" />
-                        </Button>
-                    )}
 
                     <Button
                         className={cn(PRETO, "size-7")}
@@ -128,6 +139,12 @@ export default function SlotIniciativa({ dados, onChange }: { dados?: DadosInici
                     >
                         <RotateCcw className="size-3" />
                     </Button>
+
+                    {ordenados.length > 0 && (
+                        <Button className={cn(PRETO, ROTULO_BTN, "gap-0.5")} onClick={proximoTurno}>
+                            Próx <ChevronRight className="size-3.5" />
+                        </Button>
+                    )}
                 </div>
 
                 <div className="flex items-center gap-1">
@@ -148,15 +165,16 @@ export default function SlotIniciativa({ dados, onChange }: { dados?: DadosInici
                         PV
                     </Button>
 
-                    <Button className={cn(PRETO, ROTULO_BTN, "gap-1")} title="Adicionar combatente" onClick={adicionar}>
+                    <Button className={cn(PRETO, ROTULO_BTN, "gap-1 border-0")} title="Adicionar participante" onClick={adicionar}>
                         <Plus className="size-3" strokeWidth={3} />
-                        Combatente
+                        Participante
                     </Button>
 
                     {estado.combatentes.length > 0 && (
                         <Button
-                            className={cn(PRETO, "size-7")}
-                            title="Limpar todos os combatentes"
+                            className="size-7"
+                            variant="outline"
+                            title="Limpar todos os participantes"
                             aria-label="Limpar todos"
                             onClick={() => onChange({ ...VAZIO, mostrarPv })}
                         >
@@ -170,24 +188,34 @@ export default function SlotIniciativa({ dados, onChange }: { dados?: DadosInici
                 {ordenados.length === 0 ? (
                     <div className="flex h-full flex-col items-center justify-center p-4 text-center">
                         <p className="mb-1.5 font-special text-xs uppercase tracking-wider text-gray-500 dark:text-zinc-500">
-                            Nenhum combatente
+                            Nenhum participante
                         </p>
                         <p className="max-w-xs text-[11px] text-gray-600 dark:text-zinc-400">
-                            Clique em <strong>+ Combatente</strong> para adicionar.
+                            Clique em <strong>+ Participante</strong> para adicionar.
                         </p>
                     </div>
                 ) : (
-                    ordenados.map((c) => (
-                        <LinhaCombatente
-                            key={c.id}
-                            combatente={c}
-                            isAtivo={turnoAtual?.id === c.id}
-                            mostrarPv={mostrarPv}
-                            onSetTurno={() => onChange({ ...estado, turnoId: c.id })}
-                            onUpdate={(updates) => atualizar(c.id, updates)}
-                            onRemover={() => remover(c.id)}
-                        />
-                    ))
+                    <>
+                        <div className="flex items-end gap-1.5 px-1.5 py-0.5">
+                            <span className="w-4 shrink-0" />
+                            <span className={cn(ROTULO_COLUNA, LARGURA_INICIATIVA, "shrink-0 text-center")}>Iniciativa</span>
+                            <span className={cn(ROTULO_COLUNA, "min-w-0 flex-1 px-1")}>Nome</span>
+                            {mostrarPv && <span className={cn(ROTULO_COLUNA, LARGURA_PV, "shrink-0 text-center")}>Vida</span>}
+                            <span className="w-5 shrink-0" />
+                        </div>
+
+                        {ordenados.map((c) => (
+                            <LinhaCombatente
+                                key={c.id}
+                                combatente={c}
+                                isAtivo={turnoAtual?.id === c.id}
+                                mostrarPv={mostrarPv}
+                                onSetTurno={() => onChange({ ...estado, turnoId: c.id })}
+                                onUpdate={(updates) => atualizar(c.id, updates)}
+                                onRemover={() => remover(c.id)}
+                            />
+                        ))}
+                    </>
                 )}
             </div>
         </div>
@@ -205,22 +233,81 @@ interface LinhaCombatenteProps {
 
 function LinhaCombatente({ combatente, isAtivo, mostrarPv, onSetTurno, onUpdate, onRemover }: LinhaCombatenteProps) {
     const [delta, setDelta] = useState("");
+    const [iniciativaTexto, setIniciativaTexto] = useState(String(combatente.iniciativa));
+    const [pvTexto, setPvTexto] = useState(String(combatente.pv));
+    const [pvMaxTexto, setPvMaxTexto] = useState(String(combatente.pvMax));
+
+    useEffect(() => {
+        setIniciativaTexto(String(combatente.iniciativa));
+    }, [combatente.iniciativa]);
+
+    useEffect(() => {
+        setPvTexto(String(combatente.pv));
+    }, [combatente.pv]);
+
+    useEffect(() => {
+        setPvMaxTexto(String(combatente.pvMax));
+    }, [combatente.pvMax]);
 
     const morto = mostrarPv && combatente.pv <= 0;
     const pctPv = combatente.pvMax > 0 ? Math.max(0, Math.min(100, (combatente.pv / combatente.pvMax) * 100)) : 0;
-
-    const corPv = morto
-        ? "border-red-500 text-red-600 dark:text-red-400"
-        : pctPv <= 25
-        ? "border-red-600/70 text-red-700 dark:text-red-300"
-        : pctPv <= 50
-        ? "border-amber-600/70 text-amber-700 dark:text-amber-300"
-        : "border-emerald-700/60 text-emerald-800 dark:text-emerald-300";
 
     const corBarra = pctPv <= 25 ? "bg-red-500" : pctPv <= 50 ? "bg-amber-500" : "bg-emerald-500";
 
     const mudarPv = (d: number) => onUpdate({ pv: Math.max(0, combatente.pv + d) });
     const mudarIni = (d: number) => onUpdate({ iniciativa: combatente.iniciativa + d });
+
+    const mudarIniciativa = (novo: string) => {
+        setIniciativaTexto(tratarSubstituicaoZero(novo, iniciativaTexto));
+    };
+
+    const salvarIniciativa = () => {
+        const limpo = iniciativaTexto.trim();
+        const num = parseInt(limpo, 10);
+        const valorFinal = isNaN(num) ? combatente.iniciativa : num;
+        setIniciativaTexto(String(valorFinal));
+        if (valorFinal !== combatente.iniciativa) {
+            onUpdate({ iniciativa: valorFinal });
+        }
+    };
+
+    const mudarPvInput = (novo: string) => {
+        const val = tratarSubstituicaoZero(novo, pvTexto);
+        setPvTexto(val);
+        if (val !== "") {
+            onUpdate({ pv: Math.max(0, parseInt(val, 10) || 0) });
+        }
+    };
+
+    const salvarPv = () => {
+        if (pvTexto === "") {
+            setPvTexto("0");
+            onUpdate({ pv: 0 });
+        } else {
+            const num = Math.max(0, parseInt(pvTexto, 10) || 0);
+            setPvTexto(String(num));
+            onUpdate({ pv: num });
+        }
+    };
+
+    const mudarPvMaxInput = (novo: string) => {
+        const val = tratarSubstituicaoZero(novo, pvMaxTexto);
+        setPvMaxTexto(val);
+        if (val !== "") {
+            onUpdate({ pvMax: Math.max(0, parseInt(val, 10) || 0) });
+        }
+    };
+
+    const salvarPvMax = () => {
+        if (pvMaxTexto === "") {
+            setPvMaxTexto("0");
+            onUpdate({ pvMax: 0 });
+        } else {
+            const num = Math.max(0, parseInt(pvMaxTexto, 10) || 0);
+            setPvMaxTexto(String(num));
+            onUpdate({ pvMax: num });
+        }
+    };
 
     const aplicarDelta = () => {
         const texto = delta.trim();
@@ -253,15 +340,29 @@ function LinhaCombatente({ combatente, isAtivo, mostrarPv, onSetTurno, onUpdate,
                 <ChevronRight className="size-4" strokeWidth={3} />
             </Button>
 
-            <div className="flex shrink-0 items-center gap-px" title="Iniciativa (reordena na hora)">
+            <div className={cn("flex shrink-0 items-center", LARGURA_INICIATIVA)} title="Iniciativa (reordena ao sair ou dar Enter)">
                 <Passo delta={-1} onPasso={mudarIni} titulo="Iniciativa −" />
                 <input
                     type="number"
-                    value={combatente.iniciativa}
-                    onChange={(e) => onUpdate({ iniciativa: inteiro(e.target.value) })}
+                    value={iniciativaTexto}
+                    onChange={(e) => mudarIniciativa(e.target.value)}
+                    onFocus={selecionarAoFocar}
+                    onBlur={salvarIniciativa}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                            e.preventDefault();
+                            salvarIniciativa();
+                            e.currentTarget.blur();
+                        } else if (e.key === "Escape") {
+                            e.preventDefault();
+                            setIniciativaTexto(String(combatente.iniciativa));
+                            e.currentTarget.blur();
+                        }
+                    }}
                     aria-label="Iniciativa"
+                    title="Iniciativa — pressione Enter ou clique fora para reordenar"
                     className={cn(
-                        "h-6 w-9 border-2 border-black/40 bg-white/80 text-center font-special text-base font-bold leading-none text-gray-950 outline-none focus:border-black dark:border-zinc-600 dark:bg-[#121514] dark:text-zinc-100 dark:focus:border-zinc-300",
+                        "h-6 w-9 border border-black bg-white/80 text-center font-daisy tracking-tighter text-base font-bold leading-none text-gray-950 outline-none focus:border-black dark:border-zinc-600 dark:bg-[#121514] dark:text-zinc-100 dark:focus:border-zinc-300",
                         SEM_SPINNER
                     )}
                 />
@@ -271,6 +372,11 @@ function LinhaCombatente({ combatente, isAtivo, mostrarPv, onSetTurno, onUpdate,
             <input
                 value={combatente.nome}
                 onChange={(e) => onUpdate({ nome: e.target.value })}
+                onFocus={(e) => {
+                    if (combatente.nome.startsWith("Participante ")) {
+                        selecionarAoFocar(e);
+                    }
+                }}
                 placeholder="Nome..."
                 className={cn(
                     "min-w-0 flex-1 truncate border-b border-transparent bg-transparent px-1 py-0.5 font-special text-sm font-bold text-gray-900 outline-none focus:border-gray-500 dark:text-zinc-100 dark:focus:border-zinc-600",
@@ -279,25 +385,41 @@ function LinhaCombatente({ combatente, isAtivo, mostrarPv, onSetTurno, onUpdate,
             />
 
             {mostrarPv && (
-                <div className="flex shrink-0 items-center gap-px">
+                <div className={cn("flex shrink-0 items-center justify-center", LARGURA_PV)}>
                     <Passo delta={-1} onPasso={mudarPv} titulo="PV −" />
-                    <div className={cn("flex h-6 items-center border-2 bg-white/80 pr-0.5 dark:bg-[#121514]", corPv)}>
+                    <div className="flex h-6 items-center border border-black bg-white/80 pr-0.5 dark:bg-[#121514]">
                         <input
                             type="number"
-                            value={combatente.pv}
-                            onChange={(e) => onUpdate({ pv: inteiro(e.target.value, 0) })}
+                            value={pvTexto}
+                            onChange={(e) => mudarPvInput(e.target.value)}
+                            onFocus={selecionarAoFocar}
+                            onBlur={salvarPv}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    salvarPv();
+                                    e.currentTarget.blur();
+                                }
+                            }}
                             aria-label="PV atual"
                             title="PV atual"
-                            className={cn("h-full w-8 bg-transparent text-center font-special text-base font-bold leading-none outline-none", SEM_SPINNER)}
+                            className={cn("h-full w-8 bg-transparent text-center font-daisy tracking-tighter text-base font-bold leading-none outline-none", SEM_SPINNER)}
                         />
-                        <span className="text-[10px] leading-none text-gray-400 dark:text-zinc-600">/</span>
+                        <span className="text-xs leading-none text-black/60 dark:text-zinc-600">/</span>
                         <input
                             type="number"
-                            value={combatente.pvMax}
-                            onChange={(e) => onUpdate({ pvMax: inteiro(e.target.value, 0) })}
+                            value={pvMaxTexto}
+                            onChange={(e) => mudarPvMaxInput(e.target.value)}
+                            onFocus={selecionarAoFocar}
+                            onBlur={salvarPvMax}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    salvarPvMax();
+                                    e.currentTarget.blur();
+                                }
+                            }}
                             aria-label="PV máximo"
                             title="PV máximo"
-                            className={cn("h-full w-7 bg-transparent text-center font-mono text-[10px] text-gray-500 outline-none dark:text-zinc-400", SEM_SPINNER)}
+                            className={cn("h-full w-7 bg-transparent text-center font-daisy font-bold text-xs text-black/50 outline-none dark:text-zinc-400", SEM_SPINNER)}
                         />
                     </div>
                     <Passo delta={1} onPasso={mudarPv} titulo="PV +" />
@@ -311,7 +433,8 @@ function LinhaCombatente({ combatente, isAtivo, mostrarPv, onSetTurno, onUpdate,
                     >
                         <input
                             value={delta}
-                            onChange={(e) => setDelta(e.target.value)}
+                            onChange={(e) => setDelta(tratarSubstituicaoZero(e.target.value, delta))}
+                            onFocus={selecionarAoFocar}
                             onBlur={aplicarDelta}
                             placeholder="±"
                             title="Ajuste rápido: digite ex. -54 ou +10 e pressione Enter"
@@ -325,8 +448,8 @@ function LinhaCombatente({ combatente, isAtivo, mostrarPv, onSetTurno, onUpdate,
                 variant="ghost"
                 size="icon-xs"
                 className="size-5 text-gray-400 hover:bg-transparent hover:text-gray-950 dark:text-zinc-500 dark:hover:bg-transparent dark:hover:text-zinc-100"
-                title="Remover combatente"
-                aria-label="Remover combatente"
+                title="Remover participante"
+                aria-label="Remover participante"
                 onClick={onRemover}
             >
                 <X className="size-3" />

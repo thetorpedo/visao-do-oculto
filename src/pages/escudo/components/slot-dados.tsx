@@ -1,8 +1,26 @@
 import { Dices, Minus, Plus, RotateCcw, Trash2 } from "lucide-react";
+import { useEffect, useState, type FocusEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import IconeDado from "./icone-dado";
+
+const tratarSubstituicaoZero = (novoTexto: string, textoAnterior: string): string => {
+    let val = novoTexto.trim();
+    if (textoAnterior === "0") {
+        if (/^[+-]?[1-9]0$/.test(val)) val = val.slice(0, -1);
+        else if (/^[+-]?0[0-9]+$/.test(val)) val = val.replace(/^([+-]?)0+/, "$1") || "0";
+    } else if (/^[+-]?0[0-9]+$/.test(val)) {
+        val = val.replace(/^([+-]?)0+/, "$1") || "0";
+    }
+    return val;
+};
+
+const selecionarAoFocar = (e: FocusEvent<HTMLInputElement>) => {
+    const el = e.currentTarget;
+    el.select();
+    requestAnimationFrame(() => el.select());
+};
 
 const DADOS_DISPONIVEIS = [20, 4, 6, 8, 10, 12, 100] as const;
 const MAX_POR_DADO = 50;
@@ -30,10 +48,6 @@ export interface DadosRolador {
 type Pool = Record<number, number>;
 
 const VAZIO: DadosRolador = { pool: { 20: 1 }, modificador: 0, pegarMelhorD20: true, historico: [] };
-
-const MOD_NEGATIVO = "border-red-700/50 bg-red-500/10 text-red-800 hover:bg-red-500/25 dark:border-red-500/50 dark:text-red-300";
-const MOD_POSITIVO =
-    "border-emerald-700/50 bg-emerald-500/10 text-emerald-800 hover:bg-emerald-500/25 dark:border-emerald-500/50 dark:text-emerald-300";
 
 const entradasOrdenadas = (pool: Pool): [number, number][] =>
     DADOS_DISPONIVEIS.filter((f) => (pool[f] ?? 0) > 0).map((f) => [f, pool[f]]);
@@ -123,11 +137,11 @@ function SeletorDado({ faces, qtd, onAjustar }: { faces: number; qtd: number; on
                         ativo ? "text-amber-800 dark:text-emerald-400" : "text-gray-500 dark:text-zinc-500"
                     )}
                 />
-                <span className="font-special text-[10px] font-bold uppercase leading-none">d{faces}</span>
+                <span className="font-daisy text-sm font-bold uppercase leading-none">d{faces}</span>
             </button>
 
             {ativo && (
-                <span className="pointer-events-none absolute -right-1 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-amber-700 px-1 font-mono text-[10px] font-bold text-white shadow dark:bg-emerald-500 dark:text-zinc-950">
+                <span className="pointer-events-none absolute -right-1 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-amber-700 px-1 font-mono font-bold text-[10px]  text-white shadow dark:bg-emerald-500 dark:text-zinc-950">
                     {qtd}
                 </span>
             )}
@@ -135,7 +149,7 @@ function SeletorDado({ faces, qtd, onAjustar }: { faces: number; qtd: number; on
             <div className="grid grid-cols-2 border-t border-black/15 dark:border-zinc-800">
                 <Button
                     variant="ghost"
-                    className="h-6 border-r border-black/15 hover:bg-red-500/15 hover:text-red-700 disabled:opacity-25 dark:border-zinc-800 dark:hover:bg-red-500/15 dark:hover:text-red-400"
+                    className="h-6 border-r border-l-0! border-b-0! border-t-0! border-black/15 hover:bg-white/50"
                     disabled={!ativo}
                     aria-label={`Remover d${faces}`}
                     onClick={() => onAjustar(-1)}
@@ -144,7 +158,7 @@ function SeletorDado({ faces, qtd, onAjustar }: { faces: number; qtd: number; on
                 </Button>
                 <Button
                     variant="ghost"
-                    className="h-6 hover:bg-emerald-500/15 hover:text-emerald-700 dark:hover:bg-emerald-500/15 dark:hover:text-emerald-300"
+                    className="h-6 border-0! hover:bg-white/50"
                     aria-label={`Adicionar d${faces}`}
                     onClick={() => onAjustar(1)}
                 >
@@ -161,12 +175,12 @@ function Resultado({ rolagem }: { rolagem: Rolagem }) {
     return (
         <div
             className={cn(
-                "flex shrink-0 items-center gap-3 border-2 px-2.5 py-2 transition-all",
+                "flex shrink-0 items-center gap-3 border px-2.5 py-2 transition-all",
                 critico
                     ? "border-amber-600 bg-amber-400/20 dark:border-amber-500 dark:bg-amber-950/40"
                     : desastre
-                    ? "border-red-600 bg-red-400/20 dark:border-red-500 dark:bg-red-950/40"
-                    : "border-black/50 bg-white/80 dark:border-emerald-500/60 dark:bg-[#161a18]"
+                        ? "border-red-600 bg-red-400/20 dark:border-red-500 dark:bg-red-950/40"
+                        : "border-black/50 bg-white/80 dark:border-emerald-500/60 dark:bg-[#161a18]"
             )}
         >
             <div className="min-w-14 text-center font-special text-4xl font-bold leading-none text-gray-950 dark:text-zinc-100">
@@ -228,7 +242,37 @@ export default function SlotDados({ dados, onChange }: { dados?: DadosRolador; o
     const modificador = estado.modificador ?? 0;
     const pegarMelhorD20 = estado.pegarMelhorD20 ?? true;
 
+    const [modTexto, setModTexto] = useState(String(modificador));
+
+    useEffect(() => {
+        setModTexto(String(modificador));
+    }, [modificador]);
+
     const setModificador = (mod: number) => onChange({ ...estado, modificador: mod });
+
+    const mudarModTexto = (novo: string) => {
+        const val = tratarSubstituicaoZero(novo, modTexto);
+        setModTexto(val);
+        if (val === "" || val === "-" || val === "+") {
+            setModificador(0);
+        } else {
+            const num = parseInt(val, 10);
+            if (!isNaN(num)) {
+                setModificador(num);
+            }
+        }
+    };
+
+    const salvarMod = () => {
+        if (modTexto === "" || modTexto === "-" || modTexto === "+") {
+            setModTexto("0");
+            setModificador(0);
+        } else {
+            const num = parseInt(modTexto, 10) || 0;
+            setModTexto(String(num));
+            setModificador(num);
+        }
+    };
 
     const ajustarDado = (faces: number, delta: number) => {
         const atual = pool[faces] ?? 0;
@@ -254,14 +298,14 @@ export default function SlotDados({ dados, onChange }: { dados?: DadosRolador; o
         modificador > 0
             ? "border-emerald-600 bg-emerald-500/15 text-emerald-700 dark:border-emerald-500 dark:text-emerald-300"
             : modificador < 0
-            ? "border-red-600 bg-red-500/15 text-red-700 dark:border-red-500 dark:text-red-300"
-            : "border-gray-400 bg-white/60 text-gray-500 dark:border-zinc-700 dark:bg-[#121514] dark:text-zinc-400";
+                ? "border-red-600 bg-red-500/15 text-red-700 dark:border-red-500 dark:text-red-300"
+                : "border-gray-400 bg-white/60 text-gray-500 dark:border-zinc-700 dark:bg-[#121514] dark:text-zinc-400";
 
     const botaoMod = (delta: number) => (
         <Button
             key={delta}
-            variant="outline"
-            className={cn("h-8 min-w-9 border-solid px-1.5 font-mono text-xs font-bold", delta < 0 ? MOD_NEGATIVO : MOD_POSITIVO)}
+            variant="default"
+            className={cn("h-8 min-w-9 border-solid px-1.5 font-daisy text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-white dark:hover:bg-black")}
             onClick={() => setModificador(modificador + delta)}
         >
             {delta > 0 ? `+${delta}` : `−${Math.abs(delta)}`}
@@ -280,12 +324,21 @@ export default function SlotDados({ dados, onChange }: { dados?: DadosRolador; o
                 <div className="flex items-stretch justify-center gap-1">
                     {[-5, -1].map(botaoMod)}
                     <Input
-                        type="number"
-                        value={modificador}
-                        onChange={(e) => setModificador(parseInt(e.target.value, 10) || 0)}
+                        type="text"
+                        inputMode="numeric"
+                        value={modTexto}
+                        onChange={(e) => mudarModTexto(e.target.value)}
+                        onFocus={selecionarAoFocar}
+                        onBlur={salvarMod}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                salvarMod();
+                                e.currentTarget.blur();
+                            }
+                        }}
                         aria-label="Modificador"
                         className={cn(
-                            "h-8 w-16 border-2 px-0 text-center font-special text-xl font-bold leading-none [appearance:textfield] md:text-xl [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none",
+                            "h-8 w-16 border- px-0 text-center font-daisy text-xl leading-none md:text-xl",
                             corModificador
                         )}
                     />
@@ -297,9 +350,9 @@ export default function SlotDados({ dados, onChange }: { dados?: DadosRolador; o
                         type="checkbox"
                         checked={pegarMelhorD20}
                         onChange={(e) => onChange({ ...estado, pegarMelhorD20: e.target.checked })}
-                        className="size-3.5 cursor-pointer accent-emerald-600"
+                        className="size-3.5 cursor-pointer accent-black dark:accent-emerald-600"
                     />
-                    <span className="font-special text-[10px] uppercase tracking-wide text-gray-800 dark:text-zinc-200">
+                    <span className="font-daisy text-sm uppercase tracking-tight text-gray-800 dark:text-zinc-200">
                         Manter maior d20
                     </span>
                 </label>
@@ -307,18 +360,19 @@ export default function SlotDados({ dados, onChange }: { dados?: DadosRolador; o
 
             <div className="flex shrink-0 gap-1.5">
                 <Button
-                    className="h-auto min-w-0 flex-1 gap-2 border-black/50 py-2 uppercase tracking-widest shadow-md dark:border-emerald-500/60 dark:bg-emerald-600 dark:text-white dark:hover:bg-emerald-500"
+                    variant="default"
+                    className="w-full shrink border-0 dark:bg-[#273a2f] dark:text-emerald-200"
                     title={`Rolar ${equacao}`}
                     onClick={rolar}
                 >
                     <Dices className="shrink-0" />
                     <span className="shrink-0">Rolar</span>
-                    <span className="truncate font-mono normal-case tracking-normal opacity-80">{equacao}</span>
+                    <span className="truncate font-mono bg-white/20 dark:bg-black/20 px-2 normal-case tracking-normal opacity-80">{equacao}</span>
                 </Button>
                 <Button
                     variant="outline"
                     size="icon"
-                    className="h-auto w-9 border-solid border-black/30 hover:border-red-700/60 hover:bg-red-500/10 hover:text-red-700 dark:border-zinc-700 dark:hover:text-red-400"
+                    className="h-auto"
                     disabled={totalDados === 0 && modificador === 0}
                     title="Zerar dados e bônus"
                     aria-label="Reset"
@@ -333,8 +387,8 @@ export default function SlotDados({ dados, onChange }: { dados?: DadosRolador; o
             {estado.historico.length > 1 && (
                 <div className="shrink-0">
                     <div className="mb-1 flex items-center justify-between border-b border-black/15 pb-1 dark:border-zinc-800">
-                        <span className="font-special text-[10px] uppercase tracking-wider text-gray-500 dark:text-zinc-400">
-                            Histórico Recente
+                        <span className="font-special text-xs  text-gray-500 dark:text-zinc-400">
+                            Histórico
                         </span>
                         <Button
                             variant="ghost"

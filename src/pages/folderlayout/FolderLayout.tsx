@@ -70,11 +70,14 @@ const SIDE_MARKERS: SideMarkerItem[] = [
 
 const ALL_MOBILE_LINKS: NavItem[] = [
   ...NAV_LINKS,
-  { to: "/escudo", label: "ESCUDO" },
   { to: "/fontes", label: "FONTES" },
   { to: "/colecoes", label: "COLEÇÕES" },
   { to: "/configuracoes", label: "Configurações" },
 ];
+
+const MOBILE_SIDE_MARKERS: SideMarkerItem[] = SIDE_MARKERS.filter(
+  (marker) => marker.to !== "/escudo"
+);
 
 function DesktopTab({
   to,
@@ -254,8 +257,8 @@ export default function FolderLayout() {
               </div>
 
               <div className="mt-4 border-t-2 border-dashed border-gray-400 pt-3">
-                <div className="grid grid-cols-2 xs:grid-cols-4 gap-2">
-                  {SIDE_MARKERS.map(({ to, label, icon: Icon, activeColor, inactiveColor }) => (
+                <div className="grid grid-cols-3 gap-2">
+                  {MOBILE_SIDE_MARKERS.map(({ to, label, icon: Icon, activeColor, inactiveColor }) => (
                     <NavLink
                       key={to}
                       to={to}

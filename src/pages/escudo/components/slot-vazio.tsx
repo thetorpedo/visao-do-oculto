@@ -1,41 +1,112 @@
-import { FilePlus2 } from "lucide-react";
+import type { DragEvent } from "react";
+import {
+    ArrowDown,
+    ArrowLeft,
+    ArrowRight,
+    ArrowUp,
+    FilePlus2,
+    GripVertical,
+    TableCellsSplit,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { TipoEspecial } from "@/hooks/useEscudo";
+import type { OpcaoMesclagem, TipoEspecial } from "@/hooks/useEscudo";
 import { ESPECIAIS } from "./slot-tipos";
 
-export default function SlotVazio({
-    onAdicionarRegistro,
-    onAdicionarEspecial,
-}: {
+interface SlotVazioProps {
+    colSpan: number;
+    rowSpan: number;
+    opcoesMesclagem: OpcaoMesclagem[];
     onAdicionarRegistro: () => void;
     onAdicionarEspecial: (tipo: TipoEspecial) => void;
-}) {
+    onMesclar: (direcao: "baixo" | "cima" | "direita" | "esquerda") => void;
+    onSeparar: () => void;
+    onDragStart: (e: DragEvent) => void;
+    onDragEnd?: () => void;
+}
+
+export default function SlotVazio({
+    colSpan,
+    rowSpan,
+    opcoesMesclagem,
+    onAdicionarRegistro,
+    onAdicionarEspecial,
+    onMesclar,
+    onSeparar,
+    onDragStart,
+    onDragEnd,
+}: SlotVazioProps) {
+    const isMerged = colSpan > 1 || rowSpan > 1;
+
     return (
-        <div className="flex h-full flex-col items-center justify-center p-4 text-center">
+        <div className="relative flex h-full min-h-0 flex-col items-center justify-center p-3 text-center sm:p-4">
+            {/* Barra superior de controle do slot vazio */}
+            <div className="absolute top-1.5 left-1.5 right-1.5 flex items-center justify-between">
+                <div
+                    draggable
+                    onDragStart={onDragStart}
+                    onDragEnd={onDragEnd}
+                    className="flex size-6 cursor-grab items-center justify-center rounded text-black/35 hover:bg-black/5 hover:text-black active:cursor-grabbing dark:text-zinc-500 dark:hover:bg-white/5 dark:hover:text-zinc-200"
+                    title="Arraste para mover ou trocar este slot"
+                >
+                    <GripVertical className="size-4" />
+                </div>
+            </div>
+
             <div className="w-full max-w-72 space-y-2.5">
                 <Button
-                    variant="outline"
-                    className="w-full border-solid border-black/40 bg-white/40 uppercase tracking-wider text-gray-900 shadow-xs hover:bg-white/60 dark:border-zinc-700 dark:bg-black/30 dark:text-zinc-100 dark:hover:bg-black/50"
+                    className="w-full"
                     onClick={onAdicionarRegistro}
                 >
-                    <FilePlus2 className="text-gray-800 dark:text-emerald-400" />
-                    Adicionar Registro
+                    <FilePlus2 className="" />
+                    Selecionar Registro
                 </Button>
 
                 <div className="grid grid-cols-2 gap-1.5">
-                    {ESPECIAIS.map(({ tipo, rotulo, descricao, icone: Icone, cor }) => (
+                    {ESPECIAIS.map(({ tipo, rotulo, descricao, icone: Icone }) => (
                         <Button
                             key={tipo}
-                            variant="outline"
+                            variant="default"
                             title={descricao}
-                            className="h-auto flex-col gap-1 border-solid border-black/25 bg-white/30 px-1 py-1.5 text-[10px] uppercase tracking-wider text-gray-800 hover:bg-white/60 dark:border-zinc-700 dark:bg-black/25 dark:text-zinc-200 dark:hover:bg-white/10"
                             onClick={() => onAdicionarEspecial(tipo)}
                         >
-                            <Icone className={`size-3.5 ${cor}`} />
+                            <Icone className={`size-3.5`} />
                             {rotulo}
                         </Button>
                     ))}
                 </div>
+
+                {/* Opções de Mesclagem / Separação */}
+                {(isMerged || opcoesMesclagem.length > 0) && (
+                    <div className="space-y-2 pt-2 ">
+                        {isMerged && (
+                            <Button
+                                variant="outline"
+                                className="w-full"
+                                size="sm"
+                                onClick={onSeparar}
+                            >
+                                <TableCellsSplit className="size-3.5 shrink-0" />
+                                Separar slot
+                            </Button>
+                        )}
+
+                        {opcoesMesclagem.map((op) => (
+                            <Button
+                                key={op.direcao}
+                                variant="outline"
+                                size="sm"
+                                className="w-full"
+                                onClick={() => onMesclar(op.direcao)}
+                            >
+                                {op.direcao === "baixo" && <ArrowDown className="size-3 shrink-0" />}
+                                {op.direcao === "direita" && <ArrowRight className="size-3 shrink-0" />}
+                                {op.direcao === "cima" && <ArrowUp className="size-3 shrink-0" />}
+                                {op.direcao === "esquerda" && <ArrowLeft className="size-3 shrink-0" />}
+                                {op.rotulo}
+                            </Button>
+                        ))}
+                    </div>
+                )}
             </div>
         </div>
     );
