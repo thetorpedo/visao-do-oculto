@@ -1,5 +1,5 @@
-import { Activity, BookOpen, Dices, FileText, ListChevronsUpDown, type LucideIcon } from "lucide-react";
-import type { TipoEspecial } from "@/hooks/useEscudo";
+import { BookOpen, Dices, FileText, ListChevronsUpDown, type LucideIcon } from "lucide-react";
+import type { TipoEspecial } from "@/hooks/use-escudo";
 
 export interface InfoEspecial {
     tipo: TipoEspecial;

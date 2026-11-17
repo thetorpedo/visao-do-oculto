@@ -6,6 +6,7 @@ import { useData, type Categoria } from "@/context/DataContext";
 import { cn } from "@/lib/utils";
 import FolderDiv from "@/components/ui/folder-div";
 import PaperDiv from "@/components/ui/paper-div";
+import { normalizarTexto, removerMarkdown } from "../escudo-utils";
 
 const ROTULO_CATEGORIA: Record<Categoria, string> = {
     poderes: "Poder",
@@ -28,11 +29,17 @@ const ROTULO_PLURAL: Record<Categoria | "todos", string> = {
     regras: "Regras",
 };
 
-const CATEGORIAS: Categoria[] = ["ameacas", "poderes", "rituais", "equipamentos", "origens", "trilhas", "regras"];
-const LIMITE_RESULTADOS = 100;
+const CATEGORIAS: Categoria[] = [
+    "ameacas",
+    "poderes",
+    "rituais",
+    "equipamentos",
+    "origens",
+    "trilhas",
+    "regras",
+];
 
-const normalizar = (s: string) => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-const removerMarkdown = (texto: string) => texto.replace(/[*_#]/g, "");
+const LIMITE_RESULTADOS = 100;
 
 interface Registro {
     id: string;
@@ -50,101 +57,121 @@ interface Registro {
 interface ItemBusca {
     id: string;
     nome: string;
+    nomeNormalizado: string;
     categoria: Categoria;
     descricao?: string | null;
+    descricaoNormalizada: string;
     fonteLivro?: string;
 }
 
-function descricaoDoItem(categoria: Categoria, i: Registro): string | null | undefined {
+function descricaoDoItem(categoria: Categoria, item_registro: Registro): string | null | undefined {
     if (categoria === "ameacas") {
-        return `VD ${i.vd} • ${i.tipo} • ${i.tamanho}${i.apresentacao ? ` — ${i.apresentacao}` : ""}`;
+        return `VD ${item_registro.vd} • ${item_registro.tipo} • ${item_registro.tamanho}${item_registro.apresentacao ? ` — ${item_registro.apresentacao}` : ""}`;
     }
     if (categoria === "rituais") {
-        return `${(i.elemento ?? []).join("/")} ${i.circulo ?? ""} • ${i.descricao ?? ""}`;
+        return `${(item_registro.elemento ?? []).join("/")} ${item_registro.circulo ?? ""} • ${item_registro.descricao ?? ""}`;
     }
-    return i.descricao;
+    return item_registro.descricao;
 }
 
-const estiloFiltro = (ativo: boolean) =>
-    ativo
+function obterEstiloFiltro(is_ativo: boolean): string {
+    return is_ativo
         ? "border-black bg-black text-white hover:bg-black dark:border-emerald-500/60 dark:bg-emerald-500/20 dark:text-emerald-300"
         : "border-black/20 bg-white/40 text-black/70 hover:bg-white dark:border-zinc-800 dark:bg-[#121514] dark:text-zinc-400 dark:hover:bg-[#121514]";
+}
 
-export default function RegistroPicker({
-    onSelect,
-    onClose,
-}: {
+interface RegistroPickerProps {
     onSelect: (categoria: Categoria, itemId: string) => void;
     onClose: () => void;
-}) {
+}
+
+export default function RegistroPicker({ onSelect, onClose }: RegistroPickerProps) {
     const { poderes, rituais, equipamentos, origens, trilhas, regras, ameacas } = useData();
-    const [categoriaFiltro, setCategoriaFiltro] = useState<Categoria | "todos">("todos");
+    const [categoria_filtro, setCategoriaFiltro] = useState<Categoria | "todos">("todos");
     const [busca, setBusca] = useState("");
-    const [indiceSelecionado, setIndiceSelecionado] = useState(0);
-    const inputRef = useRef<HTMLInputElement>(null);
-    const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
+    const [indice_selecionado, setIndiceSelecionado] = useState(0);
+    const input_ref = useRef<HTMLInputElement>(null);
+    const item_refs = useRef<(HTMLDivElement | null)[]>([]);
 
     useEffect(() => {
-        inputRef.current?.focus();
+        input_ref.current?.focus();
     }, []);
 
     useEffect(() => {
-        const aoPressionar = (e: KeyboardEvent) => {
+        const aoPressionarTecla = (e: KeyboardEvent) => {
             if (e.key === "Escape") onClose();
         };
-        window.addEventListener("keydown", aoPressionar);
-        return () => window.removeEventListener("keydown", aoPressionar);
+        window.addEventListener("keydown", aoPressionarTecla);
+        return () => window.removeEventListener("keydown", aoPressionarTecla);
     }, [onClose]);
 
-    const todosItens = useMemo<ItemBusca[]>(() => {
-        const listas = { ameacas, poderes, rituais, equipamentos, origens, trilhas, regras } as unknown as Record<
-            Categoria,
-            Registro[]
-        >;
+    const todos_itens = useMemo<ItemBusca[]>(() => {
+        const dados_listas = {
+            ameacas,
+            poderes,
+            rituais,
+            equipamentos,
+            origens,
+            trilhas,
+            regras,
+        } as unknown as Record<Categoria, Registro[]>;
+
         return CATEGORIAS.flatMap((categoria) =>
-            listas[categoria].map((i) => ({
-                id: i.id,
-                nome: i.nome,
-                categoria,
-                descricao: descricaoDoItem(categoria, i),
-                fonteLivro: i.fonteLivro,
-            }))
+            dados_listas[categoria].map((item_registro) => {
+                const desc = descricaoDoItem(categoria, item_registro);
+                return {
+                    id: item_registro.id,
+                    nome: item_registro.nome,
+                    nomeNormalizado: normalizarTexto(item_registro.nome),
+                    categoria,
+                    descricao: desc,
+                    descricaoNormalizada: normalizarTexto(desc ?? ""),
+                    fonteLivro: item_registro.fonteLivro,
+                };
+            })
         );
     }, [poderes, rituais, equipamentos, origens, trilhas, regras, ameacas]);
 
     const resultados = useMemo(() => {
-        const termo = normalizar(busca.trim());
-        const lista = todosItens.filter(
-            (i) =>
-                (categoriaFiltro === "todos" || i.categoria === categoriaFiltro) &&
-                (!termo || normalizar(i.nome).includes(termo) || normalizar(i.descricao ?? "").includes(termo))
-        );
+        const termo_busca = normalizarTexto(busca.trim());
 
-        return lista.sort((a, b) => {
-            if (termo) {
-                const aInicio = normalizar(a.nome).startsWith(termo);
-                const bInicio = normalizar(b.nome).startsWith(termo);
-                if (aInicio !== bInicio) return aInicio ? -1 : 1;
+        const lista_filtrada = todos_itens.filter((item) => {
+            const corresponde_categoria =
+                categoria_filtro === "todos" || item.categoria === categoria_filtro;
+            if (!corresponde_categoria) return false;
+
+            if (!termo_busca) return true;
+            return (
+                item.nomeNormalizado.includes(termo_busca) ||
+                item.descricaoNormalizada.includes(termo_busca)
+            );
+        });
+
+        return lista_filtrada.sort((a, b) => {
+            if (termo_busca) {
+                const a_inicia = a.nomeNormalizado.startsWith(termo_busca);
+                const b_inicia = b.nomeNormalizado.startsWith(termo_busca);
+                if (a_inicia !== b_inicia) return a_inicia ? -1 : 1;
             }
             return a.nome.localeCompare(b.nome);
         });
-    }, [todosItens, categoriaFiltro, busca]);
+    }, [todos_itens, categoria_filtro, busca]);
 
     useEffect(() => {
-        itemRefs.current[indiceSelecionado]?.scrollIntoView({ block: "nearest" });
-    }, [indiceSelecionado]);
+        item_refs.current[indice_selecionado]?.scrollIntoView({ block: "nearest" });
+    }, [indice_selecionado]);
 
-    const alterarBusca = (valor: string) => {
-        setBusca(valor);
+    const alterarBusca = (novo_termo: string) => {
+        setBusca(novo_termo);
         setIndiceSelecionado(0);
     };
 
-    const alterarCategoria = (categoria: Categoria | "todos") => {
-        setCategoriaFiltro(categoria);
+    const alterarCategoria = (nova_categoria: Categoria | "todos") => {
+        setCategoriaFiltro(nova_categoria);
         setIndiceSelecionado(0);
     };
 
-    const aoDigitar = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const tratarTeclado = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (resultados.length === 0) return;
 
         if (e.key === "ArrowDown" || e.key === "ArrowUp") {
@@ -153,8 +180,8 @@ export default function RegistroPicker({
             setIndiceSelecionado((prev) => (prev + passo + resultados.length) % resultados.length);
         } else if (e.key === "Enter") {
             e.preventDefault();
-            const ativo = resultados[indiceSelecionado] ?? resultados[0];
-            onSelect(ativo.categoria, ativo.id);
+            const item_ativo = resultados[indice_selecionado] ?? resultados[0];
+            onSelect(item_ativo.categoria, item_ativo.id);
         }
     };
 
@@ -166,13 +193,13 @@ export default function RegistroPicker({
                 <div className="flex shrink-0 items-center border-2 border-dashed border-black/40 bg-black/5 px-4 py-2 text-black/90 dark:border-zinc-700 dark:bg-black/30 dark:text-zinc-100">
                     <Search className="mr-2.5 size-4 shrink-0 text-black/70 dark:text-emerald-400" />
                     <input
-                        ref={inputRef}
+                        ref={input_ref}
                         type="text"
                         placeholder="Pesquisar registros para o slot do escudo..."
                         className="grow bg-transparent font-special text-sm text-black/90 outline-none placeholder:text-black/40 dark:text-zinc-100 dark:placeholder:text-zinc-500"
                         value={busca}
                         onChange={(e) => alterarBusca(e.target.value)}
-                        onKeyDown={aoDigitar}
+                        onKeyDown={tratarTeclado}
                     />
                     <Button
                         variant="ghost"
@@ -191,7 +218,10 @@ export default function RegistroPicker({
                             key={cat}
                             variant="outline"
                             size="xs"
-                            className={cn("border-solid uppercase tracking-wide", estiloFiltro(categoriaFiltro === cat))}
+                            className={cn(
+                                "border-solid uppercase tracking-wide",
+                                obterEstiloFiltro(categoria_filtro === cat)
+                            )}
                             onClick={() => alterarCategoria(cat)}
                         >
                             {ROTULO_PLURAL[cat]}
@@ -209,7 +239,7 @@ export default function RegistroPicker({
                             <div
                                 key={`${item.categoria}-${item.id}`}
                                 ref={(el) => {
-                                    itemRefs.current[idx] = el;
+                                    item_refs.current[idx] = el;
                                 }}
                                 onMouseEnter={() => setIndiceSelecionado(idx)}
                                 onClick={() => onSelect(item.categoria, item.id)}
@@ -217,8 +247,8 @@ export default function RegistroPicker({
                             >
                                 <PaperDiv
                                     className={cn(
-                                        "flex flex-col px-3 py-2! mb-1 text-left shadow-none! transition-all",
-                                        idx === indiceSelecionado
+                                        "mb-1 flex flex-col px-3 py-2! text-left shadow-none! transition-all",
+                                        idx === indice_selecionado
                                             ? "bg-[linear-gradient(rgba(253,224,71,0.22),rgba(253,224,71,0.22)),url(/assets/paper.png)] dark:border-emerald-400! dark:bg-[linear-gradient(rgba(34,197,94,0.28),rgba(34,197,94,0.28)),url(/assets/paper.png)]"
                                             : "hover:bg-black/5 dark:hover:bg-white/5"
                                     )}

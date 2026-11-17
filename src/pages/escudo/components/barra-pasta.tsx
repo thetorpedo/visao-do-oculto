@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useUI } from "@/context/UiContext";
 import { cn } from "@/lib/utils";
-import type { Painel } from "@/hooks/useEscudo";
+import type { Painel } from "@/hooks/use-escudo";
 
 const ABA_BASE =
     "relative flex cursor-pointer items-start justify-center rounded-t-lg bg-[url(/assets/folder.jpg)] bg-size-[240%] bg-blend-overlay pt-3.5 font-special transition-all shrink-0 dark:m-0! dark:h-11! dark:items-center! dark:rounded-none! dark:border dark:bg-none dark:pt-0!";
@@ -17,39 +17,38 @@ const TEXTO_ABA =
     "truncate font-special text-xs uppercase tracking-wider text-black/80 sm:text-sm xl:text-xl dark:text-zinc-200";
 
 function useFullscreen() {
-    const [ativo, setAtivo] = useState(false);
+    const [is_ativo, setIsAtivo] = useState(false);
 
     useEffect(() => {
-        const atualizar = () => setAtivo(Boolean(document.fullscreenElement));
+        const atualizar = () => setIsAtivo(Boolean(document.fullscreenElement));
         document.addEventListener("fullscreenchange", atualizar);
         return () => document.removeEventListener("fullscreenchange", atualizar);
     }, []);
 
-    const alternar = async () => {
+    const alternarFullscreen = async () => {
         try {
-            if (document.fullscreenElement) await document.exitFullscreen();
-            else await document.documentElement.requestFullscreen();
-        } catch (err) {
-            console.error("Erro ao alternar tela cheia:", err);
+            if (document.fullscreenElement) {
+                await document.exitFullscreen();
+            } else {
+                await document.documentElement.requestFullscreen();
+            }
+        } catch (erro) {
+            console.error("Erro ao alternar tela cheia:", erro);
         }
     };
 
-    return { ativo, alternar };
+    return { isAtivo: is_ativo, alternar: alternarFullscreen };
 }
 
-function Marcador({
-    titulo,
-    onClick,
-    ativo = false,
-    className,
-    children,
-}: {
+interface MarcadorProps {
     titulo: string;
     onClick: () => void;
     ativo?: boolean;
     className?: string;
     children: ReactNode;
-}) {
+}
+
+function Marcador({ titulo, onClick, ativo = false, className, children }: MarcadorProps) {
     return (
         <button
             type="button"
@@ -78,66 +77,83 @@ interface MesaTabProps {
     onRenomear: (nome: string) => void;
 }
 
-function MesaTab({ painel, indice, ativo, podeRemover, onSelecionar, onRemover, onRenomear }: MesaTabProps) {
-    const tabRef = useRef<HTMLDivElement>(null);
-    const [editando, setEditando] = useState(false);
-    const [nome, setNome] = useState(painel.nome);
+function MesaTab({
+    painel,
+    indice,
+    ativo,
+    podeRemover,
+    onSelecionar,
+    onRemover,
+    onRenomear,
+}: MesaTabProps) {
+    const tab_ref = useRef<HTMLDivElement>(null);
+    const [is_editando, setIsEditando] = useState(false);
+    const [nome_painel, setNomePainel] = useState(painel.nome);
 
-    if (!ativo && editando) setEditando(false);
+    if (!ativo && is_editando) setIsEditando(false);
 
     useEffect(() => {
-        if (ativo && tabRef.current) {
-            tabRef.current.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
+        if (ativo && tab_ref.current) {
+            tab_ref.current.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
         }
     }, [ativo]);
 
     const iniciarEdicao = () => {
-        setNome(painel.nome);
-        setEditando(true);
+        setNomePainel(painel.nome);
+        setIsEditando(true);
     };
 
-    const salvar = () => {
-        onRenomear(nome);
-        setEditando(false);
+    const salvarNomePainel = () => {
+        onRenomear(nome_painel);
+        setIsEditando(false);
     };
 
     return (
         <div
-            ref={tabRef}
-            className={cn(ABA_BASE, "w-32 sm:w-40 xl:w-48 shrink-0", ativo ? ABA_ATIVA : ABA_INATIVA)}
+            ref={tab_ref}
+            className={cn(ABA_BASE, "w-32 shrink-0 sm:w-40 xl:w-48", ativo ? ABA_ATIVA : ABA_INATIVA)}
             style={{ zIndex: ativo ? 25 : 20 - indice }}
         >
-            {ativo && editando ? (
-                <div className="flex w-full items-center h-full gap-1 px-2.5 dark:mt-0">
+            {ativo && is_editando ? (
+                <div className="flex h-full w-full items-center gap-1 px-2.5 dark:mt-0">
                     <Input
                         autoFocus
-                        value={nome}
-                        onChange={(e) => setNome(e.target.value)}
+                        value={nome_painel}
+                        onChange={(e) => setNomePainel(e.target.value)}
                         onFocus={(e) => {
                             const el = e.currentTarget;
                             el.select();
                             requestAnimationFrame(() => el.select());
                         }}
                         onKeyDown={(e) => {
-                            if (e.key === "Enter") salvar();
-                            if (e.key === "Escape") setEditando(false);
+                            if (e.key === "Enter") salvarNomePainel();
+                            if (e.key === "Escape") setIsEditando(false);
                         }}
-                        className="h-10 border text-sm! border-black! bg-black/50 px-2 uppercase tracking-wider text-white dark:border-emerald-500/60 dark:bg-black/40"
+                        className="h-10 border border-black! bg-black/50 px-2 text-sm! uppercase tracking-wider text-white dark:border-emerald-500/60 dark:bg-black/40"
                     />
-                    <Button variant="default" size="icon-sm" className="text-white h-full grow" title="Salvar nome" onClick={salvar}>
+                    <Button
+                        variant="default"
+                        size="icon-sm"
+                        className="h-full grow text-white"
+                        title="Salvar nome"
+                        onClick={salvarNomePainel}
+                    >
                         <Check />
                     </Button>
                 </div>
             ) : (
-                <div onClick={onSelecionar} className="flex h-full w-full select-none items-center justify-between px-3 -mt-1">
+                <div
+                    onClick={onSelecionar}
+                    className="-mt-1 flex h-full w-full select-none items-center justify-between px-3"
+                >
                     <span className={TEXTO_ABA}>{painel.nome}</span>
 
                     {ativo && (
-                        <div className="ml-1 flex shrink-0 gap-1 items-center">
+                        <div className="ml-1 flex shrink-0 items-center gap-1">
                             <Button
                                 variant="ghost"
                                 size="icon-sm"
-                                className="hover:border hover:border-dashed hover:border-black hover:text-black hover:bg-transparent"
+                                className="hover:border hover:border-dashed hover:border-black hover:bg-transparent hover:text-black"
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     iniciarEdicao();
@@ -149,7 +165,7 @@ function MesaTab({ painel, indice, ativo, podeRemover, onSelecionar, onRemover, 
                                 <Button
                                     variant="ghost"
                                     size="icon-sm"
-                                    className="hover:border hover:border-dashed hover:border-red-900 hover:text-red-900 hover:bg-transparent"
+                                    className="hover:border hover:border-dashed hover:border-red-900 hover:bg-transparent hover:text-red-900"
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         onRemover();
@@ -175,42 +191,51 @@ interface BarraPastaProps {
     onRenomear: (id: string, nome: string) => void;
 }
 
-export default function BarraPasta({ paineis, ativoId, onSelecionar, onAdicionar, onRemover, onRenomear }: BarraPastaProps) {
+export default function BarraPasta({
+    paineis,
+    ativoId,
+    onSelecionar,
+    onAdicionar,
+    onRemover,
+    onRenomear,
+}: BarraPastaProps) {
     const { tema, toggleTema } = useUI();
-    const isEstrangeiro = tema === "estrangeiro";
-    const fullscreen = useFullscreen();
+    const is_estrangeiro = tema === "estrangeiro";
+    const fullscreen_control = useFullscreen();
+
+    const handleScrollAbas = (e: React.WheelEvent<HTMLDivElement>) => {
+        if (e.deltaY !== 0 && e.currentTarget.scrollWidth > e.currentTarget.clientWidth) {
+            e.currentTarget.scrollLeft += e.deltaY;
+        }
+    };
 
     return (
         <div className="z-20 flex w-full flex-row items-end justify-between dark:mb-2">
             <div
-                onWheel={(e) => {
-                    if (e.deltaY !== 0 && e.currentTarget.scrollWidth > e.currentTarget.clientWidth) {
-                        e.currentTarget.scrollLeft += e.deltaY;
-                    }
-                }}
-                className="no-scrollbar z-10 flex min-w-0 flex-1 flex-row items-end gap-2 overflow-x-auto pt-10 pb-0 -mt-10 dark:pt-0 dark:mt-0 dark:pb-0"
+                onWheel={handleScrollAbas}
+                className="no-scrollbar -mt-10 z-10 flex min-w-0 flex-1 flex-row items-end gap-2 overflow-x-auto pt-10 pb-0 dark:mt-0 dark:pt-0 dark:pb-0"
             >
                 <Link
                     to="/"
                     title="Voltar para o Dossiê"
-                    className={cn(ABA_BASE, ABA_INATIVA, "z-30 w-28 items-start sm:w-36 xl:w-44")}
+                    className={cn(ABA_BASE, ABA_INATIVA, "-ml-2 z-30 w-28 items-start sm:w-36 xl:w-44")}
                 >
-                    <span className={cn(TEXTO_ABA, "flex items-center gap-1.5 -ml-2")}>
+                    <span className={cn(TEXTO_ABA, "flex items-center gap-1.5")}>
                         <ArrowLeft className="size-4 shrink-0" />
                         Voltar
                     </span>
                 </Link>
 
-                {paineis.map((painel, indice) => (
+                {paineis.map((painel_item, indice) => (
                     <MesaTab
-                        key={painel.id}
-                        painel={painel}
+                        key={painel_item.id}
+                        painel={painel_item}
                         indice={indice}
-                        ativo={painel.id === ativoId}
+                        ativo={painel_item.id === ativoId}
                         podeRemover={paineis.length > 1}
-                        onSelecionar={() => onSelecionar(painel.id)}
-                        onRemover={() => onRemover(painel.id)}
-                        onRenomear={(nome) => onRenomear(painel.id, nome)}
+                        onSelecionar={() => onSelecionar(painel_item.id)}
+                        onRemover={() => onRemover(painel_item.id)}
+                        onRenomear={(nome) => onRenomear(painel_item.id, nome)}
                     />
                 ))}
 
@@ -224,26 +249,30 @@ export default function BarraPasta({ paineis, ativoId, onSelecionar, onAdicionar
                 </button>
             </div>
 
-            <div className="flex shrink-0 flex-row items-end gap-1.5 sm:gap-2 ml-2 mr-2 -mb-1">
+            <div className="-mb-1 mr-2 ml-2 flex shrink-0 flex-row items-end gap-1.5 sm:gap-2">
                 <Marcador
-                    titulo={fullscreen.ativo ? "Sair da Tela Cheia" : "Tela Cheia"}
-                    onClick={fullscreen.alternar}
-                    ativo={fullscreen.ativo}
+                    titulo={fullscreen_control.isAtivo ? "Sair da Tela Cheia" : "Tela Cheia"}
+                    onClick={fullscreen_control.alternar}
+                    ativo={fullscreen_control.isAtivo}
                     className="bg-orange-400/45"
                 >
-                    {fullscreen.ativo ? <Minimize2 className="size-5" /> : <Maximize2 className="size-5" />}
+                    {fullscreen_control.isAtivo ? (
+                        <Minimize2 className="size-5" />
+                    ) : (
+                        <Maximize2 className="size-5" />
+                    )}
                 </Marcador>
 
                 <Marcador
-                    titulo={isEstrangeiro ? "Modo Claro" : "Modo Estrangeiro (Dark)"}
+                    titulo={is_estrangeiro ? "Modo Claro" : "Modo Estrangeiro (Dark)"}
                     onClick={toggleTema}
                     className={
-                        isEstrangeiro
+                        is_estrangeiro
                             ? "bg-emerald-400/80 text-gray-950 dark:text-emerald-400!"
                             : "bg-emerald-400/45 hover:bg-emerald-400/60"
                     }
                 >
-                    {isEstrangeiro ? <Sun className="size-5" /> : <Moon className="size-5" />}
+                    {is_estrangeiro ? <Sun className="size-5" /> : <Moon className="size-5" />}
                 </Marcador>
             </div>
         </div>

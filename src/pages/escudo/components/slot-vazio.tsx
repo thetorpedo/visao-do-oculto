@@ -9,7 +9,7 @@ import {
     TableCellsSplit,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { OpcaoMesclagem, TipoEspecial } from "@/hooks/useEscudo";
+import type { OpcaoMesclagem, TipoEspecial } from "@/hooks/use-escudo";
 import { ESPECIAIS } from "./slot-tipos";
 
 interface SlotVazioProps {
@@ -35,12 +35,11 @@ export default function SlotVazio({
     onDragStart,
     onDragEnd,
 }: SlotVazioProps) {
-    const isMerged = colSpan > 1 || rowSpan > 1;
+    const is_mesclado = colSpan > 1 || rowSpan > 1;
 
     return (
         <div className="relative flex h-full min-h-0 flex-col items-center justify-center p-3 text-center sm:p-4">
-            {/* Barra superior de controle do slot vazio */}
-            <div className="absolute top-1.5 left-1.5 right-1.5 flex items-center justify-between">
+            <div className="absolute top-1.5 right-1.5 left-1.5 flex items-center justify-between">
                 <div
                     draggable
                     onDragStart={onDragStart}
@@ -53,11 +52,8 @@ export default function SlotVazio({
             </div>
 
             <div className="w-full max-w-72 space-y-2.5">
-                <Button
-                    className="w-full"
-                    onClick={onAdicionarRegistro}
-                >
-                    <FilePlus2 className="" />
+                <Button className="w-full" onClick={onAdicionarRegistro}>
+                    <FilePlus2 />
                     Selecionar Registro
                 </Button>
 
@@ -69,16 +65,15 @@ export default function SlotVazio({
                             title={descricao}
                             onClick={() => onAdicionarEspecial(tipo)}
                         >
-                            <Icone className={`size-3.5`} />
+                            <Icone className="size-3.5" />
                             {rotulo}
                         </Button>
                     ))}
                 </div>
 
-                {/* Opções de Mesclagem / Separação */}
-                {(isMerged || opcoesMesclagem.length > 0) && (
-                    <div className="space-y-2 pt-2 ">
-                        {isMerged && (
+                {(is_mesclado || opcoesMesclagem.length > 0) && (
+                    <div className="space-y-2 pt-2">
+                        {is_mesclado && (
                             <Button
                                 variant="outline"
                                 className="w-full"

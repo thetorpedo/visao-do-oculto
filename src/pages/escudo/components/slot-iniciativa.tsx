@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useState, type FocusEvent } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ChevronRight, Heart, Minus, Plus, RotateCcw, Trash2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { selecionarAoFocar, tratarSubstituicaoZero } from "../escudo-utils";
 
 export type TipoCombatente = "jogador" | "inimigo";
 
@@ -26,36 +27,27 @@ const VAZIO: DadosIniciativa = { rodada: 1, turnoId: null, combatentes: [], most
 const SEM_SPINNER =
     "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none";
 
-const PRETO = "bg-black text-white hover:bg-black dark:border-zinc-700 dark:bg-zinc-900 dark:text-white dark:hover:bg-black border-0";
-const ROTULO_BTN = "h-7 px-2.5 font-special text-[11px] uppercase tracking-wider";
-const ROTULO_COLUNA = "font-daisy text-xs uppercase tracking-tight text-black/60 dark:text-zinc-400";
+const ESTILO_BOTAO_PRETO =
+    "border-0 bg-black text-white hover:bg-black dark:border-zinc-700 dark:bg-zinc-900 dark:text-white dark:hover:bg-black";
+const ESTILO_ROTULO_BOTAO = "h-7 px-2.5 font-special text-[11px] uppercase tracking-wider";
+const ESTILO_ROTULO_COLUNA = "font-daisy text-xs uppercase tracking-tight text-black/60 dark:text-zinc-400";
 const LARGURA_INICIATIVA = "w-[4.75rem]";
 const LARGURA_PV = "w-[9.25rem]";
 
-const tratarSubstituicaoZero = (novoTexto: string, textoAnterior: string): string => {
-    let val = novoTexto.trim();
-    if (textoAnterior === "0") {
-        if (/^[+-]?[1-9]0$/.test(val)) val = val.slice(0, -1);
-        else if (/^[+-]?0[0-9]+$/.test(val)) val = val.replace(/^([+-]?)0+/, "$1") || "0";
-    } else if (/^[+-]?0[0-9]+$/.test(val)) {
-        val = val.replace(/^([+-]?)0+/, "$1") || "0";
-    }
-    return val;
-};
-
-const selecionarAoFocar = (e: FocusEvent<HTMLInputElement>) => {
-    const el = e.currentTarget;
-    el.select();
-    requestAnimationFrame(() => el.select());
-};
-
-/** Clique = ±1, Shift+clique ou clique direito = ±5. */
-function Passo({ delta, onPasso, titulo }: { delta: 1 | -1; onPasso: (valor: number) => void; titulo: string }) {
+function Passo({
+    delta,
+    onPasso,
+    titulo,
+}: {
+    delta: 1 | -1;
+    onPasso: (valor: number) => void;
+    titulo: string;
+}) {
     const sinal = delta > 0 ? "+" : "−";
 
     return (
         <Button
-            className={cn(PRETO, "h-6 w-5 border-0!")}
+            className={cn(ESTILO_BOTAO_PRETO, "h-6 w-5 border-0!")}
             title={`${titulo} — clique: ${sinal}1 · direito/Shift: ${sinal}5`}
             aria-label={titulo}
             onClick={(e) => onPasso(e.shiftKey ? delta * 5 : delta)}
@@ -69,79 +61,108 @@ function Passo({ delta, onPasso, titulo }: { delta: 1 | -1; onPasso: (valor: num
     );
 }
 
-export default function SlotIniciativa({ dados, onChange }: { dados?: DadosIniciativa; onChange: (d: DadosIniciativa) => void }) {
-    const estado = dados ?? VAZIO;
-    const mostrarPv = estado.mostrarPv ?? true;
+export default function SlotIniciativa({
+    dados,
+    onChange,
+}: {
+    dados?: DadosIniciativa;
+    onChange: (d: DadosIniciativa) => void;
+}) {
+    const estado_atual = dados ?? VAZIO;
+    const mostrar_pv = estado_atual.mostrarPv ?? true;
 
-    const ordenados = useMemo(
+    const combatentes_ordenados = useMemo(
         () =>
-            [...estado.combatentes].sort((a, b) =>
+            [...estado_atual.combatentes].sort((a, b) =>
                 b.iniciativa !== a.iniciativa ? b.iniciativa - a.iniciativa : a.nome.localeCompare(b.nome)
             ),
-        [estado.combatentes]
+        [estado_atual.combatentes]
     );
 
-    const turnoAtual = ordenados.find((c) => c.id === estado.turnoId) ?? ordenados[0] ?? null;
+    const turno_atual =
+        combatentes_ordenados.find((c) => c.id === estado_atual.turnoId) ?? combatentes_ordenados[0] ?? null;
 
-    const adicionar = () => {
-        const novo: Combatente = {
+    const adicionarCombatente = () => {
+        const novo_combatente: Combatente = {
             id: crypto.randomUUID(),
             tipo: "jogador",
-            nome: `Participante ${estado.combatentes.length + 1}`,
+            nome: `Participante ${estado_atual.combatentes.length + 1}`,
             iniciativa: 10,
             pv: 20,
             pvMax: 20,
         };
-        onChange({ ...estado, combatentes: [...estado.combatentes, novo], turnoId: estado.turnoId ?? novo.id });
+        onChange({
+            ...estado_atual,
+            combatentes: [...estado_atual.combatentes, novo_combatente],
+            turnoId: estado_atual.turnoId ?? novo_combatente.id,
+        });
     };
 
-    const atualizar = (id: string, updates: Partial<Combatente>) =>
+    const atualizarCombatente = (combatente_id: string, atualizacao: Partial<Combatente>) => {
         onChange({
-            ...estado,
-            combatentes: estado.combatentes.map((c) => (c.id === id ? { ...c, ...updates } : c)),
+            ...estado_atual,
+            combatentes: estado_atual.combatentes.map((c) => (c.id === combatente_id ? { ...c, ...atualizacao } : c)),
         });
+    };
 
-    const remover = (id: string) => {
-        const restantes = estado.combatentes.filter((c) => c.id !== id);
+    const removerCombatente = (combatente_id: string) => {
+        const restantes = estado_atual.combatentes.filter((c) => c.id !== combatente_id);
         onChange({
-            ...estado,
+            ...estado_atual,
             combatentes: restantes,
-            turnoId: estado.turnoId === id ? (restantes[0]?.id ?? null) : estado.turnoId,
+            turnoId: estado_atual.turnoId === combatente_id ? (restantes[0]?.id ?? null) : estado_atual.turnoId,
         });
     };
 
-    const proximoTurno = () => {
-        if (!turnoAtual) return;
-        const proximo = (ordenados.findIndex((c) => c.id === turnoAtual.id) + 1) % ordenados.length;
+    const avancarProximoTurno = () => {
+        if (!turno_atual) return;
+        const indice_proximo = (combatentes_ordenados.findIndex((c) => c.id === turno_atual.id) + 1) % combatentes_ordenados.length;
         onChange({
-            ...estado,
-            turnoId: ordenados[proximo].id,
-            rodada: proximo === 0 ? estado.rodada + 1 : estado.rodada,
+            ...estado_atual,
+            turnoId: combatentes_ordenados[indice_proximo].id,
+            rodada: indice_proximo === 0 ? estado_atual.rodada + 1 : estado_atual.rodada,
         });
+    };
+
+    const reiniciarRodada = () => {
+        onChange({ ...estado_atual, rodada: 1, turnoId: combatentes_ordenados[0]?.id ?? null });
+    };
+
+    const alternarExibicaoPv = () => {
+        onChange({ ...estado_atual, mostrarPv: !mostrar_pv });
+    };
+
+    const limparParticipantes = () => {
+        onChange({ ...VAZIO, mostrarPv: mostrar_pv });
     };
 
     return (
         <div className="flex h-full min-h-0 flex-col text-gray-900 dark:text-zinc-100">
             <div className="flex shrink-0 flex-wrap items-center justify-between gap-x-2 gap-y-1 border-b border-black/20 bg-black/5 px-2 py-1.5 dark:border-zinc-800 dark:bg-[#151917]">
-                <div className="flex items-center gap-1 h-full ">
-                    <div
-                        className="flex  gap-1 h-full items-end  border border-dashed  border-black/40 bg-white/50 px-1.5 py-px dark:border-zinc-600 dark:bg-[#121514]"
-                    >
-                        <span className="font-daisy text-xs -mt-0.5 uppercase tracking-tight text-black/80 dark:text-zinc-400">Rodada</span>
-                        <span className="font-special text-lg  pb-0.5 font-bold leading-none text-gray-950 dark:text-zinc-100">{estado.rodada}</span>
+                <div className="flex h-full items-center gap-1">
+                    <div className="flex h-full items-end gap-1 border border-dashed border-black/40 bg-white/50 px-1.5 py-px dark:border-zinc-600 dark:bg-[#121514]">
+                        <span className="-mt-0.5 font-daisy text-xs uppercase tracking-tight text-black/80 dark:text-zinc-400">
+                            Rodada
+                        </span>
+                        <span className="font-special text-lg font-bold leading-none text-gray-950 pb-0.5 dark:text-zinc-100">
+                            {estado_atual.rodada}
+                        </span>
                     </div>
 
                     <Button
-                        className={cn(PRETO, "size-7")}
+                        className={cn(ESTILO_BOTAO_PRETO, "size-7")}
                         title="Reiniciar rodada para 1"
                         aria-label="Reiniciar rodada"
-                        onClick={() => onChange({ ...estado, rodada: 1, turnoId: ordenados[0]?.id ?? null })}
+                        onClick={reiniciarRodada}
                     >
                         <RotateCcw className="size-3" />
                     </Button>
 
-                    {ordenados.length > 0 && (
-                        <Button className={cn(PRETO, ROTULO_BTN, "gap-0.5")} onClick={proximoTurno}>
+                    {combatentes_ordenados.length > 0 && (
+                        <Button
+                            className={cn(ESTILO_BOTAO_PRETO, ESTILO_ROTULO_BOTAO, "gap-0.5")}
+                            onClick={avancarProximoTurno}
+                        >
                             Próx <ChevronRight className="size-3.5" />
                         </Button>
                     )}
@@ -149,34 +170,38 @@ export default function SlotIniciativa({ dados, onChange }: { dados?: DadosInici
 
                 <div className="flex items-center gap-1">
                     <Button
-                        variant={mostrarPv ? "default" : "outline"}
+                        variant={mostrar_pv ? "default" : "outline"}
                         className={cn(
-                            ROTULO_BTN,
+                            ESTILO_ROTULO_BOTAO,
                             "gap-1",
-                            mostrarPv
-                                ? PRETO
+                            mostrar_pv
+                                ? ESTILO_BOTAO_PRETO
                                 : "border-solid border-black/40 text-gray-500 hover:bg-black/10 dark:border-zinc-700 dark:text-zinc-500 dark:hover:bg-white/10"
                         )}
-                        title={mostrarPv ? "Desligar contador de vida" : "Ligar contador de vida"}
-                        aria-pressed={mostrarPv}
-                        onClick={() => onChange({ ...estado, mostrarPv: !mostrarPv })}
+                        title={mostrar_pv ? "Desligar contador de vida" : "Ligar contador de vida"}
+                        aria-pressed={mostrar_pv}
+                        onClick={alternarExibicaoPv}
                     >
-                        <Heart className="size-3" fill={mostrarPv ? "currentColor" : "none"} />
+                        <Heart className="size-3" fill={mostrar_pv ? "currentColor" : "none"} />
                         PV
                     </Button>
 
-                    <Button className={cn(PRETO, ROTULO_BTN, "gap-1 border-0")} title="Adicionar participante" onClick={adicionar}>
+                    <Button
+                        className={cn(ESTILO_BOTAO_PRETO, ESTILO_ROTULO_BOTAO, "gap-1 border-0")}
+                        title="Adicionar participante"
+                        onClick={adicionarCombatente}
+                    >
                         <Plus className="size-3" strokeWidth={3} />
                         Participante
                     </Button>
 
-                    {estado.combatentes.length > 0 && (
+                    {estado_atual.combatentes.length > 0 && (
                         <Button
                             className="size-7"
                             variant="outline"
                             title="Limpar todos os participantes"
                             aria-label="Limpar todos"
-                            onClick={() => onChange({ ...VAZIO, mostrarPv })}
+                            onClick={limparParticipantes}
                         >
                             <Trash2 className="size-3" />
                         </Button>
@@ -185,7 +210,7 @@ export default function SlotIniciativa({ dados, onChange }: { dados?: DadosInici
             </div>
 
             <div className="min-h-0 flex-1 divide-y divide-black/10 overflow-y-auto dark:divide-zinc-800/80">
-                {ordenados.length === 0 ? (
+                {combatentes_ordenados.length === 0 ? (
                     <div className="flex h-full flex-col items-center justify-center p-4 text-center">
                         <p className="mb-1.5 font-special text-xs uppercase tracking-wider text-gray-500 dark:text-zinc-500">
                             Nenhum participante
@@ -198,21 +223,27 @@ export default function SlotIniciativa({ dados, onChange }: { dados?: DadosInici
                     <>
                         <div className="flex items-end gap-1.5 px-1.5 py-0.5">
                             <span className="w-4 shrink-0" />
-                            <span className={cn(ROTULO_COLUNA, LARGURA_INICIATIVA, "shrink-0 text-center")}>Iniciativa</span>
-                            <span className={cn(ROTULO_COLUNA, "min-w-0 flex-1 px-1")}>Nome</span>
-                            {mostrarPv && <span className={cn(ROTULO_COLUNA, LARGURA_PV, "shrink-0 text-center")}>Vida</span>}
+                            <span className={cn(ESTILO_ROTULO_COLUNA, LARGURA_INICIATIVA, "shrink-0 text-center")}>
+                                Iniciativa
+                            </span>
+                            <span className={cn(ESTILO_ROTULO_COLUNA, "min-w-0 flex-1 px-1")}>Nome</span>
+                            {mostrar_pv && (
+                                <span className={cn(ESTILO_ROTULO_COLUNA, LARGURA_PV, "shrink-0 text-center")}>
+                                    Vida
+                                </span>
+                            )}
                             <span className="w-5 shrink-0" />
                         </div>
 
-                        {ordenados.map((c) => (
+                        {combatentes_ordenados.map((combatente_item) => (
                             <LinhaCombatente
-                                key={c.id}
-                                combatente={c}
-                                isAtivo={turnoAtual?.id === c.id}
-                                mostrarPv={mostrarPv}
-                                onSetTurno={() => onChange({ ...estado, turnoId: c.id })}
-                                onUpdate={(updates) => atualizar(c.id, updates)}
-                                onRemover={() => remover(c.id)}
+                                key={combatente_item.id}
+                                combatente={combatente_item}
+                                isAtivo={turno_atual?.id === combatente_item.id}
+                                mostrarPv={mostrar_pv}
+                                onSetTurno={() => onChange({ ...estado_atual, turnoId: combatente_item.id })}
+                                onUpdate={(atualizacao) => atualizarCombatente(combatente_item.id, atualizacao)}
+                                onRemover={() => removerCombatente(combatente_item.id)}
                             />
                         ))}
                     </>
@@ -227,15 +258,22 @@ interface LinhaCombatenteProps {
     isAtivo: boolean;
     mostrarPv: boolean;
     onSetTurno: () => void;
-    onUpdate: (u: Partial<Combatente>) => void;
+    onUpdate: (atualizacao: Partial<Combatente>) => void;
     onRemover: () => void;
 }
 
-function LinhaCombatente({ combatente, isAtivo, mostrarPv, onSetTurno, onUpdate, onRemover }: LinhaCombatenteProps) {
+function LinhaCombatente({
+    combatente,
+    isAtivo,
+    mostrarPv,
+    onSetTurno,
+    onUpdate,
+    onRemover,
+}: LinhaCombatenteProps) {
     const [delta, setDelta] = useState("");
-    const [iniciativaTexto, setIniciativaTexto] = useState(String(combatente.iniciativa));
-    const [pvTexto, setPvTexto] = useState(String(combatente.pv));
-    const [pvMaxTexto, setPvMaxTexto] = useState(String(combatente.pvMax));
+    const [iniciativa_texto, setIniciativaTexto] = useState(String(combatente.iniciativa));
+    const [pv_texto, setPvTexto] = useState(String(combatente.pv));
+    const [pv_max_texto, setPvMaxTexto] = useState(String(combatente.pvMax));
 
     useEffect(() => {
         setIniciativaTexto(String(combatente.iniciativa));
@@ -249,71 +287,77 @@ function LinhaCombatente({ combatente, isAtivo, mostrarPv, onSetTurno, onUpdate,
         setPvMaxTexto(String(combatente.pvMax));
     }, [combatente.pvMax]);
 
-    const morto = mostrarPv && combatente.pv <= 0;
-    const pctPv = combatente.pvMax > 0 ? Math.max(0, Math.min(100, (combatente.pv / combatente.pvMax) * 100)) : 0;
+    const is_morto = mostrarPv && combatente.pv <= 0;
+    const pct_pv =
+        combatente.pvMax > 0 ? Math.max(0, Math.min(100, (combatente.pv / combatente.pvMax) * 100)) : 0;
 
-    const corBarra = pctPv <= 25 ? "bg-red-500" : pctPv <= 50 ? "bg-amber-500" : "bg-emerald-500";
+    const cor_barra = pct_pv <= 25 ? "bg-red-500" : pct_pv <= 50 ? "bg-amber-500" : "bg-emerald-500";
 
-    const mudarPv = (d: number) => onUpdate({ pv: Math.max(0, combatente.pv + d) });
-    const mudarIni = (d: number) => onUpdate({ iniciativa: combatente.iniciativa + d });
+    const mudarPv = (delta_pv: number) => {
+        onUpdate({ pv: Math.max(0, combatente.pv + delta_pv) });
+    };
 
-    const mudarIniciativa = (novo: string) => {
-        setIniciativaTexto(tratarSubstituicaoZero(novo, iniciativaTexto));
+    const mudarIniciativaPasso = (delta_iniciativa: number) => {
+        onUpdate({ iniciativa: combatente.iniciativa + delta_iniciativa });
+    };
+
+    const alterarIniciativa = (novo_valor: string) => {
+        setIniciativaTexto(tratarSubstituicaoZero(novo_valor, iniciativa_texto));
     };
 
     const salvarIniciativa = () => {
-        const limpo = iniciativaTexto.trim();
-        const num = parseInt(limpo, 10);
-        const valorFinal = isNaN(num) ? combatente.iniciativa : num;
-        setIniciativaTexto(String(valorFinal));
-        if (valorFinal !== combatente.iniciativa) {
-            onUpdate({ iniciativa: valorFinal });
+        const texto_limpo = iniciativa_texto.trim();
+        const numero = parseInt(texto_limpo, 10);
+        const valor_final = isNaN(numero) ? combatente.iniciativa : numero;
+        setIniciativaTexto(String(valor_final));
+        if (valor_final !== combatente.iniciativa) {
+            onUpdate({ iniciativa: valor_final });
         }
     };
 
-    const mudarPvInput = (novo: string) => {
-        const val = tratarSubstituicaoZero(novo, pvTexto);
-        setPvTexto(val);
-        if (val !== "") {
-            onUpdate({ pv: Math.max(0, parseInt(val, 10) || 0) });
+    const alterarPvInput = (novo_valor: string) => {
+        const valor_ajustado = tratarSubstituicaoZero(novo_valor, pv_texto);
+        setPvTexto(valor_ajustado);
+        if (valor_ajustado !== "") {
+            onUpdate({ pv: Math.max(0, parseInt(valor_ajustado, 10) || 0) });
         }
     };
 
     const salvarPv = () => {
-        if (pvTexto === "") {
+        if (pv_texto === "") {
             setPvTexto("0");
             onUpdate({ pv: 0 });
         } else {
-            const num = Math.max(0, parseInt(pvTexto, 10) || 0);
-            setPvTexto(String(num));
-            onUpdate({ pv: num });
+            const numero = Math.max(0, parseInt(pv_texto, 10) || 0);
+            setPvTexto(String(numero));
+            onUpdate({ pv: numero });
         }
     };
 
-    const mudarPvMaxInput = (novo: string) => {
-        const val = tratarSubstituicaoZero(novo, pvMaxTexto);
-        setPvMaxTexto(val);
-        if (val !== "") {
-            onUpdate({ pvMax: Math.max(0, parseInt(val, 10) || 0) });
+    const alterarPvMaxInput = (novo_valor: string) => {
+        const valor_ajustado = tratarSubstituicaoZero(novo_valor, pv_max_texto);
+        setPvMaxTexto(valor_ajustado);
+        if (valor_ajustado !== "") {
+            onUpdate({ pvMax: Math.max(0, parseInt(valor_ajustado, 10) || 0) });
         }
     };
 
     const salvarPvMax = () => {
-        if (pvMaxTexto === "") {
+        if (pv_max_texto === "") {
             setPvMaxTexto("0");
             onUpdate({ pvMax: 0 });
         } else {
-            const num = Math.max(0, parseInt(pvMaxTexto, 10) || 0);
-            setPvMaxTexto(String(num));
-            onUpdate({ pvMax: num });
+            const numero = Math.max(0, parseInt(pv_max_texto, 10) || 0);
+            setPvMaxTexto(String(numero));
+            onUpdate({ pvMax: numero });
         }
     };
 
-    const aplicarDelta = () => {
+    const aplicarDeltaPv = () => {
         const texto = delta.trim();
         if (!texto) return;
-        const num = parseInt(texto, 10);
-        if (!isNaN(num)) mudarPv(num);
+        const numero = parseInt(texto, 10);
+        if (!isNaN(numero)) mudarPv(numero);
         setDelta("");
     };
 
@@ -340,12 +384,12 @@ function LinhaCombatente({ combatente, isAtivo, mostrarPv, onSetTurno, onUpdate,
                 <ChevronRight className="size-4" strokeWidth={3} />
             </Button>
 
-            <div className={cn("flex shrink-0 items-center", LARGURA_INICIATIVA)} title="Iniciativa (reordena ao sair ou dar Enter)">
-                <Passo delta={-1} onPasso={mudarIni} titulo="Iniciativa −" />
+            <div className={cn("flex shrink-0 items-center", LARGURA_INICIATIVA)}>
+                <Passo delta={-1} onPasso={mudarIniciativaPasso} titulo="Iniciativa −" />
                 <input
                     type="number"
-                    value={iniciativaTexto}
-                    onChange={(e) => mudarIniciativa(e.target.value)}
+                    value={iniciativa_texto}
+                    onChange={(e) => alterarIniciativa(e.target.value)}
                     onFocus={selecionarAoFocar}
                     onBlur={salvarIniciativa}
                     onKeyDown={(e) => {
@@ -360,13 +404,13 @@ function LinhaCombatente({ combatente, isAtivo, mostrarPv, onSetTurno, onUpdate,
                         }
                     }}
                     aria-label="Iniciativa"
-                    title="Iniciativa — pressione Enter ou clique fora para reordenar"
+                    title="Iniciativa — pressione Enter ou clique fora para salvar"
                     className={cn(
-                        "h-6 w-9 border border-black bg-white/80 text-center font-daisy tracking-tighter text-base font-bold leading-none text-gray-950 outline-none focus:border-black dark:border-zinc-600 dark:bg-[#121514] dark:text-zinc-100 dark:focus:border-zinc-300",
+                        "h-6 w-9 border border-black bg-white/80 text-center font-daisy text-base font-bold leading-none tracking-tighter text-gray-950 outline-none focus:border-black dark:border-zinc-600 dark:bg-[#121514] dark:text-zinc-100 dark:focus:border-zinc-300",
                         SEM_SPINNER
                     )}
                 />
-                <Passo delta={1} onPasso={mudarIni} titulo="Iniciativa +" />
+                <Passo delta={1} onPasso={mudarIniciativaPasso} titulo="Iniciativa +" />
             </div>
 
             <input
@@ -380,7 +424,7 @@ function LinhaCombatente({ combatente, isAtivo, mostrarPv, onSetTurno, onUpdate,
                 placeholder="Nome..."
                 className={cn(
                     "min-w-0 flex-1 truncate border-b border-transparent bg-transparent px-1 py-0.5 font-special text-sm font-bold text-gray-900 outline-none focus:border-gray-500 dark:text-zinc-100 dark:focus:border-zinc-600",
-                    morto && "text-red-600 line-through opacity-50 dark:text-red-400"
+                    is_morto && "text-red-600 line-through opacity-50 dark:text-red-400"
                 )}
             />
 
@@ -390,8 +434,8 @@ function LinhaCombatente({ combatente, isAtivo, mostrarPv, onSetTurno, onUpdate,
                     <div className="flex h-6 items-center border border-black bg-white/80 pr-0.5 dark:bg-[#121514]">
                         <input
                             type="number"
-                            value={pvTexto}
-                            onChange={(e) => mudarPvInput(e.target.value)}
+                            value={pv_texto}
+                            onChange={(e) => alterarPvInput(e.target.value)}
                             onFocus={selecionarAoFocar}
                             onBlur={salvarPv}
                             onKeyDown={(e) => {
@@ -402,13 +446,16 @@ function LinhaCombatente({ combatente, isAtivo, mostrarPv, onSetTurno, onUpdate,
                             }}
                             aria-label="PV atual"
                             title="PV atual"
-                            className={cn("h-full w-8 bg-transparent text-center font-daisy tracking-tighter text-base font-bold leading-none outline-none", SEM_SPINNER)}
+                            className={cn(
+                                "h-full w-8 bg-transparent text-center font-daisy text-base font-bold leading-none tracking-tighter outline-none",
+                                SEM_SPINNER
+                            )}
                         />
                         <span className="text-xs leading-none text-black/60 dark:text-zinc-600">/</span>
                         <input
                             type="number"
-                            value={pvMaxTexto}
-                            onChange={(e) => mudarPvMaxInput(e.target.value)}
+                            value={pv_max_texto}
+                            onChange={(e) => alterarPvMaxInput(e.target.value)}
                             onFocus={selecionarAoFocar}
                             onBlur={salvarPvMax}
                             onKeyDown={(e) => {
@@ -419,7 +466,10 @@ function LinhaCombatente({ combatente, isAtivo, mostrarPv, onSetTurno, onUpdate,
                             }}
                             aria-label="PV máximo"
                             title="PV máximo"
-                            className={cn("h-full w-7 bg-transparent text-center font-daisy font-bold text-xs text-black/50 outline-none dark:text-zinc-400", SEM_SPINNER)}
+                            className={cn(
+                                "h-full w-7 bg-transparent text-center font-daisy text-xs font-bold text-black/50 outline-none dark:text-zinc-400",
+                                SEM_SPINNER
+                            )}
                         />
                     </div>
                     <Passo delta={1} onPasso={mudarPv} titulo="PV +" />
@@ -427,7 +477,7 @@ function LinhaCombatente({ combatente, isAtivo, mostrarPv, onSetTurno, onUpdate,
                     <form
                         onSubmit={(e) => {
                             e.preventDefault();
-                            aplicarDelta();
+                            aplicarDeltaPv();
                         }}
                         className="ml-0.5 flex items-center"
                     >
@@ -435,9 +485,9 @@ function LinhaCombatente({ combatente, isAtivo, mostrarPv, onSetTurno, onUpdate,
                             value={delta}
                             onChange={(e) => setDelta(tratarSubstituicaoZero(e.target.value, delta))}
                             onFocus={selecionarAoFocar}
-                            onBlur={aplicarDelta}
+                            onBlur={aplicarDeltaPv}
                             placeholder="±"
-                            title="Ajuste rápido: digite ex. -54 ou +10 e pressione Enter"
+                            title="Ajuste rápido: digite ex. -10 ou +5 e pressione Enter"
                             className="h-6 w-9 border border-dashed border-gray-500 bg-white/50 text-center font-mono text-[11px] text-gray-800 outline-none placeholder:text-gray-400 focus:border-solid focus:border-black dark:border-zinc-600 dark:bg-[#161a18] dark:text-zinc-200 dark:placeholder:text-zinc-600 dark:focus:border-zinc-300"
                         />
                     </form>
@@ -457,7 +507,7 @@ function LinhaCombatente({ combatente, isAtivo, mostrarPv, onSetTurno, onUpdate,
 
             {mostrarPv && (
                 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-0.5 bg-black/10 dark:bg-white/10">
-                    <div className={cn("h-full transition-all", corBarra)} style={{ width: `${pctPv}%` }} />
+                    <div className={cn("h-full transition-all", cor_barra)} style={{ width: `${pct_pv}%` }} />
                 </div>
             )}
         </div>

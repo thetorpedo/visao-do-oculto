@@ -1,4 +1,4 @@
-import { Download, FileText, Trash2 } from "lucide-react";
+import { Download, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -9,29 +9,31 @@ export interface DadosAnotacoes {
 
 const TITULO_PADRAO = "Título da Anotação";
 
-function baixarTxt(titulo: string, texto: string) {
-    const base = titulo.replace(/[^\w\u00C0-\u017F\s-]/g, "").trim().replace(/\s+/g, "_") || "anotacoes";
-    const url = URL.createObjectURL(new Blob([texto], { type: "text/plain;charset=utf-8" }));
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `${base}.txt`;
-    link.click();
-    URL.revokeObjectURL(url);
+function baixarArquivoTexto(titulo: string, texto: string): void {
+    const nome_base =
+        titulo.replace(/[^\w\u00C0-\u017F\s-]/g, "").trim().replace(/\s+/g, "_") || "anotacoes";
+    const url_arquivo = URL.createObjectURL(new Blob([texto], { type: "text/plain;charset=utf-8" }));
+    const elemento_link = document.createElement("a");
+    elemento_link.href = url_arquivo;
+    elemento_link.download = `${nome_base}.txt`;
+    elemento_link.click();
+    URL.revokeObjectURL(url_arquivo);
 }
 
-export default function SlotAnotacoes({
-    dados,
-    onChange,
-}: {
+interface SlotAnotacoesProps {
     dados?: DadosAnotacoes;
     onChange: (novos: DadosAnotacoes) => void;
-}) {
-    const texto = dados?.texto ?? "";
-    const titulo = dados?.titulo ?? TITULO_PADRAO;
-    const linhas = texto ? texto.split("\n").length : 0;
+}
 
-    const limpar = () => {
-        if (texto.trim() && window.confirm("Deseja realmente limpar todas as anotações desta aba?")) {
+export default function SlotAnotacoes({ dados, onChange }: SlotAnotacoesProps) {
+    const texto_atual = dados?.texto ?? "";
+    const titulo_atual = dados?.titulo ?? TITULO_PADRAO;
+
+    const limparAnotacoes = () => {
+        if (
+            texto_atual.trim() &&
+            window.confirm("Deseja realmente limpar todas as anotações desta aba?")
+        ) {
             onChange({ ...dados, texto: "" });
         }
     };
@@ -41,10 +43,10 @@ export default function SlotAnotacoes({
             <div className="mb-2 flex shrink-0 select-none items-center justify-between gap-2 border-b border-black/15 pb-2 dark:border-zinc-800">
                 <div className="flex min-w-0 flex-1 items-center gap-1.5">
                     <Input
-                        value={titulo}
+                        value={titulo_atual}
                         onChange={(e) => onChange({ ...dados, titulo: e.target.value })}
                         onFocus={(e) => {
-                            if (titulo === TITULO_PADRAO) {
+                            if (titulo_atual === TITULO_PADRAO) {
                                 const el = e.currentTarget;
                                 el.select();
                                 requestAnimationFrame(() => el.select());
@@ -60,18 +62,18 @@ export default function SlotAnotacoes({
                         variant="outline"
                         size="xs"
                         title="Baixar anotações como arquivo .txt"
-                        onClick={() => baixarTxt(titulo, texto)}
+                        onClick={() => baixarArquivoTexto(titulo_atual, texto_atual)}
                     >
                         <Download />
                         Baixar
                     </Button>
 
-                    {texto && (
+                    {texto_atual && (
                         <Button
                             variant="outline"
                             size="icon-xs"
                             title="Limpar texto"
-                            onClick={limpar}
+                            onClick={limparAnotacoes}
                         >
                             <Trash2 />
                         </Button>
@@ -80,13 +82,12 @@ export default function SlotAnotacoes({
             </div>
 
             <textarea
-                value={texto}
+                value={texto_atual}
                 onChange={(e) => onChange({ ...dados, texto: e.target.value })}
                 placeholder="Escreva aqui suas pistas, ideias, anotações de combate, segredos da investigação..."
                 spellCheck={false}
                 className="scrollbar-thin min-h-0 w-full flex-1 resize-none bg-transparent font-base text-xs leading-relaxed text-gray-900 outline-none placeholder:text-gray-400 sm:text-sm dark:text-zinc-200 dark:placeholder:text-zinc-600"
             />
-
         </div>
     );
 }

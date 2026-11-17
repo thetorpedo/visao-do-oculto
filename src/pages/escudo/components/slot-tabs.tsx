@@ -14,7 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useData } from "@/context/DataContext";
 import { cn } from "@/lib/utils";
-import type { AbaSlot, ConteudoAba, OpcaoMesclagem, TipoEspecial } from "@/hooks/useEscudo";
+import type { AbaSlot, ConteudoAba, OpcaoMesclagem, TipoEspecial } from "@/hooks/use-escudo";
 import { ESPECIAIS } from "./slot-tipos";
 
 interface SlotTabsProps {
@@ -26,8 +26,8 @@ interface SlotTabsProps {
     menuAberto: boolean;
     onToggleMenu: () => void;
     onFecharMenu: () => void;
-    onSelecionarAba: (abaId: string) => void;
-    onRemoverAba: (abaId: string) => void;
+    onSelecionarAba: (aba_id: string) => void;
+    onRemoverAba: (aba_id: string) => void;
     onAdicionarRegistro: () => void;
     onAdicionarEspecial: (tipo: TipoEspecial) => void;
     onMesclar: (direcao: "baixo" | "cima" | "direita" | "esquerda") => void;
@@ -36,7 +36,8 @@ interface SlotTabsProps {
     onDragEnd?: () => void;
 }
 
-const ITEM_MENU = "w-full justify-start gap-2 px-2 py-1.5 h-auto uppercase tracking-wider text-gray-900 dark:text-zinc-100";
+const ITEM_MENU =
+    "h-auto w-full justify-start gap-2 px-2 py-1.5 uppercase tracking-wider text-gray-900 dark:text-zinc-100";
 
 export default function SlotTabs({
     abas,
@@ -57,76 +58,77 @@ export default function SlotTabs({
     onDragEnd,
 }: SlotTabsProps) {
     const data = useData();
-    const [menuMesclarAberto, setMenuMesclarAberto] = useState(false);
-    const headerRef = useRef<HTMLDivElement>(null);
-    const btnRef = useRef<HTMLDivElement>(null);
-    const [abrirParaEsquerda, setAbrirParaEsquerda] = useState(false);
+    const [menu_mesclar_aberto, setMenuMesclarAberto] = useState(false);
+    const [abrir_para_esquerda, setAbrirParaEsquerda] = useState(false);
+    const header_ref = useRef<HTMLDivElement>(null);
+    const btn_ref = useRef<HTMLDivElement>(null);
 
-    const isMerged = colSpan > 1 || rowSpan > 1;
+    const is_mesclado = colSpan > 1 || rowSpan > 1;
 
     const handleToggleMenu = () => {
-        if (!menuAberto && btnRef.current && headerRef.current) {
-            const btnRect = btnRef.current.getBoundingClientRect();
-            const headerRect = headerRef.current.getBoundingClientRect();
-            // Se a distância do botão até o final do slot ou da tela for menor que a largura do menu (190px),
-            // abre o menu alinhado à direita (expandindo para a esquerda)
-            const espacoNoSlot = headerRect.right - btnRect.left;
-            const espacoNaJanela = window.innerWidth - btnRect.left;
-            setAbrirParaEsquerda(espacoNoSlot < 190 || espacoNaJanela < 190);
+        if (!menuAberto && btn_ref.current && header_ref.current) {
+            const btn_rect = btn_ref.current.getBoundingClientRect();
+            const header_rect = header_ref.current.getBoundingClientRect();
+            const espaco_no_slot = header_rect.right - btn_rect.left;
+            const espaco_na_janela = window.innerWidth - btn_rect.left;
+            setAbrirParaEsquerda(espaco_no_slot < 190 || espaco_na_janela < 190);
         }
         setMenuMesclarAberto(false);
         onToggleMenu();
     };
 
-    const tituloAba = (conteudo: ConteudoAba) => {
+    const obterTituloAba = (conteudo: ConteudoAba): string => {
         if (conteudo.tipo === "registro") {
-            const item = (data[conteudo.categoria] as { id: string; nome: string }[]).find((i) => i.id === conteudo.itemId);
+            const item = (data[conteudo.categoria] as { id: string; nome: string }[]).find(
+                (i) => i.id === conteudo.itemId
+            );
             return item?.nome ?? "Registro";
         }
         if (conteudo.tipo === "anotacoes") {
-            const titulo = (conteudo.dados as { titulo?: string } | undefined)?.titulo?.trim();
-            return titulo || "Anotações";
+            const dados_anotacoes = conteudo.dados as { titulo?: string } | undefined;
+            return dados_anotacoes?.titulo?.trim() || "Anotações";
         }
         return ESPECIAIS.find((e) => e.tipo === conteudo.tipo)?.rotulo ?? "Aba";
     };
 
-    const escolher = (acao: () => void) => () => {
+    const executarAcaoMenu = (acao: () => void) => () => {
         onFecharMenu();
         setMenuMesclarAberto(false);
         acao();
     };
 
     return (
-        <div ref={headerRef} className="relative z-30 flex h-7.5 shrink-0 select-none items-center justify-between border-b border-gray-400/90 bg-black/5 px-1 text-xs dark:border-zinc-800 dark:bg-[#161a18]">
+        <div
+            ref={header_ref}
+            className="relative z-30 flex h-7.5 shrink-0 select-none items-center justify-between border-b border-gray-400/90 bg-black/5 px-1 text-xs dark:border-zinc-800 dark:bg-[#161a18]"
+        >
             <div className="flex min-w-0 flex-1 items-center gap-1 py-0.5">
-                {/* Drag handle */}
                 <div
                     draggable
                     onDragStart={onDragStart}
                     onDragEnd={onDragEnd}
-                    className="flex size-5 cursor-grab items-center justify-center  text-black/40 hover:bg-black/5 hover:text-black active:cursor-grabbing dark:text-zinc-500 dark:hover:bg-white/5 dark:hover:text-zinc-200"
+                    className="flex size-5 cursor-grab items-center justify-center text-black/40 hover:bg-black/5 hover:text-black active:cursor-grabbing dark:text-zinc-500 dark:hover:bg-white/5 dark:hover:text-zinc-200"
                     title="Arraste para mover ou trocar este slot"
                 >
                     <GripVertical className="size-3.5" />
                 </div>
 
-                {/* Lista de abas */}
                 <div className="no-scrollbar flex min-w-0 items-center gap-1 overflow-x-auto">
-                    {abas.map((aba) => {
-                        const titulo = tituloAba(aba.conteudo);
+                    {abas.map((aba_item) => {
+                        const titulo_aba = obterTituloAba(aba_item.conteudo);
                         return (
                             <div
-                                key={aba.id}
-                                onClick={() => onSelecionarAba(aba.id)}
-                                title={titulo}
+                                key={aba_item.id}
+                                onClick={() => onSelecionarAba(aba_item.id)}
+                                title={titulo_aba}
                                 className={cn(
                                     "flex max-w-32.5 shrink-0 cursor-pointer items-center gap-1 border px-2 py-0.5 font-special text-xs uppercase tracking-wider transition-colors sm:max-w-40",
-                                    aba.id === abaAtivaId
+                                    aba_item.id === abaAtivaId
                                         ? "border-gray-400 bg-white/95 font-bold text-gray-950 shadow-xs dark:border-emerald-500/60 dark:bg-[#202723] dark:text-emerald-300"
                                         : "border-transparent bg-black/5 text-gray-600 hover:bg-white/50 hover:text-gray-900 dark:bg-[#121514] dark:text-zinc-400 dark:hover:bg-[#191e1b] dark:hover:text-zinc-200"
                                 )}
                             >
-                                <span className="truncate font-normal">{titulo}</span>
+                                <span className="truncate font-normal">{titulo_aba}</span>
                                 <Button
                                     variant="ghost"
                                     size="icon-xs"
@@ -134,7 +136,7 @@ export default function SlotTabs({
                                     title="Fechar aba"
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        onRemoverAba(aba.id);
+                                        onRemoverAba(aba_item.id);
                                     }}
                                 >
                                     <X />
@@ -144,8 +146,7 @@ export default function SlotTabs({
                     })}
                 </div>
 
-                {/* Botão Adicionar Aba (+) */}
-                <div ref={btnRef} className="relative shrink-0">
+                <div ref={btn_ref} className="relative shrink-0">
                     <Button
                         variant="secondary"
                         className="size-5"
@@ -162,10 +163,14 @@ export default function SlotTabs({
                             <div
                                 className={cn(
                                     "absolute top-full z-50 mt-1 w-44 border border-black/40 bg-white p-1 text-xs shadow-xl dark:border-zinc-700 dark:bg-[#181d1a]",
-                                    abrirParaEsquerda ? "right-0" : "left-0"
+                                    abrir_para_esquerda ? "right-0" : "left-0"
                                 )}
                             >
-                                <Button variant="ghost" className={ITEM_MENU} onClick={escolher(onAdicionarRegistro)}>
+                                <Button
+                                    variant="ghost"
+                                    className={ITEM_MENU}
+                                    onClick={executarAcaoMenu(onAdicionarRegistro)}
+                                >
                                     <FilePlus2 className="text-gray-700 dark:text-emerald-400" />
                                     Registro
                                 </Button>
@@ -174,7 +179,7 @@ export default function SlotTabs({
                                         key={tipo}
                                         variant="ghost"
                                         className={ITEM_MENU}
-                                        onClick={escolher(() => onAdicionarEspecial(tipo))}
+                                        onClick={executarAcaoMenu(() => onAdicionarEspecial(tipo))}
                                     >
                                         <Icone className={cor} />
                                         {rotulo}
@@ -186,22 +191,30 @@ export default function SlotTabs({
                 </div>
             </div>
 
-            {(isMerged || opcoesMesclagem.length > 0) && (
+            {(is_mesclado || opcoesMesclagem.length > 0) && (
                 <div className="relative ml-1.5 shrink-0">
                     <Button
                         variant="ghost"
                         size="icon-xs"
-                        title={isMerged ? `Slot mesclado (${colSpan}x${rowSpan}) — opções de mesclagem` : "Opções de mesclagem"}
-                        aria-expanded={menuMesclarAberto}
+                        title={
+                            is_mesclado
+                                ? `Slot mesclado (${colSpan}x${rowSpan}) — opções de mesclagem`
+                                : "Opções de mesclagem"
+                        }
+                        aria-expanded={menu_mesclar_aberto}
                         onClick={() => {
                             onFecharMenu();
-                            setMenuMesclarAberto(!menuMesclarAberto);
+                            setMenuMesclarAberto(!menu_mesclar_aberto);
                         }}
                     >
-                        {isMerged ? <TableCellsSplit className="size-3.5" /> : <TableCellsMerge className="size-3.5" />}
+                        {is_mesclado ? (
+                            <TableCellsSplit className="size-3.5" />
+                        ) : (
+                            <TableCellsMerge className="size-3.5" />
+                        )}
                     </Button>
 
-                    {menuMesclarAberto && (
+                    {menu_mesclar_aberto && (
                         <>
                             <div
                                 className="fixed inset-0 z-40"
@@ -210,13 +223,12 @@ export default function SlotTabs({
                                     onFecharMenu();
                                 }}
                             />
-                            <div className="absolute w-fit right-0 top-full z-50 mt-1 border border-black/40 bg-white p-1 text-xs shadow-xl dark:border-zinc-700 dark:bg-[#181d1a]">
-                                {isMerged && (
+                            <div className="absolute top-full right-0 z-50 mt-1 w-fit border border-black/40 bg-white p-1 text-xs shadow-xl dark:border-zinc-700 dark:bg-[#181d1a]">
+                                {is_mesclado && (
                                     <Button
                                         variant="ghost"
-                                        className={cn(
-                                            ITEM_MENU)}
-                                        onClick={escolher(onSeparar)}
+                                        className={cn(ITEM_MENU)}
+                                        onClick={executarAcaoMenu(onSeparar)}
                                     >
                                         <TableCellsSplit className="size-3.5 shrink-0" />
                                         Separar slot
@@ -228,12 +240,12 @@ export default function SlotTabs({
                                         key={op.direcao}
                                         variant="ghost"
                                         className={ITEM_MENU}
-                                        onClick={escolher(() => onMesclar(op.direcao))}
+                                        onClick={executarAcaoMenu(() => onMesclar(op.direcao))}
                                     >
-                                        {op.direcao === "baixo" && <ArrowDown className="size-3.5 shrink-0 " />}
-                                        {op.direcao === "direita" && <ArrowRight className="size-3.5 shrink-0 " />}
-                                        {op.direcao === "cima" && <ArrowUp className="size-3.5 shrink-0 " />}
-                                        {op.direcao === "esquerda" && <ArrowLeft className="size-3.5 shrink-0 " />}
+                                        {op.direcao === "baixo" && <ArrowDown className="size-3.5 shrink-0" />}
+                                        {op.direcao === "direita" && <ArrowRight className="size-3.5 shrink-0" />}
+                                        {op.direcao === "cima" && <ArrowUp className="size-3.5 shrink-0" />}
+                                        {op.direcao === "esquerda" && <ArrowLeft className="size-3.5 shrink-0" />}
                                         {op.rotulo}
                                     </Button>
                                 ))}
