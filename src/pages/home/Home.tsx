@@ -122,7 +122,7 @@ export default function Home() {
         {registroSorteado && (
           <div className="relative border border-black/40 bg-black/5 p-4 pt-6 sm:p-6 sm:pt-7">
             <div className="absolute top-0 left-4 flex -translate-y-1/2 items-center bg-gray-900 px-2 py-0.5 font-special text-xs tracking-widest text-white uppercase sm:text-sm">
-              Registro sorteado • {ROTULO_CATEGORIA[registroSorteado.categoria]}
+              Registro aleatório • {ROTULO_CATEGORIA[registroSorteado.categoria]}
             </div>
 
             <button
@@ -131,7 +131,7 @@ export default function Home() {
               title="Sortear outro registro"
             >
               <Shuffle className="size-3.5" />
-              Sortear outro
+              Outro
             </button>
 
             <ItemCard

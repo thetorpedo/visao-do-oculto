@@ -1,5 +1,7 @@
-import { useState, useMemo, useRef } from "react";
-import { ChevronRight, RotateCcw, Trash2, User, Skull, X } from "lucide-react";
+import { useMemo, useState } from "react";
+import { ChevronRight, Heart, Minus, Plus, RotateCcw, Trash2, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export type TipoCombatente = "jogador" | "inimigo";
 
@@ -16,54 +18,70 @@ export interface DadosIniciativa {
     rodada: number;
     turnoId: string | null;
     combatentes: Combatente[];
+    mostrarPv?: boolean;
 }
 
-const VAZIO: DadosIniciativa = { rodada: 1, turnoId: null, combatentes: [] };
+const VAZIO: DadosIniciativa = { rodada: 1, turnoId: null, combatentes: [], mostrarPv: true };
 
-export default function SlotIniciativa({
-    dados,
-    onChange,
-}: {
-    dados?: DadosIniciativa;
-    onChange: (d: DadosIniciativa) => void;
-}) {
+const SEM_SPINNER =
+    "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none";
+
+const PRETO = "bg-gray-900 text-white hover:bg-black dark:border-zinc-700 dark:bg-zinc-900 dark:text-white dark:hover:bg-black";
+const ROTULO_BTN = "h-7 px-2.5 font-special text-[11px] uppercase tracking-wider";
+
+const inteiro = (texto: string, minimo = -Infinity) => Math.max(minimo, parseInt(texto, 10) || 0);
+
+/** Clique = ±1, Shift+clique ou clique direito = ±5. */
+function Passo({ delta, onPasso, titulo }: { delta: 1 | -1; onPasso: (valor: number) => void; titulo: string }) {
+    const sinal = delta > 0 ? "+" : "−";
+
+    return (
+        <Button
+            className={cn(PRETO, "h-6 w-5")}
+            title={`${titulo} — clique: ${sinal}1 · direito/Shift: ${sinal}5`}
+            aria-label={titulo}
+            onClick={(e) => onPasso(e.shiftKey ? delta * 5 : delta)}
+            onContextMenu={(e) => {
+                e.preventDefault();
+                onPasso(delta * 5);
+            }}
+        >
+            {delta < 0 ? <Minus className="size-3" strokeWidth={3} /> : <Plus className="size-3" strokeWidth={3} />}
+        </Button>
+    );
+}
+
+export default function SlotIniciativa({ dados, onChange }: { dados?: DadosIniciativa; onChange: (d: DadosIniciativa) => void }) {
     const estado = dados ?? VAZIO;
+    const mostrarPv = estado.mostrarPv ?? true;
 
-    // Ordenação automática e reativa por iniciativa decrescente
-    const ordenados = useMemo(() => {
-        return [...estado.combatentes].sort((a, b) => {
-            if (b.iniciativa !== a.iniciativa) return b.iniciativa - a.iniciativa;
-            if (a.tipo !== b.tipo) return a.tipo === "jogador" ? -1 : 1;
-            return a.nome.localeCompare(b.nome);
-        });
-    }, [estado.combatentes]);
+    const ordenados = useMemo(
+        () =>
+            [...estado.combatentes].sort((a, b) =>
+                b.iniciativa !== a.iniciativa ? b.iniciativa - a.iniciativa : a.nome.localeCompare(b.nome)
+            ),
+        [estado.combatentes]
+    );
 
     const turnoAtual = ordenados.find((c) => c.id === estado.turnoId) ?? ordenados[0] ?? null;
 
-    const adicionarRapido = (tipo: TipoCombatente) => {
-        const contagem = estado.combatentes.filter((c) => c.tipo === tipo).length + 1;
+    const adicionar = () => {
         const novo: Combatente = {
             id: crypto.randomUUID(),
-            tipo,
-            nome: tipo === "jogador" ? `Jogador ${contagem}` : `Ameaça ${contagem}`,
+            tipo: "jogador",
+            nome: `Combatente ${estado.combatentes.length + 1}`,
             iniciativa: 10,
-            pv: tipo === "jogador" ? 20 : 30,
-            pvMax: tipo === "jogador" ? 20 : 30,
+            pv: 20,
+            pvMax: 20,
         };
-        const novaLista = [...estado.combatentes, novo];
-        onChange({
-            ...estado,
-            combatentes: novaLista,
-            turnoId: estado.turnoId ?? novo.id,
-        });
+        onChange({ ...estado, combatentes: [...estado.combatentes, novo], turnoId: estado.turnoId ?? novo.id });
     };
 
-    const atualizarCombatente = (id: string, updates: Partial<Combatente>) => {
+    const atualizar = (id: string, updates: Partial<Combatente>) =>
         onChange({
             ...estado,
             combatentes: estado.combatentes.map((c) => (c.id === id ? { ...c, ...updates } : c)),
         });
-    };
 
     const remover = (id: string) => {
         const restantes = estado.combatentes.filter((c) => c.id !== id);
@@ -75,9 +93,8 @@ export default function SlotIniciativa({
     };
 
     const proximoTurno = () => {
-        if (!turnoAtual || ordenados.length === 0) return;
-        const indice = ordenados.findIndex((c) => c.id === turnoAtual.id);
-        const proximo = (indice + 1) % ordenados.length;
+        if (!turnoAtual) return;
+        const proximo = (ordenados.findIndex((c) => c.id === turnoAtual.id) + 1) % ordenados.length;
         onChange({
             ...estado,
             turnoId: ordenados[proximo].id,
@@ -85,262 +102,241 @@ export default function SlotIniciativa({
         });
     };
 
-    const reiniciarRodadas = () => {
-        onChange({
-            ...estado,
-            rodada: 1,
-            turnoId: ordenados[0]?.id ?? null,
-        });
-    };
-
     return (
         <div className="flex h-full min-h-0 flex-col text-gray-900 dark:text-zinc-100">
-            {/* Barra superior de controle rápido */}
-            <div className="flex shrink-0 flex-wrap items-center justify-between gap-2 border-b border-black/20 bg-black/5 px-3 py-2 dark:border-zinc-800 dark:bg-[#151917]">
-                <div className="flex items-center gap-1.5">
-                    <span className="font-special text-xs font-bold uppercase tracking-wider text-gray-800 dark:text-zinc-200">
-                        Rodada {estado.rodada}
-                    </span>
-                    <button
-                        onClick={reiniciarRodadas}
+            <div className="flex shrink-0 flex-wrap items-center justify-between gap-x-2 gap-y-1 border-b border-black/20 bg-black/5 px-2 py-1.5 dark:border-zinc-800 dark:bg-[#151917]">
+                <div className="flex items-center gap-1">
+                    <div
+                        className="flex items-baseline gap-1 border-2 border-black/40 bg-white/70 px-1.5 py-px dark:border-zinc-600 dark:bg-[#121514]"
+                        title="Rodada atual"
+                    >
+                        <span className="font-special text-[9px] uppercase tracking-widest text-gray-500 dark:text-zinc-400">Rodada</span>
+                        <span className="font-special text-lg font-bold leading-none text-gray-950 dark:text-zinc-100">{estado.rodada}</span>
+                    </div>
+
+                    {ordenados.length > 0 && (
+                        <Button className={cn(PRETO, ROTULO_BTN, "gap-0.5")} onClick={proximoTurno}>
+                            Próx <ChevronRight className="size-3.5" />
+                        </Button>
+                    )}
+
+                    <Button
+                        className={cn(PRETO, "size-7")}
                         title="Reiniciar rodada para 1"
-                        className="cursor-pointer p-1 text-gray-600 transition-colors hover:text-black dark:text-zinc-400 dark:hover:text-white"
+                        aria-label="Reiniciar rodada"
+                        onClick={() => onChange({ ...estado, rodada: 1, turnoId: ordenados[0]?.id ?? null })}
                     >
                         <RotateCcw className="size-3" />
-                    </button>
-                    {ordenados.length > 0 && (
-                        <button
-                            onClick={proximoTurno}
-                            className="flex cursor-pointer items-center gap-0.5 bg-gray-900 px-2.5 py-1 font-special text-[11px] uppercase tracking-wider text-white transition-colors hover:bg-black dark:bg-emerald-600 dark:hover:bg-emerald-500"
-                        >
-                            Próx <ChevronRight className="size-3" />
-                        </button>
-                    )}
+                    </Button>
                 </div>
 
-                {/* Botões Rápidos estilo Owlbear */}
-                <div className="flex flex-wrap items-center gap-1.5">
-                    <button
-                        onClick={() => adicionarRapido("jogador")}
-                        className="flex cursor-pointer items-center gap-1 border border-emerald-700/60 bg-emerald-700/10 px-2 py-1 font-special text-[11px] uppercase tracking-wider text-emerald-800 transition-colors hover:bg-emerald-700/20 dark:border-emerald-500/60 dark:bg-emerald-950/40 dark:text-emerald-300"
-                        title="Adicionar Jogador automaticamente"
+                <div className="flex items-center gap-1">
+                    <Button
+                        variant={mostrarPv ? "default" : "outline"}
+                        className={cn(
+                            ROTULO_BTN,
+                            "gap-1",
+                            mostrarPv
+                                ? PRETO
+                                : "border-solid border-black/40 text-gray-500 hover:bg-black/10 dark:border-zinc-700 dark:text-zinc-500 dark:hover:bg-white/10"
+                        )}
+                        title={mostrarPv ? "Desligar contador de vida" : "Ligar contador de vida"}
+                        aria-pressed={mostrarPv}
+                        onClick={() => onChange({ ...estado, mostrarPv: !mostrarPv })}
                     >
-                        <User className="size-3 text-emerald-700 dark:text-emerald-400" />
-                        + Jogador
-                    </button>
+                        <Heart className="size-3" fill={mostrarPv ? "currentColor" : "none"} />
+                        PV
+                    </Button>
 
-                    <button
-                        onClick={() => adicionarRapido("inimigo")}
-                        className="flex cursor-pointer items-center gap-1 border border-rose-700/60 bg-rose-700/10 px-2 py-1 font-special text-[11px] uppercase tracking-wider text-rose-800 transition-colors hover:bg-rose-700/20 dark:border-rose-500/60 dark:bg-rose-950/40 dark:text-rose-300"
-                        title="Adicionar Inimigo / Ameaça automaticamente"
-                    >
-                        <Skull className="size-3 text-rose-700 dark:text-rose-400" />
-                        + Inimigo
-                    </button>
+                    <Button className={cn(PRETO, ROTULO_BTN, "gap-1")} title="Adicionar combatente" onClick={adicionar}>
+                        <Plus className="size-3" strokeWidth={3} />
+                        Combatente
+                    </Button>
 
                     {estado.combatentes.length > 0 && (
-                        <button
-                            onClick={() => onChange(VAZIO)}
+                        <Button
+                            className={cn(PRETO, "size-7")}
                             title="Limpar todos os combatentes"
-                            className="cursor-pointer p-1 text-gray-500 dark:text-zinc-400 hover:text-red-700 dark:hover:text-red-400 ml-0.5"
+                            aria-label="Limpar todos"
+                            onClick={() => onChange({ ...VAZIO, mostrarPv })}
                         >
                             <Trash2 className="size-3" />
-                        </button>
+                        </Button>
                     )}
                 </div>
             </div>
 
-            {/* Lista Compacta de Combatentes */}
-            <div className="min-h-0 flex-1 divide-y divide-black/10 overflow-y-auto px-1.5 py-1 dark:divide-zinc-800/80">
+            <div className="min-h-0 flex-1 divide-y divide-black/10 overflow-y-auto dark:divide-zinc-800/80">
                 {ordenados.length === 0 ? (
                     <div className="flex h-full flex-col items-center justify-center p-4 text-center">
-                        <p className="font-special text-xs uppercase tracking-wider text-gray-500 dark:text-zinc-500 mb-2">
-                            Nenhum combatente ativo
+                        <p className="mb-1.5 font-special text-xs uppercase tracking-wider text-gray-500 dark:text-zinc-500">
+                            Nenhum combatente
                         </p>
-                        <p className="text-[11px] text-gray-600 dark:text-zinc-400 max-w-xs">
-                            Clique em <strong>+ Jogador</strong> ou <strong>+ Inimigo</strong> para adicionar instantaneamente.
+                        <p className="max-w-xs text-[11px] text-gray-600 dark:text-zinc-400">
+                            Clique em <strong>+ Combatente</strong> para adicionar.
                         </p>
                     </div>
                 ) : (
-                    ordenados.map((c) => {
-                        const ativo = turnoAtual?.id === c.id;
-                        return (
-                            <LinhaCombatente
-                                key={c.id}
-                                combatente={c}
-                                isAtivo={ativo}
-                                onSetTurno={() => onChange({ ...estado, turnoId: c.id })}
-                                onUpdate={(updates) => atualizarCombatente(c.id, updates)}
-                                onRemover={() => remover(c.id)}
-                            />
-                        );
-                    })
+                    ordenados.map((c) => (
+                        <LinhaCombatente
+                            key={c.id}
+                            combatente={c}
+                            isAtivo={turnoAtual?.id === c.id}
+                            mostrarPv={mostrarPv}
+                            onSetTurno={() => onChange({ ...estado, turnoId: c.id })}
+                            onUpdate={(updates) => atualizar(c.id, updates)}
+                            onRemover={() => remover(c.id)}
+                        />
+                    ))
                 )}
             </div>
         </div>
     );
 }
 
-function LinhaCombatente({
-    combatente,
-    isAtivo,
-    onSetTurno,
-    onUpdate,
-    onRemover,
-}: {
+interface LinhaCombatenteProps {
     combatente: Combatente;
     isAtivo: boolean;
+    mostrarPv: boolean;
     onSetTurno: () => void;
     onUpdate: (u: Partial<Combatente>) => void;
     onRemover: () => void;
-}) {
-    const isJogador = combatente.tipo === "jogador";
+}
+
+function LinhaCombatente({ combatente, isAtivo, mostrarPv, onSetTurno, onUpdate, onRemover }: LinhaCombatenteProps) {
     const [delta, setDelta] = useState("");
-    const inputDeltaRef = useRef<HTMLInputElement>(null);
+
+    const morto = mostrarPv && combatente.pv <= 0;
+    const pctPv = combatente.pvMax > 0 ? Math.max(0, Math.min(100, (combatente.pv / combatente.pvMax) * 100)) : 0;
+
+    const corPv = morto
+        ? "border-red-500 text-red-600 dark:text-red-400"
+        : pctPv <= 25
+        ? "border-red-600/70 text-red-700 dark:text-red-300"
+        : pctPv <= 50
+        ? "border-amber-600/70 text-amber-700 dark:text-amber-300"
+        : "border-emerald-700/60 text-emerald-800 dark:text-emerald-300";
+
+    const corBarra = pctPv <= 25 ? "bg-red-500" : pctPv <= 50 ? "bg-amber-500" : "bg-emerald-500";
+
+    const mudarPv = (d: number) => onUpdate({ pv: Math.max(0, combatente.pv + d) });
+    const mudarIni = (d: number) => onUpdate({ iniciativa: combatente.iniciativa + d });
 
     const aplicarDelta = () => {
         const texto = delta.trim();
         if (!texto) return;
-
         const num = parseInt(texto, 10);
-        if (!isNaN(num)) {
-            const novoPv = Math.max(0, combatente.pv + num);
-            onUpdate({ pv: novoPv });
-        }
+        if (!isNaN(num)) mudarPv(num);
         setDelta("");
     };
 
     return (
         <div
-            className={`flex items-center gap-2 px-2.5 py-2 transition-colors ${
-                isAtivo
-                    ? "bg-amber-400/20 dark:bg-emerald-950/40 border-l-3 border-amber-700 dark:border-emerald-500"
-                    : "hover:bg-black/5 dark:hover:bg-white/5 border-l-3 border-transparent"
-            }`}
+            className={cn(
+                "relative flex items-center gap-1.5 px-1.5 py-1 transition-colors",
+                isAtivo ? "bg-amber-400/25 dark:bg-white/10" : "hover:bg-black/5 dark:hover:bg-white/5"
+            )}
         >
-            {/* Indicador de Turno */}
-            <button
-                onClick={onSetTurno}
-                title={isAtivo ? "Turno atual" : "Definir como turno atual"}
-                className={`size-3.5 shrink-0 cursor-pointer rounded-full transition-all ${
+            <Button
+                variant="ghost"
+                size="icon-xs"
+                className={cn(
+                    "size-4 hover:bg-transparent",
                     isAtivo
-                        ? "bg-emerald-500 ring-2 ring-emerald-400/50 scale-110"
-                        : "bg-stone-400 dark:bg-zinc-600 hover:bg-emerald-400/60"
-                }`}
-            />
+                        ? "text-gray-950 dark:text-zinc-100"
+                        : "text-black/20 hover:text-black/60 dark:text-zinc-700 dark:hover:text-zinc-400"
+                )}
+                title={isAtivo ? "Turno atual" : "Definir como turno atual"}
+                aria-label="Definir turno"
+                onClick={onSetTurno}
+            >
+                <ChevronRight className="size-4" strokeWidth={3} />
+            </Button>
 
-            {/* Iniciativa com botões + e - e sem estilo nativo de spinner */}
-            <div className="flex shrink-0 items-center gap-0.5" title="Iniciativa (reordena na hora)">
-                <button
-                    type="button"
-                    onClick={() => onUpdate({ iniciativa: combatente.iniciativa - 1 })}
-                    className="cursor-pointer border border-gray-400 dark:border-zinc-700 bg-white/60 dark:bg-[#161a18] px-1 py-0.5 text-[10px] font-bold text-gray-700 dark:text-zinc-300 hover:bg-black/10 dark:hover:bg-white/10 active:scale-95 leading-none"
-                    title="-1 Iniciativa"
-                >
-                    -
-                </button>
+            <div className="flex shrink-0 items-center gap-px" title="Iniciativa (reordena na hora)">
+                <Passo delta={-1} onPasso={mudarIni} titulo="Iniciativa −" />
                 <input
                     type="number"
                     value={combatente.iniciativa}
-                    onChange={(e) => {
-                        const val = parseInt(e.target.value, 10);
-                        onUpdate({ iniciativa: isNaN(val) ? 0 : val });
-                    }}
-                    className="w-7 border border-gray-400 dark:border-zinc-700 bg-white/80 dark:bg-[#121514] px-0.5 py-0.5 text-center font-special text-xs font-bold text-gray-900 dark:text-emerald-400 outline-none focus:border-black dark:focus:border-emerald-400 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    onChange={(e) => onUpdate({ iniciativa: inteiro(e.target.value) })}
+                    aria-label="Iniciativa"
+                    className={cn(
+                        "h-6 w-9 border-2 border-black/40 bg-white/80 text-center font-special text-base font-bold leading-none text-gray-950 outline-none focus:border-black dark:border-zinc-600 dark:bg-[#121514] dark:text-zinc-100 dark:focus:border-zinc-300",
+                        SEM_SPINNER
+                    )}
                 />
-                <button
-                    type="button"
-                    onClick={() => onUpdate({ iniciativa: combatente.iniciativa + 1 })}
-                    className="cursor-pointer border border-gray-400 dark:border-zinc-700 bg-white/60 dark:bg-[#161a18] px-1 py-0.5 text-[10px] font-bold text-gray-700 dark:text-zinc-300 hover:bg-black/10 dark:hover:bg-white/10 active:scale-95 leading-none"
-                    title="+1 Iniciativa"
-                >
-                    +
-                </button>
+                <Passo delta={1} onPasso={mudarIni} titulo="Iniciativa +" />
             </div>
 
-            {/* Tipo (Ponto sutil) */}
-            <span
-                className={`size-2 shrink-0 rounded-full ${
-                    isJogador ? "bg-emerald-600 dark:bg-emerald-400" : "bg-rose-600 dark:bg-rose-400"
-                }`}
-                title={isJogador ? "Jogador" : "Inimigo / Ameaça"}
-            />
-
-            {/* Nome editável */}
             <input
                 value={combatente.nome}
                 onChange={(e) => onUpdate({ nome: e.target.value })}
-                className={`min-w-0 flex-1 bg-transparent px-1 py-0.5 font-special text-xs text-gray-900 dark:text-zinc-100 outline-none border-b border-transparent focus:border-gray-500 dark:focus:border-zinc-600 truncate ${
-                    combatente.pv <= 0 ? "line-through opacity-50 text-red-600 dark:text-red-400" : ""
-                }`}
                 placeholder="Nome..."
+                className={cn(
+                    "min-w-0 flex-1 truncate border-b border-transparent bg-transparent px-1 py-0.5 font-special text-sm font-bold text-gray-900 outline-none focus:border-gray-500 dark:text-zinc-100 dark:focus:border-zinc-600",
+                    morto && "text-red-600 line-through opacity-50 dark:text-red-400"
+                )}
             />
 
-            {/* Vida Sutil (ao lado do nome, sem barra gigante) */}
-            <div className="flex shrink-0 items-center gap-1 text-xs">
-                <span className="font-special text-[11px] text-gray-500 dark:text-zinc-500">PV</span>
-                <input
-                    type="number"
-                    value={combatente.pv}
-                    onChange={(e) => {
-                        const val = parseInt(e.target.value, 10);
-                        onUpdate({ pv: isNaN(val) ? 0 : Math.max(0, val) });
-                    }}
-                    className={`w-10 border border-gray-400 dark:border-zinc-700 bg-white/80 dark:bg-[#121514] px-0.5 py-0.5 text-center font-mono text-xs font-bold outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${
-                        combatente.pv <= 0
-                            ? "text-red-600 dark:text-red-400 border-red-500"
-                            : "text-gray-900 dark:text-zinc-200"
-                    }`}
-                    title="PV atual"
-                />
+            {mostrarPv && (
+                <div className="flex shrink-0 items-center gap-px">
+                    <Passo delta={-1} onPasso={mudarPv} titulo="PV −" />
+                    <div className={cn("flex h-6 items-center border-2 bg-white/80 pr-0.5 dark:bg-[#121514]", corPv)}>
+                        <input
+                            type="number"
+                            value={combatente.pv}
+                            onChange={(e) => onUpdate({ pv: inteiro(e.target.value, 0) })}
+                            aria-label="PV atual"
+                            title="PV atual"
+                            className={cn("h-full w-8 bg-transparent text-center font-special text-base font-bold leading-none outline-none", SEM_SPINNER)}
+                        />
+                        <span className="text-[10px] leading-none text-gray-400 dark:text-zinc-600">/</span>
+                        <input
+                            type="number"
+                            value={combatente.pvMax}
+                            onChange={(e) => onUpdate({ pvMax: inteiro(e.target.value, 0) })}
+                            aria-label="PV máximo"
+                            title="PV máximo"
+                            className={cn("h-full w-7 bg-transparent text-center font-mono text-[10px] text-gray-500 outline-none dark:text-zinc-400", SEM_SPINNER)}
+                        />
+                    </div>
+                    <Passo delta={1} onPasso={mudarPv} titulo="PV +" />
 
-                {/* Input de Cálculo rápido (ex: digita -54 ou +10 e aperta Enter) */}
-                <form
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        aplicarDelta();
-                    }}
-                    className="flex items-center"
-                >
-                    <input
-                        ref={inputDeltaRef}
-                        value={delta}
-                        onChange={(e) => setDelta(e.target.value)}
-                        onBlur={aplicarDelta}
-                        placeholder="±"
-                        title="Altere o PV: digite ex. -54 ou +10 e pressione Enter"
-                        className="w-9 border border-dashed border-gray-400 dark:border-zinc-700 bg-white/50 dark:bg-[#161a18] px-0.5 py-0.5 text-center font-mono text-[11px] text-gray-800 dark:text-zinc-300 placeholder-gray-400 dark:placeholder-zinc-600 outline-none focus:border-solid focus:border-black dark:focus:border-emerald-400"
-                    />
-                </form>
+                    <form
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            aplicarDelta();
+                        }}
+                        className="ml-0.5 flex items-center"
+                    >
+                        <input
+                            value={delta}
+                            onChange={(e) => setDelta(e.target.value)}
+                            onBlur={aplicarDelta}
+                            placeholder="±"
+                            title="Ajuste rápido: digite ex. -54 ou +10 e pressione Enter"
+                            className="h-6 w-9 border border-dashed border-gray-500 bg-white/50 text-center font-mono text-[11px] text-gray-800 outline-none placeholder:text-gray-400 focus:border-solid focus:border-black dark:border-zinc-600 dark:bg-[#161a18] dark:text-zinc-200 dark:placeholder:text-zinc-600 dark:focus:border-zinc-300"
+                        />
+                    </form>
+                </div>
+            )}
 
-                {/* Botões rápidos + e - de PV */}
-                <button
-                    type="button"
-                    onClick={() => onUpdate({ pv: Math.max(0, combatente.pv - 1) })}
-                    className="cursor-pointer border border-gray-400 dark:border-zinc-700 bg-white/60 dark:bg-[#161a18] px-1.5 py-0.5 text-[10px] font-bold text-red-600 dark:text-red-400 hover:bg-red-500/10 active:scale-95 leading-none"
-                    title="-1 PV"
-                >
-                    -
-                </button>
-                <button
-                    type="button"
-                    onClick={() => onUpdate({ pv: combatente.pv + 1 })}
-                    className="cursor-pointer border border-gray-400 dark:border-zinc-700 bg-white/60 dark:bg-[#161a18] px-1.5 py-0.5 text-[10px] font-bold text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10 active:scale-95 leading-none"
-                    title="+1 PV"
-                >
-                    +
-                </button>
-            </div>
-
-            {/* Botão Remover */}
-            <button
-                type="button"
-                onClick={onRemover}
-                className="cursor-pointer text-gray-400 hover:text-red-600 dark:text-zinc-500 dark:hover:text-red-400 p-0.5 ml-0.5"
+            <Button
+                variant="ghost"
+                size="icon-xs"
+                className="size-5 text-gray-400 hover:bg-transparent hover:text-gray-950 dark:text-zinc-500 dark:hover:bg-transparent dark:hover:text-zinc-100"
                 title="Remover combatente"
+                aria-label="Remover combatente"
+                onClick={onRemover}
             >
                 <X className="size-3" />
-            </button>
+            </Button>
+
+            {mostrarPv && (
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-0.5 bg-black/10 dark:bg-white/10">
+                    <div className={cn("h-full transition-all", corBarra)} style={{ width: `${pctPv}%` }} />
+                </div>
+            )}
         </div>
     );
 }
