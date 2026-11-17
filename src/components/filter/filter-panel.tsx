@@ -123,7 +123,7 @@ function LinhaFiltroExpansivel({
     toggleOperador,
     toggleFiltro,
 }: {
-    config: ConfigFiltro & { opcoes: string[] };
+    config: Omit<ConfigFiltro, "opcoes"> & { opcoes: string[] };
     estadosOpcoes: Record<string, EstadoFiltro>;
     operador: OperadorFiltro;
     possuiSelecoes: boolean;
