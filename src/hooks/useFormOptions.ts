@@ -24,6 +24,47 @@ export function useFormOptions(categoria: Categoria) {
         return { tipo: unicosDe("tipo"), fonte: unicosDe("fonteLivro") };
       case "regras":
         return { categoria: unicosDeArray("categoria"), fonte: unicosDe("fonteLivro") };
+      case "ameacas":
+        return {
+          tipo: ["Criatura", "Pessoa", "Animal", ...unicosDe("tipo")],
+          tamanho: ["Minúsculo", "Pequeno", "Médio", "Grande", "Enorme", "Colossal", ...unicosDe("tamanho")],
+          elemento: [
+            "Sangue",
+            "Morte",
+            "Energia",
+            "Conhecimento",
+            "Medo",
+            ...unicosDeArray("elementos"),
+            ...unicosDeArray("elementosSecundarios"),
+          ],
+          grupos: unicosDeArray("grupos"),
+          sentidosExtras: [
+            "Percepção às cegas",
+            "Visão no escuro",
+            "Visão na penumbra",
+            "Faro",
+            ...dados.flatMap((item) =>
+              Array.isArray(item?.sentidos?.extras) ? item.sentidos.extras : []
+            ),
+          ],
+          resistencias: unicosDeArray("resistencias"),
+          imunidades: unicosDeArray("imunidades"),
+          vulnerabilidades: unicosDeArray("vulnerabilidades"),
+          deslocamento: ["9m | 6□", "12m | 8□", "6m | 4□", ...unicosDe("deslocamento")],
+          acaoBloco: [
+            "Padrão",
+            "Movimento",
+            "Livre",
+            "Reação",
+            "Completa",
+            ...dados.flatMap((item) =>
+              Array.isArray(item?.blocos)
+                ? item.blocos.map((b: any) => b?.acao).filter((v: any): v is string => typeof v === "string" && v.trim() !== "")
+                : []
+            ),
+          ],
+          fonte: unicosDe("fonteLivro"),
+        };
       default:
         return { fonte: unicosDe("fonteLivro") };
     }

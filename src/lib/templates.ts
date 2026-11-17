@@ -93,6 +93,42 @@ const TEMPLATES: Record<Categoria, unknown> = {
     descricao: "### Texto em Markdown\n\nTexto explicando a regra com formatação, **negrito**, *itálico*, etc.",
     fonteLivro: "OPRPG",
     fontePagina: "200"
+  }],
+
+  ameacas: [{
+    id: "roy_stevens",
+    codigo: 1,
+    nome: "Roy Stevens",
+    vd: 160,
+    tipo: "Pessoa",
+    tamanho: "Médio",
+    elementos: [],
+    elementosSecundarios: [],
+    grupos: [],
+    apresentacao: null,
+    sentidos: { percepcao: "4d20+10", iniciativa: "2d20+10", extras: [] },
+    defesa: { valor: 32, fortitude: "3d20+15", reflexos: "2d20+10", vontade: "4d20+15" },
+    pv: 250,
+    machucado: null,
+    resistencias: [],
+    imunidades: [],
+    vulnerabilidades: [],
+    atributos: { agi: 2, for: 3, int: 3, pre: 4, vig: 5 },
+    pericias: [
+      { nome: "Atletismo", valor: "3d20+10" },
+      { nome: "Diplomacia", valor: "4d20+10" },
+      { nome: "Medicina", valor: "3d20+15" }
+    ],
+    deslocamento: "9m | 6□",
+    blocos: [
+      { secao: "caracteristicas", acao: null, titulo: "Técnicas de Resgate", tags: [], descricao: "Pode carregar até dois corpos sem penalidade de deslocamento." },
+      { secao: "acoes", acao: "Padrão", titulo: "Agredir", tags: ["Corpo a corpo", "À distância"], descricao: "**Combate Marcial** *(Corpo a corpo)* — Teste 3d20+20 | Dano 2d6+15 impacto\n\n**Pistola Modificada** *(À distância • Curto)* — Teste 2d20+20 | Dano 2d8+17 balístico | Crítico 16" },
+      { secao: "acoes", acao: "Livre", titulo: "Luta Tática", tags: [], descricao: "Uma vez por rodada, faz uma manobra de combate como ação livre." },
+      { secao: "acoes", acao: "Padrão", titulo: "Prestar Socorro", tags: [], descricao: "Cura 3d10 PV ou remove uma condição negativa de si ou de um aliado adjacente." }
+    ],
+    observacoes: null,
+    fonteLivro: "AS6",
+    fontePagina: "1"
   }]
 };
 

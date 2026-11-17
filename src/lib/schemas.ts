@@ -146,3 +146,59 @@ export const RegraSchema = z
     .merge(FonteSchema);
 
 export type Regra = z.infer<typeof RegraSchema>;
+
+// ─────────────────────────────────────────
+// Ameaças
+// ─────────────────────────────────────────
+
+const BlocoSchema = z.object({
+    secao: z.enum(["caracteristicas", "tracos", "acoes", "enigma", "comportamento"]),
+    acao: z.string().nullable(),
+    titulo: z.string(),
+    tags: z.array(z.string()),
+    descricao: z.string(),
+});
+
+export const AmeacaSchema = z
+    .object({
+        id: z.string(),
+        codigo: z.number().int().positive(),
+        nome: z.string(),
+        vd: z.number().int().nonnegative(),
+        tipo: z.string(),
+        tamanho: z.string(),
+        elementos: z.array(z.string()),
+        elementosSecundarios: z.array(z.string()),
+        grupos: z.array(z.string()),
+        apresentacao: z.string().nullable(),
+        sentidos: z.object({
+            percepcao: z.string().nullable(),
+            iniciativa: z.string().nullable(),
+            extras: z.array(z.string()),
+        }),
+        defesa: z.object({
+            valor: z.number().int().nullable(),
+            fortitude: z.string(),
+            reflexos: z.string(),
+            vontade: z.string(),
+        }),
+        pv: z.number().int(),
+        machucado: z.number().int().nullable(),
+        resistencias: z.array(z.string()),
+        imunidades: z.array(z.string()),
+        vulnerabilidades: z.array(z.string()),
+        atributos: z.object({
+            agi: z.number().int().nullable(),
+            for: z.number().int().nullable(),
+            int: z.number().int().nullable(),
+            pre: z.number().int().nullable(),
+            vig: z.number().int().nullable(),
+        }),
+        pericias: z.array(z.object({ nome: z.string(), valor: z.string() })),
+        deslocamento: z.string(),
+        blocos: z.array(BlocoSchema),
+        observacoes: z.string().nullable(),
+    })
+    .merge(FonteSchema);
+
+export type Ameaca = z.infer<typeof AmeacaSchema>;

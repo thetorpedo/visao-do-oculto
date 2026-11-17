@@ -112,7 +112,7 @@ export default function Favoritos() {
           }
 
           return (
-            <ItemCard item={item} categoria={favorito.categoria} showCategory />
+            <ItemCard key={favorito.id} item={item} categoria={favorito.categoria} showCategory />
           );
         })}
 

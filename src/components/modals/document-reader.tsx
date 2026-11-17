@@ -114,12 +114,23 @@ export default function DocumentReader({ fonteId, paginaImpressa, isOpen, onClos
     onClose();
   };
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        handleClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!mounted) return null;
 
   return createPortal(
-    <div className={`fixed inset-0 z-49 flex items-center justify-center bg-black/50 backdrop-blur-md p-0 sm:p-4 transition-all duration-300 ${isOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"}`}>
+    <div className={`fixed inset-0 z-70 flex items-center justify-center bg-black/50 backdrop-blur-md p-2 sm:p-4 transition-all duration-300 ${isOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"}`}>
 
-      <FolderDiv className="max-w-5xl max-lg:mt-15 h-[85vh] lg:h-[90vh] rounded-none sm:rounded-md">
+      <FolderDiv className="max-w-5xl h-[90dvh] lg:h-[90vh] rounded-md">
         <div className="text-center px-2 py-2 mb-2 sm:mb-3 border-b-2 border-black/40 border-dashed text-black/90 uppercase font-daisy tracking-wider text-xs md:text-sm leading-relaxed flex flex-row items-center justify-between gap-2">
           <div className="flex gap-2 items-center truncate min-w-0">
             <span className="font-special text-sm sm:text-lg mt-0.5 truncate">

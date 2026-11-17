@@ -10,7 +10,7 @@ export default function FonteCard({ fonte, onClick }: { fonte: FonteConfig; onCl
 
     return (
         <div className="cursor-pointer h-full" onClick={onClick}>
-            <PaperDiv className="transition-all duration-300 hover:-translate-y-1 url(/assets/paper.png)]">
+            <PaperDiv className="transition-all duration-300 hover:-translate-y-1">
                 <div className="flex justify-between items-start mb-4">
                     <span
                         className={`${badgeClass} ${estiloBadgeTipo('default')} gap-1 text-xs`}>
@@ -20,11 +20,11 @@ export default function FonteCard({ fonte, onClick }: { fonte: FonteConfig; onCl
                     </span>
                 </div>
 
-                <h3 className="text-2xl font-special underline leading-tight mb-2 text-gray-900">
+                <h3 className="text-2xl font-special underline leading-tight mb-2 text-gray-900 dark:text-zinc-100">
                     {fonte.label || fonte.id}
                 </h3>
 
-                <div className="mt-auto pt-4 border-t border-gray-400 border-dashed text-xs text-gray-600 font-daisy break-all">
+                <div className="mt-auto pt-4 border-t border-gray-400 dark:border-zinc-700 border-dashed text-xs text-gray-600 dark:text-zinc-400 font-daisy break-all">
                     {fonte.nomeArquivo || `${fonte.id}.${extensaoPadrao}`}
                 </div>
             </PaperDiv>

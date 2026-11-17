@@ -1,5 +1,5 @@
 import { Bookmark } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFavoritos } from "@/context/FavoritosContext";
 import { Categoria } from "@/context/DataContext.tsx";
 import SaveModal from "./save-modal.tsx";
@@ -15,6 +15,15 @@ export default function SaveButton({ itemId, categoria }: BotaoFavoritarProps) {
 
   const favoritado = isFavoritado(itemId, categoria);
 
+  useEffect(() => {
+    if (!modalAberto) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setModalAberto(false);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [modalAberto]);
+
   return (
     <>
       <button
@@ -23,7 +32,7 @@ export default function SaveButton({ itemId, categoria }: BotaoFavoritarProps) {
         title={favoritado ? "Editar Favorito" : "Adicionar aos Favoritos"}
       >
         <Bookmark
-          className={`size-5 transition-all ${favoritado ? "fill-gray-900 text-gray-900" : "text-gray-500 hover:text-gray-900"
+          className={`size-5 transition-all ${favoritado ? "fill-gray-900 text-gray-900 dark:fill-emerald-400 dark:text-emerald-400" : "text-gray-500 hover:text-gray-900"
             }`}
         />
       </button>

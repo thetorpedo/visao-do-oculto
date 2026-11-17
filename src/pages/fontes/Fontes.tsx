@@ -27,8 +27,8 @@ export default function Fontes() {
       {!fonteAberta ? (
         <div className="space-y-6 flex-1 pb-10">
           <PaperDiv>
-            <h2 className="text-3xl sm:text-4xl font-special text-gray-900 leading-tight mb-2">Fontes</h2>
-            <p className="text-gray-700 max-w-3xl">
+            <h2 className="text-3xl sm:text-4xl font-special text-gray-900 dark:text-zinc-100 leading-tight mb-2">Fontes</h2>
+            <p className="text-gray-700 dark:text-zinc-300 max-w-3xl">
               Navegue diretamente pelos arquivos de fonte.
               <br />
               Se estiver usando celular, talvez seu navegador não suporte a leitura de PDFs diretamente no site.

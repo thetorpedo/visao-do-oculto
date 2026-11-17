@@ -29,7 +29,7 @@ export default function Equipamentos() {
     return [
       { id: "tipo", label: "Tipos", opcoes: "auto", match: "array" },
       { id: "subtipo", label: "Subtipos", opcoes: "auto" },
-      { id: "espaco", label: "Espaços", opcoes: "auto" },
+      ...(abaAtiva === "equipamentos" ? [{ id: "espaco", label: "Espaços", opcoes: "auto" as const }] : []),
       { id: "arma.armaTipo", label: "Uso Arma", opcoes: "auto" },
       { id: "arma.catArma", label: "Cat Arma", opcoes: "auto" },
       { id: "arma.empunhadura", label: "Empunh", opcoes: "auto" },
@@ -74,23 +74,23 @@ export default function Equipamentos() {
 
   return (
     <div className="space-y-6">
-      <div className="relative -mt-2 sm:-mt-6">
+      <div className="relative -mt-2 sm:-mt-6 dark:mt-0!">
 
-        <div className="relative z-0 flex items-end gap-2 pl-2 sm:pl-6 -mb-0.5">
+        <div className="relative z-0 flex items-end gap-2 pl-2 sm:pl-6 -mb-0.5 dark:pl-0 dark:mb-2">
           {TABS.map((tab) => {
             const isActive = abaAtiva === tab.id;
             return (
-              <div className="relative h-12 flex items-end -mb-1 shadow-lg">
+              <div key={tab.id} className="relative h-12 flex items-end -mb-1 shadow-lg dark:h-auto dark:mb-0 dark:shadow-none">
                 <button
-                  key={tab.id}
                   onClick={() => changeTab(tab.id)}
                   className={`
                    flex cursor-pointer items-start justify-center
                   bg-[url(/assets/paper.png)] bg-blend-overlay bg-size-[300%]
                   px-4 pt-2 sm:px-6 sm:pt-2.5 font-daisy text-xs sm:text-base uppercase transition-all
+                  dark:items-center dark:py-2 dark:rounded-none! dark:bg-none dark:border
                   ${isActive
-                      ? "z-10 h-11 sm:h-12 bg-yellow-400/50 text-gray-900 shadow-[inset_0_-8px_5px_rgba(0,0,0,0.20)]"
-                      : "z-0 h-9 sm:h-10 bg-yellow-400/30 text-gray-900/60 hover:h-10 sm:hover:h-11 hover:bg-yellow-400/50 hover:text-gray-900 shadow-[inset_0_-8px_5px_rgba(0,0,0,0.10)]"
+                      ? "z-10 h-11 sm:h-12 bg-yellow-400/50 text-gray-900 shadow-[inset_0_-8px_5px_rgba(0,0,0,0.20)] dark:h-10 dark:bg-[#222925] dark:border-emerald-500/60 dark:text-emerald-300 dark:shadow-none"
+                      : "z-0 h-9 sm:h-10 bg-yellow-400/30 text-gray-900/60 hover:h-10 sm:hover:h-11 hover:bg-yellow-400/50 hover:text-gray-900 shadow-[inset_0_-8px_5px_rgba(0,0,0,0.10)] dark:h-10 dark:bg-[#121514] dark:border-zinc-800 dark:text-zinc-400 dark:hover:h-10 dark:hover:bg-[#1a1e1c] dark:hover:border-zinc-600 dark:hover:text-zinc-200 dark:shadow-none"
                     }
                 `}
                 >
