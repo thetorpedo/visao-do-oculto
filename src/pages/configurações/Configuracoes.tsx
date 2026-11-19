@@ -434,8 +434,8 @@ export default function Configuracoes() {
                 <p className="text-sm text-gray-600">{totalItems} registros carregados no total.</p>
             </PaperDiv>
 
-            <div className="flex flex-row justify-between">
-                <div className="flex gap-2">
+            <div className="flex flex-col gap-3 lg:flex-row lg:justify-between">
+                <div className="flex flex-wrap gap-2">
                     <Button
                         onClick={() => setActiveTab("jsons")}
                         variant={activeTab === "jsons" ? 'default' : 'secondary'}

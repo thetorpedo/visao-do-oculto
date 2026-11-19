@@ -266,14 +266,15 @@ export default function FolderLayout() {
                       className={({ isActive }) => `
                         flex flex-col items-center justify-center gap-1 border border-black/20 px-2 py-2 text-center font-special text-[11px] uppercase transition-all
                         bg-[url(/assets/paper.png)] bg-blend-overlay bg-size-[300%]
+                        dark:bg-none! dark:rounded-none dark:border-zinc-800 dark:bg-[#121514]! dark:text-zinc-400! dark:shadow-none
                         ${isActive
-                          ? `${activeColor} ring-2 ring-gray-900 font-bold shadow-xs`
-                          : `${inactiveColor} shadow-2xs`
+                          ? `${activeColor} ring-2 ring-gray-900 font-bold shadow-xs dark:ring-0 dark:bg-[#222925]! dark:border-emerald-500/60 dark:text-emerald-300!`
+                          : `${inactiveColor} shadow-2xs dark:hover:bg-[#1a1e1c]! dark:hover:text-zinc-200!`
                         }
                       `}
                     >
                       <Icon className="size-4 shrink-0" />
-                      <span className="truncate w-full">{label}</span>
+                      <span className="w-full break-words text-[10px] leading-tight">{label}</span>
                     </NavLink>
                   ))}
                 </div>

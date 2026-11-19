@@ -4,13 +4,14 @@ import GlitchTitle from "@/pages/home/components/glitch-title";
 import InfoPanel from "@/pages/home/components/info-panel";
 import ItemCard from "@/components/ui/item-card";
 import { useData, type Categoria } from "@/context/DataContext";
-import { ExternalLink, Heart, Search, Shuffle } from "lucide-react";
+import { ExternalLink, Heart, Link2, Search, Shuffle } from "lucide-react";
 import { useMemo, useState } from "react";
 import DonateModal from "@/pages/home/components/donate-modal";
 import ChangelogList from "@/pages/home/components/changelog-panel";
 import { UPDATES_PRIVATE, UPDATES_PUBLIC } from "@/pages/home/components/changelog";
 
 const REPO_URL = "https://github.com/thetorpedo/visao-do-oculto";
+const LINKS_URL = "https://torpedolinks.web.app";
 
 const ROTULO_CATEGORIA: Record<string, string> = {
   poderes: "Poder",
@@ -64,6 +65,15 @@ export default function Home() {
           >
             <ExternalLink className="size-3" />
             Repositório no GitHub
+          </a>
+          <a
+            href={LINKS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 border-b border-dashed border-gray-400 font-special text-sm tracking-wide text-black/80 transition-colors hover:text-gray-800"
+          >
+            <Link2 className="size-3" />
+            Meus links
           </a>
           <button
             onClick={() => setShowDonate(true)}
