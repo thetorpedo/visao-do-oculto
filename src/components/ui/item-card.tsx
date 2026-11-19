@@ -261,12 +261,14 @@ export default function ItemCard({
     showCategory,
     expandAll = false,
     withoutPaper = false,
+    isPreview = false,
 }: {
     item: any;
     categoria: Categoria;
     showCategory?: boolean;
     expandAll?: boolean;
     withoutPaper?: boolean;
+    isPreview?: boolean;
 }) {
     const { abrirLeitor, abrirEditar } = useUI();
     const { fontes } = useData();
@@ -286,7 +288,7 @@ export default function ItemCard({
             <div className="grow">
                 <div className="flex justify-between items-start mb-4 gap-2">
                     <h3 className="text-2xl font-special underline wrap-break-word text-gray-950 dark:text-zinc-100">
-                        {item.nome}
+                        {item.nome || "Sem nome"}
                     </h3>
                     {showCategory && (
                         <span className="text-xs uppercase font-daisy bg-black text-white px-2 py-1 shrink-0">
@@ -306,16 +308,18 @@ export default function ItemCard({
                         abrirLeitor(fonteConfig?.id ?? item.fonteLivro, paginaParaLeitor)
                     }
                 />
-                <div className="flex flex-row gap-2">
-                    <button
-                        onClick={() => abrirEditar(categoria, item)}
-                        className="flex items-center justify-center p-1.5 transition-colors hover:bg-gray-200 dark:hover:bg-zinc-800 cursor-pointer rounded"
-                        title="Editar"
-                    >
-                        <Pencil className="size-5 transition-all text-gray-500 hover:text-gray-900 dark:text-zinc-400 dark:hover:text-zinc-100" />
-                    </button>
-                    <SaveButton itemId={item.id} categoria={categoria} />
-                </div>
+                {!isPreview && (
+                    <div className="flex flex-row gap-2">
+                        <button
+                            onClick={() => abrirEditar(categoria, item)}
+                            className="flex items-center justify-center p-1.5 transition-colors hover:bg-gray-200 dark:hover:bg-zinc-800 cursor-pointer rounded"
+                            title="Editar"
+                        >
+                            <Pencil className="size-5 transition-all text-gray-500 hover:text-gray-900 dark:text-zinc-400 dark:hover:text-zinc-100" />
+                        </button>
+                        <SaveButton itemId={item.id} categoria={categoria} />
+                    </div>
+                )}
             </div>
         </div>
     );

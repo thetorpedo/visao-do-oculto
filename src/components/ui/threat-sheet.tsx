@@ -46,9 +46,10 @@ function LinhaFicha({
 interface ThreatSheetProps {
     ameaca: Ameaca;
     hideChrome?: boolean;
+    isPreview?: boolean;
 }
 
-export default function ThreatSheet({ ameaca, hideChrome = false }: ThreatSheetProps) {
+export default function ThreatSheet({ ameaca, hideChrome = false, isPreview = false }: ThreatSheetProps) {
     const { abrirLeitor, abrirEditar } = useUI();
     const { fontes } = useData();
 
@@ -82,7 +83,7 @@ export default function ThreatSheet({ ameaca, hideChrome = false }: ThreatSheetP
                     <div className="flex justify-between items-start mb-3 gap-3">
                         <div className="min-w-0">
                             <h2 className="text-3xl sm:text-4xl font-special text-black leading-tight uppercase wrap-break-word">
-                                {ameaca.nome}
+                                {ameaca.nome || "Sem nome"}
                             </h2>
                             <p className="font-special text-xs sm:text-sm uppercase tracking-widest text-gray-600 mt-0.5">
                                 {ameaca.tipo} • {ameaca.tamanho}
@@ -99,14 +100,18 @@ export default function ThreatSheet({ ameaca, hideChrome = false }: ThreatSheetP
                                 </span>
                             </div>
 
-                            <button
-                                onClick={() => abrirEditar("ameacas", ameaca)}
-                                className="flex items-center justify-center p-1.5 transition-colors hover:bg-gray-200 cursor-pointer rounded"
-                                title="Editar"
-                            >
-                                <Pencil className="size-5 transition-all text-gray-500 hover:text-black" />
-                            </button>
-                            <SaveButton itemId={ameaca.id} categoria="ameacas" />
+                            {!isPreview && (
+                                <>
+                                    <button
+                                        onClick={() => abrirEditar("ameacas", ameaca)}
+                                        className="flex items-center justify-center p-1.5 transition-colors hover:bg-gray-200 cursor-pointer rounded"
+                                        title="Editar"
+                                    >
+                                        <Pencil className="size-5 transition-all text-gray-500 hover:text-black" />
+                                    </button>
+                                    <SaveButton itemId={ameaca.id} categoria="ameacas" />
+                                </>
+                            )}
                         </div>
                     </div>
 

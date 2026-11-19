@@ -1,10 +1,17 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
-import { X, Save, Plus, Trash2, RotateCcw } from "lucide-react";
+import { X, Save, Plus, Trash2, RotateCcw, Eye, EyeOff } from "lucide-react";
 import { useData, type Categoria } from "@/context/DataContext";
+import { useUI } from "@/context/UiContext";
 import ComboBox, { ComboBoxCsv } from "@/components/ui/combo-box";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import ItemCard, { badgeClass } from "@/components/ui/item-card";
+import ThreatSheet from "@/components/ui/threat-sheet";
+import PaperDiv from "@/components/ui/paper-div";
+import MarkdownRenderer from "@/components/ui/markdown-renderer";
+import Source from "@/components/ui/source";
+import { estiloBadgeTipo } from "@/utils/badgeUtils";
 import { useFormOptions } from "@/hooks/useFormOptions";
 import { Secao, Campo, inputCls, textareaCls } from "./form-layout";
 import {
@@ -29,6 +36,7 @@ export default function ModalCriarRegistro({
     onClose: () => void;
 }) {
     const { salvarRegistro, removerRegistro } = useData();
+    const { abrirLeitor } = useUI();
     const { opcoes, opcoesArma } = useFormOptions(categoria);
 
     const chaveRascunho = `${categoria}:${itemInicial?.id ?? "novo"}`;
@@ -36,11 +44,20 @@ export default function ModalCriarRegistro({
     const [erro, setErro] = useState("");
     const [salvando, setSalvando] = useState(false);
     const [excluindo, setExcluindo] = useState(false);
+    const [mostrarPreview, setMostrarPreview] = useState(true);
     const [formData, setFormData] = useState<any>(() => {
         const salvo = rascunhosModal.get(chaveRascunho);
         if (salvo) return salvo;
         return itemInicial ? itemParaForm(categoria, itemInicial) : estadoInicial(categoria);
     });
+
+    const previewItem = useMemo<any>(() => {
+        try {
+            return { ...montarPayload(categoria, formData), id: formData.id ?? "preview" };
+        } catch {
+            return null;
+        }
+    }, [categoria, formData]);
 
     useEffect(() => {
         rascunhosModal.set(chaveRascunho, formData);
@@ -172,16 +189,31 @@ export default function ModalCriarRegistro({
 
     return createPortal(
         <div className="fixed inset-0 z-70 flex items-center justify-center bg-black/60 backdrop-blur-sm p-2 sm:p-4" onClick={onClose}>
-            <div className="relative bg-[#837156] dark:bg-[#141716] bg-[url(/assets/folder.jpg)] dark:bg-none dark:border dark:border-zinc-800 bg-blend-overlay bg-size-[30%] p-2 sm:p-6 lg:p-6 shadow-2xl/90 rounded-lg dark:rounded-none! max-w-4xl h-[92dvh] sm:h-[90vh] w-full" onClick={e => e.stopPropagation()}>
-                <div className="relative h-full">
+            <div
+                className={`flex w-full max-w-4xl ${mostrarPreview ? "lg:max-w-7xl" : ""} h-[92dvh] sm:h-[90vh] gap-5 items-stretch transition-all`}
+                onClick={e => e.stopPropagation()}
+            >
+                <div className="relative bg-[#837156] dark:bg-[#141716] bg-[url(/assets/folder.jpg)] dark:bg-none dark:border dark:border-zinc-800 bg-blend-overlay bg-size-[30%] p-2 sm:p-6 lg:p-6 shadow-2xl/90 rounded-lg dark:rounded-none! h-full w-full lg:flex-[1.15] min-w-0">
+                    <div className="relative h-full">
                     <div className="relative flex flex-col justify-between z-10 w-full p-3 sm:p-5 h-full shadow-lg bg-[linear-gradient(rgba(249,249,249,0.5),rgba(249,249,249,0.5)),url(/assets/paper.png)] dark:bg-[#1e2220] dark:bg-none bg-repeat bg-size-[30%] border border-gray-300 dark:border-zinc-700/80 dark:text-zinc-100">
                         <div className="flex items-center justify-between p-2.5 sm:p-3 border-b-2 border-dashed border-gray-400">
                             <h3 className="text-base sm:text-xl font-special text-gray-900 uppercase tracking-wider truncate pr-2">
                                 {itemInicial ? "Editar Registro" : "Criar Novo Registro"} - {categoria}
                             </h3>
-                            <button onClick={onClose} className="text-black hover:text-red-700 cursor-pointer shrink-0">
-                                <X className="size-5" />
-                            </button>
+                            <div className="flex items-center gap-2 shrink-0">
+                                <button
+                                    type="button"
+                                    onClick={() => setMostrarPreview((v) => !v)}
+                                    className="hidden lg:inline-flex items-center gap-1.5 border border-black/40 dark:border-zinc-600 bg-black/5 dark:bg-zinc-800 px-2 py-0.5 font-special text-xs uppercase tracking-wider text-black/80 dark:text-zinc-200 transition-colors hover:bg-black/10 dark:hover:border-emerald-500/60 cursor-pointer"
+                                    title={mostrarPreview ? "Ocultar pré-visualização" : "Mostrar pré-visualização"}
+                                >
+                                    {mostrarPreview ? <EyeOff className="size-3.5" /> : <Eye className="size-3.5" />}
+                                    <span>{mostrarPreview ? "Ocultar preview" : "Preview"}</span>
+                                </button>
+                                <button onClick={onClose} className="text-black hover:text-red-700 cursor-pointer shrink-0">
+                                    <X className="size-5" />
+                                </button>
+                            </div>
                         </div>
 
                         <div className="p-2.5 sm:p-5 overflow-y-auto flex-1 space-y-5 custom-scrollbar">
@@ -752,6 +784,77 @@ export default function ModalCriarRegistro({
                     </div>
                     <div className="absolute top-1/2 left-1/2 z-0 h-full w-full -translate-x-1/2 -translate-y-1/2 rotate-1 p-1 bg-[linear-gradient(rgba(139,139,139,0.4),rgba(139,139,139,0.2)),url(/assets/paper.png)] shadow-[0_0_15px_rgba(0,0,0,0.15)] bg-repeat bg-size-[30%] pointer-events-none dark:hidden" />
                 </div>
+            </div>
+
+                {mostrarPreview && previewItem && (
+                    <div className="hidden lg:flex lg:flex-1 min-w-0 h-full flex-col bg-[#837156] dark:bg-[#141716] bg-[url(/assets/folder.jpg)] dark:bg-none dark:border dark:border-zinc-800 bg-blend-overlay bg-size-[30%] p-5 shadow-2xl/90 rounded-lg dark:rounded-none!">
+                        <div className="flex items-center justify-between mb-3 px-2 py-1 bg-black/80 dark:bg-[#121514] dark:border dark:border-zinc-800 text-white dark:text-emerald-300 font-special text-xs uppercase tracking-widest shrink-0">
+                            <span className="flex items-center gap-1.5">
+                                <Eye className="size-3.5" />
+                                Pré-visualização
+                            </span>
+                            <button
+                                type="button"
+                                onClick={() => setMostrarPreview(false)}
+                                className="flex items-center gap-1 opacity-75 hover:opacity-100 cursor-pointer"
+                                title="Ocultar pré-visualização"
+                            >
+                                <EyeOff className="size-3.5" />
+                                <span>Ocultar</span>
+                            </button>
+                        </div>
+
+                        {categoria === "ameacas" ? (
+                            <div className="flex-1 min-h-0">
+                                <PaperDiv className="flex flex-col h-full w-full">
+                                    <ThreatSheet ameaca={previewItem as any} isPreview />
+                                </PaperDiv>
+                            </div>
+                        ) : categoria === "regras" ? (
+                            <div className="flex-1 min-h-0">
+                                <PaperDiv className="flex flex-col h-full w-full">
+                                    <div className="mb-4 border-b border-gray-400 border-dashed pb-4">
+                                        <div className="flex justify-between items-start mb-4 gap-2">
+                                            <h2 className="text-3xl sm:text-4xl font-special text-gray-900 leading-tight wrap-break-word">
+                                                {previewItem.nome || "Sem nome"}
+                                            </h2>
+                                        </div>
+
+                                        <div className="flex flex-wrap gap-4 items-center justify-between">
+                                            <div className="flex flex-wrap gap-2">
+                                                {(previewItem.categoria ?? []).map((cat: string) => (
+                                                    <span key={cat} className={`${badgeClass} ${estiloBadgeTipo("default")}`}>
+                                                        {cat}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                            <div className="shrink-0 [&>div]:mt-0 [&>div]:pt-0 [&>div]:border-none">
+                                                <Source
+                                                    fonte={previewItem.fonteLivro}
+                                                    pagina={previewItem.fontePagina}
+                                                    onOpenReader={() =>
+                                                        abrirLeitor(
+                                                            previewItem.fonteLivro,
+                                                            parseInt(String(previewItem.fontePagina))
+                                                        )
+                                                    }
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex-1 mb-2 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-slate-900/60 scrollbar-track-slate-500/10">
+                                        <MarkdownRenderer content={previewItem.descricao || ""} />
+                                    </div>
+                                </PaperDiv>
+                            </div>
+                        ) : (
+                            <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden custom-scrollbar p-1">
+                                <ItemCard item={previewItem} categoria={categoria} isPreview />
+                            </div>
+                        )}
+                    </div>
+                )}
             </div>
         </div>,
         document.body
